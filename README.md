@@ -1,5 +1,5 @@
 # scq
-Our main repo for the SCQ senior project.
+Our main repo for the SCQ senior project. Sam Is Awesome!
 
 ## Installing Dependenices:
 We are using virtual environments to manage our dependencies and make sure they are the same between dev environments. If you don't have a virtualenv setup for this project, this is how to do it.
