@@ -7,7 +7,6 @@ class Course(Model):
 class Section(Model):
     belongs_to = ('Course',)
 
-print("Hello world")
 create_tables()
 create_indexes()
 test_course = Course.create(name='MATH 1300')
