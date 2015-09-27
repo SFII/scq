@@ -33,11 +33,6 @@ class MyselfHandler(tornado.web.RequestHandler):
         password = self.get_argument('password')
         authd = ldapauth.auth_user_ldap(identikey, password)
         self.write("authd: {0}".format(authd))
-        # p = subprocess.Popen("date")
-        # print p.communicate()
-        # self.write(p.communicate())
-        # p = subprocess.Popen(["ldapsearch", "-x", "-H", "ldap://directory.colorado.edu", "-b", "dc=colorado,dc=edu", "uid={0}".format(identikey)], stdout=subprocess.PIPE)
-        # self.write(p.communicate())
         return
 
 def main():
