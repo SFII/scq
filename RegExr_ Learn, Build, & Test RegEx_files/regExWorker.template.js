@@ -1,0 +1,1 @@
+onmessage=function(a){var b,c,d=a.data.regex,e=a.data.str,f=null,g=[];if(postMessage("onload"),!d)return postMessage({error:f,matches:g}),void self.close();for(;!f&&(b=d.exec(e));){if(d.global&&c===d.lastIndex){f="infinite";break}if(b.end=(c=b.index+b[0].length)-1,b.input=null,g.push(b),!d.global)break}postMessage({error:f,matches:g}),self.close()};
