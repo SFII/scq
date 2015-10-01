@@ -19,7 +19,7 @@ LDAP_URL = 'ldap://directory.colorado.edu'
 LDAP_UNAME_ATTR = 'uid'
 
 # The attribute we need to retrieve in order to perform a bind.
-LDAP_BIND_ATTR = ''
+LDAP_BIND_ATTRS = ['']
 
 # Whether to use LDAPv3. Highly recommended.
 LDAP_VERSION_3 = True
@@ -38,8 +38,7 @@ def auth_user_ldap(uname, pwd):
     if LDAP_VERSION_3:
         ld.set_option(ldap.VERSION3, 1)
     ld.start_tls_s()
-    udn = ld.search_s(LDAP_SEARCH_BASE, ldap.SCOPE_SUBTREE,
-                           '(%s=%s)' % (LDAP_UNAME_ATTR,uname), [LDAP_BIND_ATTR])
+    udn = user_info_ldap(uname,LDAP_BIND_ATTRS)
     if udn:
         try:
             bindres = ld.simple_bind_s(udn[0][0], pwd)
@@ -55,3 +54,23 @@ def auth_user_ldap(uname, pwd):
     else:
         logging.error("No user by that name")
         return False
+
+def user_info_ldap(uname, attributes):
+    """
+    Attempts to bind using the uname/pwd combo passed in.
+    If that works, returns true. Otherwise returns false.
+
+    """
+    if not uname or not attributes:
+        logging.error("Username or attributes not supplied")
+        return []
+    ld = ldap.initialize(LDAP_URL)
+    if LDAP_VERSION_3:
+        ld.set_option(ldap.VERSION3, 1)
+    ld.start_tls_s()
+    udn = ld.search_s(LDAP_SEARCH_BASE, ldap.SCOPE_SUBTREE,
+                           '(%s=%s)' % (LDAP_UNAME_ATTR,uname), attributes)
+    if udn:
+        return udn
+    else:
+        return []

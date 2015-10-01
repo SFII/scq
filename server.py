@@ -32,7 +32,12 @@ class MyselfHandler(tornado.web.RequestHandler):
         identikey = self.get_argument('identikey')
         password = self.get_argument('password')
         authd = ldapauth.auth_user_ldap(identikey, password)
-        self.write("authd: {0}".format(authd))
+        attrs = ['cn','cuEduPersonPrimaryMajor1','cuEduPersonPrimaryMajor2','cuEduPersonSecondaryMajor1','cuEduPersonSecondaryMajor2','mail','cuEduPersonClass']
+        results = ldapauth.user_info_ldap(identikey, attrs)
+        writeout = "authd: {0}<br>".format(authd)
+        if authd:
+            writeout += "{0}".format(results)
+        self.write(writeout)
         return
 
 def main():
