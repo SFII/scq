@@ -3,17 +3,13 @@
 # Configuration
 # TODO: finish tidying up these make tasks
 
-PYTHON="/usr/bin/python"
-
-# Targets
-
 PROJECTPATH="`pwd`/src"
 
 serve:
-	export PROJECTPATH=${PROJECTPATH} && cd src && ${PYTHON} server.py
+	export PROJECTPATH=${PROJECTPATH} && cd src && python server.py
 
 console:
-	export PROJECTPATH=${PROJECTPATH} && cd src && ${PYTHON}
+	export PROJECTPATH=${PROJECTPATH} && cd src && python
 
 test:
 	echo "not yet implemented"
