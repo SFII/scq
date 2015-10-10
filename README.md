@@ -6,7 +6,7 @@ We are using virtual environments to manage our dependencies and make sure they 
 
 To setup virtualenvs in general on your computer, do the following:
 ```
-sudo easy_install nodejs
+brew install nodejs
 sudo easy_install pip
 sudo pip install virtualenvwrapper
 export WORKON_HOME=~/Envs
