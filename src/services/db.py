@@ -1,11 +1,8 @@
 from remodel.models import Model
 from remodel.helpers import create_tables, create_indexes
-
-class Course(Model):
-    has_many = ('Section',)
-
-class Section(Model):
-    belongs_to = ('Course',)
+from models.course import Course
+from models.section import Section
+from models.user import User
 
 create_tables()
 create_indexes()
