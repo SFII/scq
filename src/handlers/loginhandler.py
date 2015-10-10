@@ -1,5 +1,5 @@
 import tornado.web
-import ldapauth
+from services import ldapauth
 from models.user import User
 
 class LoginHandler(tornado.web.RequestHandler):
