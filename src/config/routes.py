@@ -16,7 +16,7 @@ settings = {
 # accessed routes and simpler regexes before other routes.
 routes = [
     (r"/", IndexHandler),
-    (r"/([0-9]+)/", LoginHandler)
+    (r"/login", LoginHandler)
 ]
 
 application = tornado.web.Application(handlers=routes,

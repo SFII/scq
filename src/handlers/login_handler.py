@@ -1,52 +1,27 @@
 import tornado.web
-from services import ldapauth
+from services.hashing import Hashing
 from models.user import User
 
 class LoginHandler(tornado.web.RequestHandler):
-    LDAP_NAME = 'cn'
-    LDAP_MAIL = 'mail'
-    LDAP_MAJOR_1 = 'cuEduPersonPrimaryMajor1'
-    LDAP_MAJOR_2 = 'cuEduPersonPrimaryMajor2'
-    LDAP_MAJOR_3 = 'cuEduPersonSecondaryMajor1'
-    LDAP_MAJOR_4 = 'cuEduPersonSecondaryMajor2'
-    LDAP_MINOR_1 = 'cuEduPersonPrimaryMinor'
-    LDAP_MINOR_2 = 'cuEduPersonSecondaryMinor'
-    LDAP_STATUS = 'cuEduPersonClass'
-    LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL, LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS]
-
-    def __loginForm(self):
-        self.write("""
-                <form method="post" action="/login">
-                <b>Enter Your Identikey</b><br>
-                <input type="text" name="username"><br>
-                <b>Enter Your Password</b><br>
-                <input type="password" name="password"></p>
-                <input type="submit" value="Submit">
-                </form>
-            """)
-
     def get(self):
-        self.__loginForm()
+        self.render("login.html", errormessage='', next=self.get_argument("next","/"))
 
     def post(self):
         username = self.get_argument('username',strip = True)
         password = self.get_argument('password',strip = True)
-        authorized = ldapauth.auth_user_ldap(username, password)
-        if authorized:
-            user = self.__getUser(username)
-            if user is None:
-                self.set_secure_cookie('username', username)
-                self.redirect("/register")
-                self.__registerForm()
-            else:
-                self.__login(user)
+        user = User.get(uid=username)
+        if user is None:
+            self.render(
+                'login.html',
+                errormessage="User credentials are incorrect!",
+                next=self.get_argument("next","/")
+            )
+        hashedpassword = password
+        if user['passwordhash_sha256'] ==
         else:
-            self.__failToAuthenticate()
-            self.__loginForm()
-        return
+            self.__set_current_user(user)
+            self.redirect(self.get_argument("next", "/"))
 
-    def __failToAuthenticate(self):
-        self.write("<i>User and Password not recognized.</i>")
 
     def __register(self, username):
         ldapinfo = ldapauth.user_info_ldap(username, LDAP_ATTRS)[0][1]
