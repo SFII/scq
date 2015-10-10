@@ -1,0 +1,19 @@
+{
+  "name": "scq",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sfii/scq.git"
+  },
+  "author": "CUFCQ/SCQ Team",
+  "license": "MIT",
+  "description": "Our main repo for the SCQ senior project.",
+  "dependencies": {
+    "material-ui": "^0.12.3"
+  },
+  "devDependencies": {
+    "npm": "^2"
+  },
+  "keywords": [
+    "student course questionaire"
+  ]
+}

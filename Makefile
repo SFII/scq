@@ -18,8 +18,8 @@ database:
 	echo "not yet implemented"
 
 build:
-	sudo apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
 	pip install -r requirements.txt
+	npm install
 
 clean:
 	find . -name *.pyc -exec rm {} \;
