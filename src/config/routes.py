@@ -21,4 +21,5 @@ routes = [
 
 application = tornado.web.Application(handlers=routes,
                                       template_path='templates/',
+                                      static_path='assets/',
                                       settings=settings)
