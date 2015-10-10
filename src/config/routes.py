@@ -3,8 +3,8 @@ Routing configuration.
 """
 
 import tornado.web
-from handlers.loginhandler import LoginHandler
-from handlers.indexhandler import IndexHandler
+from handlers.login_handler import LoginHandler
+from handlers.index_handler import IndexHandler
 
 settings = {
     'cookie_secret': '8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=',

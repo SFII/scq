@@ -19,7 +19,7 @@ database:
 
 build:
 	sudo apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
-	sudo pip install -r requirements.txt
+	pip install -r requirements.txt
 
 clean:
 	find . -name *.pyc -exec rm {} \;
