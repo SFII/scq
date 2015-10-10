@@ -1,6 +1,6 @@
 import tornado.web
 import ldapauth
-import models/user
+from models.user import User
 
 class LoginHandler(tornado.web.RequestHandler):
     LDAP_NAME = 'cn'
@@ -14,30 +14,9 @@ class LoginHandler(tornado.web.RequestHandler):
     LDAP_STATUS = 'cuEduPersonClass'
     LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL, LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS]
 
-    def get(self):
-        loginForm()
-
-    def post(self):
-        username = self.get_argument('username')
-        password = self.get_argument('password')
-        authorized = ldapauth.auth_user_ldap(username, password)
-        if authorized:
-            user = getUser(username)
-            if user is None:
-                register(user)
-            else:
-                login(user)
-        else:
-            failToAuthenticate()
-            loginForm()
-        return
-
-    def failToAuthenticate():
-        self.write("<i>User and Password not recognized.</i>")
-
-    def loginForm():
+    def __loginForm(self):
         self.write("""
-                <form method="post" action="/myself">
+                <form method="post" action="/login">
                 <b>Enter Your Identikey</b><br>
                 <input type="text" name="username"><br>
                 <b>Enter Your Password</b><br>
@@ -46,7 +25,30 @@ class LoginHandler(tornado.web.RequestHandler):
                 </form>
             """)
 
-    def register(user):
+    def get(self):
+        self.__loginForm()
+
+    def post(self):
+        username = self.get_argument('username',strip = True)
+        password = self.get_argument('password',strip = True)
+        authorized = ldapauth.auth_user_ldap(username, password)
+        if authorized:
+            user = self.__getUser(username)
+            if user is None:
+                self.set_secure_cookie('username', username)
+                self.redirect("/register")
+                self.__registerForm()
+            else:
+                self.__login(user)
+        else:
+            self.__failToAuthenticate()
+            self.__loginForm()
+        return
+
+    def __failToAuthenticate(self):
+        self.write("<i>User and Password not recognized.</i>")
+
+    def __register(self, username):
         ldapinfo = ldapauth.user_info_ldap(username, LDAP_ATTRS)[0][1]
         name = ldapinfo[LDAP_NAME][0]
         mail = ldapinfo[LDAP_MAIL][0]
@@ -57,14 +59,18 @@ class LoginHandler(tornado.web.RequestHandler):
         major4 = ldapinfo[LDAP_MAJOR_4][0] if LDAP_MAJOR_4 in ldapinfo else None
         minor1 = ldapinfo[LDAP_MINOR_1][0] if LDAP_MINOR_1 in ldapinfo else None
         minor2 = ldapinfo[LDAP_MINOR_2][0] if LDAP_MINOR_2 in ldapinfo else None
-        User.create
 
-    def login(user):
+
+    def __login(self, user):
+        self.__set_current_user(user)
         self.set_secure_cookie("username", self.get_argument("username"))
         self.redirect("/")
 
-    def getUser(username):
+    def __getUser(self, username):
         user = User.get(uid=username)
 
-    def failToAuthenticate(username):
-        self.write("user and password not recognized.".format(username))
+    def __set_current_user(self, user):
+        if user:
+            self.set_secure_cookie("user", tornado.escape.json_encode(user))
+        else:
+            self.clear_cookie("user")
