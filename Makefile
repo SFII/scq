@@ -4,30 +4,28 @@
 # TODO: finish tidying up these make tasks
 
 PYTHON="/usr/bin/python"
-EASYINSTALL="/path/to/easy_install"
-NOSETESTS="/path/to/nosetests"
 
 # Targets
 
 PROJECTPATH="`pwd`/src"
 
-server:
+serve:
 	export PROJECTPATH=${PROJECTPATH} && cd src && ${PYTHON} server.py
 
 console:
 	export PROJECTPATH=${PROJECTPATH} && cd src && ${PYTHON}
 
 test:
-	${NOSETESTS} -i should -i spec --verbose --nocapture
+	echo "not yet implemented"
 
 database:
-	mkdir -p data
-	export PROJECTPATH=${PROJECTPATH} && cd src/ && ${PYTHON} util/database.py
+	echo "not yet implemented"
 
 build:
-	${EASYINSTALL}
+	sudo apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
+	sudo pip install -r requirements.txt
 
 clean:
 	find . -name *.pyc -exec rm {} \;
 
-.PHONY: server test database clean
+.PHONY: serve clean

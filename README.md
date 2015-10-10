@@ -35,7 +35,7 @@ $ source ~/.bashrc
 
 Then go to the project and run this command in your project directory to install the dependencies.
 ```
-$ pip install -r requirements.txt
+$ make build
 ```
 
 ## Install [rethinkdb]( https://rethinkdb.com/docs/install/):
