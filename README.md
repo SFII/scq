@@ -64,6 +64,3 @@ The webserver can be started by running the following commands:
 ```
 make serve
 ```
-
---------------
-Sung was here
