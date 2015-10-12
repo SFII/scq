@@ -6,19 +6,21 @@ We are using virtual environments to manage our dependencies and make sure they 
 
 To setup virtualenvs in general on your computer, do the following:
 ```
-$ pip install virtualenvwrapper
-$ export WORKON_HOME=~/Envs
-$ source /usr/local/bin/virtualenvwrapper.sh
+brew install nodejs
+sudo easy_install pip
+sudo pip install virtualenvwrapper
+export WORKON_HOME=~/Envs
+source /usr/local/bin/virtualenvwrapper.sh
 ```
 
 To setup our specific environment:
 ```
-$ mkvirtualenv scq
+mkvirtualenv scq
 ```
 
 Whenever you are going to work on the project to ensure that we are all using the same dependencies:
 ```
-$ workon scq
+workon scq
 ```
 
 Add the following to ~/.bashrc (or zshrc if you use one):
@@ -28,21 +30,22 @@ export WORKON_HOME=$HOME/Envs
 source /usr/local/bin/virtualenvwrapper.sh
 ```
 
-Then run:
+Then source it (bashrc example below):
 ```
-$ source ~/.bashrc
+source ~/.bashrc
 ```
 
 Then go to the project and run this command in your project directory to install the dependencies.
 ```
-$ pip install -r requirements.txt
+make build
 ```
+you will likely be asked for sudo privileges to install all needed packages
 
 ## Install [rethinkdb]( https://rethinkdb.com/docs/install/):
 
 On Mac:
 
-```$ brew update && brew install rethinkdb```
+```brew update && brew install rethinkdb```
 
 [On Linux](https://www.rethinkdb.com/docs/install/ubuntu/):
 
@@ -59,7 +62,7 @@ sudo apt-get install rethinkdb
 The webserver can be started by running the following commands:
 
 ```
-python app.py
+make serve
 ```
 
 --------------
