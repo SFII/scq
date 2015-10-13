@@ -1,6 +1,5 @@
 import tornado.web
 import logging
-from services import hashing
 from models.user import User
 
 class LoginHandler(tornado.web.RequestHandler):
@@ -18,8 +17,7 @@ class LoginHandler(tornado.web.RequestHandler):
                 next=self.get_argument("next","/")
             )
         else:
-            hashedpassword = hashing.sha256(password)
-            if user['passwordhash'] == hashedpassword:
+            if user.validatePassword(password):
                 return __login(user)
             else:
                 return self.render(

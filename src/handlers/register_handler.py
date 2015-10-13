@@ -3,6 +3,9 @@ import ldapauth
 from models.user import User
 
 class RegisterHandler(tornado.web.RequestHandler):
+    # Mandatories: Name, Universty email, password, confirm password, group (student...), accept term and conditions
+    # Not mandatories: date, birthday, phone number, location, gender, ethnicity, native language
+
     LDAP_NAME = 'cn'
     LDAP_MAIL = 'mail'
     LDAP_MAJOR_1 = 'cuEduPersonPrimaryMajor1'
