@@ -1,10 +1,13 @@
 """
-Routing configuration.
+Application configuration.
+
+All settings should be configurable through flags or environment variables.
+Secrets must be configured through envrionment variables.
 """
 
 import tornado.web
-from handlers.login_handler import LoginHandler
-from handlers.index_handler import IndexHandler
+from tornado.options import define, options
+from routes import routes
 
 settings = {
     'cookie_secret': '8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=',
@@ -12,12 +15,7 @@ settings = {
     'login_url': '/login'
 }
 
-# Tornado pro-tip: regex routing is optimized by putting more frequently
-# accessed routes and simpler regexes before other routes.
-routes = [
-    (r"/", IndexHandler),
-    (r"/login", LoginHandler)
-]
+define("port", default=8000, help="run on the given port", type=int)
 
 application = tornado.web.Application(handlers=routes,
                                       template_path='templates/',
