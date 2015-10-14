@@ -1,12 +1,12 @@
 from remodel.models import Model
-from remodel.helpers import create_tables, create_indexes
+#from remodel.helpers import create_tables, create_indexes
 
 class User(Model):
-    pass
+    has_one = ('Student', 'Instructor',)
 
 
 # Creates all database tables defined by models
-create_tables()
+#create_tables()
 # Creates all table indexes based on model relations
-create_indexes()
+#create_indexes()
 
