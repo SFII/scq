@@ -8,10 +8,7 @@ import logging
 from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
-from config.routes import application
-import db
-
-define("port", default=8000, help="run on the given port", type=int)
+from config.config import application
 
 def main():
     tornado.options.parse_command_line()
