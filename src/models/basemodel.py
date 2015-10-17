@@ -1,5 +1,4 @@
 import rethinkdb as r
-from services import schemautils
 
 class BaseModel:
     def is_int(data):
@@ -87,14 +86,14 @@ class BaseModel:
     def fields():
         {'id' : (is_int, )}
 
-    def required_fields():
+    def requiredFields():
         ['id']
 
     def init(self, conn):
         try:
-            yield r.table_create(cls.__name__).run(conn)
+            yield r.table_create(__name__).run(conn)
         except:
-            print "Table {0} already exist".format(cls.__name__)
+            print "Table {0} already exist".format(__name__)
 
-    def verify(self, data, require_all_fields=[]):
-        return list(su.check_data(data, fields(), required_fields()))
+    def verify(self, data):
+        return list(su.check_data(data, fields(), requiredFields()))
