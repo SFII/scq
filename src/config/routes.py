@@ -17,6 +17,8 @@ settings = {
 routes = [
     (r"/", IndexHandler),
     (r"/login", LoginHandler)
+    (r"/register", LoginHandler)
+    (r"/test", TestHandler)
 ]
 
 application = tornado.web.Application(handlers=routes,
