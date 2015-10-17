@@ -4,7 +4,7 @@ from remodel.models import Model
 class Section(Model):
     belongs_to = ('Course',)
     #has_one = ('Instructor',)
-    
+
     def get_section_id(section):
         return str(section['section_id'])
 
@@ -28,4 +28,3 @@ class Section(Model):
 #create_tables()
 # Creates all table indexes based on model relations
 #create_indexes()
-

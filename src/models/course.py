@@ -3,7 +3,7 @@ from remodel.models import Model
 
 class Course(Model):
     has_many = ('Section',)
-    
+
     def get_course_name(course):
         return str(course['name'])
 
@@ -18,7 +18,7 @@ class Course(Model):
 
     def get_section_count(course):
         return str(course['sections'].count())
-    
+
 
 
 
