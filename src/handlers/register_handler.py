@@ -1,8 +1,9 @@
 import tornado.web
-import ldapauth
+import services.ldapauth
 from models.user import User
 
 class RegisterHandler(tornado.web.RequestHandler):
+
     # Mandatories: Name, Universty email, password, confirm password, group (student...), accept term and conditions
     # Not mandatories: date, birthday, phone number, location, gender, ethnicity, native language
 
@@ -17,27 +18,57 @@ class RegisterHandler(tornado.web.RequestHandler):
     LDAP_STATUS = 'cuEduPersonClass'
     LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL, LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS]
 
-    def __registerForm(self):
-        self.write("""
-                <form method="post" action="/register">
-                <b>Enter Your Desired Username</b><br>
-                <input type="text" name="username"><br>
-                <b>Enter Your Password</b><br>
-                <input type="password" name="password"></p>
-                <input type="submit" value="Submit">
-                </form>
-            """)
+    def get(self, input):
+        if input is None:
+            return self.render("register.html", errormessage='', next=self.get_argument("next","/"))
+        if input is 'ldap':
+            return self.render("ldapregister.html", errormessage='', next=self.get_argument("next","/"))
+        self.redirect(self.get_argument("next", "/register"))
 
-    def get(self):
+    def post(self, input):
+        if input is None:
+            return __registerDefault(self)
+        if input is 'ldap':
+            return __registerLdap(self)
+        self.redirect(self.get_argument("next", "/register"))
+
+
+    def __getErrors(self):
+        errors = []
+        username = self.get_argument('username',strip = True)
+        password = self.get_argument('password',strip = True)
+        confirmpassword = self.get_argument('password',strip = True)
+        accepted = self.get_argument('accepted',strip = True)
+        if password != confirmpassword:
+            errors.append('passwords do not match')
+        if not accepted:
+            errors.append('you must accept the Terms and Conditions to Register')
+        return errors
+
+
+    def __registerDefault(self):
+        username = self.get_argument('username',strip = True)
+        password = self.get_argument('password',strip = True)
+        errors = __getErrors(self)
+        if errors.count != 0:
+            return self.render(
+                'register.html',
+                errors=errors,
+                next=self.get_argument("next","/")
+            )
 
 
 
-        if username is None:
-            redirect('/login')
-
-    def post(self):
-        username = self.get_argument('username')
-        password = self.get_argument('password')
+    def __registerLdap(self):
+        username = self.get_argument('username',strip = True)
+        password = self.get_argument('password',strip = True)
+        errors = __getErrors(self)
+        if errors.count != 0:
+            return self.render(
+                'registerldap.html',
+                errors=errors,
+                next=self.get_argument("next","/")
+            )
         authorized = ldapauth.auth_user_ldap(username, password)
         if authorized:
             user = self.__getUser(username)
@@ -50,8 +81,6 @@ class RegisterHandler(tornado.web.RequestHandler):
             self.__loginForm()
         return
 
-    def __failToAuthenticate(self):
-        self.write("<i>User and Password not recognized.</i>")
 
     def __register(self, username):
         ldapinfo = ldapauth.user_info_ldap(username, LDAP_ATTRS)[0][1]
@@ -68,7 +97,7 @@ class RegisterHandler(tornado.web.RequestHandler):
 
     def __login(self, user):
         self.set_secure_cookie("username", self.get_argument("username"))
-        self.redirect("/")
+        self.redirect(self.get_argument("next", "/"))
 
     def __getUser(self, username):
         user = User.get(uid=username)

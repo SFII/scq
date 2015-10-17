@@ -3,10 +3,12 @@
 {{ err }}
 </div>
 {% end %}
-<form action="/register/ldap" method="post">
-  <label>CU Login Name</label><br />
+<form action="/register" method="post">
+  <label>Username</label><br />
   <input type="text" name="username" required><br>
-  <label>Identikey Password</label><br />
+  <label>University Affiliated Email</label><br />
+  <input type="text" name="email" required><br>
+  <label>Password</label><br />
   <input type="password" name="password" required><br />
   <label>Confirm Password</label><br />
   <input type="password" name="passwordconfirm" required><br/>
