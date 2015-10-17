@@ -1,13 +1,19 @@
-from remodel.models import Model
-#from remodel.helpers import create_tables, create_indexes
+import rethinkdb as r
+from basemodel import BaseModel
 
-class User(Model):
-    has_one = ('Student', 'Instructor',)
-    HASHEDPASSWORDKEY = 'hashedpassword_sha256'
+class User(BaseModel):
+    REGISTRATION_LDAP = 'registration_ldap'
+    REGISTRATION_METHODS = [REGISTRATION_LDAP]
 
-    def validatePassword(password):
-        hashedpassword = hashing.sha256(password)
-        return self[HASHEDPASSWORDKEY] == hashedpassword
+    def required_fields():
+        super + ['registration', 'username', 'email']
+
+    def fields():
+        super.update({
+            "registration" : is_in_list(REGISTRATION_METHODS),
+            "username" : (is_string, ),
+            "email" : (is_string, )
+        })
 
 # Creates all database tables defined by models
 #create_tables()

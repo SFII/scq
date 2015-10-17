@@ -19,8 +19,9 @@ def init():
         print "Creating DB"
         yield r.db_create(DB).run(conn)
     except:
-        print "database tablesalready exists"
-    print "initializing "
+        print "database already exists"
+    print "initializing"
+    conn.use(DB)
     Course.init()
     User.init()
     Section.init()
@@ -28,6 +29,16 @@ def init():
     Survey.init()
 
 ioloop.IOLoop().instance().add_callback(init)
+
+@gen.coroutine
+def exists(table, ):
+    conn = yield connection
+    conn.use(DB)
+    result = yield r.table('users').insert(
+            data,
+            conflict='update',
+            ).run(conn)
+    raise gen.Return(result)
 
 def main():
     connection = r.connect(host='localhost', port=28015)
