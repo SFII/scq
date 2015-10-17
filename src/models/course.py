@@ -1,4 +1,4 @@
-from remodel.models import Model
+from basemodel import BaseModel
 #from remodel.helpers import create_tables, create_indexes
 
 class Course(Model):

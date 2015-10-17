@@ -1,5 +1,6 @@
-from remodel.models import Model
-
-class Answer(Model):
-    has_one = ('Question', 'Response',)
-    #belongs_to = ('Survey_respose',)
+from basemodel import BaseModel
+class Answer(BaseModel):
+    # has_one = ('Question', 'Response',)
+    # def question(value = None):
+    #     if value is None:
+    #         self.table.
