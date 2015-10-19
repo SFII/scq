@@ -1,11 +1,22 @@
 import rethinkdb as r
+import re
 
 class BaseModel:
     def is_int(data):
         assert isinstance(data, (int, float)), "Must be a number"
 
+    def is_date_string(date):
+        is_string(data)
+        try:
+            time.strptime(x, '%a %b %d %H:%M:%S %Z %Y')
+        except Exception, ex:
+            raise Exception("datestring '{0}' could not be parsed into date object".format(date))
+
     def is_string(data):
         assert isinstance(data, (str, unicode)), "Must be a string"
+
+    def is_valid_email(data):
+        assert re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", data) is not None, "Must be a valid email address"
 
     def is_list(data):
         assert isinstance(data, (list, tuple)), "Must be a list"
@@ -26,9 +37,6 @@ class BaseModel:
         def _in_list(data):
             assert data in master_list, "Must be in {}".format(alias or master_list)
         return _in_list
-
-    def is_material(node_id):
-        pass
 
     def is_in_range(low, high=None):
         def _in_range(data):
@@ -64,9 +72,6 @@ class BaseModel:
                 raise Exception("Not all elements satisfy: {}".format(e))
         return _list_check
 
-    def is_knowledge_graph(data):
-        pass
-
     def check_data(data, fields, required_fields=[]):
         for field in required_fields:
             if field not in data:
@@ -83,8 +88,10 @@ class BaseModel:
                         else:
                             yield (key, "{}: {}".format(key, e))
 
+    # critical methods
+
     def fields():
-        {'id' : (is_int, )}
+        {'id' : (is_string, )}
 
     def requiredFields():
         ['id']
@@ -96,4 +103,4 @@ class BaseModel:
             print "Table {0} already exist".format(__name__)
 
     def verify(self, data):
-        return list(su.check_data(data, fields(), requiredFields()))
+        return list(check_data(data, fields(), requiredFields()))

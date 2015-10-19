@@ -3,8 +3,9 @@ import services.ldapauth
 from basemodel import BaseModel
 
 class User(BaseModel):
-    REGISTRATION_LDAP = 'registration_ldap'
-    REGISTRATION_METHODS = [REGISTRATION_LDAP]
+    REGISTRATION_LDAP       = 'registration_ldap'
+    REGISTRATION_METHODS    = [REGISTRATION_LDAP]
+    USER_GENDERS            = ['Male', 'Female', 'Other', 'Prefer Not to Disclose']
 
     # must be overridden
     def requiredFields():
@@ -13,10 +14,15 @@ class User(BaseModel):
     # must be overrriden
     def fields():
         super.update({
-            'registration' : is_in_list(REGISTRATION_METHODS),
+            'registration' : (is_in_list(REGISTRATION_METHODS),),
             'username' : (is_string, ),
-            'email' : (is_string, )
+            'email' : (is_string, is_valid_email, ),
+            'gender' : (is_gender,),
+            'date_registered' : (is_date_string,)
         })
+
+    def is_gender(data):
+        is_in_list(USER_GENDERS, data)
 
     def getUser(self, username):
         r.table(__name__).filter({'username': username})
