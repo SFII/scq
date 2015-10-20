@@ -1,9 +1,9 @@
-from remodel.models import Model
+from basemodel import BaseModel
 #from remodel.helpers import create_tables, create_indexes
 
 class Course(Model):
     has_many = ('Section',)
-    
+
     def get_course_name(course):
         return str(course['name'])
 
@@ -18,7 +18,7 @@ class Course(Model):
 
     def get_section_count(course):
         return str(course['sections'].count())
-    
+
 
 
 

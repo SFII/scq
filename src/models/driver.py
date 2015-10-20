@@ -1,6 +1,4 @@
 import rethinkdb as r
-from remodel.models import Model
-from remodel.helpers import create_tables, create_indexes
 
 # import classes within the same directory
 from course import Course
@@ -9,8 +7,41 @@ from user import User
 from question import Question
 from survey import Survey
 
+DB = "scq"
+
+r.set_loop_type("tornado")
+
+@gen.engine
+def init():
+    conn = yield connection
+    print "Connecting"
+    try:
+        print "Creating DB"
+        yield r.db_create(DB).run(conn)
+    except:
+        print "database already exists"
+    print "initializing"
+    conn.use(DB)
+    Course.init()
+    User.init()
+    Section.init()
+    Question.init()
+    Survey.init()
+
+ioloop.IOLoop().instance().add_callback(init)
+
+@gen.coroutine
+def exists(table, ):
+    conn = yield connection
+    conn.use(DB)
+    result = yield r.table('users').insert(
+            data,
+            conflict='update',
+            ).run(conn)
+    raise gen.Return(result)
+
 def main():
-    #conn = r.connect(host='localhost', port=28015, db='testdb')
+    connection = r.connect(host='localhost', port=28015)
 
     #create_indexes()
 
