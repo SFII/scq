@@ -6,6 +6,8 @@ class User(BaseModel):
     REGISTRATION_LDAP       = 'registration_ldap'
     REGISTRATION_METHODS    = [REGISTRATION_LDAP]
     USER_GENDERS            = ['Male', 'Female', 'Other', 'Prefer Not to Disclose']
+    USER_ETHNICITIES        = ['Caucasian', 'Black', 'Asian', 'Native American', 'Pacific Islander', 'Hispanic or Latino', 'Multiracial', 'Other', 'Prefer Not to Disclose']
+    USER_NATIVE_LANGUAGES   = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi']
 
     # must be overridden
     def requiredFields():
@@ -18,11 +20,20 @@ class User(BaseModel):
             'username' : (is_string, ),
             'email' : (is_string, is_valid_email, ),
             'gender' : (is_gender,),
-            'date_registered' : (is_date_string,)
+            'ethnicity' : (is_ethnicity,),
+            'native_language' : (is_native_language,),
+            'date_registered' : (is_date_string,),
+            'last_sign_in' : (is_date_string,)
         })
 
     def is_gender(data):
         is_in_list(USER_GENDERS, data)
+
+    def is_ethnicity(data):
+        is_in_list(USER_ETHNICITIES, data)
+
+    def is_native_language(data):
+        is_in_list(USER_NATIVE_LANGUAGES, data)
 
     def getUser(self, username):
         r.table(__name__).filter({'username': username})

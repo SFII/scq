@@ -5,12 +5,11 @@ class BaseModel:
     def is_int(data):
         assert isinstance(data, (int, float)), "Must be a number"
 
-    def is_date_string(date):
-        is_string(data)
+    def is_date_string(data):
         try:
-            time.strptime(x, '%a %b %d %H:%M:%S %Z %Y')
+            time.strptime(data, '%a %b %d %H:%M:%S %Z %Y')
         except Exception, ex:
-            raise Exception("datestring '{0}' could not be parsed into date object".format(date))
+            raise Exception("datestring '{0}' could not be parsed into date object".format(data))
 
     def is_string(data):
         assert isinstance(data, (str, unicode)), "Must be a string"
