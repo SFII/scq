@@ -36,11 +36,8 @@ class User(BaseModel):
     def is_native_language(data):
         is_in_list(USER_NATIVE_LANGUAGES, data)
 
-    def getUser(self, username):
-        r.table(__name__).filter({'username': username})
-
     def authenticate(self, username, password):
-        user = self.getUser(username)
+        user = self.get({'username' : username})
         registration = user['registration']
         {
             REGISTRATION_CULDAP : ldapauth.auth_user_ldap

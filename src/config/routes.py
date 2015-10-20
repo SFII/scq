@@ -4,6 +4,7 @@ Routing configuration.
 
 import tornado.web
 from handlers.login_handler import LoginHandler
+from handlers.logout_handler import LogoutHandler
 from handlers.index_handler import IndexHandler
 from handlers.register_handler import RegisterHandler
 
@@ -18,6 +19,7 @@ settings = {
 routes = [
     (r"/", IndexHandler),
     (r"/login", LoginHandler),
+    (r"/login", LogoutHandler),
     (r"/register/(\w+)", RegisterHandler),
     (r"/register", RegisterHandler)
 

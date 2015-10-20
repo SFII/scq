@@ -1,5 +1,5 @@
 import tornado.web
-import services.ldapauth
+import services.ldapauth as ldapauth
 from models.user import User
 
 class RegisterHandler(tornado.web.RequestHandler):
@@ -31,7 +31,7 @@ class RegisterHandler(tornado.web.RequestHandler):
         if input is None:
             return self.__registerDefault()
         if input == 'culdap':
-            return self.__registerLdap()
+            return self.__registerCULdap()
         self.redirect(self.get_argument("next", "/register"))
 
 
@@ -39,8 +39,8 @@ class RegisterHandler(tornado.web.RequestHandler):
         errors = []
         username = self.get_argument('username',None,strip = True)
         password = self.get_argument('password',None,strip = True)
-        confirmpassword = self.get_argument('password',None,strip = True)
-        accepted = self.get_argument('accepted',None,strip = True)
+        confirmpassword = self.get_argument('passwordconfirm',None,strip = True)
+        accepted = self.get_argument('accept',None,strip = True)
         if username is None:
             errors.append('username is required')
         if password is None:
@@ -62,33 +62,38 @@ class RegisterHandler(tornado.web.RequestHandler):
             next=self.get_argument("next","/")
         )
 
-    def __registerLdap(self):
+    def __registerCULdap(self):
         print 'register ldap'
         username = self.get_argument('username',strip = True)
         password = self.get_argument('password',strip = True)
         errors = self.__getErrors()
-        print errors
-        if errors.count != 0:
-            return self.render(
-                'registerldap.html',
-                errors=errors,
-                next=self.get_argument("next","/")
-            )
+        if len(errors) != 0:
+            return self.__failWithErrors('culdapregister.html', errors)
+        print 'no errors, validating user'
         authorized = ldapauth.auth_user_ldap(username, password)
+        print User().REGISTRATION_CULDAP
         print authorized
         if authorized:
-            user = self.__getUser(username)
+            user = self.__getCULdapUser(username)
             if user is None:
-                self.__registerForm()
+                # make new User Object in DB
+                # get their LDAP Info
+                self.__registerCULdap(username)
             else:
-                self.__login(user)
+                return self.__failWithErrors('culdapregister.html', ['Registered user with those credentials already exists'])
         else:
-            self.__failToAuthenticate()
-            self.__loginForm()
+            return self.__failWithErrors('culdapregister.html', ['Failed to authenticate LDAP username and password'])
         return
 
+    def __failWithErrors(self,page='register.html',errors=['Something Went Wrong']):
+        return self.render(
+            page,
+            errors=errors,
+            next=self.get_argument("next","/")
+        )
 
-    def __register(self, username):
+
+    def __registerCULDAP(self, username):
         ldapinfo = ldapauth.user_info_ldap(username, LDAP_ATTRS)[0][1]
         name = ldapinfo[LDAP_NAME][0]
         mail = ldapinfo[LDAP_MAIL][0]
@@ -105,5 +110,5 @@ class RegisterHandler(tornado.web.RequestHandler):
         self.set_secure_cookie("username", self.get_argument("username"))
         self.redirect(self.get_argument("next", "/"))
 
-    def __getUser(self, username):
-        user = User.get(uid=username)
+    def __getCULdapUser(self, username):
+        user = User().get({'username' : username, 'registration' : User().REGISTRATION_CULDAP})

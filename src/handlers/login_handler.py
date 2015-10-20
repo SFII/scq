@@ -10,7 +10,7 @@ class LoginHandler(tornado.web.RequestHandler):
     def post(self):
         username = self.get_argument('username',strip = True)
         password = self.get_argument('password',strip = True)
-        user = User().getUser(username)
+        user = User().get({'username' : username})
         if user is None:
             return self.render(
                 'login.html',
@@ -18,6 +18,7 @@ class LoginHandler(tornado.web.RequestHandler):
                 next=self.get_argument("next","/")
             )
         else:
+            print user
             if User().authenticate(username, password):
                 return __login(user)
             else:

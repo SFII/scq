@@ -107,5 +107,8 @@ class BaseModel:
         except:
             print "Table {0} already exist".format(__name__)
 
+    def get(self, criteria={}):
+        yield r.table(__name__).filter(criteria)
+
     def verify(self, data):
         return list(check_data(data, fields(), requiredFields()))
