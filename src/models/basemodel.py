@@ -5,6 +5,12 @@ class BaseModel:
     def is_int(data):
         assert isinstance(data, (int, float)), "Must be a number"
 
+    def is_truthy(data):
+        assert (data and True), "Must be Truthy"
+
+    def is_falsey(data):
+        assert (data or False), "Must be Falsey"
+
     def is_date_string(data):
         try:
             time.strptime(data, '%a %b %d %H:%M:%S %Z %Y')

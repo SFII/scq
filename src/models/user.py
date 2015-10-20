@@ -3,15 +3,15 @@ import services.ldapauth
 from basemodel import BaseModel
 
 class User(BaseModel):
-    REGISTRATION_LDAP       = 'registration_ldap'
-    REGISTRATION_METHODS    = [REGISTRATION_LDAP]
+    REGISTRATION_CULDAP     = 'registration_culdap'
+    REGISTRATION_METHODS    = [REGISTRATION_CULDAP]
     USER_GENDERS            = ['Male', 'Female', 'Other', 'Prefer Not to Disclose']
     USER_ETHNICITIES        = ['Caucasian', 'Black', 'Asian', 'Native American', 'Pacific Islander', 'Hispanic or Latino', 'Multiracial', 'Other', 'Prefer Not to Disclose']
     USER_NATIVE_LANGUAGES   = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi']
 
     # must be overridden
     def requiredFields():
-        super + ['registration', 'username', 'email']
+        super + ['registration', 'username', 'email', 'accepted_tos']
 
     # must be overrriden
     def fields():
@@ -19,6 +19,7 @@ class User(BaseModel):
             'registration' : (is_in_list(REGISTRATION_METHODS),),
             'username' : (is_string, ),
             'email' : (is_string, is_valid_email, ),
+            'accepted_tos' : (is_truthy,),
             'gender' : (is_gender,),
             'ethnicity' : (is_ethnicity,),
             'native_language' : (is_native_language,),
@@ -42,7 +43,7 @@ class User(BaseModel):
         user = self.getUser(username)
         registration = user['registration']
         {
-            REGISTRATION_LDAP : ldapauth.auth_user_ldap
+            REGISTRATION_CULDAP : ldapauth.auth_user_ldap
         }[registration](username, password)
 
 
