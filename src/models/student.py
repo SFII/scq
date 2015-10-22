@@ -1,4 +1,3 @@
-import services.ldapauth
 from basemodel import BaseModel
 
 class Student(BaseModel):

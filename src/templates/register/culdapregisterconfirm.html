@@ -1,0 +1,39 @@
+{% for err in errors %}
+<div class="alert alert-danger" role="alert">
+{{ err }}
+</div>
+{% end %}
+<h1>Almost finished. Please verify and complete the following fields.</h1>
+<form action="/register/culdap" method="post">
+  <input type="hidden" name="confirming" value="True">
+  <label>Username</label><br/>
+  <input type="text" name="username" value="{{ username }}" readonly><br>
+  <label>Recovery Email</label><br />
+  <input type="email" name="email" value="{{ email }}" required><br>
+  <label>Academic Status</label><br />
+  <input type="text" name="status" value="{{ status }}"><br>
+  <label>Enrolled Majors</label><br />
+  <input type="text" name="major1" value="{{ major1 }}"><br>
+  <input type="text" name="major2" value="{{ major2 }}"><br>
+  <input type="text" name="major3" value="{{ major3 }}"><br>
+  <input type="text" name="major4" value="{{ major4 }}"><br>
+  <label>Enrolled Minors</label><br />
+  <input type="text" name="minor1" value="{{ minor1 }}"><br>
+  <input type="text" name="minor2" value="{{ minor2 }}"><br>
+  <label>Birthday</label><br />
+  <input type="date" name="dob" value="{{ dob }}" required="">
+  <label>Gender</label><br />
+  {% for user_gender in user_genders %}
+  <input type="radio" name="gender" value="{{ user_gender }}"><br> {{ user_gender }}
+  {% end %}
+  <label>Ethnicity</label><br />
+  {% for user_ethnicity in user_ethnicities %}
+  <input type="radio" name="ethnicity" value="{{ user_ethnicity }}"><br> {{ user_ethnicity }}
+  {% end %}
+  <label>Native Language</label><br />
+  {% for user_native_language in user_native_languages %}
+  <input type="radio" name="native_language" value="{{ user_native_language }}"><br> {{ user_native_language }}
+  {% end %}
+
+  <input type="submit" id="loginbtn" name="login" value="Confirm and Create Account" class="button"><br />
+</form>
