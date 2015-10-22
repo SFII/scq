@@ -1,15 +1,23 @@
 import rethinkdb as r
+from tornado import gen
+from tornado import ioloop
 
 # import classes within the same directory
+from answer import Answer
+from basemodel import BaseModel
 from course import Course
-from section import Section
-from user import User
+from instructor import Instructor
 from question import Question
+from section import Section
+from student import Student
 from survey import Survey
+from surveyresponse import SurveyResponse
+from user import User
 
 DB = "scq"
 
 r.set_loop_type("tornado")
+connection = r.connect(host='localhost', port=28015)
 
 @gen.engine
 def init():
@@ -20,18 +28,23 @@ def init():
         yield r.db_create(DB).run(conn)
     except:
         print "database already exists"
-    print "initializing"
+
+    print "Initializing tables"
     conn.use(DB)
+    Answer.init()
     Course.init()
-    User.init()
-    Section.init()
+    Instructor.init()
     Question.init()
+    Section.init()
+    Student.init()
     Survey.init()
+    SurveyResponse.init()
+    User.init()
 
 ioloop.IOLoop().instance().add_callback(init)
 
 @gen.coroutine
-def exists(table, ):
+def user(data):
     conn = yield connection
     conn.use(DB)
     result = yield r.table('users').insert(
@@ -40,38 +53,3 @@ def exists(table, ):
             ).run(conn)
     raise gen.Return(result)
 
-def main():
-    connection = r.connect(host='localhost', port=28015)
-
-    #create_indexes()
-
-    # Test out course
-    #test_course = Course.create(name='MATH 1300')
-    #id = [['math01', 'math 1300', 5]
-    #     ['biol1', 'biolo 1100', 4]]
-    #course_id_list =
-    test_course = Course.create(course_id='MATH-01', name='MATH 1300', department='mathematics', credit_hours=5)
-    test_course['sections'].add(Section(name='8AM - DOE'), Section(name='2PM - CHANG'))
-    print Course.get_course_name(test_course)
-    print Course.get_department_name(test_course)
-    print Course.get_course_id(test_course)
-    print Course.get_credit_hours(test_course)
-    print Course.get_section_count(test_course)
-
-
-    # Test out Survey/Question
-    create_tables()
-    s = Survey.create(name="another survey")
-    s['questions'].add(Question(text="Does our teacher suck?", response_format="free response"))
-
-    # Test out section
-    #test_section = Section.create(section_id='001', course_id='MATH-01', course_name='MATH 1300', department_name='mathematics', credit_hours=5)
-    #print Section.get_section_id(test_section)
-    #print Section.get_course_id(test_section)
-    #print Section.get_course_name(test_section)
-    #print Section.get_department_name(test_section)
-    #print Section.get_credit_hours(test_section)
-
-
-if __name__ == '__main__':
-	main()

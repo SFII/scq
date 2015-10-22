@@ -1,30 +1,20 @@
-from remodel.models import Model
-#from remodel.helpers import create_tables, create_indexes
+from basemodel import BaseModel
 
-class Section(Model):
-    belongs_to = ('Course',)
-    #has_one = ('Instructor',)
+class Section(BaseModel):
 
-    def get_section_id(section):
-        return str(section['section_id'])
+    def requiredFields():
+        super + ['section_id', 'course_id', 'course_name', 'average_grade', 'credit_hours', 'section_time', 'instructor_id']
 
-    def get_course_id(section):
-        return str(section['course_id'])
+    def fields():
+        super.update({
+            'section_id' : (is_int, ),
+            'course_id' : (is_int, ),
+            'course_name' : (is_str, ),
+            'average_grade' : (is_int, ),
+            'credit_hours' : (is_int, ),
+            'section_time' : (is_time_string, ),
+            'instructor_id' : (is_int, )
+        })
 
-    def get_course_name(section):
-        return str(section['course_name'])
-
-    def get_department_name(section):
-        return str(section['department_name'])
-
-    def get_credit_hours(section):
-        return str(section['credit_hours'])
-
-
-
-
-
-# Creates all database tables defined by models
-#create_tables()
-# Creates all table indexes based on model relations
-#create_indexes()
+    def is_time_string(data):
+        # TODO: use regular expressions in order to verify time string

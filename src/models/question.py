@@ -1,6 +1,14 @@
-from remodel.models import Model
+from basemodel import BaseModel
+from answer import Answer
 
+class Question(BaseModel):
 
-# text, response format
-class Question(Model):
-    pass
+    def requiredFields():
+        super + ['question_id', 'text', 'reponse_format']
+
+    def fields():
+        super.update({
+            'question_id' : (is_int, ),
+            'text' : (is_str, ),
+            'response_format' : (is_str, Answer.is_response_format(Answer.USER_RESPONSE_FORMAT))
+        })
