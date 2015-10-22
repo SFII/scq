@@ -12,9 +12,6 @@ class Section(BaseModel):
             'course_name' : (is_str, ),
             'average_grade' : (is_int, ),
             'credit_hours' : (is_int, ),
-            'section_time' : (is_time_string, ),
+            'section_time' : (is_date_string, ),
             'instructor_id' : (is_int, )
         })
-
-    def is_time_string(data):
-        # TODO: use regular expressions in order to verify time string
