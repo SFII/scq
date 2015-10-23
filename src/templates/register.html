@@ -1,17 +1,1 @@
-{% if errormessage %}
-<div class="alert alert-danger" role="alert">
-{{ errormessage }}
-</div>
-<form action="/register" method="post">
-  <label>Username</label><br />
-  <input type="text" name="username" required><br>
-  <label>University Affiliated Email</label><br />
-  <input type="text" name="email" required><br>
-  <label>Password</label><br />
-  <input type="password" name="password" required><br />
-  <label>Confirm Password</label><br />
-  <input type="password" name="passwordconfirm" required><br/>
-  <label/>
-  <input type="checkbox" name="accept" value="ACCEPT" unchecked required>I accept the <a href="/tos">Terms and Conditions.</a><br>
-  <input type="submit" id="loginbtn" name="login" value="REGISTER" class="button"><br />
-</form>
+<a href="/register/culdap">Register via University of Colorado LDAP</a>

@@ -1,28 +1,45 @@
-from remodel.models import Model
-#from remodel.helpers import create_tables, create_indexes
+import rethinkdb as r
+import services.culdapauth
+from basemodel import BaseModel
 
-class User(Model):
-    REGISTRATION_LDAP = 'registration_ldap'
-    REGISTRATION = [REGISTRATION_LDAP]
-    # has_one = ('Student', 'Instructor',)
-    HASHEDPASSWORDKEY = 'hashedpassword_sha256'
+class User(BaseModel):
+    REGISTRATION_CULDAP     = 'registration_culdap'
+    REGISTRATION_METHODS    = [REGISTRATION_CULDAP]
+    USER_GENDERS            = ['Male', 'Female', 'Other', 'Prefer Not to Disclose']
+    USER_ETHNICITIES        = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Hispanic or Latino', 'Native Hawaiian or Other Pacific Islander', 'White', 'Other', 'Prefer Not to Disclose']
+    USER_NATIVE_LANGUAGES   = ['English', 'Spanish', 'French', 'German', 'Korean', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi', 'Other', 'Prefer Not to Disclose']
 
-    def validatePassword(password):
-        hashedpassword = hashing.sha256(password)
-        return self[HASHEDPASSWORDKEY] == hashedpassword
+    # must be overridden
+    def requiredFields():
+        super + ['registration', 'user_id',  'username', 'email', 'accepted_tos']
 
-    FIELDS = {
-        "registration" :
-        "id" : (is_int, ),
-        "title" : (is_string, ),
-        "parent" : (schema_or(is_none, is_user_node), ),
-        "owner" : (is_user, ),
-        "created_on" : (is_int, ),
-        "base_node" : (schema_or(is_none, is_user_node), ),
-        "children" : (is_list, schema_list_check(schema_recurse(user_node_child_fields))),
-    }
+    # must be overrriden
+    def fields():
+        super.update({
+            'registration' : (is_in_list(REGISTRATION_METHODS),),
+            'user_id' : (is_int, ),
+            'username' : (is_string, ),
+            'email' : (is_string, is_valid_email, ),
+            'accepted_tos' : (is_truthy,),
+            'gender' : (is_gender,),
+            'ethnicity' : (is_ethnicity,),
+            'native_language' : (is_native_language,),
+            'date_registered' : (is_date_string,),
+            'last_sign_in' : (is_date_string,)
+        })
 
-# Creates all database tables defined by models
-#create_tables()
-# Creates all table indexes based on model relations
-#create_indexes()
+    def is_gender(data):
+        is_in_list(USER_GENDERS, data)
+
+    def is_ethnicity(data):
+        is_in_list(USER_ETHNICITIES, data)
+
+    def is_native_language(data):
+        is_in_list(USER_NATIVE_LANGUAGES, data)
+
+    def authenticate(self, username, password):
+        user = self.get({'username' : username})
+        registration = user['registration']
+        {
+            REGISTRATION_CULDAP : culdapauth.auth_user_ldap
+        }[registration](username, password)
