@@ -6,34 +6,35 @@
 <h1>Almost finished. Please verify and complete the following fields.</h1>
 <form action="/register/culdap" method="post">
   <input type="hidden" name="confirming" value="True">
-  <label>Username</label><br/>
+  <label><b>Username</b></label><br/>
   <input type="text" name="username" value="{{ username }}" readonly><br>
-  <label>Recovery Email</label><br />
+  <label><b>Recovery Email</b></label><br />
   <input type="email" name="email" value="{{ email }}" required><br>
-  <label>Academic Status</label><br />
+  <label><b>Academic Status</b></label><br />
   <input type="text" name="status" value="{{ status }}"><br>
-  <label>Enrolled Majors</label><br />
+  <label><b>Enrolled Majors</b></label><br />
   <input type="text" name="major1" value="{{ major1 }}"><br>
   <input type="text" name="major2" value="{{ major2 }}"><br>
   <input type="text" name="major3" value="{{ major3 }}"><br>
   <input type="text" name="major4" value="{{ major4 }}"><br>
-  <label>Enrolled Minors</label><br />
+  <label><b>Enrolled Minors</b></label><br />
   <input type="text" name="minor1" value="{{ minor1 }}"><br>
   <input type="text" name="minor2" value="{{ minor2 }}"><br>
-  <label>Birthday</label><br />
-  <input type="date" name="dob" value="{{ dob }}" required="">
-  <label>Gender</label><br />
+  <label><b>Date of Birth</b></label><br />
+  <input type="date" name="dob" value="{{ dob }}" required=""><br />
+  <label><b>Gender</b></label><br />
   {% for user_gender in user_genders %}
-  <input type="radio" name="gender" value="{{ user_gender }}"><br> {{ user_gender }}
+  <input type="radio" name="gender" value="{{ user_gender }}"> {{ user_gender }}<br />
   {% end %}
-  <label>Ethnicity</label><br />
+  <label><b>Ethnicity</b></label><br />
   {% for user_ethnicity in user_ethnicities %}
-  <input type="radio" name="ethnicity" value="{{ user_ethnicity }}"><br> {{ user_ethnicity }}
+  <input type="radio" name="ethnicity" value="{{ user_ethnicity }}"> {{ user_ethnicity }}<br />
   {% end %}
-  <label>Native Language</label><br />
+  <label><b>Native Language</b></label><br />
   {% for user_native_language in user_native_languages %}
-  <input type="radio" name="native_language" value="{{ user_native_language }}"><br> {{ user_native_language }}
+  <input type="radio" name="native_language" value="{{ user_native_language }}"> {{ user_native_language }}<br />
   {% end %}
 
-  <input type="submit" id="loginbtn" name="login" value="Confirm and Create Account" class="button"><br />
+  <input type="submit" id="submitbtn" name="submit" value="Confirm and Create Account" class="button"><br />
+  {% raw xsrf_form_html() %}
 </form>
