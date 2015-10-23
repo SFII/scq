@@ -28,7 +28,7 @@ class Student(BaseModel):
 
     # must be overridden
     def requiredFields():
-        super + ['student_id', 'email', 'college', 'majors', 'minors', 'gpa', 'course_history', 'credits_earned']
+        super + ['student_id', 'college']
 
     # must be overrriden
     def fields():
