@@ -8,6 +8,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
+var babel = require('gulp-babel');
 
 // Lint Task
 gulp.task('lint', function() {
@@ -20,10 +21,11 @@ gulp.task('lint', function() {
 gulp.task('scripts', function() {
     return gulp.src('./assets/javascripts/*.js')
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist'))
+        .pipe(babel())
+        .pipe(gulp.dest('dist/js/'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/js/'));
 });
 
 gulp.task('minify-css', function () {
@@ -32,7 +34,7 @@ gulp.task('minify-css', function () {
         .pipe(rename({
             suffix: '.min.css'
         }))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('dist/css/'))
     ;
 });
 
