@@ -1,7 +1,11 @@
 import rethinkdb as r
 import re
 
+import tornado.gen as gen
+
 class BaseModel:
+    conn = None
+
     def is_int(data):
         assert isinstance(data, (int, float)), "Must be a number"
 
@@ -101,6 +105,7 @@ class BaseModel:
     def requiredFields():
         ['id']
 
+    @gen.coroutine
     def init(self, conn):
         print __class__.__name__
         try:
@@ -113,3 +118,14 @@ class BaseModel:
 
     def verify(self, data):
         return list(check_data(data, fields(), requiredFields()))
+
+    @gen.coroutine
+    def get_item(self, idnum):
+        table = self.__class__.__name__
+        return r.table(table).get(idnum).run(BaseModel.conn)
+
+    @gen.coroutine
+    def create_item(self, data):
+        table = self.__class__.__name__
+        r.table(table).insert(data).run(BaseModel.conn)
+        return
