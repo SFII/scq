@@ -15,7 +15,7 @@ def main():
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
-    print "Listening for connections on localhost:{0}".format(options.port)
+    print("Listening for connections on localhost:{0}".format(options.port))
     tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":

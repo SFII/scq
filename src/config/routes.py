@@ -10,11 +10,6 @@ from handlers.register_handler import RegisterHandler
 from handlers.register.culdap_register_handler import CuLdapRegisterHandler
 from services.survey import Survey
 
-settings = {
-    'cookie_secret': '8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=',
-    'xsrf_cookies': True,
-}
-
 # Tornado pro-tip: regex routing is optimized by putting more frequently
 # accessed routes and simpler regexes before other routes.
 routes = [

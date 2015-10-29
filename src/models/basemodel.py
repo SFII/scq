@@ -106,12 +106,17 @@ class BaseModel:
         ['id']
 
     @gen.coroutine
+
+    # @web.asynchronous usef for async web requests
+
+
+
     def init(self, conn):
-        print __class__.__name__
+        print self.__class__.__name__
         try:
-            yield r.table_create(__class__.__name__).run(conn)
+            yield r.table_create(self.__class__.__name__).run(conn)
         except:
-            print "Table {0} already exist".format(__class__.__name__)
+            "Table {0} already exist".format(self.__class__.__name__)
 
     def get(self, criteria={}):
         yield r.table(__class__.__name__).filter(criteria)
