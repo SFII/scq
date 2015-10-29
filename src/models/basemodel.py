@@ -1,7 +1,11 @@
 import rethinkdb as r
 import re
 
+import tornado.gen as gen
+
 class BaseModel:
+    conn = None
+
     def is_int(data):
         assert isinstance(data, (int, float)), "Must be a number"
 
@@ -101,14 +105,28 @@ class BaseModel:
     def requiredFields():
         ['id']
 
+    @gen.coroutine
     def init(self, conn):
+        BaseModel.conn = conn
+        table = self.__class__.__name__
         try:
-            yield r.table_create(__name__).run(conn)
+            yield r.table_create(table).run(conn)
         except:
-            print "Table {0} already exist".format(__name__)
+            print "Table {0} already exist".format(table)
 
     def get(self, criteria={}):
-        yield r.table(__name__).filter(criteria)
+        r.table(__name__).filter(criteria)
 
     def verify(self, data):
         return list(check_data(data, fields(), requiredFields()))
+
+    @gen.coroutine
+    def get_item(self, idnum):
+        table = self.__class__.__name__
+        return r.table(table).get(idnum).run(BaseModel.conn)
+
+    @gen.coroutine
+    def create_item(self, data):
+        table = self.__class__.__name__
+        r.table(table).insert(data).run(BaseModel.conn)
+        return

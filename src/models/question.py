@@ -14,5 +14,5 @@ class Question(BaseModel):
             'response_format' : (is_str, is_reponse_format(USER_RESPONSE_FORMAT))
         })
 
-   def is_reponse_format(data):
+    def is_reponse_format(data):
        is_in_list(USER_RESPONSE_FORMAT, data) 

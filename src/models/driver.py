@@ -3,6 +3,7 @@ from tornado import gen
 from tornado import ioloop
 
 # import classes within the same directory
+#from surveyresponse import SurveyResponse
 from answer import Answer
 from basemodel import BaseModel
 from course import Course
@@ -11,7 +12,6 @@ from question import Question
 from section import Section
 from student import Student
 from survey import Survey
-from surveyresponse import SurveyResponse
 from user import User
 
 DB = "scq"
@@ -21,6 +21,7 @@ connection = r.connect(host='localhost', port=28015)
 
 @gen.engine
 def init():
+    print "Connecting"
     conn = yield connection
     print "Connecting"
     try:
@@ -31,17 +32,14 @@ def init():
 
     print "Initializing tables"
     conn.use(DB)
-    Answer.init()
-    Course.init()
-    Instructor.init()
-    Question.init()
-    Section.init()
-    Student.init()
-    Survey.init()
-    SurveyResponse.init()
-    User.init()
-
-ioloop.IOLoop().instance().add_callback(init)
+    Answer().init(conn)
+    Course().init(conn)
+    Instructor().init(conn)
+    Question().init(conn)
+    Section().init(conn)
+    Student().init(conn)
+    Survey().init(conn)
+    User().init(conn)
 
 @gen.coroutine
 def user(data):
@@ -53,3 +51,20 @@ def user(data):
             ).run(conn)
     raise gen.Return(result)
 
+    create_tables()
+    create_indexes()
+
+    test_course = Course.create(course_id='MATH-01', name='MATH 1300', department='mathematics', credit_hours=5)
+    test_course['sections'].add(Section(name='8AM - DOE'), Section(name='2PM - CHANG'))
+    print Course.get_course_name(test_course)
+    print Course.get_department_name(test_course)
+    print Course.get_course_id(test_course)
+    print Course.get_credit_hours(test_course)
+
+
+    s = Survey.create(name="another survey")
+    s['questions'].add(Question(text="Do you think our teacher is good?", response_format="free response"))
+    print Survey.get(name="another survey")
+    #l = s['questions'].all()[0].get("text")
+
+init()
