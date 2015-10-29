@@ -35,7 +35,7 @@ class Student(BaseModel):
     def fields():
         super.update({
             'student_id' : (is_int, ),
-            'email' : (is_string, is_valid_email, )
+            'email' : (is_string, is_valid_email, ),
             'college' : (is_in_list(REGISTRATION_METHODS), ),
             'majors' : (is_list, schema_list_check(is_major),),
             'minors' : (is_list, schema_list_check(is_minor),),
