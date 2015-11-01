@@ -1,4 +1,4 @@
-from basemodel import BaseModel
+from models.basemodel import BaseModel
 
 class Student(BaseModel):
     'college'

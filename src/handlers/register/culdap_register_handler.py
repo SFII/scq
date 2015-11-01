@@ -23,7 +23,6 @@ class CuLdapRegisterHandler(RegisterHandler):
 
     def post(self):
         confirming = self.get_argument('confirming',False,strip = True)
-        print confirming
         if confirming:
             return self.verifyCULdapRegistration()
         else:
@@ -84,7 +83,6 @@ class CuLdapRegisterHandler(RegisterHandler):
         )
 
     def verifyCULdapRegistration(self):
-        print 'verifying'
         username = self.get_argument('username',None,strip = True)
         if username is None:
             return self.failWithErrors('register/culdapregister.html')
@@ -99,13 +97,9 @@ class CuLdapRegisterHandler(RegisterHandler):
         email = self.get_argument('email',None,strip = True)
         status = self.get_argument('status',None,strip = True)
         dob = self.get_argument('dob',None,strip = True)
-        print dob
         gender = self.get_argument('gender',None,strip = True)
-        print gender
         ethnicity = self.get_argument('ethnicity',None,strip = True)
-        print ethnicity
         native_language = self.get_argument('native_language',None,strip = True)
-        print native_language
         if email is None:
             errors.append('a .colorado.edu email address is required')
         if not email.endswith('@colorado.edu'):
@@ -133,7 +127,6 @@ class CuLdapRegisterHandler(RegisterHandler):
         info['major4'] = ldapinfo[self.LDAP_MAJOR_4][0] if self.LDAP_MAJOR_4 in ldapinfo else ''
         info['minor1'] = ldapinfo[self.LDAP_MINOR_1][0] if self.LDAP_MINOR_1 in ldapinfo else ''
         info['minor2'] = ldapinfo[self.LDAP_MINOR_2][0] if self.LDAP_MINOR_2 in ldapinfo else ''
-        print info
         return info
 
 

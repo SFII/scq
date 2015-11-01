@@ -6,7 +6,7 @@ requires:
 sudo apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
 pip install python-ldap
 """
-import ldap
+import ldap3
 import logging
 
 # where to start the search for users
@@ -42,7 +42,7 @@ def auth_user_ldap(uname, pwd):
     if udn:
         try:
             bindres = ld.simple_bind_s(udn[0][0], pwd)
-        except ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM:
+        except(ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM):
             logging.error("Invalid or incomplete credentials for %s", uname)
             return False
         except Exception as out:

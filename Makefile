@@ -6,10 +6,10 @@
 PROJECTPATH="`pwd`/src"
 
 serve:
-	export PROJECTPATH=${PROJECTPATH} && cd src && python server.py
+	export PROJECTPATH=${PROJECTPATH} && cd src && python3 server.py
 
 console:
-	export PROJECTPATH=${PROJECTPATH} && cd src && python
+	export PROJECTPATH=${PROJECTPATH} && cd src && python3
 
 test:
 	echo "not yet implemented"
@@ -18,7 +18,7 @@ database:
 	echo "not yet implemented"
 
 build:
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 	npm install
 
 clean:

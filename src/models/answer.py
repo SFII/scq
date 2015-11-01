@@ -1,4 +1,4 @@
-from basemodel import BaseModel
+from models.basemodel import BaseModel
 
 class Answer(BaseModel):
     # Dichotomous: two possible responses (i.e. yes or no)

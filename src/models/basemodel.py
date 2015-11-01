@@ -18,7 +18,7 @@ class BaseModel:
     def is_date_string(data):
         try:
             time.strptime(data, '%a %b %d %H:%M:%S %Z %Y')
-        except Exception, ex:
+        except (Exception, ex):
             raise Exception("datestring '{0}' could not be parsed into date object".format(data))
 
     def is_string(data):
@@ -66,10 +66,10 @@ class BaseModel:
         def _or(data):
             try:
                 method_a(data)
-            except Exception, exa:
+            except (Exception, exa):
                 try:
                     method_b(data)
-                except Exception, exb:
+                except (Exception, exb):
                     raise Exception("Must be one of the following: {} or {}".format(exa, exb))
         return _or
 
@@ -77,7 +77,7 @@ class BaseModel:
         def _list_check(data):
             try:
                 all(method(d) for d in data)
-            except Exception, e:
+            except (Exception, e):
                 raise Exception("Not all elements satisfy: {}".format(e))
         return _list_check
 
@@ -90,7 +90,7 @@ class BaseModel:
                 for method in methods:
                     try:
                         method(data[key])
-                    except Exception, e:
+                    except (Exception, e):
                         if isinstance(e.message, (list, tuple)):
                             for error in e.message:
                                 yield error
@@ -112,7 +112,7 @@ class BaseModel:
 
 
     def init(self, conn):
-        print self.__class__.__name__
+        print(self.__class__.__name__)
         try:
             yield r.table_create(self.__class__.__name__).run(conn)
         except:

@@ -4,15 +4,15 @@ from tornado import ioloop
 
 # import classes within the same directory
 #from surveyresponse import SurveyResponse
-from answer import Answer
-from basemodel import BaseModel
-from course import Course
-from instructor import Instructor
-from question import Question
-from section import Section
-from student import Student
-from survey import Survey
-from user import User
+from models.answer import Answer
+from models.basemodel import BaseModel
+from models.course import Course
+from models.instructor import Instructor
+from models.question import Question
+from models.section import Section
+from models.student import Student
+from models.survey import Survey
+from models.user import User
 
 DB = "scq"
 
@@ -21,16 +21,16 @@ connection = r.connect(host='localhost', port=28015)
 
 @gen.engine
 def init():
-    print "Connecting"
+    print("Connecting")
     conn = yield connection
-    print "Connecting"
+    print("Connecting")
     try:
-        print "Creating DB"
+        print("Creating DB")
         yield r.db_create(DB).run(conn)
     except:
-        print "database already exists"
+        print("database already exists")
 
-    print "Initializing tables"
+    print("Initializing tables")
     conn.use(DB)
     Answer().init(conn)
     Course().init(conn)
@@ -56,15 +56,15 @@ def user(data):
 
     test_course = Course.create(course_id='MATH-01', name='MATH 1300', department='mathematics', credit_hours=5)
     test_course['sections'].add(Section(name='8AM - DOE'), Section(name='2PM - CHANG'))
-    print Course.get_course_name(test_course)
-    print Course.get_department_name(test_course)
-    print Course.get_course_id(test_course)
-    print Course.get_credit_hours(test_course)
+    print(Course.get_course_name(test_course))
+    print(Course.get_department_name(test_course))
+    print(Course.get_course_id(test_course))
+    print(Course.get_credit_hours(test_course))
 
 
     s = Survey.create(name="another survey")
     s['questions'].add(Question(text="Do you think our teacher is good?", response_format="free response"))
-    print Survey.get(name="another survey")
+    print(Survey.get(name="another survey"))
     #l = s['questions'].all()[0].get("text")
 
 init()

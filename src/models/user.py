@@ -1,6 +1,6 @@
 import rethinkdb as r
 import services.culdapauth
-from basemodel import BaseModel
+from models.basemodel import BaseModel
 
 class User(BaseModel):
     REGISTRATION_CULDAP     = 'registration_culdap'
