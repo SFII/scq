@@ -28,5 +28,4 @@ routes = [
 ]
 
 application = tornado.web.Application(handlers=routes,
-                                      template_path='templates/',
                                       settings=settings)

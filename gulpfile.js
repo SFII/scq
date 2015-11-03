@@ -9,21 +9,33 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
 var babel = require('gulp-babel');
+var exec = require('gulp-exec');
 
+
+var exec = require('child_process').exec;
+
+gulp.task('serve', function (cb) {
+  exec('cd src && python server.py', function (err, stdout, stderr) {
+    print(stdout);
+    print(stderr);
+    cb(err);
+  });
+})
 // Lint Task
 gulp.task('lint', function() {
-    return gulp.src('./src/assets/javascripts/*.js')
+    return gulp.src('./src/static/javascripts/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
 gulp.task('dev-js', function() {
-    return gulp.src('./src/assets/javascripts/*.js')
+    return gulp.src('./src/static/javascripts/*.js')
         .pipe(babel())
+        .pipe(gulp.dest('./src/static/dist/'));
 });
 
 gulp.task('prod-js', function(){
-    return gulp.src('./src/assets/javascripts/*.js')
+    return gulp.src('./src/static/javascripts/*.js')
         .pipe(concat('all.js'))
         .pipe(babel())
         .pipe(gulp.dest('./dist/js/'))
@@ -33,7 +45,7 @@ gulp.task('prod-js', function(){
 })
 
 gulp.task('minify-css', function () {
-    gulp.src('./src/assets/stylesheets/*.css')
+    gulp.src('./src/static/stylesheets/*.css')
         .pipe(minify({keepBreaks: true}))
         .pipe(rename({
             suffix: '.min.css'
@@ -43,7 +55,7 @@ gulp.task('minify-css', function () {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('./src/assets/javascripts/*.js', ['lint', 'dev-js']);
+    gulp.watch('./src/static/javascripts/*.js', ['lint', 'dev-js']);
 });
 
 // Default Task
