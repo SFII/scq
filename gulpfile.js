@@ -9,18 +9,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
 var babel = require('gulp-babel');
-var exec = require('gulp-exec');
 
-
-var exec = require('child_process').exec;
-
-gulp.task('serve', function (cb) {
-  exec('cd src && python server.py', function (err, stdout, stderr) {
-    print(stdout);
-    print(stderr);
-    cb(err);
-  });
-})
 // Lint Task
 gulp.task('lint', function() {
     return gulp.src('./src/static/javascripts/*.js')
