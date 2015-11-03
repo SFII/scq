@@ -19,5 +19,5 @@ define("port", default=8000, help="run on the given port", type=int)
 
 application = tornado.web.Application(handlers=routes,
                                       template_path='templates/',
-                                      static_path='assets/',
+                                      static_path='static/',
                                       settings=settings)
