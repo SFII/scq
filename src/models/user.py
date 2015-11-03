@@ -10,23 +10,26 @@ class User(BaseModel):
     USER_NATIVE_LANGUAGES   = ['English', 'Spanish', 'French', 'German', 'Korean', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi', 'Other', 'Prefer Not to Disclose']
 
     # must be overridden
-    def requiredFields():
-        super + ['registration', 'user_id',  'username', 'email', 'accepted_tos']
+    def requiredFields(self):
+        r = ['registration',  'username', 'email', 'accepted_tos', 'date_registered']
+        return r
 
     # must be overrriden
-    def fields():
-        super.update({
-            'registration' : (is_in_list(REGISTRATION_METHODS),),
-            'user_id' : (is_int, ),
-            'username' : (is_string, ),
-            'email' : (is_string, is_valid_email, ),
-            'accepted_tos' : (is_truthy,),
-            'gender' : (is_gender,),
-            'ethnicity' : (is_ethnicity,),
-            'native_language' : (is_native_language,),
-            'date_registered' : (is_date_string,),
-            'last_sign_in' : (is_date_string,)
-        })
+    def fields(self):
+        b = super(User, self)
+        f = {
+            'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
+            'user_id' : (b.is_int, ),
+            'username' : (b.is_string, ),
+            'email' : (b.is_string, b.is_valid_email, ),
+            'accepted_tos' : (b.is_truthy,),
+            'gender' : (b.is_in_list(self.USER_GENDERS),),
+            'ethnicity' : (b.is_in_list(self.USER_ETHNICITIES),),
+            'native_language' : (b.is_in_list(self.USER_NATIVE_LANGUAGES),),
+            'date_registered' : (b.is_date_string,),
+            'last_sign_in' : (b.is_date_string,)
+        }
+        return f
 
     def is_gender(data):
         is_in_list(USER_GENDERS, data)

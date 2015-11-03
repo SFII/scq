@@ -2,52 +2,53 @@ import rethinkdb as r
 import re
 
 import tornado.gen as gen
+import logging
 
 class BaseModel:
     conn = None
 
-    def is_int(data):
+    def is_int(self, data):
         assert isinstance(data, (int, float)), "Must be a number"
 
-    def is_truthy(data):
+    def is_truthy(self, data):
         assert (data and True), "Must be Truthy"
 
-    def is_falsey(data):
+    def is_falsey(self, data):
         assert (data or False), "Must be Falsey"
 
-    def is_date_string(data):
+    def is_date_string(self, data):
         try:
             time.strptime(data, '%a %b %d %H:%M:%S %Z %Y')
-        except (Exception, ex):
+        except Exception as e:
             raise Exception("datestring '{0}' could not be parsed into date object".format(data))
 
-    def is_string(data):
-        assert isinstance(data, (str, unicode)), "Must be a string"
+    def is_string(self, data):
+        assert isinstance(data, (str,)), "Must be a string"
 
-    def is_valid_email(data):
+    def is_valid_email(self, data):
         assert re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", data) is not None, "Must be a valid email address"
 
-    def is_list(data):
+    def is_list(self, data):
         assert isinstance(data, (list, tuple)), "Must be a list"
 
-    def is_none(data):
+    def is_none(self, data):
         assert data is None, "Must be empty"
 
-    def is_user(user_id):
+    def is_user(self, user_id):
         assert db.exists('user', user_id), "Must be a valid user ID"
 
-    def is_content_node(node_id):
+    def is_content_node(self, node_id):
         assert db.exists('content_node', node_id), "Must be a valid content node"
 
-    def is_user_node(node_id):
+    def is_user_node(self, node_id):
         assert db.exists('user_node', node_id), "Must be a valid user node"
 
-    def is_in_list(master_list, alias=None):
+    def is_in_list(self, alias=[]):
         def _in_list(data):
-            assert data in master_list, "Must be in {}".format(alias or master_list)
+            assert data in alias, "Must be in {}".format(alias)
         return _in_list
 
-    def is_in_range(low, high=None):
+    def is_in_range(self, low, high=None):
         def _in_range(data):
             if high is None:
                 assert low <= data, "Must be larger than {}".format(low)
@@ -66,10 +67,10 @@ class BaseModel:
         def _or(data):
             try:
                 method_a(data)
-            except (Exception, exa):
+            except Exception as exa:
                 try:
                     method_b(data)
-                except (Exception, exb):
+                except Exception as exb:
                     raise Exception("Must be one of the following: {} or {}".format(exa, exb))
         return _or
 
@@ -77,7 +78,7 @@ class BaseModel:
         def _list_check(data):
             try:
                 all(method(d) for d in data)
-            except (Exception, e):
+            except Exception as e:
                 raise Exception("Not all elements satisfy: {}".format(e))
         return _list_check
 
@@ -85,13 +86,13 @@ class BaseModel:
         for field in required_fields:
             if field not in data:
                 yield (field, 'Missing field: {}'.format(field))
-        for key, methods in fields.iteritems():
+        for key, methods in fields.items():
             if key in data:
                 for method in methods:
                     try:
                         method(data[key])
-                    except (Exception, e):
-                        if isinstance(e.message, (list, tuple)):
+                    except Exception as e:
+                        if isinstance(getattr(e,'message',None), (list, tuple)):
                             for error in e.message:
                                 yield error
                         else:
@@ -99,18 +100,13 @@ class BaseModel:
 
     # critical methods
 
-    def fields():
+    def fields(self):
         {'id' : (is_string, )}
 
-    def requiredFields():
-        ['id']
+    def requiredFields(self):
+        []
 
     @gen.coroutine
-
-    # @web.asynchronous usef for async web requests
-
-
-
     def init(self, conn):
         print(self.__class__.__name__)
         try:
@@ -122,7 +118,7 @@ class BaseModel:
         yield r.table(__class__.__name__).filter(criteria)
 
     def verify(self, data):
-        return list(check_data(data, fields(), requiredFields()))
+        return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
 
     @gen.coroutine
     def get_item(self, idnum):

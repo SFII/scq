@@ -1,4 +1,5 @@
 import services.culdapauth as culdapauth
+import logging
 from handlers.register_handler import RegisterHandler
 from models.user import User
 
@@ -24,19 +25,47 @@ class CuLdapRegisterHandler(RegisterHandler):
     def post(self):
         confirming = self.get_argument('confirming',False,strip = True)
         if confirming:
-            return self.verifyCULdapRegistration()
+            return self.confirmCULdapRegistration()
         else:
             return self.CULdapRegister()
 
 
-    def verifyCULdapRegistration(self):
+    def confirmCULdapRegistration(self):
         username = self.get_argument('username',strip = True)
         errors = self.getVerificationErrors()
         if len(errors) != 0:
             return self.verifyCULdapRegistrationPage(username, errors)
-        cookie_username = self.get_secure_cookie(COOKIE, max_age_days=FIVE_MINUTES)
-        if username != cookie_username:
+        cookie_username = self.get_secure_cookie(self.COOKIE, max_age_days=self.FIVE_MINUTES)
+        if cookie_username is None:
             return self.failWithErrors('register/culdapregister.html', ['Time to complete registration expired (5 minutes)'])
+        decoded_cookie_username = cookie_username.decode("utf-8")
+        if username != decoded_cookie_username:
+            logging.error('username %s did not match cookie username %s' % (username, decoded_cookie_username))
+            return self.failWithErrors('register/culdapregister.html', ['Registration failed: find a programmer'])
+        data = {}
+        data['username']        = username
+        data['registration']    = User().REGISTRATION_CULDAP
+        data['accepted_tos']    = True
+        data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
+        data['email']           = self.get_argument('email',None,strip = True)
+        data['dob']             = self.get_argument('dob',None,strip = True)
+        data['gender']          = self.get_argument('gender',None,strip = True)
+        data['ethnicity']       = self.get_argument('ethnicity',None,strip = True)
+        data['native_language'] = self.get_argument('native_language',None,strip = True)
+        data['status']          = self.get_argument('status',None,strip = True)
+        data['major1']          = self.get_argument('major1',None,strip = True)
+        data['major2']          = self.get_argument('major2',None,strip = True)
+        data['major3']          = self.get_argument('major3',None,strip = True)
+        data['major4']          = self.get_argument('major4',None,strip = True)
+        data['minor1']          = self.get_argument('minor1',None,strip = True)
+        data['minor2']          = self.get_argument('minor2',None,strip = True)
+        verified = User().verify(data)
+        if len(verified) != 0:
+            logging.error('User: verification errors!')
+            logging.error(verified)
+            return self.verifyCULdapRegistrationPage(username, verified)
+        
+
 
 
     def CULdapRegister(self):
@@ -59,7 +88,7 @@ class CuLdapRegisterHandler(RegisterHandler):
 
 
     def verifyCULdapRegistrationPage(self, username, errors=[]):
-        self.set_secure_cookie(self.COOKIE, value=username)
+        self.set_secure_cookie(self.COOKIE, value=username, expires_days=self.FIVE_MINUTES)
         info = self.ldapInfo(username)
         self.render('register/culdapregisterconfirm.html',
         errors=errors,
@@ -82,17 +111,18 @@ class CuLdapRegisterHandler(RegisterHandler):
         minor2= self.get_argument('minor2',info['minor2'],strip = True),
         )
 
+    #
     def verifyCULdapRegistration(self):
         username = self.get_argument('username',None,strip = True)
         if username is None:
             return self.failWithErrors('register/culdapregister.html')
-        errors = self.getConfirmationErrors()
+        errors = self.getVerificationErrors()
         if len(errors) != 0:
             return self.verifyCULdapRegistrationPage(username, errors)
 
-
-
-    def getConfirmationErrors(self):
+    # returns an array of errors found with input data
+    # no errors is indicated by an empty array
+    def getVerificationErrors(self):
         errors = []
         email = self.get_argument('email',None,strip = True)
         status = self.get_argument('status',None,strip = True)
@@ -102,7 +132,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         native_language = self.get_argument('native_language',None,strip = True)
         if email is None:
             errors.append('a .colorado.edu email address is required')
-        if not email.endswith('@colorado.edu'):
+        if not email.lower().endswith('@colorado.edu'):
             errors.append('email address must be a valid @colorado.edu email address')
         if dob is None:
             errors.append('a Date of Birth must be specified')
@@ -114,31 +144,17 @@ class CuLdapRegisterHandler(RegisterHandler):
             errors.append("a Native Language must be specified (you may 'Prefer not to Disclose')")
         return errors
 
-
+    # queries the ldapserver for user info, returning a dictionary of information
     def ldapInfo(self, username):
-        ldapinfo = culdapauth.user_info_ldap(username, self.LDAP_ATTRS)[0][1]
+        ldapinfo = culdapauth.user_info_ldap(username, self.LDAP_ATTRS)[0]['attributes']
         info = {}
         info['name'] = ldapinfo[self.LDAP_NAME][0]
-        info['email'] = ldapinfo[self.LDAP_MAIL][0]
-        info['status'] = ldapinfo[self.LDAP_STATUS][0]
-        info['major1'] = ldapinfo[self.LDAP_MAJOR_1][0] if self.LDAP_MAJOR_1 in ldapinfo else ''
-        info['major2'] = ldapinfo[self.LDAP_MAJOR_2][0] if self.LDAP_MAJOR_2 in ldapinfo else ''
-        info['major3'] = ldapinfo[self.LDAP_MAJOR_3][0] if self.LDAP_MAJOR_3 in ldapinfo else ''
-        info['major4'] = ldapinfo[self.LDAP_MAJOR_4][0] if self.LDAP_MAJOR_4 in ldapinfo else ''
-        info['minor1'] = ldapinfo[self.LDAP_MINOR_1][0] if self.LDAP_MINOR_1 in ldapinfo else ''
-        info['minor2'] = ldapinfo[self.LDAP_MINOR_2][0] if self.LDAP_MINOR_2 in ldapinfo else ''
+        info['email'] = ldapinfo[self.LDAP_MAIL][0].lower()
+        info['status'] = ldapinfo[self.LDAP_STATUS].capitalize()
+        info['major1'] = ldapinfo[self.LDAP_MAJOR_1].capitalize() if self.LDAP_MAJOR_1 in ldapinfo else ''
+        info['major2'] = ldapinfo[self.LDAP_MAJOR_2].capitalize() if self.LDAP_MAJOR_2 in ldapinfo else ''
+        info['major3'] = ldapinfo[self.LDAP_MAJOR_3].capitalize() if self.LDAP_MAJOR_3 in ldapinfo else ''
+        info['major4'] = ldapinfo[self.LDAP_MAJOR_4].capitalize() if self.LDAP_MAJOR_4 in ldapinfo else ''
+        info['minor1'] = ldapinfo[self.LDAP_MINOR_1].capitalize() if self.LDAP_MINOR_1 in ldapinfo else ''
+        info['minor2'] = ldapinfo[self.LDAP_MINOR_2].capitalize() if self.LDAP_MINOR_2 in ldapinfo else ''
         return info
-
-
-    # def confirmRegistration(self,page='register/culdapregisterconfirm.html',errors=['Something went wrong.'],username="",dob="",user_gender="",user_native_language="",user_ethnicity=""):
-    #     return self.render(
-    #         page,
-    #         username=username,
-    #         errors=errors,
-    #         dob=""
-    #         genders=User().USER_GENDERS,
-    #         ethnicites=User().USER_ETHNICITIES,
-    #         native_languages=User().USER_NATIVE_LANGUAGES,
-    #         gender
-    #         next=self.get_argument("next","/")
-    #     )

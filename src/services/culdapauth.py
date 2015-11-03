@@ -6,7 +6,7 @@ requires:
 sudo apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
 pip install python-ldap
 """
-import ldap3
+import ldap3 as ldap
 import logging
 
 # where to start the search for users
@@ -18,59 +18,61 @@ LDAP_URL = 'ldap://directory.colorado.edu'
 # The attribute we try to match the username against.
 LDAP_UNAME_ATTR = 'uid'
 
-# The attribute we need to retrieve in order to perform a bind.
-LDAP_BIND_ATTRS = ['']
+# specific bind id for cu students
+CU_BIND_ID = 'cuedupersonuuid'
 
-# Whether to use LDAPv3. Highly recommended.
-LDAP_VERSION_3 = True
+# The attribute we need to retrieve in order to perform a bind.
+LDAP_BIND_ATTRS = [CU_BIND_ID]
+
+# prefered search scope
+LDAP_SEARCH_SCOPE='SUBTREE'
 
 def auth_user_ldap(uname, pwd):
     """
     Attempts to bind using the uname/pwd combo passed in.
     If that works, returns true. Otherwise returns false.
-
     """
     if not uname or not pwd:
         logging.error("Username or password not supplied")
         return False
-
-    ld = ldap.initialize(LDAP_URL)
-    if LDAP_VERSION_3:
-        ld.set_option(ldap.VERSION3, 1)
-    ld.start_tls_s()
-    udn = user_info_ldap(uname,LDAP_BIND_ATTRS)
-    if udn:
-        try:
-            bindres = ld.simple_bind_s(udn[0][0], pwd)
-        except(ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM):
+    resp = user_info_ldap(uname,LDAP_BIND_ATTRS)
+    if resp:
+        dn = resp[0]['dn']
+        server = ldap.Server(LDAP_URL, get_info=ldap.ALL, use_ssl=True)
+        conn = ldap.Connection(server, user=dn, password=pwd)
+        error = {}
+        success = {}
+        result = {}
+        # attempt bind twice to start_tls
+        # amazing hack, sam is quite proud
+        if not conn.bind(): conn.start_tls()
+        conn.bind()
+        result = conn.result
+        if result['description'] == 'success':
+            return True
+        if result['description'] == 'invalidCredentials':
             logging.error("Invalid or incomplete credentials for %s", uname)
             return False
-        except Exception as out:
-            logging.error("Auth attempt for %s had an unexpected error: %s",
-                         uname, out)
-            return False
         else:
-            return True
+            logging.error("Auth attempt for %s had an unexpected error: %s",
+                         uname, error)
+            return False
     else:
         logging.error("No user by that name")
         return False
 
-def user_info_ldap(uname, attributes):
-    """
-    Attempts to bind using the uname/pwd combo passed in.
-    If that works, returns true. Otherwise returns false.
-
-    """
-    if not uname or not attributes:
-        logging.error("Username or attributes not supplied")
-        return []
-    ld = ldap.initialize(LDAP_URL)
-    if LDAP_VERSION_3:
-        ld.set_option(ldap.VERSION3, 1)
-    ld.start_tls_s()
-    udn = ld.search_s(LDAP_SEARCH_BASE, ldap.SCOPE_SUBTREE,
-                           '(%s=%s)' % (LDAP_UNAME_ATTR,uname), attributes)
+# returns info for a user with a given uid
+# return attribute values for the users ldap if they are provided
+def user_info_ldap(uname, attributes=None):
+    if not uname:
+        logging.error("Username not supplied")
+        return False
+    server = ldap.Server(LDAP_URL, get_info=ldap.ALL)
+    conn = ldap.Connection(server, auto_bind=True)
+    conn.start_tls()
+    udn = conn.search(LDAP_SEARCH_BASE, '(%s=%s)' % (LDAP_UNAME_ATTR,uname), search_scope=LDAP_SEARCH_SCOPE, attributes=attributes)
+    resp = conn.response
     if udn:
-        return udn
+        return resp
     else:
-        return []
+        return False
