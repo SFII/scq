@@ -64,3 +64,6 @@ The webserver can be started by running the following commands:
 ```
 make serve
 ```
+
+To add data to the database, you can run `curl localhost:8000/api/survey -X
+POST -d @survey.json`. React components will make requests the same way.
