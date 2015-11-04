@@ -1,5 +1,6 @@
 import services.culdapauth as culdapauth
 import logging
+import time
 from handlers.register_handler import RegisterHandler
 from models.user import User
 
@@ -64,7 +65,7 @@ class CuLdapRegisterHandler(RegisterHandler):
             logging.error('User: verification errors!')
             logging.error(verified)
             return self.verifyCULdapRegistrationPage(username, verified)
-        
+
 
 
 

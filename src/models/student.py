@@ -28,11 +28,12 @@ class Student(BaseModel):
 
     # must be overridden
     def requiredFields():
-        super + ['student_id', 'college']
+        return ['college']
 
     # must be overrriden
     def fields():
-        super.update({
+        b = super(User, self)
+        return {
             'student_id' : (is_int, ),
             'email' : (is_string, is_valid_email, ),
             'college' : (is_in_list(REGISTRATION_METHODS), ),
@@ -41,4 +42,4 @@ class Student(BaseModel):
             'gpa' : (is_int, ),
             'course_history' : (is_list, ),
             'credits_earned' : (is_int, )
-        })
+        }

@@ -11,13 +11,12 @@ class User(BaseModel):
 
     # must be overridden
     def requiredFields(self):
-        r = ['registration',  'username', 'email', 'accepted_tos', 'date_registered']
-        return r
+        return ['registration',  'username', 'email', 'accepted_tos', 'date_registered']
 
     # must be overrriden
     def fields(self):
         b = super(User, self)
-        f = {
+        return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
             'user_id' : (b.is_int, ),
             'username' : (b.is_string, ),
@@ -29,16 +28,15 @@ class User(BaseModel):
             'date_registered' : (b.is_date_string,),
             'last_sign_in' : (b.is_date_string,)
         }
-        return f
 
-    def is_gender(data):
-        is_in_list(USER_GENDERS, data)
-
-    def is_ethnicity(data):
-        is_in_list(USER_ETHNICITIES, data)
-
-    def is_native_language(data):
-        is_in_list(USER_NATIVE_LANGUAGES, data)
+    # def is_gender(data):
+    #     is_in_list(USER_GENDERS, data)
+    #
+    # def is_ethnicity(data):
+    #     is_in_list(USER_ETHNICITIES, data)
+    #
+    # def is_native_language(data):
+    #     is_in_list(USER_NATIVE_LANGUAGES, data)
 
     def authenticate(self, username, password):
         user = self.get({'username' : username})

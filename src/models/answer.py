@@ -7,16 +7,17 @@ class Answer(BaseModel):
     USER_RESPONSE_FORMAT = ['Free reponse', 'Mutiple choice', 'Dichotomous', 'Rank order scaling', 'Rating scale']
 
     def requiredFields():
-        super + ['answer_id', 'user_id', 'survey_id', 'question_id', 'response_format']
+        return ['user_id', 'survey_id', 'question_id', 'response_format']
 
     def fields():
-        super.update({
+        b = super(User, self)
+        return {
             'answer_id' : (is_int, ),
             'user_id' : (is_int, ),
             'survey_id' : (is_int, ),
             'question_id' : (is_int, ),
             'response_format' : (is_string, is_reponse_format,)
-        })
+        }
 
     def is_reponse_format(data):
         is_in_list(USER_RESPONSE_FORMAT, data)
