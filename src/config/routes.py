@@ -8,6 +8,7 @@ from handlers.logout_handler import LogoutHandler
 from handlers.index_handler import IndexHandler
 from handlers.register_handler import RegisterHandler
 from services.survey import Survey
+from services.survey import Surveys
 
 settings = {
     'cookie_secret': '8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=',
@@ -25,5 +26,5 @@ routes = [
     (r"/register", RegisterHandler),
 
     (r"/api/survey/(\d+)", Survey),
-    (r"/api/survey", Survey),
+    (r"/api/survey", Surveys),
 ]
