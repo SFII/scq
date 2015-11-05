@@ -2,9 +2,6 @@
 See an example that uses basic auth with an LDAP
 backend in examples/helloworld_basic_ldap.py
 from: https://github.com/gmr/Tinman/blob/master/tinman/auth/ldapauth.py
-requires:
-sudo apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
-pip install python-ldap
 """
 import ldap3 as ldap
 import logging

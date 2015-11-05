@@ -1,6 +1,5 @@
 backports.ssl-match-hostname==3.4.0.2
 certifi==2015.9.6.2
 tornado==4.2.1
-wsgiref==0.1.2
-python-ldap==2.4.21
 python-dateutil==2.4.2
+ldap3==0.9.9.2
