@@ -1,7 +1,5 @@
 "use strict";
 
-var data = [];
-
 var Title = React.createClass({
     displayName: "Title",
 

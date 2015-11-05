@@ -1,5 +1,3 @@
-var data = [];
-
 var Title = React.createClass({
 render: function(){
   return (
@@ -31,19 +29,19 @@ render: function(){
 });
 
 var Card = React.createClass({
-propTypes: {
-    bullets: React.PropTypes.array.isRequired
-},
+    propTypes: {
+        bullets: React.PropTypes.array.isRequired
+    },
 
-render: function(){
-  return (
-    <div>
+    render: function(){
+      return (
+        <div>
 
-      <Title titleText="Updates!" />
-      <Support bullets={ this.props.bullets }/>
-    </div>
-  );
-}
+          <Title titleText="Updates!" />
+          <Support bullets={ this.props.bullets }/>
+        </div>
+      );
+    }
 });
 
 
@@ -81,8 +79,6 @@ var Page = React.createClass({
         );
     }
   });
-
-
 
 var BigCard = React.createClass({
     render: function() {
