@@ -4,10 +4,11 @@ import time
 import tornado.gen as gen
 import logging
 
+r.set_loop_type("tornado")
+
 class BaseModel:
     conn = r.connect(host='localhost', port=28015)
     DB = "scq"
-
 
     def is_int(self, data):
         assert isinstance(data, (int, float)), "Must be a number"
@@ -108,12 +109,13 @@ class BaseModel:
     def requiredFields(self):
         []
 
-    @gen.coroutine
+
     def init(self, conn):
         table = self.__class__.__name__
         logging.info(table)
+        print(table)
         try:
-            yield r.table_create(table).run(conn)
+            r.table_create(table).run(conn)
         except:
             "Table {0} already exist".format(table)
 
