@@ -123,14 +123,12 @@ class BaseModel:
     def verify(self, data):
         return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
 
-    @gen.coroutine
+
     def get_item(self, idnum):
         table = self.__class__.__name__
         return r.db(DB).table(table).get(idnum).run(BaseModel.conn)
 
-    @gen.coroutine
+
     def create_item(self, data):
         table = self.__class__.__name__
-        id = yield r.db(DB).table(table).insert(data).run(BaseModel.conn)
-        logger.info(id)
-        return id
+        return r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
