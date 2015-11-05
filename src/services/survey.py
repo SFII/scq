@@ -1,8 +1,9 @@
-import models.survey
 import tornado.web
 import tornado.gen as gen
 import json
 import time
+import models.survey
+import models.answer
 
 class Survey(tornado.web.RequestHandler):
     @gen.coroutine
@@ -19,6 +20,14 @@ class Survey(tornado.web.RequestHandler):
             return
         self.write(json.dumps(data))
 
+    @gen.coroutine
+    def post(self, idnumber):
+        idnumber = int(idnumber)
+        body = self.request.body
+        data = json.loads(body)
+        yield models.answer.Answer().create_item(data)
+
+class Surveys(tornado.web.RequestHandler):
     @gen.coroutine
     def post(self):
         body = self.request.body
