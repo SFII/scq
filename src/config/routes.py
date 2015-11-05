@@ -9,6 +9,7 @@ from handlers.index_handler import IndexHandler
 from handlers.register_handler import RegisterHandler
 from handlers.dashboard_handler import DashboardHandler
 from services.survey import Survey
+from services.survey import Surveys
 
 settings = {
     'cookie_secret': '8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=',
@@ -20,13 +21,12 @@ settings = {
 routes = [
     (r"/", IndexHandler),
     (r"/login", LoginHandler),
-    (r"/login", LoginHandler),
     (r"/login", LogoutHandler),
     (r"/register/(\w+)", RegisterHandler),
     (r"/register", RegisterHandler),
-    (r"/dashboard/",DashboardHandler)
+    (r"/dashboard/",DashboardHandler),
     (r"/api/survey/(\d+)", Survey),
-    (r"/api/survey", Survey),
+    (r"/api/survey", Surveys)
 ]
 
 application = tornado.web.Application(handlers=routes,
