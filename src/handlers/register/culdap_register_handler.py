@@ -4,6 +4,8 @@ import time
 from tornado import gen
 from handlers.register_handler import RegisterHandler
 from models.user import User
+from models.basemodel import BaseModel
+import rethinkdb as r
 
 class CuLdapRegisterHandler(RegisterHandler):
 
@@ -24,13 +26,13 @@ class CuLdapRegisterHandler(RegisterHandler):
     def get(self):
         return self.render("register/culdapregister.html", errors=[], next=self.get_argument("next","/"))
 
+
     def post(self):
         confirming = self.get_argument('confirming',False,strip = True)
         if confirming:
             return self.confirmCULdapRegistration()
         else:
             return self.CULdapRegister()
-
 
     def confirmCULdapRegistration(self):
         username = self.get_argument('username',strip = True)
@@ -66,7 +68,6 @@ class CuLdapRegisterHandler(RegisterHandler):
         data['minor2']          = self.get_argument('minor2',None,strip = True)
         return data
 
-
     @gen.coroutine
     def registerUser(self,data):
         data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
@@ -75,11 +76,10 @@ class CuLdapRegisterHandler(RegisterHandler):
             logging.error('User: verification errors!')
             logging.error(verified)
             return self.verifyCULdapRegistrationPage(username, verified)
-        user_id = yield User().create_item(data)
+        user_id = yield User.create_item(data)
+        # user_id = yield r.db(BaseModel.DB).table("User").insert(data).run(BaseModel.conn)
         logger.info(user_id)
         return user_id
-
-
 
 
     def CULdapRegister(self):

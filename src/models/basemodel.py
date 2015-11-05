@@ -5,7 +5,9 @@ import tornado.gen as gen
 import logging
 
 class BaseModel:
-    conn = None
+    conn = r.connect(host='localhost', port=28015)
+    DB = "scq"
+
 
     def is_int(self, data):
         assert isinstance(data, (int, float)), "Must be a number"
@@ -108,11 +110,12 @@ class BaseModel:
 
     @gen.coroutine
     def init(self, conn):
-        print(self.__class__.__name__)
+        table = self.__class__.__name__
+        logging.info(table)
         try:
-            yield r.table_create(self.__class__.__name__).run(conn)
+            yield r.table_create(table).run(conn)
         except:
-            "Table {0} already exist".format(self.__class__.__name__)
+            "Table {0} already exist".format(table)
 
     def get(self, criteria={}):
         yield r.table(__class__.__name__).filter(criteria)
@@ -123,9 +126,11 @@ class BaseModel:
     @gen.coroutine
     def get_item(self, idnum):
         table = self.__class__.__name__
-        return r.table(table).get(idnum).run(BaseModel.conn)
+        return r.db(DB).table(table).get(idnum).run(BaseModel.conn)
 
     @gen.coroutine
     def create_item(self, data):
         table = self.__class__.__name__
-        yield r.table(table).insert(data).run(BaseModel.conn)
+        id = yield r.db(DB).table(table).insert(data).run(BaseModel.conn)
+        logger.info(id)
+        return id

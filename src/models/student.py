@@ -20,10 +20,10 @@ class Student(BaseModel):
     COLLEGE_ENVIRONMENTAL = 'Program in Environmental Design'
     COLLEGES = [COLLEGE_ARTS_AND_SCIENCES, COLLEGE_ENGINEERING, COLLEGE_BUSINESS, COLLEGE_EDUCATION, COLLEGE_GRAD, COLLEGE_LAW, COLLEGE_MEDIA, COLLEGE_MUSIC, COLLEGE_CONTINUE, COLLEGE_ENVIRONMENTAL]
 
-    def b.is_major(data):
+    def is_major(data):
         pass
 
-    def b.is_minor(data):
+    def is_minor(data):
         pass
 
     # must be overridden
