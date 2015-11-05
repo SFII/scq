@@ -36,10 +36,10 @@
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
             <i class="material-icons">more_vert</i>
           </button>
-          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn" onCli>
-            <li class="mdl-menu__item" onclick="addSmall()">Add Small Box</li>
-            <li class="mdl-menu__item" onclick="addMedium()">Add Medium Box</li>
-            <li class="mdl-menu__item" onclick="addBig()">Add Big Box</li>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+            <li class="mdl-menu__item">About</li>
+            <li class="mdl-menu__item">Contact</li>
+            <li class="mdl-menu__item">Legal information</li>
           </ul>
         </div>
       </header>
@@ -224,149 +224,176 @@
     <script src="../assets/javascripts/material.js"></script>
   </body>
 </html>
-<script>
 
-"use strict";
+<style>
+    .listForm{
+    margin-bottom: 10px;
+    width: 100%;
+    }
+    
+    .mainDiv{
+    width: 100%;
+    }
+</style>    
 
-var Title = React.createClass({
-  displayName: "Title",
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "mdl-card__title mdl-card--expand mdl-color--teal-300" },
-      React.createElement(
-        "h2",
-        { className: "mdl-card__title-text" },
-        " ",
-        this.props.titleText,
-        " "
-      )
-    );
-  }
-});
-
-var Support = React.createClass({
-  displayName: "Support",
-
-  propTypes: {
-    bullets: React.PropTypes.array.isRequired
-  },
-
-  render: function render() {
-    var bulletPoints = this.props.bullets.map(function (bullet) {
-      return React.createElement(
-        "li",
-        { key: bullet },
-        bullet
+<script type="text/babel">
+/*
+*
+* data
+*
+*/
+var data = [];
+  
+  var Title = React.createClass({
+    render: function(){
+      return (
+        <div className="mdl-card__title mdl-card--expand mdl-color--teal-300">
+          <h2 className="mdl-card__title-text"> { this.props.titleText } </h2>
+        </div>
       );
-    });
+    }
+  });
 
-    return React.createElement(
-      "div",
-      { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-      React.createElement(
-        "ul",
-        { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-        bulletPoints
-      )
-    );
-  }
-});
+  var Support = React.createClass({
+    propTypes: {
+      bullets: React.PropTypes.array.isRequired
+    },
 
-var Card = React.createClass({
-  displayName: "Card",
+    render: function(){
+      const bulletPoints = this.props.bullets.map((bullet) => {
+        return <li key={ bullet }>{ bullet }</li>;
+      });
 
-  propTypes: {
-    bullets: React.PropTypes.array.isRequired
-  },
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+          <ul className="mdl-card__supporting-text mdl-color-text--grey-600">
+            { bulletPoints }
+          </ul>
+        </div>
+      );
+    }
+  });
 
-  render: function render() {
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(Title, { titleText: "Add cards with the button!" }),
-      React.createElement(Support, { bullets: this.props.bullets })
-    );
-  }
-});
+  var Card = React.createClass({
+    propTypes: {
+        bullets: React.PropTypes.array.isRequired
+    },
+
+    render: function(){
+      return (
+        <div>
+          
+          <Title titleText="Updates!" />
+          <Support bullets={ this.props.bullets }/>
+        </div>
+      );
+    }
+  });
+
 
 var Page = React.createClass({
-  displayName: "Page",
 
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop" },
-      React.createElement(Card, { bullets: ['BIG CARDS!', 'MEDIUM CARDS!', 'SMALL CARDS!'] })
-    );
-  }
+    handleAddItem: function(){
+    
+        //taken current state
+        var newItem = this.state.data;
+        
+        var addItem = newItem.concat([" "]);
+        this.setState({data: addItem});
+    },
+    
+    getInitialState: function() {
+        return {data: []};
+    },
+    
+    render: function(){
+      return (
+        
+        <div className="mdl-grid mdl-cell--12-col content">
+        <Form onItemSubmit={this.handleAddItem}/>
+
+        <MainDiv data={this.state.data}/>
+        
+        
+        <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+        
+          <Card bullets={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
+          
+          
+        </div>
+        </div>
+        );
+    }
+  });
+  
+  
+  
+var BigCard = React.createClass({
+    render: function() {
+        return (
+            <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+            <Card bullets={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
+        </div>
+        
+        );
+    }
 });
 
-ReactDOM.render(React.createElement(Page, null), document.getElementById('main-grid'));
+  
+/*
+*
+* MainDiv
+*ask michael about this.props.class
+*/
+var MainDiv = React.createClass({
+    render: function() {
+        var itemNodes = this.props.data.map(function (item) {
+                return (
+                    <BigCard>
+                    </BigCard>
+                );
+            });
+        return (
+        <div className="mainDiv ">
+            {itemNodes}
+        </div>
+        );
+    }
+});
 
-var button = document.createElement('button');
-var textNode = document.createTextNode('REACT BUTTON!');
-button.appendChild(textNode);
-button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
-componentHandler.upgradeElement(button);
-document.getElementById('container').appendChild(button);
-    
-function addBig() {
-    var node = document.createElement("div");
-    node.className = "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop";
-    var first = document.getElementById("main-grid").firstChild;
-    document.getElementById("main-grid").insertBefore(node, first);
-    
-    var div1 = document.createElement("div");
+  
+  
+/*
+*
+* Form
+*
+*/
+var Form = React.createClass({
 
-    var node2 = document.createElement("div");
-    node2.className = "mdl-card__title mdl-card--expand mdl-color--teal-300";
+    addItem: function(e) {
+        e.preventDefault();
+        this.props.onItemSubmit({});
+        return;
+        
+    },
     
-    var node3 = document.createElement("h2");
-    node3.className="mdl-card__title-text";
-    
-    node.appendChild(div1);
-    div1.appendChild(node2);
-    node2.appendChild(node3);
-}
-    
-function addMedium() {
-    var node = document.createElement("div");
-    node.className = "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--8-col-desktop";
-    var first = document.getElementById("main-grid").firstChild;
-    document.getElementById("main-grid").insertBefore(node, first);
-    
-    var div1 = document.createElement("div");
+    render: function() {
+        return (
+        <form className="listForm" onSubmit={this.addItem}>
+        <input  type="submit" value="Click me" />
+        </form>
+        );
+    }
+});
+  
+  
+  
+  ReactDOM.render(<Page /> , document.getElementById('main-grid'));
 
-    var node2 = document.createElement("div");
-    node2.className = "mdl-card__title mdl-card--expand mdl-color--teal-300";
-    
-    var node3 = document.createElement("h2");
-    node3.className="mdl-card__title-text";
-    
-    node.appendChild(div1);
-    div1.appendChild(node2);
-    node2.appendChild(node3);
-}
-
-function addSmall() {
-    var node = document.createElement("div");
-    node.className = "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--4-col-desktop";
-    var first = document.getElementById("main-grid").firstChild;
-    document.getElementById("main-grid").insertBefore(node, first);
-    
-    var div1 = document.createElement("div");
-
-    var node2 = document.createElement("div");
-    node2.className = "mdl-card__title mdl-card--expand mdl-color--teal-300";
-    
-    var node3 = document.createElement("h2");
-    node3.className="mdl-card__title-text";
-    
-    node.appendChild(div1);
-    div1.appendChild(node2);
-    node2.appendChild(node3);
-}
+  var button = document.createElement('button');
+  var textNode = document.createTextNode('REACT BUTTON!');
+  button.appendChild(textNode);
+  button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
+  componentHandler.upgradeElement(button);
+  document.getElementById('container').appendChild(button);
 </script>
-
