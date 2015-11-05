@@ -1,6 +1,6 @@
 import rethinkdb as r
 import re
-
+import time
 import tornado.gen as gen
 import logging
 
@@ -20,7 +20,7 @@ class BaseModel:
         try:
             time.strptime(data, '%a %b %d %H:%M:%S %Z %Y')
         except Exception as e:
-            raise Exception("datestring '{0}' could not be parsed into date object".format(data))
+            raise Exception("datestring '{0}' could not be parsed into date object:".format(data))
 
     def is_string(self, data):
         assert isinstance(data, (str,)), "Must be a string"
@@ -128,5 +128,4 @@ class BaseModel:
     @gen.coroutine
     def create_item(self, data):
         table = self.__class__.__name__
-        r.table(table).insert(data).run(BaseModel.conn)
-        return
+        yield r.table(table).insert(data).run(BaseModel.conn)

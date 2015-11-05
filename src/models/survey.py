@@ -8,8 +8,8 @@ class Survey(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'survey_id' : (is_int, ),
-            'question_id' : (is_int, ),
-            'course_id' : (is_int, ),
-            'user_id' : (is_int, )
+            'survey_id' : (b.is_int, ),
+            'question_id' : (b.is_int, ),
+            'course_id' : (b.is_int, ),
+            'user_id' : (b.is_int, )
         }

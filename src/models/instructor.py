@@ -8,9 +8,9 @@ class Instructor(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'instructor_id' : (is_int, ),
-            'instructor_name' : (is_str, ),
-            'department' : (is_str, ),
-            'college' : (is_str, ),
-            'section' : (is_str, )
+            'instructor_id' : (b.is_int, ),
+            'instructor_name' : (b.is_str, ),
+            'department' : (b.is_str, ),
+            'college' : (b.is_str, ),
+            'section' : (b.is_str, )
         }

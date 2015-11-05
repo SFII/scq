@@ -12,11 +12,11 @@ class Answer(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'answer_id' : (is_int, ),
-            'user_id' : (is_int, ),
-            'survey_id' : (is_int, ),
-            'question_id' : (is_int, ),
-            'response_format' : (is_string, is_reponse_format,)
+            'answer_id' : (b.is_int, ),
+            'user_id' : (b.is_int, ),
+            'survey_id' : (b.is_int, ),
+            'question_id' : (b.is_int, ),
+            'response_format' : (b.is_string, is_reponse_format,)
         }
 
     def is_reponse_format(data):

@@ -1,6 +1,7 @@
 import services.culdapauth as culdapauth
 import logging
 import time
+from tornado import gen
 from handlers.register_handler import RegisterHandler
 from models.user import User
 
@@ -42,12 +43,15 @@ class CuLdapRegisterHandler(RegisterHandler):
         decoded_cookie_username = cookie_username.decode("utf-8")
         if username != decoded_cookie_username:
             logging.error('username %s did not match cookie username %s' % (username, decoded_cookie_username))
-            return self.failWithErrors('register/culdapregister.html', ['Registration failed: find a programmer'])
-        data = {}
+            return self.failWithErrors('register/culdapregister.html', ['Registration failed: cookie data is invalid'])
+        data = self.collectUserData()
         data['username']        = username
         data['registration']    = User().REGISTRATION_CULDAP
         data['accepted_tos']    = True
-        data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
+        return self.registerUser(data)
+
+    def collectUserData(self):
+        data = {}
         data['email']           = self.get_argument('email',None,strip = True)
         data['dob']             = self.get_argument('dob',None,strip = True)
         data['gender']          = self.get_argument('gender',None,strip = True)
@@ -60,11 +64,20 @@ class CuLdapRegisterHandler(RegisterHandler):
         data['major4']          = self.get_argument('major4',None,strip = True)
         data['minor1']          = self.get_argument('minor1',None,strip = True)
         data['minor2']          = self.get_argument('minor2',None,strip = True)
+        return data
+
+
+    @gen.coroutine
+    def registerUser(self,data):
+        data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
         verified = User().verify(data)
         if len(verified) != 0:
             logging.error('User: verification errors!')
             logging.error(verified)
             return self.verifyCULdapRegistrationPage(username, verified)
+        user_id = yield User().create_item(data)
+        logger.info(user_id)
+        return user_id
 
 
 

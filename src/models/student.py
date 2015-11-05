@@ -20,10 +20,10 @@ class Student(BaseModel):
     COLLEGE_ENVIRONMENTAL = 'Program in Environmental Design'
     COLLEGES = [COLLEGE_ARTS_AND_SCIENCES, COLLEGE_ENGINEERING, COLLEGE_BUSINESS, COLLEGE_EDUCATION, COLLEGE_GRAD, COLLEGE_LAW, COLLEGE_MEDIA, COLLEGE_MUSIC, COLLEGE_CONTINUE, COLLEGE_ENVIRONMENTAL]
 
-    def is_major(data):
+    def b.is_major(data):
         pass
 
-    def is_minor(data):
+    def b.is_minor(data):
         pass
 
     # must be overridden
@@ -34,12 +34,12 @@ class Student(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'student_id' : (is_int, ),
-            'email' : (is_string, is_valid_email, ),
-            'college' : (is_in_list(REGISTRATION_METHODS), ),
-            'majors' : (is_list, schema_list_check(is_major),),
-            'minors' : (is_list, schema_list_check(is_minor),),
-            'gpa' : (is_int, ),
-            'course_history' : (is_list, ),
-            'credits_earned' : (is_int, )
+            'student_id' : (b.is_int, ),
+            'email' : (b.is_string, b.is_valid_email, ),
+            'college' : (b.is_in_list(REGISTRATION_METHODS), ),
+            'majors' : (b.is_list, schema_list_check(is_major),),
+            'minors' : (b.is_list, schema_list_check(is_minor),),
+            'gpa' : (b.is_int, ),
+            'course_history' : (b.is_list, ),
+            'credits_earned' : (b.is_int, )
         }
