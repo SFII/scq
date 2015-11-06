@@ -6,12 +6,31 @@ var Card = React.createClass({
     render: function(){
       return (
         <div>
-
           <TitleSection titleText="Updates!" />
           <SupportSection bullets={ this.props.bullets }/>
         </div>
       );
     }
+});
+
+var MediumCard = React.createClass({
+   render: function(){
+      return(
+         <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col">
+            <Card bullets={ ['Medium', 'TEST', 'SAMPLE THREE']}/>
+         </div>
+      );
+   }
+});
+
+var SmallCard = React.createClass({
+   render: function(){
+      return(
+         <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
+            <Card bullets={ ['Small', 'TEST', 'SAMPLE THREE']}/>
+         </div>
+      );
+   }
 });
 
 var BigCard = React.createClass({
@@ -20,7 +39,6 @@ var BigCard = React.createClass({
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <Card bullets={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
         </div>
-
         );
     }
 });

@@ -35,8 +35,12 @@ var MainDiv = React.createClass({
     render: function() {
         var itemNodes = this.props.data.map(function (item) {
                 return (
-                    <BigCard>
-                    </BigCard>
+                <div>
+                    <Table>
+                    </Table>
+                    <SmallCard>
+                    </SmallCard>
+                </div>
                 );
             });
         return (
