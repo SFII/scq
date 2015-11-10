@@ -24,6 +24,3 @@ routes = [
     (r"/api/survey/(\d+)", Survey),
     (r"/api/survey", Surveys)
 ]
-
-application = tornado.web.Application(handlers=routes,
-                                      settings=settings)

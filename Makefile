@@ -4,15 +4,20 @@
 # TODO: finish tidying up these make tasks
 
 PROJECTPATH="`pwd`/src"
+TESTINGPATH="`pwd`/test"
+TESTS = $(wildcard test/*.py)
 
 serve:
-	export PROJECTPATH=${PROJECTPATH} && cd src && python3 server.py
+	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3 server.py
 
 console:
-	export PROJECTPATH=${PROJECTPATH} && cd src && python3
+	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3
 
 test:
-	echo "not yet implemented"
+	@- $(foreach TEST,$(TESTS), \
+		echo === Running python3 test: $(TEST); \
+		python3 $(TEST); \
+		)
 
 database:
 	echo "not yet implemented"
@@ -24,4 +29,4 @@ build:
 clean:
 	find . -name *.pyc -exec rm {} \;
 
-.PHONY: serve clean
+.PHONY: test serve clean
