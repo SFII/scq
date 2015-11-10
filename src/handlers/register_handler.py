@@ -13,7 +13,6 @@ class RegisterHandler(tornado.web.RequestHandler):
     def post(self, input=None):
         return self.__registerDefault()
 
-
     def getErrors(self):
         errors = []
         username = self.get_argument('username',None,strip = True)

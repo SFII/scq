@@ -4,8 +4,6 @@ import time
 import tornado.gen as gen
 import logging
 
-r.set_loop_type("tornado")
-
 class BaseModel:
     conn = r.connect(host='localhost', port=28015)
     DB = "scq"
@@ -104,10 +102,10 @@ class BaseModel:
     # critical methods
 
     def fields(self):
-        {'id' : (is_string, )}
+        return {'id' : (is_string, )}
 
     def requiredFields(self):
-        []
+        return []
 
 
     def init(self, conn):
@@ -117,10 +115,7 @@ class BaseModel:
         try:
             r.table_create(table).run(conn)
         except:
-            "Table {0} already exist".format(table)
-
-    def get(self, criteria={}):
-        yield r.table(__class__.__name__).filter(criteria)
+            pass
 
     def verify(self, data):
         return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
@@ -133,4 +128,4 @@ class BaseModel:
 
     def create_item(self, data):
         table = self.__class__.__name__
-        return r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
+        r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
