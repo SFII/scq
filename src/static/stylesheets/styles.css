@@ -18,6 +18,15 @@ html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 
+.listForm{
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.mainDiv{
+    width: 100%;
+}
+
 .layout .header .mdl-textfield {
   padding-top: 27px;
 }
