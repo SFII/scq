@@ -18,7 +18,7 @@ class LoginHandler(tornado.web.RequestHandler):
                 next=self.get_argument("next","/")
             )
         else:
-            print user
+            print(user)
             if User().authenticate(username, password):
                 return __login(user)
             else:
