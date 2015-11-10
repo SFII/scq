@@ -6,7 +6,7 @@ Secrets must be configured through envrionment variables.
 """
 
 import tornado.web
-from tornado.options import define, options
+from tornado.options import define
 from routes import routes
 
 settings = {

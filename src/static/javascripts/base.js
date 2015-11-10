@@ -18,9 +18,6 @@ var Page = React.createClass({
         <div className="mdl-grid mdl-cell--12-col content">
             <Form onItemSubmit={this.handleAddItem}/>
             <MainDiv data={this.state.data}/>
-            <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-              <Card bullets={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
-            </div>
         </div>
         );
     }
@@ -36,10 +33,8 @@ var MainDiv = React.createClass({
         var itemNodes = this.props.data.map(function (item) {
                 return (
                 <div>
-                    <Table>
-                    </Table>
-                    <SmallCard>
-                    </SmallCard>
+                    <MediumCard survey={getSurvey('/api/survey/058eda13-7d8b-4ed4-a897-05848f844844')}>
+                    </MediumCard>
                 </div>
                 );
             });

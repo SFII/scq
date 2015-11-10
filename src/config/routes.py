@@ -25,7 +25,7 @@ routes = [
     (r"/register/(\w+)", RegisterHandler),
     (r"/register", RegisterHandler),
     (r"/dashboard/",DashboardHandler),
-    (r"/api/survey/(\d+)", Survey),
+    (r"/api/survey/([0-9a-z\-]+)", Survey),
     (r"/api/survey", Surveys)
 ]
 

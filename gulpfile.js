@@ -20,6 +20,7 @@ gulp.task('lint', function() {
 gulp.task('dev-js', function() {
     return gulp.src(
     [
+        './src/static/javascripts/db.js',
         './src/static/javascripts/base.js',
         './src/static/javascripts/cards.js',
         './src/static/javascripts/survey.js'

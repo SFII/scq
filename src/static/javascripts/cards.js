@@ -1,23 +1,28 @@
 var Card = React.createClass({
     propTypes: {
-        bullets: React.PropTypes.array.isRequired
+        survey: React.PropTypes.object.isRequired
     },
 
     render: function(){
       return (
         <div>
           <TitleSection titleText="Updates!" />
-          <SupportSection bullets={ this.props.bullets }/>
+          <SupportSection survey={ this.props.survey }/>
         </div>
       );
     }
 });
 
 var MediumCard = React.createClass({
+
+    propTypes: {
+        survey: React.PropTypes.object.isRequired
+    },
+
    render: function(){
       return(
          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col">
-            <Card bullets={ ['Medium', 'TEST', 'SAMPLE THREE']}/>
+            <Card survey={ this.props.survey }/>
          </div>
       );
    }
@@ -54,20 +59,11 @@ var TitleSection = React.createClass({
 });
 
 var SupportSection = React.createClass({
-    propTypes: {
-      bullets: React.PropTypes.array.isRequired
-    },
 
     render: function(){
-      const bulletPoints = this.props.bullets.map((bullet) => {
-        return <li key={ bullet }>{ bullet }</li>;
-      });
-
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-          <ul className="mdl-card__supporting-text mdl-color-text--grey-600">
-            { bulletPoints }
-          </ul>
+            { this.props.survey }
         </div>
       );
     }
