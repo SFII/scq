@@ -10,30 +10,32 @@ class LoginHandler(tornado.web.RequestHandler):
     def post(self):
         username = self.get_argument('username',strip = True)
         password = self.get_argument('password',strip = True)
-        user = User().get({'username' : username})
-        if user is None:
-            return self.render(
-                'login.html',
-                errormessage="User credentials not found!",
-                next=self.get_argument("next","/")
-            )
-        else:
-            print(user)
-            if User().authenticate(username, password):
-                return __login(user)
-            else:
+        cursor = User().find({'username' : username})
+        for user in cursor:
+            logging.info(user)
+            if user is None:
                 return self.render(
                     'login.html',
-                    errormessage="User credentials are incorrect!",
+                    errormessage="User credentials not found!",
                     next=self.get_argument("next","/")
                 )
+            else:
+                user_id = user['id']
+                if User().authenticate(user_id, password):
+                    return login(user)
+                else:
+                    return self.render(
+                        'login.html',
+                        errormessage="User credentials are incorrect!",
+                        next=self.get_argument("next","/")
+                    )
 
-    def __login(self, user):
-        self.__set_current_user(user)
+    def login(self, user_id):
+        self.set_current_user(user_id)
         self.redirect(self.get_argument("next", "/"))
 
-    def __set_current_user(self, user):
-        if user:
-            self.set_secure_cookie("user", tornado.escape.json_encode(user))
+    def set_current_user(self, user_id):
+        if user_id:
+            self.set_secure_cookie("user", tornado.escape.json_encode(user_id))
         else:
             self.clear_cookie("user")

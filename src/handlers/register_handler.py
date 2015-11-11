@@ -53,4 +53,4 @@ class RegisterHandler(tornado.web.RequestHandler):
         self.redirect(self.get_argument("next", "/"))
 
     def getLdapUser(self, username, registration):
-        user = User().get({'username' : username, 'registration' : registration})
+        user = User().find({'username' : username, 'registration' : registration})

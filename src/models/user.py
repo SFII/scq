@@ -1,5 +1,5 @@
 import rethinkdb as r
-import services.culdapauth
+import services.culdapauth as culdapauth
 from models.basemodel import BaseModel
 
 class User(BaseModel):
@@ -38,9 +38,11 @@ class User(BaseModel):
     # def is_native_language(data):
     #     is_in_list(USER_NATIVE_LANGUAGES, data)
 
-    def authenticate(self, username, password):
-        user = self.get({'username' : username})
+    # authenticates a user given a rethinkdb user_id and a password
+    def authenticate(self, user_id, password):
+        user = self.get_item(user_id)
+        username = user['username']
         registration = user['registration']
         {
-            REGISTRATION_CULDAP : culdapauth.auth_user_ldap
+            self.REGISTRATION_CULDAP : culdapauth.auth_user_ldap
         }[registration](username, password)

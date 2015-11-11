@@ -2,7 +2,7 @@ import services.culdapauth as culdapauth
 import logging
 import time
 from tornado import gen
-from tornado import web
+import tornado.web
 from handlers.register_handler import RegisterHandler
 from models.user import User
 from models.basemodel import BaseModel
@@ -78,10 +78,11 @@ class CuLdapRegisterHandler(RegisterHandler):
             logging.error('User: verification errors!')
             logging.error(verified)
             return self.verifyCULdapRegistrationPage(username, verified)
-        user_id = User().create_item(data)
-        # user_id = yield r.db(BaseModel.DB).table("User").insert(data).run(BaseModel.conn)
-        logging.info(user_id)
-        return user_id
+        log = User().create_item(data)
+        logging.info(log)
+        user_id = log['generated_keys'][0]
+        self.set_secure_cookie("user", tornado.escape.json_encode(user_id))
+        return self.redirect(self.get_argument("next", "/"))
 
 
     def CULdapRegister(self):
@@ -93,7 +94,6 @@ class CuLdapRegisterHandler(RegisterHandler):
         authorized = culdapauth.auth_user_ldap(username, password)
         if authorized:
             user = self.getLdapUser(username, User().REGISTRATION_CULDAP)
-
             if user is None:
                 return self.verifyCULdapRegistrationPage(username)
             else:
