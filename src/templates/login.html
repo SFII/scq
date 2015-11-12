@@ -1,11 +1,14 @@
-<html>
-<body>
-  <form method="post" action="/login">
-    <b>Enter Your Identikey</b><br>
-    <input type="text" name="username"><br>
-    <b>Enter Your Password</b><br>
-    <input type="password" name="password"></p>
-    <input type="submit" value="Submit">
-  </form>
-</body>
-</html>
+{% if errormessage %}
+<div class="alert alert-danger" role="alert">
+{{ errormessage }}
+</div>
+{% end %}
+<form method="post" action="/login">
+  <input type="hidden" name="next" id="next" value="{{ next }}">
+  <b>Enter Your Username</b><br>
+  <input type="text" name="username"><br>
+  <b>Enter Your Password</b><br>
+  <input type="password" name="password"></p>
+  <input type="submit" value="Submit">
+  {% raw xsrf_form_html() %}
+</form>
