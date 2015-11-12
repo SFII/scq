@@ -113,7 +113,7 @@ class BaseModel:
         logging.info(table)
         print(table)
         try:
-            r.table_create(table).run(conn)
+            r.db(BaseModel.DB).table_create(table).run(conn)
         except:
             pass
 
@@ -123,9 +123,12 @@ class BaseModel:
 
     def get_item(self, idnum):
         table = self.__class__.__name__
-        return r.db(DB).table(table).get(idnum).run(BaseModel.conn)
+        return r.db(BaseModel.DB).table(table).get(idnum).run(BaseModel.conn)
 
+    def find(self, key):
+        table = self.__class__.__name__
+        return r.db(BaseModel.DB).table(table).filter(key).run(BaseModel.conn)
 
     def create_item(self, data):
         table = self.__class__.__name__
-        r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
+        return r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
