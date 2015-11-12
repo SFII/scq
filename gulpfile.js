@@ -18,8 +18,16 @@ gulp.task('lint', function() {
 });
 
 gulp.task('dev-js', function() {
-    return gulp.src('./src/static/javascripts/*.js')
+    return gulp.src(
+    [
+        './src/static/javascripts/db.js',
+        './src/static/javascripts/base.js',
+        './src/static/javascripts/cards.js',
+        './src/static/javascripts/survey.js'
+    ])
+        .pipe(concat('all.js'))
         .pipe(babel())
+        .pipe(rename('all.js'))
         .pipe(gulp.dest('./src/static/dist/'));
 });
 
@@ -30,7 +38,7 @@ gulp.task('prod-js', function(){
         .pipe(gulp.dest('./dist/js/'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('./dist/js/'));
+        .pipe(gulp.dest('./src/static/dist/'));
 })
 
 gulp.task('minify-css', function () {
@@ -39,7 +47,7 @@ gulp.task('minify-css', function () {
         .pipe(rename({
             suffix: '.min.css'
         }))
-        .pipe(gulp.dest('dist/css/'));
+        .pipe(gulp.dest('./src/static/dist/'));
 });
 
 // Watch Files For Changes
