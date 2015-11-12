@@ -6,13 +6,8 @@ Secrets must be configured through envrionment variables.
 """
 
 import tornado.web
-<<<<<<< HEAD
-from tornado.options import define
-from routes import routes
-=======
 from tornado.options import define, options
 from config.routes import routes
->>>>>>> master
 
 SETTINGS = {
     'cookie_secret': "8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=",

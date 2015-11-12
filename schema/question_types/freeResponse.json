@@ -1,6 +1,6 @@
 {
     "question-id" : "asdasdad",
-    "type" : "multipleChoice",
+    "type" : "freeResponse",
     "question":"Did you enjoy the course?",
     "options":[],
 }
