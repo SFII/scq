@@ -11,7 +11,7 @@ make build
 
 ## Running:
 
-To run the server, make sure you have rethinkdb is up.
+To run the server, make sure you have rethinkDB is up.
 
 ```
 make serve
@@ -61,25 +61,17 @@ you will likely be asked for sudo privileges to install all needed packages
 
 On Mac:
 
-```brew update && brew install rethinkdb```
+```
+brew update && brew install rethinkdb
+```
 
 [On Linux](https://www.rethinkdb.com/docs/install/ubuntu/):
 
 Copy and past the entire codeblock:
+
 ```
 source /etc/lsb-release && echo "deb http://download.rethinkdb.com/apt $DISTRIB_CODENAME main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list
 wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install rethinkdb
 ```
-
-## Running:
-
-The webserver can be started by running the following commands:
-
-```
-make serve
-```
-
-To add data to the database, you can run `curl localhost:8000/api/survey -X
-POST -d @survey.json`. React components will make requests the same way.

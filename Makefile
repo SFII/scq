@@ -25,6 +25,7 @@ database:
 build:
 	pip3 install -r requirements.txt
 	npm install
+	gulp dev-js
 
 clean:
 	find . -name *.pyc -exec rm {} \;

@@ -37,8 +37,8 @@ gulp.task('dev-js', function() {
 });
 
 gulp.task('prod-js', function(){
-    return gulp.src('./src/static/javascripts/*.js')
-        .pipe(concat(js_files))
+    return gulp.src(js_files)
+        .pipe(concat('all.js'))
         .pipe(babel())
         .pipe(gulp.dest('./dist/js/'))
         .pipe(rename('all.min.js'))
