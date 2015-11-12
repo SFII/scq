@@ -1,7 +1,23 @@
 # scq
 Our main repo for the SCQ senior project.
 
-## Installing Dependenices:
+## Installing:
+
+Make sure you have python3 installed on your computer. Then run
+
+```
+make build
+```
+
+## Running:
+
+To run the server, make sure you have rethinkdb is up.
+
+```
+make serve
+```
+
+## Installing (Hard Way):
 We are using virtual environments to manage our dependencies and make sure they are the same between dev environments. If you don't have a virtualenv setup for this project, this is how to do it.
 
 To setup virtualenvs in general on your computer, do the following:
