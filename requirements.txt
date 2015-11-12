@@ -1,8 +1,6 @@
 backports.ssl-match-hostname==3.4.0.2
 certifi==2015.9.6.2
-pymongo==3.0.3
 tornado==4.2.1
-wsgiref==0.1.2
-remodel==0.4.3
-python-ldap==2.4.21
 python-dateutil==2.4.2
+ldap3==0.9.9.2
+rethinkdb

@@ -1,6 +1,6 @@
 import rethinkdb as r
-import services.ldapauth
-from basemodel import BaseModel
+import services.culdapauth
+from models.basemodel import BaseModel
 
 class User(BaseModel):
     REGISTRATION_CULDAP     = 'registration_culdap'
@@ -10,36 +10,37 @@ class User(BaseModel):
     USER_NATIVE_LANGUAGES   = ['English', 'Spanish', 'French', 'German', 'Korean', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi', 'Other', 'Prefer Not to Disclose']
 
     # must be overridden
-    def requiredFields():
-        super + ['registration', 'user_id',  'username', 'email', 'accepted_tos']
+    def requiredFields(self):
+        return ['registration',  'username', 'email', 'accepted_tos', 'date_registered']
 
     # must be overrriden
-    def fields():
-        super.update({
-            'registration' : (is_in_list(REGISTRATION_METHODS),),
-            'user_id' : (is_int, ),
-            'username' : (is_string, ),
-            'email' : (is_string, is_valid_email, ),
-            'accepted_tos' : (is_truthy,),
-            'gender' : (is_gender,),
-            'ethnicity' : (is_ethnicity,),
-            'native_language' : (is_native_language,),
-            'date_registered' : (is_date_string,),
-            'last_sign_in' : (is_date_string,)
-        })
+    def fields(self):
+        b = super(User, self)
+        return {
+            'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
+            'user_id' : (b.is_int, ),
+            'username' : (b.is_string, ),
+            'email' : (b.is_string, b.is_valid_email, ),
+            'accepted_tos' : (b.is_truthy,),
+            'gender' : (b.is_in_list(self.USER_GENDERS),),
+            'ethnicity' : (b.is_in_list(self.USER_ETHNICITIES),),
+            'native_language' : (b.is_in_list(self.USER_NATIVE_LANGUAGES),),
+            'date_registered' : (b.is_date_string,),
+            'last_sign_in' : (b.is_date_string,)
+        }
 
-    def is_gender(data):
-        is_in_list(USER_GENDERS, data)
-
-    def is_ethnicity(data):
-        is_in_list(USER_ETHNICITIES, data)
-
-    def is_native_language(data):
-        is_in_list(USER_NATIVE_LANGUAGES, data)
+    # def is_gender(data):
+    #     is_in_list(USER_GENDERS, data)
+    #
+    # def is_ethnicity(data):
+    #     is_in_list(USER_ETHNICITIES, data)
+    #
+    # def is_native_language(data):
+    #     is_in_list(USER_NATIVE_LANGUAGES, data)
 
     def authenticate(self, username, password):
         user = self.get({'username' : username})
         registration = user['registration']
         {
-            REGISTRATION_CULDAP : ldapauth.auth_user_ldap
+            REGISTRATION_CULDAP : culdapauth.auth_user_ldap
         }[registration](username, password)

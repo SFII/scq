@@ -1,10 +1,5 @@
 {
     "question-id" : "Unique-ID",
-    "meta"  : {
-        "department":"",
-        "creator":"",
-        "isInstructor":"",
-    },
     "type" : "multipleChoice",
     "question":"Did you enjoy the course?",
     "options":["Not at all","It was an average course","It was an excellent course"],

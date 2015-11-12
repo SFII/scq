@@ -1,18 +1,19 @@
-from basemodel import BaseModel
+from models.basemodel import BaseModel
 
 class Question(BaseModel):
 
-    USER_RESPONSE_FORMAT = ['Free reponse', 'Mutiple choice', 'Dichotomous', 'Rank order scaling', 'Rating scale'] 
+    USER_RESPONSE_FORMAT = ['Free reponse', 'Mutiple choice', 'Dichotomous', 'Rank order scaling', 'Rating scale']
 
     def requiredFields():
-        super + ['question_id', 'text', 'reponse_format']
+        return ['text', 'reponse_format']
 
     def fields():
-        super.update({
-            'question_id' : (is_int, ),
-            'text' : (is_str, ),
-            'response_format' : (is_str, is_reponse_format(USER_RESPONSE_FORMAT))
-        })
+        b = super(User, self)
+        return {
+            'question_id' : (b.is_int, ),
+            'text' : (b.is_str, ),
+            'response_format' : (b.is_str, b.is_reponse_format(USER_RESPONSE_FORMAT))
+        }
 
     def is_reponse_format(data):
-       is_in_list(USER_RESPONSE_FORMAT, data) 
+       super(User, self).is_in_list(USER_RESPONSE_FORMAT, data)

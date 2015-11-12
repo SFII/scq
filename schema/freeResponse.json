@@ -1,10 +1,5 @@
 {
     "question-id" : "asdasdad",
-    "meta"  : {
-        "department":"",
-        "creator":"",
-        "isInstructor":"",
-    },
     "type" : "multipleChoice",
     "question":"Did you enjoy the course?",
     "options":[],
