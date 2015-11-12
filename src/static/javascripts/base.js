@@ -33,7 +33,7 @@ var MainDiv = React.createClass({
         var itemNodes = this.props.data.map(function (item) {
                 return (
                 <div>
-                    <MediumCard survey={getSurvey('/api/survey/058eda13-7d8b-4ed4-a897-05848f844844')}>
+                    <MediumCard survey={getSurvey('PUT ENDPOINT HERE')}>
                     </MediumCard>
                 </div>
                 );

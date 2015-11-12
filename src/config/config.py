@@ -13,7 +13,7 @@ SETTINGS = {
     'cookie_secret': "8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=",
     'autoreload': True,
     'template_path':'templates/',
-    'static_path':'assets/',
+    'static_path':'static/',
 }
 
 define("port", default=8000, help="run on the given port", type=int)
