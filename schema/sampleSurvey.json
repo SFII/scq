@@ -1,0 +1,38 @@
+{
+    "survey-id" : "Unique-ID",
+    "survey" : [
+         {
+            "question-id" : "Unique-ID",
+            "type" : "trueOrFalse",
+            "meta"  : {
+                "department":"",
+                "creator":"",
+                "isInstructor":"",
+            },
+            "question":"Did you enjoy the course?",
+            "options":[1,2],
+        },
+        {
+            "question-id" : "Unique-ID",
+            "type" : "multipleChoice",
+            "meta"  : {
+                "department":"",
+                "creator":"",
+                "isInstructor":"",
+            },
+            "question":"Did you enjoy the course?",
+            "options":["Not at all","It was an average course","It was an excellent course"],
+        },
+        {
+            "question-id" : "Unique-ID",
+            "meta"  : {
+                "department":"",
+                "creator":"",
+                "isInstructor":"",
+            },
+            "type" : "multipleChoice",
+            "question":"Did you enjoy the course?",
+            "options":[],
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "question-id" : "Unique-ID",
+    "meta"  : {
+        "department":"",
+        "creator":"",
+        "isInstructor":"",
+    },
+    "type" : "trueOrFalse",
+    "question":"Did you enjoy the course?",
+    "options":[1,2],
+}
