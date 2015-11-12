@@ -1,5 +1,17 @@
 <body>
-  {% include body/header.html %}
-  {% block content %}Default Body Content{% end %}
+  <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    {% include body/header.html %}
+    <div class="drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+      {% include body/identifier.html %}
+      {% include body/navigation.html %}
+    </div>
+    {% block content %}Default Body Content{% end %}
   {% include body/footer.html %}
+  {% include body/scripts.html %}
+  {% block react %}
+  <script>
+  ReactDOM.render(React.createElement(Page, null), document.getElementById('main-grid'));
+  </script>
+  {% end %}
+</div>
 </body>
