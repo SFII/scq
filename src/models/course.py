@@ -1,29 +1,16 @@
-from basemodel import BaseModel
-#from remodel.helpers import create_tables, create_indexes
+from models.basemodel import BaseModel
 
-class Course(Model):
-    has_many = ('Section',)
+class Course(BaseModel):
 
-    def get_course_name(course):
-        return str(course['name'])
+    def requiredFields():
+        return ['course_name', 'department', 'average_grade', 'credit_hours']
 
-    def get_department_name(course):
-        return str(course['department'])
-
-    def get_course_id(course):
-        return str(course['course_id'])
-
-    def get_credit_hours(course):
-        return str(course['credit_hours'])
-
-    def get_section_count(course):
-        return str(course['sections'].count())
-
-
-
-
-
-# Creates all database tables defined by models
-#create_tables()
-# Creates all table indexes based on model relations
-#create_indexes()
+    def fields():
+        b = super(User, self)
+        return {
+            'course_id' : (b.is_int, ),
+            'course_name' : (b.is_str, ),
+            'department' : (b.is_str, ),
+            'average_grade' : (b.is_int, ),
+            'credit_hours' : (b.is_int, )
+        }

@@ -1,5 +1,15 @@
-from remodel.models import Model
+from models.basemodel import BaseModel
 
-class Survey(Model):
-    has_many = ('Question', 'Instructor',)
-    has_one = ('Course', 'Creator',)
+class Survey(BaseModel):
+
+    def requiredFields():
+        return ['question_id', 'course_id', 'user_id']
+
+    def fields():
+        b = super(User, self)
+        return {
+            'survey_id' : (b.is_int, ),
+            'question_id' : (b.is_int, ),
+            'course_id' : (b.is_int, ),
+            'user_id' : (b.is_int, )
+        }

@@ -8,38 +8,57 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
+var babel = require('gulp-babel');
+var cachebreaker = require('gulp-cache-breaker');
+
+
+js_files = [
+    './src/static/javascripts/db.js',
+    './src/static/javascripts/base.js',
+    './src/static/javascripts/cards.js',
+    './src/static/javascripts/survey.js'
+]
 
 // Lint Task
 gulp.task('lint', function() {
-    return gulp.src('./assets/javascripts/*.js')
+    return gulp.src('./src/static/javascripts/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
-// Concatenate & Minify JS
-gulp.task('scripts', function() {
-    return gulp.src('./assets/javascripts/*.js')
+gulp.task('dev-js', function() {
+    //these need to be sequential to prevent
+    return gulp.src(js_files)
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist'))
-        .pipe(rename('all.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('dist'));
+        .pipe(babel())
+        .pipe(rename('all.js'))
+        .pipe(cachebreaker())
+        .pipe(gulp.dest('./src/static/dist/'));
 });
 
+gulp.task('prod-js', function(){
+    return gulp.src(js_files)
+        .pipe(concat('all.js'))
+        .pipe(babel())
+        .pipe(gulp.dest('./dist/js/'))
+        .pipe(rename('all.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./src/static/dist/'));
+})
+
 gulp.task('minify-css', function () {
-    gulp.src('./assets/stylesheets/*.css')
+    gulp.src('./src/static/stylesheets/*.css')
         .pipe(minify({keepBreaks: true}))
         .pipe(rename({
             suffix: '.min.css'
         }))
-        .pipe(gulp.dest('dist'))
-    ;
+        .pipe(gulp.dest('./src/static/dist/'));
 });
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('./assets/javascripts/*.js', ['lint', 'scripts']);
+    gulp.watch('./src/static/javascripts/*.js', ['lint', 'dev-js']);
 });
 
 // Default Task
-gulp.task('default', ['lint', 'scripts', 'minify-css','watch']);
+gulp.task('default', ['scripts', 'minify-css']);

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>  <meta charset="utf-8">
+  <title>JS Bin</title>
+<link rel="stylesheet" href="../assets/stylesheets/styles_interact.css">
+<link rel="stylesheet"
+href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-red.min.css">
+<script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+    
+    <div id="container"></div>
+</body>
+</html>
+<style>
+    .box{
+     background-color: yellow;
+     width: 500px;
+     height: 150px;
+     border-style: solid;
+     border-color: blue;
+     margin-bottom: 5px;
+    }
+</style>
+<script type="text/babel">
+/*
+*
+* data, necessary to have all the nodes
+*
+*/
+var data = [];
+/*
+*
+* ListBox
+*
+*/
+var ListBox = React.createClass({
+    handleAddItem: function(){
+    
+        //taken current state
+        var newItem = this.state.data;
+        
+        //add to new state
+        var addItem = newItem.concat(["1"]);
+        this.setState({data: addItem});
+    },
+    
+    handleAddItem2: function(){
+        var newItem = this.state.data;
+        var addItem = newItem.concat(["2"]);
+        this.setState({data: addItem});
+    },
+    
+    handleAddItem3: function(){
+        var newItem = this.state.data;
+        var addItem = newItem.concat(["3"]);
+        this.setState({data: addItem});
+    },
+    
+    handleAddItem4: function(){
+        var newItem = this.state.data;
+        var addItem = newItem.concat(["4"]);
+        this.setState({data: addItem});
+    },
+    getInitialState: function() {
+        //leaving {} makes the first item
+        return {data: []};
+    },
+    
+    //data={this.props.data}
+    render: function() {
+        return (
+            <div className="listBox">
+                <h1>Main Box!</h1>
+                //Render MainList with prop this.state.data which was set in getInitialState
+                <MainList data={this.state.data} />
+                //Only called onItemSubmit, adds Item to be concatenated to addItem and then set to state
+                <Form onItemSubmit={this.handleAddItem}/>
+                <Form onItemSubmit={this.handleAddItem2}/>
+                <Form onItemSubmit={this.handleAddItem3}/>
+                <Form onItemSubmit={this.handleAddItem4}/>
+            </div>
+        );
+    }
+});
+/*
+*
+* MainList
+*ask michael about this.props.class
+*/
+//Receives prop this.state.data, the concatenated list of Items received by ListBox so far
+var MainList = React.createClass({
+    render: function() {
+            //Function that maps Item instances to list itemNodes
+            var itemNodes = this.props.data.map(function (item) {
+                if (item=="1"){
+                return(<Item></Item>)
+                }
+                else if(item=="2"){
+                return(<Item2></Item2>)
+                }
+                else if(item=="3"){
+                return(<Item3></Item3>)
+                }
+                else if(item=="4"){
+                return(<CheckboxCard></CheckboxCard>)
+                }
+            });
+        return (
+        <div className="mainList mdl-grid mdl-cell--12-col">
+            //returns list of itemNodes to the ListBox function
+            {itemNodes}
+        </div>
+        );
+    }
+});
+/*
+*
+* Form
+*
+*/
+var Form = React.createClass({
+    addItem: function(e) {
+        e.preventDefault();
+        //returns onItemSubmit, which tells ListBox to enter the addItem handler
+        this.props.onItemSubmit({});
+        return;
+        
+    },
+    
+    
+    render: function() {
+        return (
+        //calls addItem above
+        <form className="listForm" onSubmit={this.addItem}>
+        <input  type="submit" value="Click me" />
+        </form>
+        );
+    }
+});
+/*
+*
+* Item
+*
+*/
+//class that represents an instanced item that's appended in other functions into a list and displayed
+var Item = React.createClass({
+    render: function(){
+        return (
+            <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+                <Card bullets={['One', 'Two', 'Three']}/>
+            </div>
+        );
+    }
+});
+var Item2 = React.createClass({
+    render: function(){
+        return (
+            <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col">
+                <Card bullets={['One', 'Two', 'Three']}/>
+            </div>
+        );
+    }
+});
+var Item3 = React.createClass({
+    render: function(){
+        return (
+            <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
+                <Card bullets={['One', 'Two', 'Three']}/>
+            </div>
+        );
+    }
+});
+var CheckboxCard = React.createClass({
+    render: function(){
+        return(
+            <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
+                <Card2 checks={['One', 'Two', 'Three']}/>
+            </div>
+        );
+    }
+});
+//Stuff we got from Alex
+var Title = React.createClass({
+    render: function(){
+      return (
+        <div className="mdl-card__title mdl-card--expand mdl-color--teal-300">
+          <h2 className="mdl-card__title-text"> { this.props.titleText } </h2>
+        </div>
+      );
+    }
+  });
+  //red title
+var Title2 = React.createClass({
+    render:function(){
+        return(
+        <div className="mdl-card__title mdl-card--expand mdl-color--red-300">
+          <h2 className="mdl-card__title-text"> {this.props.titleText} </h2>
+        </div>
+    );
+  }
+});
+var Support = React.createClass({
+    propTypes: {
+      bullets: React.PropTypes.array.isRequired
+    },
+    render: function(){
+      const bulletPoints = this.props.bullets.map((bullet) => {
+        return <li key={ bullet }>{ bullet }</li>;
+      });
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+          <ul className="mdl-card__supporting-text mdl-color-text--grey-600">
+            { bulletPoints }
+          </ul>
+        </div>
+      );
+    }
+  });
+  
+var CheckboxSupport = React.createClass({
+    propTypes: {
+        checks: React.PropTypes.array.isRequired
+    },
+    
+    render:function(){
+        const checkBoxes = this.props.checks.map((check) => {
+             return (
+             <div>
+             <input type="checkbox"/> {check}
+             </div>   
+             );
+      });
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+         
+         
+         <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+           <fieldset>   
+           { checkBoxes }
+           <input type="submit" value="Submit"/> 
+           </fieldset>           
+           </form>
+        </div>
+      );
+    }
+  });
+var Card = React.createClass({
+    propTypes: {
+        bullets: React.PropTypes.array.isRequired
+    },
+    render: function(){
+      return (
+        <div>
+          <Title titleText="Bullets Card!" />
+          <Support bullets={ this.props.bullets }/>
+        </div>
+      );
+    }
+  });
+var Card2 = React.createClass({
+    propTypes: {
+        checks: React.PropTypes.array.isRequired    
+    },
+    
+    render: function(){
+        return (
+            <div>
+                <Title2 titleText="Checkbox Card!" />
+                <CheckboxSupport checks = {this.props.checks}/>
+
+            </div>
+        );
+    }
+});
+ReactDOM.render(
+    <ListBox />,
+    document.getElementById('container')
+);
+</script>
