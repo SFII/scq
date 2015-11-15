@@ -17,16 +17,11 @@ class RegisterHandler(tornado.web.RequestHandler):
         errors = []
         username = self.get_argument('username',None,strip = True)
         password = self.get_argument('password',None,strip = True)
-        confirmpassword = self.get_argument('passwordconfirm',None,strip = True)
         accepted = self.get_argument('accept',None,strip = True)
         if username is None:
             errors.append('username is required')
         if password is None:
             errors.append('password is required')
-        if confirmpassword is None:
-            errors.append('password confirmation is required')
-        if password != confirmpassword:
-            errors.append('passwords do not match')
         if not accepted:
             errors.append('you must accept the Terms and Conditions to Register')
         return errors
