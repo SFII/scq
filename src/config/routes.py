@@ -22,5 +22,5 @@ routes = [
     (r"/register", RegisterHandler),
     (r"/dashboard/",DashboardHandler),
     (r"/api/survey/(\d+)", Survey),
-    (r"/api/survey", Surveys)
+    (r"/api/surveys", Surveys)
 ]
