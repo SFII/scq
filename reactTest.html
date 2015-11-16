@@ -62,11 +62,21 @@ var ListBox = React.createClass({
         this.setState({data: addItem});
     },
     
-    handleAddItem4: function(){
+    //checkbox card
+    handleAddItem4: function(){ 
         var newItem = this.state.data;
         var addItem = newItem.concat(["4"]);
         this.setState({data: addItem});
     },
+    
+        //trueFalse card
+    handleAddItem5: function(){ 
+        var newItem = this.state.data;
+        var addItem = newItem.concat(["5"]);
+        this.setState({data: addItem});
+    },
+    
+    
     getInitialState: function() {
         //leaving {} makes the first item
         return {data: []};
@@ -84,6 +94,7 @@ var ListBox = React.createClass({
                 <Form onItemSubmit={this.handleAddItem2}/>
                 <Form onItemSubmit={this.handleAddItem3}/>
                 <Form onItemSubmit={this.handleAddItem4}/>
+                <Form onItemSubmit={this.handleAddItem5}/>
             </div>
         );
     }
@@ -109,6 +120,9 @@ var MainList = React.createClass({
                 }
                 else if(item=="4"){
                 return(<CheckboxCard></CheckboxCard>)
+                }
+                else if(item=="5"){
+                return(<TrueFalseCard></TrueFalseCard>)
                 }
             });
         return (
@@ -185,6 +199,21 @@ var CheckboxCard = React.createClass({
         );
     }
 });
+
+
+var TrueFalseCard = React.createClass({
+    render: function(){
+        return(
+            <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
+                <Card3 TFoption={['True', 'False']}/>
+            </div>
+        );
+    }
+});
+
+
+
+
 //Stuff we got from Alex
 var Title = React.createClass({
     render: function(){
@@ -238,8 +267,6 @@ var CheckboxSupport = React.createClass({
       });
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-         
-         
          <form className="mdl-card__supporting-text mdl-color-text--grey-600">
            <fieldset>   
            { checkBoxes }
@@ -250,6 +277,31 @@ var CheckboxSupport = React.createClass({
       );
     }
   });
+
+var TrueFalseSupport = React.createClass({
+    render: function(){
+      const radioButtons = this.props.TFoption.map((radiobutton) => {
+             return (
+             <div>
+             <input type="radio" name="TF" value="True or False"/> {radiobutton}
+             </div>   
+             );
+      });
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+          <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+          <fieldset>
+            { radioButtons }
+           <input type="submit" value="Submit"/> 
+           </fieldset>    
+          </form>
+        </div>
+      );
+    }
+  });
+
+  
+  
 var Card = React.createClass({
     propTypes: {
         bullets: React.PropTypes.array.isRequired
@@ -278,8 +330,27 @@ var Card2 = React.createClass({
         );
     }
 });
+
+
+var Card3 = React.createClass({
+    propTypes: {
+        TFoption: React.PropTypes.array.isRequired    
+    },
+    
+    render: function(){
+        return (
+            <div>
+                <Title2 titleText="True/False Card!" />
+                <TrueFalseSupport TFoption = {this.props.TFoption}/>
+
+            </div>
+        );
+    }
+});
+
+
 ReactDOM.render(
     <ListBox />,
     document.getElementById('container')
-);
+);a
 </script>
