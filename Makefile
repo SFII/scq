@@ -8,7 +8,7 @@ TESTINGPATH="`pwd`/test"
 TESTS = $(wildcard test/*.py)
 
 serve:
-	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3 server.py
+	export PROJECTPATH=${PROJECTPATH} && gulp watch & cd ./src && python3 server.py
 
 console:
 	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3
