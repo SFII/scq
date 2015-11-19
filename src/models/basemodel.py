@@ -75,50 +75,19 @@ class BaseModel:
                     raise Exception("Must be one of the following: {} or {}".format(exa, exb))
         return _or
 
-    def schema_list_check(method):
-        def _list_check(data):
-            try:
-                all(method(d) for d in data)
-            except Exception as e:
-                raise Exception("Not all elements satisfy: {}".format(e))
-        return _list_check
-
-    def check_data(data, fields, required_fields=[]):
-        for field in required_fields:
-            if field not in data:
-                yield (field, 'Missing field: {}'.format(field))
-        for key, methods in fields.items():
-            if key in data:
-                for method in methods:
-                    try:
-                        method(data[key])
-                    except Exception as e:
-                        if isinstance(getattr(e,'message',None), (list, tuple)):
-                            for error in e.message:
-                                yield error
-                        else:
-                            yield (key, "{}: {}".format(key, e))
-
-    # critical methods
-
-    def fields(self):
-        return {'id' : (is_string, )}
-
     def requiredFields(self):
         return []
 
 
     def init(self, conn):
         table = self.__class__.__name__
-        logging.info(table)
-        print(table)
         try:
             r.db(BaseModel.DB).table_create(table).run(conn)
         except:
             pass
 
-    def verify(self, data):
-        return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
+    def isValid(self, data):
+        return True
 
 
     def get_item(self, idnum):
@@ -127,8 +96,10 @@ class BaseModel:
 
     def find(self, key):
         table = self.__class__.__name__
-        return r.db(BaseModel.DB).table(table).filter(key).run(BaseModel.conn)
+        return list(r.db(BaseModel.DB).table(table).filter(key).run(BaseModel.conn))
 
     def create_item(self, data):
         table = self.__class__.__name__
-        return r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
+        if self.isValid(data):
+            o = r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
+            return o['generated_keys'][0]

@@ -29,16 +29,6 @@ class User(BaseModel):
             'last_sign_in' : (b.is_date_string,)
         }
 
-    # def is_gender(data):
-    #     is_in_list(USER_GENDERS, data)
-    #
-    # def is_ethnicity(data):
-    #     is_in_list(USER_ETHNICITIES, data)
-    #
-    # def is_native_language(data):
-    #     is_in_list(USER_NATIVE_LANGUAGES, data)
-
-    # authenticates a user given a rethinkdb user_id and a password
     def authenticate(self, user_id, password):
         user = self.get_item(user_id)
         username = user['username']

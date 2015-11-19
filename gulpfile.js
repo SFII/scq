@@ -9,6 +9,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
 var babel = require('gulp-babel');
+var plumber = require('gulp-plumber');
 var cachebreaker = require('gulp-cache-breaker');
 
 
@@ -29,6 +30,12 @@ gulp.task('lint', function() {
 gulp.task('dev-js', function() {
     //these need to be sequential to prevent
     return gulp.src(js_files)
+        .pipe(plumber({
+			errorHandler: function(err) {
+				console.log(err);
+				this.emit('end');
+			}
+		}))
         .pipe(concat('all.js'))
         .pipe(babel())
         .pipe(rename('all.js'))
