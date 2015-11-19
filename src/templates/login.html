@@ -1,3 +1,7 @@
+fdsa
+{% extends "layouts/base.html" %}
+{% block title %}Login{% end %}
+{% block content %}
 <form method="post" action="/login">
   <input type="hidden" name="next" id="next" value="{{ next }}">
   <b>Enter Your Username</b><br>
@@ -7,3 +11,4 @@
   <input type="submit" value="Submit">
   {% raw xsrf_form_html() %}
 </form>
+{% end %}

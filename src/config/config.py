@@ -14,8 +14,9 @@ SETTINGS = {
     'autoreload': True,
     'template_path':'templates/',
     'static_path':'static/',
+    'login_url': '/login'
 }
 
-define("port", default=8000, help="run on the given port", type=int)
+define('port', default=8000, help='run on the given port', type=int)
 
 application = tornado.web.Application(handlers=routes, **SETTINGS)

@@ -78,7 +78,8 @@ class CuLdapRegisterHandler(RegisterHandler):
             logging.error(verified)
             return self.verifyCULdapRegistrationPage(username, verified)
         user_id = User().create_item(data)
-        self.set_secure_cookie("user", tornado.escape.json_encode(user_id))
+        user_data = User().get_item(user_id)
+        self.set_current_user(user_data)
         return self.redirect(self.get_argument("next", "/"))
 
 

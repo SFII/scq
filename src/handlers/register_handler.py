@@ -1,7 +1,8 @@
 import tornado.web
 from models.user import User
+from handlers.base_handler import BaseHandler
 
-class RegisterHandler(tornado.web.RequestHandler):
+class RegisterHandler(BaseHandler):
 
     # Mandatories: Name, Universty email, password, confirm password, group (student...), accept term and conditions
     # Not mandatories: date, birthday, phone number, location, gender, ethnicity, native language
@@ -11,7 +12,7 @@ class RegisterHandler(tornado.web.RequestHandler):
 
 
     def post(self, input=None):
-        return self.__registerDefault()
+        return self.registerDefault()
 
     def getErrors(self):
         errors = []
@@ -27,7 +28,7 @@ class RegisterHandler(tornado.web.RequestHandler):
         return errors
 
 
-    def __registerDefault(self):
+    def registerDefault(self):
         errors = self.getErrors()
         return self.render(
             'register.html',
@@ -41,11 +42,6 @@ class RegisterHandler(tornado.web.RequestHandler):
             errors=errors,
             next=self.get_argument("next","/")
         )
-
-
-    def __login(self, user):
-        self.set_secure_cookie("username", self.get_argument("username"))
-        self.redirect(self.get_argument("next", "/"))
 
     def getLdapUser(self, username, registration):
         user = User().find({'username' : username, 'registration' : registration})

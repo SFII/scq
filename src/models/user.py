@@ -1,4 +1,5 @@
 import rethinkdb as r
+import logging
 import services.culdapauth as culdapauth
 from models.basemodel import BaseModel
 
@@ -18,7 +19,7 @@ class User(BaseModel):
         b = super(User, self)
         return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
-            'user_id' : (b.is_int, ),
+            'user_id' : (b.is_string, ),
             'username' : (b.is_string, ),
             'email' : (b.is_string, b.is_valid_email, ),
             'accepted_tos' : (b.is_truthy,),
@@ -26,13 +27,21 @@ class User(BaseModel):
             'ethnicity' : (b.is_in_list(self.USER_ETHNICITIES),),
             'native_language' : (b.is_in_list(self.USER_NATIVE_LANGUAGES),),
             'date_registered' : (b.is_date_string,),
-            'last_sign_in' : (b.is_date_string,)
+            'last_sign_in' : (b.is_date_string,),
+            'courses' : (b.is_list,),
+            'departments' : (b.is_list,),
+            'unanswered_surveys' : (b.is_list,),
+            'answered_surveys' : (b.is_list,),
+            'answers' : (b.is_list,),
         }
 
+    # Given user_id and possible password, lookup how to authenticate the user
+    # and attempt to authenticate the user
+    # returns True / False whether the authentication is successful
     def authenticate(self, user_id, password):
         user = self.get_item(user_id)
         username = user['username']
         registration = user['registration']
-        {
+        return {
             self.REGISTRATION_CULDAP : culdapauth.auth_user_ldap
         }[registration](username, password)
