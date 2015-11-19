@@ -3,11 +3,13 @@ Our main repo for the SCQ senior project.
 
 ## Installing:
 
-Make sure you have python3 installed on your computer. Then run
+Make sure you have python3 installed on your computer. Then run:
 
 ```
 make build
 ```
+
+This will install all of the pip modules as well as the
 
 ## Running:
 

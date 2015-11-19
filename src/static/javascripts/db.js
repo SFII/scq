@@ -15,3 +15,7 @@ function getSurvey(url){
      }
     });
 }
+
+function hello(){
+    alert('hello')
+}
