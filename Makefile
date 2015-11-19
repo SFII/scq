@@ -8,16 +8,13 @@ TESTINGPATH="`pwd`/test"
 TESTS = $(wildcard test/*.py)
 
 serve:
-	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3 server.py
+	export PROJECTPATH=${PROJECTPATH} && gulp watch & cd ./src && python3 server.py
 
 console:
 	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3
 
 test:
-	@- $(foreach TEST,$(TESTS), \
-		echo === Running python3 test: $(TEST); \
-		python3 $(TEST); \
-		)
+	cd src && python3 -m unittest discover test
 
 database:
 	echo "not yet implemented"
