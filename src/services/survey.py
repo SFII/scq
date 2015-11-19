@@ -29,7 +29,7 @@ class Surveys(tornado.web.RequestHandler):
 
     def get(self):
         uid = self.get_secure_cookie("username")
-        user = User().get_item(user)
+        user = User().get_item(uid)
         classes = user['courses']
         for course in courses:
             data += models.survey.Survey().find({'course': course,})
