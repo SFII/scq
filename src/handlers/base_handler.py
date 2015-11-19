@@ -7,7 +7,10 @@ class BaseHandler(tornado.web.RequestHandler):
     # any handler can call self.current_user to get the cookie-stored rethinkdb
     #data for a User. The data is set at login (when the cookie is set)
     def get_current_user(self):
-        return json.loads(self.get_secure_cookie('user').decode("utf-8"))
+        user_cookie = self.get_secure_cookie('user')
+        if user_cookie is None:
+            return None
+        return json.loads(user_cookie.decode("utf-8"))
 
     def refresh_current_user_cookie(self):
         if self.current_user is None:
