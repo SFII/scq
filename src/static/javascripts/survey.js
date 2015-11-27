@@ -1,32 +1,64 @@
-var Table = React.createClass({
-   render: function(){
-      return(
-        <table className= "mdl-js-data-table mdl-data-table--selectable">
-            <thead>
-              <tr>
-                <th className="mdl-data-table__cell--non-numeric">Material</th>
-                <th>Quantity</th>
-                <th>Unit price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
-                <td>250</td>
-                <td>$2.90</td>
-              </tr>
-              <tr>
-                <td className="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
-                <td>50</td>
-                <td>$1.25</td>
-              </tr>
-              <tr>
-                <td className="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
-                <td>10</td>
-                <td>$12.35</td>
-              </tr>
-            </tbody>
-        </table>
+/*
+*
+*
+* Multiple Choice
+*/
+var MultipleChoice = React.createClass({
+    render: function(){
+      const renderedOptions = this.props.options.map((option) => {
+        return <input type="checkbox" key={ option }>{ option }<br/></input>;
+      });
+
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+          <ul className="mdl-card__supporting-text mdl-color-text--grey-600">
+            { renderedOptions }
+          </ul>
+        </div>
       );
-   }
+    }
 });
+
+
+/*
+*
+*
+* Single Choice
+*/
+ var SingleChoice = React.createClass({
+    render: function(){
+        const renderedOptions = this.props.options.map((option, type) => {
+          alert(type);
+          return <div><input type="radio" name ={ option } value={ option } key={ option }/>{ option }<br/></div>;
+        });
+
+        return (
+          <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+            <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+              { renderedOptions }
+            </form>
+          </div>
+        );
+    }
+});
+
+/*
+*
+*
+* Free
+*/
+var FreeResponse = React.createClass({
+
+  render: function(){
+    return (
+      <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+        <p>Insert your text here</p>
+        <textarea rows="6" cols="110">
+        </textarea>
+      </div>
+     );
+  }
+});
+
+
+

@@ -10,14 +10,13 @@ var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
 var babel = require('gulp-babel');
 var plumber = require('gulp-plumber');
-var cachebreaker = require('gulp-cache-breaker');
 
 
 js_files = [
     './src/static/javascripts/db.js',
-    './src/static/javascripts/base.js',
+    './src/static/javascripts/survey.js',
     './src/static/javascripts/cards.js',
-    './src/static/javascripts/survey.js'
+    './src/static/javascripts/base.js'
 ]
 
 // Lint Task
@@ -30,16 +29,9 @@ gulp.task('lint', function() {
 gulp.task('dev-js', function() {
     //these need to be sequential to prevent
     return gulp.src(js_files)
-        .pipe(plumber({
-			errorHandler: function(err) {
-				console.log(err);
-				this.emit('end');
-			}
-		}))
-        .pipe(concat('all.js'))
         .pipe(babel())
+        .pipe(concat('all.js'))
         .pipe(rename('all.js'))
-        .pipe(cachebreaker())
         .pipe(gulp.dest('./src/static/dist/'));
 });
 

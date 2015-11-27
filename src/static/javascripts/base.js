@@ -1,28 +1,28 @@
-var Page = React.createClass({
+var testQuestions = [
+{
+    id : 1,
+    type : "trueOrFalse",
+    title :"Would you recommend this course?",
+    options : ["Yes", "No"]
+},
+{
+    id : "asdasdad",
+    type : "freeResponse",
+    title :"What things should be improved?"
+},
+{
+    id : 2,
+    type : "multipeChoice",
+    title: "Did you enjoy the course?",
+    options: ["Not at all","It was an average course","It was an excellent course"]
+}
+];
 
-    handleAddItem: function(){
-
-        //taken current state
-        var newItem = this.state.data;
-
-        var addItem = newItem.concat([" "]);
-        this.setState({data: addItem});
-    },
-
-    getInitialState: function() {
-        return {data: []};
-    },
-
-    render: function(){
-      return (
-        <div className="mdl-grid mdl-cell--12-col content">
-            <Form onItemSubmit={this.handleAddItem}/>
-            <MainDiv data={this.state.data}/>
-        </div>
-        );
-    }
-  });
-
+/*
+*
+* MainDiv
+*ask michael about this.props.class
+*/
 /*
 *
 * MainDiv
@@ -30,17 +30,25 @@ var Page = React.createClass({
 */
 var MainDiv = React.createClass({
     render: function() {
-        var itemNodes = this.props.data.map(function (item) {
+        var itemNodes = testQuestions.map(function (item) {
                 return (
-                <div>
-                    <MediumCard survey={getSurvey('PUT ENDPOINT HERE')}>
-                    </MediumCard>
-                </div>
+                    <Card title={item.title} options={item.options} type={item.type}>
+                    </Card>
                 );
             });
         return (
         <div className="mainDiv ">
             {itemNodes}
+        </div>
+        );
+    }
+});
+
+var Page = React.createClass({
+    render: function(){
+      return (
+        <div className="mdl-grid mdl-cell--12-col content">
+            <MainDiv question={this.props.question}/>
         </div>
         );
     }
