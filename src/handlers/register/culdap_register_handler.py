@@ -73,12 +73,15 @@ class CuLdapRegisterHandler(RegisterHandler):
 
     def registerUser(self,data):
         data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
-        if not User().isValid(data):
+        username = self.get_argument('username',strip = True)
+        verified = User().verify(data)
+        if len(verified) != 0:
             logging.error('User: verification errors!')
             logging.error(verified)
             return self.verifyCULdapRegistrationPage(username, verified)
         user_id = User().create_item(data)
-        self.set_secure_cookie("user", tornado.escape.json_encode(user_id))
+        user_data = User().get_item(user_id)
+        self.set_current_user(user_data)
         return self.redirect(self.get_argument("next", "/"))
 
 

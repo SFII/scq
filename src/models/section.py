@@ -8,7 +8,7 @@ class Section(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'section_id' : (b.is_int, ),
+            'section_id' : (b.is_string, ),
             'course_id' : (b.is_int, ),
             'course_name' : (b.is_str, ),
             'average_grade' : (b.is_int, ),
