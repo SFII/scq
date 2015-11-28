@@ -55,7 +55,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         return self.registerUser(data)
 
     def collectUserData(self):
-        data = {}
+        data = User().default()
         data['email']           = self.get_argument('email',None,strip = True)
         data['dob']             = self.get_argument('dob',None,strip = True)
         data['gender']          = self.get_argument('gender',None,strip = True)

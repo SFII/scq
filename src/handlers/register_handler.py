@@ -10,7 +10,6 @@ class RegisterHandler(BaseHandler):
     def get(self, input=None):
         return self.render("register.html", errors=[], next=self.get_argument("next","/"))
 
-
     def post(self, input=None):
         return self.registerDefault()
 

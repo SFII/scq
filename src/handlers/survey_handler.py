@@ -8,7 +8,6 @@ from models.user import User
 import models.answer
 from handlers.base_handler import BaseHandler
 
-# given a
 class Survey(BaseHandler):
     def get(self, id_number):
         data = Survey().get_item(id_number)
@@ -30,7 +29,7 @@ class Surveys(BaseHandler):
 
     def get(self):
         user_data = self.current_user
-        classes = user['courses']
+        classes = user_data['courses']
         for course in courses:
             data += models.survey.Survey().find({'course': course,})
         self.write(json.dumps(data))

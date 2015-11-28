@@ -31,10 +31,29 @@ class User(BaseModel):
             'courses' : (b.is_list,),
             'departments' : (b.is_list,),
             'unanswered_surveys' : (b.is_list,),
-            'incomplete_surveys' : (b.is_list,),
             'answered_surveys' : (b.is_list,),
             'answers' : (b.is_list,),
         }
+
+    # returns default user data, that can be overwritten. Good for templating a new user
+    def default(self):
+        return {
+            'registration' : self.REGISTRATION_METHODS[0],
+            'username' : '',
+            'email' : '',
+            'accepted_tos' : False,
+            'gender' : self.USER_GENDERS[-1],
+            'ethnicity' : self.USER_ETHNICITIES[-1],
+            'native_language' : self.USER_NATIVE_LANGUAGES[-1],
+            'date_registered' : time.strftime('%a %b %d %H:%M:%S %Z %Y'),
+            'last_sign_in' : time.strftime('%a %b %d %H:%M:%S %Z %Y'),
+            'courses' : [],
+            'departments' : [],
+            'unanswered_surveys' : [],
+            'answered_surveys' : [],
+            'answers' : [],
+        }
+
 
     # Given user_id and possible password, lookup how to authenticate the user
     # and attempt to authenticate the user
