@@ -8,9 +8,9 @@ from models.user import User
 import models.answer
 from handlers.base_handler import BaseHandler
 
+# given a
 class Survey(BaseHandler):
     def get(self, id_number):
-        id_number = id_number
         data = Survey().get_item(id_number)
         if data == None:
             self.write_error(404)
@@ -18,7 +18,6 @@ class Survey(BaseHandler):
             self.write(json.dumps(data))
 
     def post(self, id_number):
-        id_number = int(id_number)
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
         Answer().create_item(data)

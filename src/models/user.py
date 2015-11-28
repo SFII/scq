@@ -20,7 +20,7 @@ class User(BaseModel):
         return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
             'user_id' : (b.is_string, ),
-            'username' : (b.is_string, ),
+            'username' : (b.is_string, b.is_unique),
             'email' : (b.is_string, b.is_valid_email, ),
             'accepted_tos' : (b.is_truthy,),
             'gender' : (b.is_in_list(self.USER_GENDERS),),
@@ -31,6 +31,7 @@ class User(BaseModel):
             'courses' : (b.is_list,),
             'departments' : (b.is_list,),
             'unanswered_surveys' : (b.is_list,),
+            'incomplete_surveys' : (b.is_list,),
             'answered_surveys' : (b.is_list,),
             'answers' : (b.is_list,),
         }

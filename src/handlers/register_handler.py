@@ -44,4 +44,4 @@ class RegisterHandler(BaseHandler):
         )
 
     def getLdapUser(self, username, registration):
-        user = User().find({'username' : username, 'registration' : registration})
+        return User().find({'username' : username, 'registration' : registration})
