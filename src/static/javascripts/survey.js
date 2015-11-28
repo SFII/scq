@@ -6,14 +6,19 @@
 var MultipleChoice = React.createClass({
     render: function(){
       const renderedOptions = this.props.options.map((option) => {
-        return <input type="checkbox" key={ option }>{ option }<br/></input>;
+        return (
+            <div>
+            <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <input type="checkbox" key={ option } className="mdl-checkbox__input"></input>
+                <span className="mdl-checkbox__label"> { option } <br/></span>
+            </label>
+            </div>
+        )
       });
 
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-          <ul className="mdl-card__supporting-text mdl-color-text--grey-600">
             { renderedOptions }
-          </ul>
         </div>
       );
     }
@@ -28,8 +33,14 @@ var MultipleChoice = React.createClass({
  var SingleChoice = React.createClass({
     render: function(){
         const renderedOptions = this.props.options.map((option, type) => {
-          alert(type);
-          return <div><input type="radio" name ={ option } value={ option } key={ option }/>{ option }<br/></div>;
+            return (
+                <div>
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+                      <input type="radio" className="mdl-radio__button" name ={ option } value={ option } key={ option }></input>
+                      <span className="mdl-radio__label"> { option } </span>
+                    </label>
+                </div>
+            )
         });
 
         return (
@@ -52,9 +63,7 @@ var FreeResponse = React.createClass({
   render: function(){
     return (
       <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-        <p>Insert your text here</p>
-        <textarea rows="6" cols="110">
-        </textarea>
+        <textarea className="mdl-textfield__input" type="text" rows="6" cols="110" id="test"></textarea>
       </div>
      );
   }
