@@ -1,3 +1,12 @@
+var SubmitButton = React.createClass({
+    render: function(){
+        return (
+            <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Submit
+            </button>
+        )
+    }
+})
 /*
 *
 *
@@ -19,12 +28,11 @@ var MultipleChoice = React.createClass({
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
             { renderedOptions }
+            <SubmitButton />
         </div>
       );
     }
-});
-
-
+})
 /*
 *
 *
@@ -47,6 +55,7 @@ var MultipleChoice = React.createClass({
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
             <form className="mdl-card__supporting-text mdl-color-text--grey-600">
               { renderedOptions }
+              <SubmitButton />
             </form>
           </div>
         );
@@ -63,7 +72,9 @@ var FreeResponse = React.createClass({
   render: function(){
     return (
       <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-        <textarea className="mdl-textfield__input" type="text" rows="6" cols="110" id="test"></textarea>
+        <textarea className="mdl-textfield__input" type="text" rows="4" cols="110" id="test"></textarea>
+        <br/>
+        <SubmitButton />
       </div>
      );
   }

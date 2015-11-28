@@ -18,86 +18,95 @@ function getSurvey(url) {
 }
 
 function sendSurvey(url) {}
+"use strict";
+
+var SubmitButton = React.createClass({
+    displayName: "SubmitButton",
+
+    render: function render() {
+        return React.createElement(
+            "button",
+            { className: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" },
+            "Submit"
+        );
+    }
+});
 /*
 *
 *
 * Multiple Choice
 */
-"use strict";
-
 var MultipleChoice = React.createClass({
-  displayName: "MultipleChoice",
+    displayName: "MultipleChoice",
 
-  render: function render() {
-    var renderedOptions = this.props.options.map(function (option) {
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "label",
-          { className: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" },
-          React.createElement("input", { type: "checkbox", key: option, className: "mdl-checkbox__input" }),
-          React.createElement(
-            "span",
-            { className: "mdl-checkbox__label" },
-            " ",
-            option,
-            " ",
-            React.createElement("br", null)
-          )
-        )
-      );
-    });
+    render: function render() {
+        var renderedOptions = this.props.options.map(function (option) {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "label",
+                    { className: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" },
+                    React.createElement("input", { type: "checkbox", key: option, className: "mdl-checkbox__input" }),
+                    React.createElement(
+                        "span",
+                        { className: "mdl-checkbox__label" },
+                        " ",
+                        option,
+                        " ",
+                        React.createElement("br", null)
+                    )
+                )
+            );
+        });
 
-    return React.createElement(
-      "div",
-      { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-      renderedOptions
-    );
-  }
+        return React.createElement(
+            "div",
+            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+            renderedOptions,
+            React.createElement(SubmitButton, null)
+        );
+    }
 });
-
 /*
 *
 *
 * Single Choice
 */
 var SingleChoice = React.createClass({
-  displayName: "SingleChoice",
+    displayName: "SingleChoice",
 
-  render: function render() {
-    var renderedOptions = this.props.options.map(function (option, type) {
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "label",
-          { className: "mdl-radio mdl-js-radio mdl-js-ripple-effect" },
-          React.createElement(
-            "input",
-            { type: "radio", className: "mdl-radio__button", name: option, value: option, key: option },
-            " "
-          ),
-          React.createElement(
-            "span",
-            { className: "mdl-radio__label" },
-            " ",
-            option
-          )
-        )
-      );
-    });
+    render: function render() {
+        var renderedOptions = this.props.options.map(function (option, type) {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "label",
+                    { className: "mdl-radio mdl-js-radio mdl-js-ripple-effect" },
+                    React.createElement("input", { type: "radio", className: "mdl-radio__button", name: option, value: option, key: option }),
+                    React.createElement(
+                        "span",
+                        { className: "mdl-radio__label" },
+                        " ",
+                        option,
+                        " "
+                    )
+                )
+            );
+        });
 
-    return React.createElement(
-      "div",
-      { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-      React.createElement(
-        "form",
-        { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-        renderedOptions
-      )
-    );
-  }
+        return React.createElement(
+            "div",
+            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+            React.createElement(
+                "form",
+                { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+                renderedOptions,
+                React.createElement(SubmitButton, null)
+            )
+        );
+    }
 });
 
 /*
@@ -106,15 +115,17 @@ var SingleChoice = React.createClass({
 * Free
 */
 var FreeResponse = React.createClass({
-  displayName: "FreeResponse",
+    displayName: "FreeResponse",
 
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-      React.createElement("textarea", { className: "mdl-textfield__input", type: "text", rows: "6", cols: "110", id: "test" })
-    );
-  }
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+            React.createElement("textarea", { className: "mdl-textfield__input", type: "text", rows: "4", cols: "110", id: "test" }),
+            React.createElement("br", null),
+            React.createElement(SubmitButton, null)
+        );
+    }
 });
 // var MediumCard = React.createClass({
 //
@@ -148,16 +159,6 @@ var FreeResponse = React.createClass({
 //             <Card options={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
 //         </div>
 //         );
-//     }
-// });
-// var SupportSection = React.createClass({
-//
-//     render: function(){
-//       return (
-//         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-//             { this.props.survey }
-//         </div>
-//       );
 //     }
 // });
 
