@@ -72,7 +72,6 @@ class CuLdapRegisterHandler(RegisterHandler):
 
 
     def registerUser(self,data):
-        data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
         username = self.get_argument('username',strip = True)
         verified = User().verify(data)
         if len(verified) != 0:
