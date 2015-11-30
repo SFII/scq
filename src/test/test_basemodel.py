@@ -25,10 +25,26 @@ class TestBaseModel(unittest.TestCase):
             BaseModel().is_int([1,2,3])
                
     def test_is_truthy(self):
-        pass
+        try:
+            BaseModel().is_truthy(True)
+            BaseModel().is_truthy(1)
+        except:
+            self.fail('Error: data as True or 1 should be Truthy')
+        with self.assertRaises(AssertionError):
+            BaseModel().is_truthy(False)
+        with self.assertRaises(AssertionError):
+            BaseModel().is_truthy(0)
 
     def test_is_falsey(self):
-        pass
+        try:
+            BaseModel().is_falsey(True)
+            BaseModel().is_falsey(1)
+        except:
+            self.fail('Error: data should be falsey?')
+        with self.assertRaises(AssertionError):
+            BaseModel().is_truthy(False)
+        with self.assertRaises(AssertionError):
+            BaseModel().is_truthy(0)
 
     def test_is_date_string(self):
         try:
