@@ -10,19 +10,18 @@ var rename = require('gulp-rename');
 var minify = require('gulp-minify-css');
 var babel = require('gulp-babel');
 var plumber = require('gulp-plumber');
-var cachebreaker = require('gulp-cache-breaker');
 
 
 js_files = [
     './src/static/javascripts/db.js',
-    './src/static/javascripts/base.js',
-    './src/static/javascripts/cards.js',
-    './src/static/javascripts/survey.js'
+    './src/static/javascripts/components/questions.jsx',
+    './src/static/javascripts/components/cards.jsx',
+    './src/static/javascripts/components/dashboard.jsx'
 ]
 
 // Lint Task
 gulp.task('lint', function() {
-    return gulp.src('./src/static/javascripts/*.js')
+    return gulp.src(js_files)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -30,16 +29,9 @@ gulp.task('lint', function() {
 gulp.task('dev-js', function() {
     //these need to be sequential to prevent
     return gulp.src(js_files)
-        .pipe(plumber({
-			errorHandler: function(err) {
-				console.log(err);
-				this.emit('end');
-			}
-		}))
-        .pipe(concat('all.js'))
         .pipe(babel())
+        .pipe(concat('all.js'))
         .pipe(rename('all.js'))
-        .pipe(cachebreaker())
         .pipe(gulp.dest('./src/static/dist/'));
 });
 
@@ -64,7 +56,8 @@ gulp.task('minify-css', function () {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('./src/static/javascripts/*.js', ['lint', 'dev-js']);
+    gulp.watch(js_files, ['lint', 'dev-js']);
+
 });
 
 // Default Task
