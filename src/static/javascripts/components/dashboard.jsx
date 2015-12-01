@@ -23,11 +23,6 @@ var testQuestions = [
 * MainDiv
 *ask michael about this.props.class
 */
-/*
-*
-* MainDiv
-*ask michael about this.props.class
-*/
 var MainDiv = React.createClass({
     render: function() {
         var itemNodes = testQuestions.map(function (item) {

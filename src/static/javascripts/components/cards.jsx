@@ -1,38 +1,3 @@
-// var MediumCard = React.createClass({
-//
-//     propTypes: {
-//         survey: React.PropTypes.object.isRequired
-//     },
-//
-//    render: function(){
-//       return(
-//          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col">
-//             <Card survey={ this.props.survey }/>
-//          </div>
-//       );
-//    }
-// });
-//
-// var SmallCard = React.createClass({
-//    render: function(){
-//       return(
-//          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
-//             <Card options={ ['Small', 'TEST', 'SAMPLE THREE']}/>
-//          </div>
-//       );
-//    }
-// });
-//
-// var BigCard = React.createClass({
-//     render: function() {
-//         return (
-//             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-//             <Card options={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
-//         </div>
-//         );
-//     }
-// });
-
 var TitleSection = React.createClass({
     render: function(){
       return (
@@ -45,7 +10,7 @@ var TitleSection = React.createClass({
 
 var Card = React.createClass({
     render: function(){
-      if(this.props.type=="multipeChoice"){
+      if(this.props.type == "multipeChoice"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
@@ -54,7 +19,7 @@ var Card = React.createClass({
             </div>
           </div>
         );
-      } else if (this.props.type=="trueOrFalse"){
+      } else if (this.props.type == "trueOrFalse"){
           return (
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
@@ -63,7 +28,7 @@ var Card = React.createClass({
               </div>
             </div>
           );
-    } else if (this.props.type=="freeResponse"){
+    } else if (this.props.type == "freeResponse"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
@@ -78,5 +43,3 @@ var Card = React.createClass({
     }
   }
 });
-
-

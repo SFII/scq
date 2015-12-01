@@ -18,6 +18,10 @@ function getSurvey(url) {
 }
 
 function sendSurvey(url) {}
+/*
+*
+* Submit Button
+*/
 "use strict";
 
 var SubmitButton = React.createClass({
@@ -31,8 +35,8 @@ var SubmitButton = React.createClass({
         );
     }
 });
+
 /*
-*
 *
 * Multiple Choice
 */
@@ -108,7 +112,6 @@ var SingleChoice = React.createClass({
         );
     }
 });
-
 /*
 *
 *
@@ -127,41 +130,6 @@ var FreeResponse = React.createClass({
         );
     }
 });
-// var MediumCard = React.createClass({
-//
-//     propTypes: {
-//         survey: React.PropTypes.object.isRequired
-//     },
-//
-//    render: function(){
-//       return(
-//          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col">
-//             <Card survey={ this.props.survey }/>
-//          </div>
-//       );
-//    }
-// });
-//
-// var SmallCard = React.createClass({
-//    render: function(){
-//       return(
-//          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col">
-//             <Card options={ ['Small', 'TEST', 'SAMPLE THREE']}/>
-//          </div>
-//       );
-//    }
-// });
-//
-// var BigCard = React.createClass({
-//     render: function() {
-//         return (
-//             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-//             <Card options={ ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] }/>
-//         </div>
-//         );
-//     }
-// });
-
 "use strict";
 
 var TitleSection = React.createClass({
@@ -243,11 +211,6 @@ var testQuestions = [{
     options: ["Not at all", "It was an average course", "It was an excellent course"]
 }];
 
-/*
-*
-* MainDiv
-*ask michael about this.props.class
-*/
 /*
 *
 * MainDiv

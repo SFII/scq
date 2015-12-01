@@ -1,3 +1,7 @@
+/*
+*
+* Submit Button
+*/
 var SubmitButton = React.createClass({
     render: function(){
         return (
@@ -7,8 +11,8 @@ var SubmitButton = React.createClass({
         )
     }
 })
+
 /*
-*
 *
 * Multiple Choice
 */
@@ -38,7 +42,7 @@ var MultipleChoice = React.createClass({
 *
 * Single Choice
 */
- var SingleChoice = React.createClass({
+var SingleChoice = React.createClass({
     render: function(){
         const renderedOptions = this.props.options.map((option, type) => {
             return (
@@ -61,7 +65,6 @@ var MultipleChoice = React.createClass({
         );
     }
 });
-
 /*
 *
 *
@@ -79,6 +82,3 @@ var FreeResponse = React.createClass({
      );
   }
 });
-
-
-
