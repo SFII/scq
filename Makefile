@@ -8,7 +8,10 @@ TESTINGPATH="`pwd`/test"
 TESTS = $(wildcard test/*.py)
 
 serve:
-	export PROJECTPATH=${PROJECTPATH} && gulp dev-js && cd ./src && python3 server.py
+	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3 server.py
+
+serve-dev:
+	gulp watch & cd ./src && python3 ./server.py
 
 console:
 	export PROJECTPATH=${PROJECTPATH} && gulp dev-js && cd ./src && python3
@@ -27,4 +30,4 @@ build:
 clean:
 	find . -name *.pyc -exec rm {} \;
 
-.PHONY: test serve clean
+.PHONY: test serve clean serve-dev
