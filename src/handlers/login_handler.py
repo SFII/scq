@@ -1,41 +1,34 @@
 import tornado.web
 import logging
 from models.user import User
+from handlers.base_handler import BaseHandler
 
-class LoginHandler(tornado.web.RequestHandler):
+class LoginHandler(BaseHandler):
 
     def get(self):
-        self.render("login.html", errormessage='', next=self.get_argument("next","/"))
+        if self.current_user:
+            return self.redirect(self.get_argument('next', '/dashboard'))
+        return self.render('login.html', errors=[], next=self.get_argument('next','/dashboard'))
 
     def post(self):
         username = self.get_argument('username',strip = True)
         password = self.get_argument('password',strip = True)
         cursor = User().find({'username' : username})
-        for user in cursor:
-            logging.info(user)
-            if user is None:
-                return self.render(
-                    'login.html',
-                    errormessage="User credentials not found!",
-                    next=self.get_argument("next","/")
-                )
+        for user_data in cursor:
+            user_id = user_data['id']
+            if User().authenticate(user_id, password):
+                return self.login(user_data)
             else:
-                user_id = user['id']
-                if User().authenticate(user_id, password):
-                    return login(user)
-                else:
-                    return self.render(
-                        'login.html',
-                        errormessage="User credentials are incorrect!",
-                        next=self.get_argument("next","/")
-                    )
+                return self.denied('User credentials are incorrect!')
+        return self.denied('User credentials not found!')
 
-    def login(self, user_id):
-        self.set_current_user(user_id)
-        self.redirect(self.get_argument("next", "/"))
+    def login(self, user_data):
+        self.set_current_user(user_data)
+        self.redirect(self.get_argument('next', '/dashboard'))
 
-    def set_current_user(self, user_id):
-        if user_id:
-            self.set_secure_cookie("user", tornado.escape.json_encode(user_id))
-        else:
-            self.clear_cookie("user")
+    def denied(self, error):
+        self.render(
+            'login.html',
+            errors=[error],
+            next=self.get_argument('next','/dashboard')
+        )

@@ -34,7 +34,7 @@ class Student(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'student_id' : (b.is_int, ),
+            'student_id' : (b.is_string, ),
             'email' : (b.is_string, b.is_valid_email, ),
             'college' : (b.is_in_list(REGISTRATION_METHODS), ),
             'majors' : (b.is_list, schema_list_check(is_major),),

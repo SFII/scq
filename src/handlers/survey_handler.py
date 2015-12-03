@@ -2,34 +2,34 @@ import tornado.web
 import tornado.gen as gen
 import json
 import time
+from models.answer import Answer
 from models.survey import Survey
 from models.user import User
 import models.answer
+from handlers.base_handler import BaseHandler
 
-class Survey(tornado.web.RequestHandler):
-    def get(self, idnumber):
-        idnumber = int(idnumber)
-        data = models.survey.Survey().get_item(idnumber)
+# given a
+class Survey(BaseHandler):
+    def get(self, id_number):
+        data = Survey().get_item(id_number)
         if data == None:
             self.write_error(404)
         else:
             self.write(json.dumps(data))
 
-    def post(self, idnumber):
-        idnumber = int(idnumber)
+    def post(self, id_number):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
-        models.answer.Answer().create_item(data)
+        Answer().create_item(data)
 
-class Surveys(tornado.web.RequestHandler):
+class Surveys(BaseHandler):
     def post(self):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
-        models.survey.Survey().create_item(data)
+        Survey().create_item(data)
 
     def get(self):
-        uid = self.get_secure_cookie("username")
-        user = User().get_item(uid)
+        user_data = self.current_user
         classes = user['courses']
         for course in courses:
             data += models.survey.Survey().find({'course': course,})

@@ -1,5 +1,4 @@
 function getSurvey(url){
-
     $.ajax({
      url: url,
      type: 'GET',
@@ -14,4 +13,7 @@ function getSurvey(url){
          return data;
      }
     });
+}
+
+function sendSurvey(url){
 }

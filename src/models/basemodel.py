@@ -32,6 +32,9 @@ class BaseModel:
     def is_list(self, data):
         assert isinstance(data, (list, tuple)), "Must be a list"
 
+    def is_unique(self, data):
+        assert len(self.find(data)) == 0, 'Must be unique / Value already taken'
+
     def is_none(self, data):
         assert data is None, "Must be empty"
 
@@ -87,8 +90,7 @@ class BaseModel:
             pass
 
     def isValid(self, data):
-        return True
-
+        return len(self.verify(data)) == 0
 
     def get_item(self, idnum):
         table = self.__class__.__name__
@@ -98,8 +100,36 @@ class BaseModel:
         table = self.__class__.__name__
         return list(r.db(BaseModel.DB).table(table).filter(key).run(BaseModel.conn))
 
+    # create a new database item from given data, if the data passes the validator
     def create_item(self, data):
         table = self.__class__.__name__
         if self.isValid(data):
             o = r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
             return o['generated_keys'][0]
+        return None
+
+    def schema_list_check(method):
+        def _list_check(data):
+            try:
+                all(method(d) for d in data)
+            except Exception as e:
+                raise Exception("Not all elements satisfy: {}".format(e))
+        return _list_check
+
+    def check_data(data, fields, required_fields=[]):
+        for field in required_fields:
+            if field not in data:
+                yield (field, 'Missing field: {}'.format(field))
+        for key, methods in fields.items():
+            if key in data:
+                for method in methods:
+                    try:
+                        method(data[key])
+                    except Exception as e:
+                        if isinstance(getattr(e,'message',None), (list, tuple)):
+                            for error in e.message:
+                                yield error
+                        else:
+                            yield (key, "{}: {}".format(key, e))
+    def verify(self, data):
+        return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))

@@ -1,7 +1,6 @@
-"use strict";
+'use strict';
 
 function getSurvey(url) {
-
     $.ajax({
         url: url,
         type: 'GET',
@@ -17,31 +16,200 @@ function getSurvey(url) {
         }
     });
 }
-var Page = React.createClass({
-    displayName: "Page",
 
-    handleAddItem: function handleAddItem() {
+function sendSurvey(url) {}
+/*
+*
+* Submit Button
+*/
+"use strict";
 
-        //taken current state
-        var newItem = this.state.data;
+var SubmitButton = React.createClass({
+    displayName: "SubmitButton",
 
-        var addItem = newItem.concat([" "]);
-        this.setState({ data: addItem });
-    },
+    render: function render() {
+        return React.createElement(
+            "button",
+            { className: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" },
+            "Submit"
+        );
+    }
+});
 
-    getInitialState: function getInitialState() {
-        return { data: [] };
-    },
+/*
+*
+* Multiple Choice
+*/
+var MultipleChoice = React.createClass({
+    displayName: "MultipleChoice",
+
+    render: function render() {
+        var renderedOptions = this.props.options.map(function (option) {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "label",
+                    { className: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" },
+                    React.createElement("input", { type: "checkbox", key: option, className: "mdl-checkbox__input" }),
+                    React.createElement(
+                        "span",
+                        { className: "mdl-checkbox__label" },
+                        " ",
+                        option,
+                        " ",
+                        React.createElement("br", null)
+                    )
+                )
+            );
+        });
+
+        return React.createElement(
+            "div",
+            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+            renderedOptions,
+            React.createElement(SubmitButton, null)
+        );
+    }
+});
+/*
+*
+*
+* Single Choice
+*/
+var SingleChoice = React.createClass({
+    displayName: "SingleChoice",
+
+    render: function render() {
+        var renderedOptions = this.props.options.map(function (option, type) {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "label",
+                    { className: "mdl-radio mdl-js-radio mdl-js-ripple-effect" },
+                    React.createElement("input", { type: "radio", className: "mdl-radio__button", name: option, value: option, key: option }),
+                    React.createElement(
+                        "span",
+                        { className: "mdl-radio__label" },
+                        " ",
+                        option,
+                        " "
+                    )
+                )
+            );
+        });
+
+        return React.createElement(
+            "div",
+            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+            React.createElement(
+                "form",
+                { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+                renderedOptions,
+                React.createElement(SubmitButton, null)
+            )
+        );
+    }
+});
+/*
+*
+*
+* Free
+*/
+var FreeResponse = React.createClass({
+    displayName: "FreeResponse",
 
     render: function render() {
         return React.createElement(
             "div",
-            { className: "mdl-grid mdl-cell--12-col content" },
-            React.createElement(Form, { onItemSubmit: this.handleAddItem }),
-            React.createElement(MainDiv, { data: this.state.data })
+            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
+            React.createElement("textarea", { className: "mdl-textfield__input", type: "text", rows: "4", cols: "110", id: "test" }),
+            React.createElement("br", null),
+            React.createElement(SubmitButton, null)
         );
     }
 });
+"use strict";
+
+var TitleSection = React.createClass({
+  displayName: "TitleSection",
+
+  render: function render() {
+    return React.createElement(
+      "div",
+      { className: "mdl-card__title mdl-card--expand mdl-color--teal-300" },
+      React.createElement(
+        "h2",
+        { className: "mdl-card__title-text" },
+        " ",
+        this.props.titleText,
+        " "
+      )
+    );
+  }
+});
+
+var Card = React.createClass({
+  displayName: "Card",
+
+  render: function render() {
+    if (this.props.type == "multipeChoice") {
+      return React.createElement(
+        "div",
+        { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop" },
+        React.createElement(
+          "div",
+          null,
+          React.createElement(TitleSection, { titleText: this.props.title }),
+          React.createElement(MultipleChoice, { options: this.props.options })
+        )
+      );
+    } else if (this.props.type == "trueOrFalse") {
+      return React.createElement(
+        "div",
+        { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop" },
+        React.createElement(
+          "div",
+          null,
+          React.createElement(TitleSection, { titleText: this.props.title }),
+          React.createElement(SingleChoice, { options: this.props.options })
+        )
+      );
+    } else if (this.props.type == "freeResponse") {
+      return React.createElement(
+        "div",
+        { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop" },
+        React.createElement(
+          "div",
+          null,
+          React.createElement(TitleSection, { titleText: this.props.title }),
+          React.createElement(FreeResponse, null)
+        )
+      );
+    } else {
+      alert("not Valid card type");
+      return undefined;;
+    }
+  }
+});
+"use strict";
+
+var testQuestions = [{
+    id: 1,
+    type: "trueOrFalse",
+    title: "Would you recommend this course?",
+    options: ["Yes", "No"]
+}, {
+    id: "asdasdad",
+    type: "freeResponse",
+    title: "What things should be improved?"
+}, {
+    id: 2,
+    type: "multipeChoice",
+    title: "Did you enjoy the course?",
+    options: ["Not at all", "It was an average course", "It was an excellent course"]
+}];
 
 /*
 *
@@ -52,17 +220,25 @@ var MainDiv = React.createClass({
     displayName: "MainDiv",
 
     render: function render() {
-        var itemNodes = this.props.data.map(function (item) {
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(MediumCard, { survey: getSurvey('PUT ENDPOINT HERE') })
-            );
+        var itemNodes = testQuestions.map(function (item) {
+            return React.createElement(Card, { title: item.title, options: item.options, type: item.type });
         });
         return React.createElement(
             "div",
             { className: "mainDiv " },
             itemNodes
+        );
+    }
+});
+
+var Page = React.createClass({
+    displayName: "Page",
+
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "mdl-grid mdl-cell--12-col content" },
+            React.createElement(MainDiv, { question: this.props.question })
         );
     }
 });
@@ -86,187 +262,6 @@ var Form = React.createClass({
             "form",
             { className: "listForm", onSubmit: this.addItem },
             React.createElement("input", { type: "submit", value: "Click me" })
-        );
-    }
-});
-var Card = React.createClass({
-    displayName: "Card",
-
-    propTypes: {
-        survey: React.PropTypes.object.isRequired
-    },
-
-    render: function render() {
-        return React.createElement(
-            "div",
-            null,
-            React.createElement(TitleSection, { titleText: "Updates!" }),
-            React.createElement(SupportSection, { survey: this.props.survey })
-        );
-    }
-});
-
-var MediumCard = React.createClass({
-    displayName: "MediumCard",
-
-    propTypes: {
-        survey: React.PropTypes.object.isRequired
-    },
-
-    render: function render() {
-        return React.createElement(
-            "div",
-            { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col" },
-            React.createElement(Card, { survey: this.props.survey })
-        );
-    }
-});
-
-var SmallCard = React.createClass({
-    displayName: "SmallCard",
-
-    render: function render() {
-        return React.createElement(
-            "div",
-            { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col" },
-            React.createElement(Card, { bullets: ['Small', 'TEST', 'SAMPLE THREE'] })
-        );
-    }
-});
-
-var BigCard = React.createClass({
-    displayName: "BigCard",
-
-    render: function render() {
-        return React.createElement(
-            "div",
-            { className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop" },
-            React.createElement(Card, { bullets: ['SAMPLE ONE', 'SAMPLE TWO', 'SAMPLE THREE'] })
-        );
-    }
-});
-
-var TitleSection = React.createClass({
-    displayName: "TitleSection",
-
-    render: function render() {
-        return React.createElement(
-            "div",
-            { className: "mdl-card__title mdl-card--expand mdl-color--teal-300" },
-            React.createElement(
-                "h2",
-                { className: "mdl-card__title-text" },
-                " ",
-                this.props.titleText,
-                " "
-            )
-        );
-    }
-});
-
-var SupportSection = React.createClass({
-    displayName: "SupportSection",
-
-    render: function render() {
-        return React.createElement(
-            "div",
-            { className: "mdl-card__supporting-text mdl-color-text--grey-600" },
-            this.props.survey
-        );
-    }
-});
-
-var Table = React.createClass({
-    displayName: "Table",
-
-    render: function render() {
-        return React.createElement(
-            "table",
-            { className: "mdl-js-data-table mdl-data-table--selectable" },
-            React.createElement(
-                "thead",
-                null,
-                React.createElement(
-                    "tr",
-                    null,
-                    React.createElement(
-                        "th",
-                        { className: "mdl-data-table__cell--non-numeric" },
-                        "Material"
-                    ),
-                    React.createElement(
-                        "th",
-                        null,
-                        "Quantity"
-                    ),
-                    React.createElement(
-                        "th",
-                        null,
-                        "Unit price"
-                    )
-                )
-            ),
-            React.createElement(
-                "tbody",
-                null,
-                React.createElement(
-                    "tr",
-                    null,
-                    React.createElement(
-                        "td",
-                        { className: "mdl-data-table__cell--non-numeric" },
-                        "Acrylic (Transparent)"
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        "250"
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        "$2.90"
-                    )
-                ),
-                React.createElement(
-                    "tr",
-                    null,
-                    React.createElement(
-                        "td",
-                        { className: "mdl-data-table__cell--non-numeric" },
-                        "Plywood (Birch)"
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        "50"
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        "$1.25"
-                    )
-                ),
-                React.createElement(
-                    "tr",
-                    null,
-                    React.createElement(
-                        "td",
-                        { className: "mdl-data-table__cell--non-numeric" },
-                        "Laminate (Gold on Blue)"
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        "10"
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        "$12.35"
-                    )
-                )
-            )
         );
     }
 });

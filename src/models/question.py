@@ -10,7 +10,7 @@ class Question(BaseModel):
     def fields():
         b = super(User, self)
         return {
-            'question_id' : (b.is_int, ),
+            'question_id' : (b.is_string, ),
             'text' : (b.is_str, ),
             'response_format' : (b.is_str, b.is_reponse_format(USER_RESPONSE_FORMAT))
         }
