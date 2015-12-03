@@ -16,7 +16,8 @@ js_files = [
     './src/static/javascripts/db.js',
     './src/static/javascripts/components/questions.jsx',
     './src/static/javascripts/components/cards.jsx',
-    './src/static/javascripts/components/dashboard.jsx'
+    './src/static/javascripts/components/dashboard.jsx',
+    './src/static/javascripts/components/welcome.jsx'
 ]
 
 // Lint Task

@@ -25,6 +25,9 @@ var testQuestions = [
 */
 var MainDiv = React.createClass({
     render: function() {
+		if (document.cookie == "") {
+		   return (<Welcome />);
+		}
         var itemNodes = testQuestions.map(function (item) {
                 return (
                     <Card title={item.title} options={item.options} type={item.type}>
