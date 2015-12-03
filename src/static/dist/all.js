@@ -220,7 +220,7 @@ var MainDiv = React.createClass({
     displayName: "MainDiv",
 
     render: function render() {
-        if (document.cookie == "") {
+        if (!loggedIn()) {
             return React.createElement(Welcome, null);
         }
         var itemNodes = testQuestions.map(function (item) {
@@ -268,6 +268,10 @@ var Form = React.createClass({
         );
     }
 });
+
+function loggedIn() {
+    return document.cookie.indexOf("user") > -1;
+}
 "use strict";
 
 var Welcome = React.createClass({
