@@ -1,0 +1,7 @@
+{
+    "question-id" : "Unique-ID",
+    "type" : "rating",
+    "question" : "Did you enjoy the course?",
+    "scale_low" : 0,
+    "scale_high" : 100
+}

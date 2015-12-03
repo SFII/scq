@@ -1,6 +1,6 @@
 import unittest
 
-from services.survey import Survey, Surveys
+from handlers.survey_handler import Survey, Surveys
 
 class TestServices(unittest.TestCase):
 

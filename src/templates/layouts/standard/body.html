@@ -1,11 +1,23 @@
 <body>
   <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
     {% include body/header.html %}
+    <title>{% block title %}Scq Default Title{% end %}</title>
+
     <div class="drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
       {% include body/identifier.html %}
       {% include body/navigation.html %}
     </div>
+    <main class="mdl-layout__content mdl-color--grey-100">
+    {% try %}
+      {% if errors %}
+        {% for err in errors %}
+        <div class="alert alert-danger" role="alert">{{ err }}</div>
+        {% end %}
+      {% end %}
+    {% except %}
+    {% end %}
     {% block content %}Default Body Content{% end %}
+    </div>
   {% include body/footer.html %}
   {% include body/scripts.html %}
   {% block react %}

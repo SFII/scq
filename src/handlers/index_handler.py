@@ -1,4 +1,5 @@
 import tornado.web
-class IndexHandler(tornado.web.RequestHandler):
+from handlers.base_handler import BaseHandler
+class IndexHandler(BaseHandler):
     def get(self):
         self.render('index.html')
