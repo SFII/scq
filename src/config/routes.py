@@ -9,8 +9,8 @@ from handlers.index_handler import IndexHandler
 from handlers.register_handler import RegisterHandler
 from handlers.register.culdap_register_handler import CuLdapRegisterHandler
 from handlers.dashboard_handler import DashboardHandler
-from handlers.survey_handler import Survey
 from handlers.survey_handler import Surveys
+from handlers.survey_handler import Response
 
 
 # Tornado pro-tip: regex routing is optimized by putting more frequently
@@ -22,6 +22,6 @@ routes = [
     (r"/register/culdap", CuLdapRegisterHandler),
     (r"/register", RegisterHandler),
     (r"/dashboard",DashboardHandler),
-    (r"/api/survey/(\d+)", Survey),
-    (r"/api/surveys", Surveys)
+    (r"/api/surveys", Surveys),
+    (r"/api/response", Response)
 ]
