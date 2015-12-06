@@ -8,15 +8,8 @@ from models.user import User
 import models.answer
 from handlers.base_handler import BaseHandler
 
-class Survey(BaseHandler):
-    def get(self, id_number):
-        data = Survey().get_item(id_number)
-        if data == None:
-            self.write_error(404)
-        else:
-            self.write(json.dumps(data))
-
-    def post(self, id_number):
+class Response(BaseHandler):
+    def post(self):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
         Response().create_item(data)
