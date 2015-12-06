@@ -10,6 +10,9 @@ TESTS = $(wildcard test/*.py)
 serve:
 	export PROJECTPATH=${PROJECTPATH} && gulp prod-js && cd ./src && python3 server.py
 
+serve-nogulp:
+	export PROJECTPATH=${PROJECTPATH} && cd ./src && python3 server.py
+
 serve-dev:
 	gulp watch & cd ./src && python3 ./server.py
 

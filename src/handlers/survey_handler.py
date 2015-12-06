@@ -22,7 +22,7 @@ class Surveys(BaseHandler):
 
     def get(self):
         user_data = self.current_user
-        classes = user['courses']
+        classes = user_data['courses']
         for course in courses:
             data += models.survey.Survey().find({'course': course,})
         self.write(json.dumps(data))
