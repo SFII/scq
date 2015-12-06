@@ -5,6 +5,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import logging
+import rethinkdb as r
 from models.answer import Answer
 from models.basemodel import BaseModel
 from models.course import Course
@@ -20,22 +21,23 @@ from tornado.options import define, options
 from config.config import application
 
 def main():
-    init()
+    initialize()
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
     print("Listening for connections on localhost:{0}".format(options.port))
     tornado.ioloop.IOLoop.instance().start()
 
-def init():
+def initialize():
     logging.info("Connecting")
     try:
+        connection = BaseModel.conn
+        DB = BaseModel.DB
         logging.info("Creating DB")
-        r.db_create(DB).run(conn)
+        r.db_create(DB).run(connection)
     except:
         logging.info("database already exists")
     logging.info("Initializing tables")
-    connection = BaseModel.conn
     Answer().init(connection)
     Course().init(connection)
     Instructor().init(connection)

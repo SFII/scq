@@ -92,8 +92,8 @@ class CuLdapRegisterHandler(RegisterHandler):
             return self.failWithErrors('register/culdapregister.html', errors)
         authorized = culdapauth.auth_user_ldap(username, password)
         if authorized:
-            user = self.getLdapUser(username, User().REGISTRATION_CULDAP)
-            if user is None:
+            simmilar_users = self.getLdapUser(username, User().REGISTRATION_CULDAP)
+            if len(simmilar_users) == 0:
                 return self.verifyCULdapRegistrationPage(username)
             else:
                 return self.failWithErrors('register/culdapregister.html', ['Registered user with those credentials already exists'])

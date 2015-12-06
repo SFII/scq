@@ -44,7 +44,7 @@ gulp.task('dev-js', function() {
 
 gulp.task('prod-js', function(){
     return gulp.src(js_files)
-        .pipe(concat('all.js'))
+        .pipe(concat('alxl.js'))
         .pipe(babel())
         .pipe(gulp.dest('./dist/js/'))
         .pipe(rename('all.min.js'))
