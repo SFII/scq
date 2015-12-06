@@ -16,7 +16,8 @@ js_files = [
     './src/static/javascripts/db.js',
     './src/static/javascripts/components/questions.jsx',
     './src/static/javascripts/components/cards.jsx',
-    './src/static/javascripts/components/dashboard.jsx'
+    './src/static/javascripts/components/dashboard.jsx',
+    './src/static/javascripts/components/welcome.jsx'
 ]
 
 // Lint Task
@@ -29,6 +30,12 @@ gulp.task('lint', function() {
 gulp.task('dev-js', function() {
     //these need to be sequential to prevent
     return gulp.src(js_files)
+        .pipe(plumber({
+			errorHandler: function(err) {
+				console.log(err);
+				this.emit('end');
+			}
+		}))
         .pipe(babel())
         .pipe(concat('all.js'))
         .pipe(rename('all.js'))
@@ -56,7 +63,7 @@ gulp.task('minify-css', function () {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch(js_files, ['lint', 'dev-js']);
+    gulp.watch(js_files, ['dev-js']);
 
 });
 

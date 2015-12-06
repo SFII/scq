@@ -25,6 +25,9 @@ var testQuestions = [
 */
 var MainDiv = React.createClass({
     render: function() {
+		if (!loggedIn()) {
+		   return (<Welcome />);
+		}
         var itemNodes = testQuestions.map(function (item) {
                 return (
                     <Card title={item.title} options={item.options} type={item.type}>
@@ -71,3 +74,7 @@ var Form = React.createClass({
         );
     }
 });
+
+function loggedIn() {
+	return document.cookie.indexOf("user") > -1
+}

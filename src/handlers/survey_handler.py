@@ -2,7 +2,7 @@ import tornado.web
 import tornado.gen as gen
 import json
 import time
-from models.answer import Answer
+from models.response import Response
 from models.survey import Survey
 from models.user import User
 import models.answer
@@ -19,7 +19,7 @@ class Survey(BaseHandler):
     def post(self, id_number):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
-        Answer().create_item(data)
+        Response().create_item(data)
 
 class Surveys(BaseHandler):
     def post(self):
