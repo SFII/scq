@@ -17,7 +17,6 @@
     "gulp-babel": "^5.3.0",
     "gulp-cache": "^0.3.0",
     "gulp-concat": "^2.6.0",
-    "gulp-expect-file": "^0.0.7",
     "gulp-imagemin": "^2.3.0",
     "gulp-jshint": "^1.11.2",
     "gulp-livereload": "^3.8.1",
