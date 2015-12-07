@@ -36,8 +36,7 @@ def initialize_db():
         logging.info("Creating DB")
         r.db_create(DB).run(connection)
     except r.errors.ReqlOpFailedError as e:
-        print(e.message)
-        logging.info("database already exists")
+        logging.info(e.message)
     except Exception as e:
         logging.error(e.message)
 
