@@ -1,6 +1,6 @@
 from models.basemodel import BaseModel
 
-class SurveyReponse(BaseModel):
+class Response(BaseModel):
     def requiredFields():
         return ['user_id', 'survey_id', 'answer_id']
 

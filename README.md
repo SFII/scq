@@ -3,7 +3,7 @@ Our main repo for the SCQ senior project.
 
 ## Installing:
 
-Make sure you have python3 installed on your computer. Then run:
+Make sure you have python3 and [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) installed on your computer. Then run:
 
 ```
 make build

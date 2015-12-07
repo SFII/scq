@@ -1,74 +1,74 @@
 [
     {
-        "survey-id" : "Unique-ID",
+        "survey_id" : "Unique-ID",
         "department":"",
         "creator":"",
         "isInstructor":"",
         "questions" : [
              {
-                "question-id" : "Unique-ID",
-                "type" : "trueOrFalse",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "trueOrFalse",
                 "question":"Did you enjoy the course?",
             },
             {
-                "question-id" : "Unique-ID",
-                "type" : "multipleChoice",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "multipleChoice",
                 "question":"Did you enjoy the course?",
                 "options":["Not at all","It was an average course","It was an excellent course"],
             },
             {
-                "question-id" : "Unique-ID",
-                "type" : "freeResponse",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "freeResponse",
                 "question":"Did you enjoy the course?",
                 "options":[],
             }
         ]
     },
     {
-        "survey-id" : "Unique-ID",
+        "survey_id" : "Unique-ID",
         "department":"",
         "creator":"",
         "isInstructor":"",
         "questions" : [
              {
-                "question-id" : "Unique-ID",
-                "type" : "trueOrFalse",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "trueOrFalse",
                 "question":"Did you enjoy the course?",
             },
             {
-                "question-id" : "Unique-ID",
-                "type" : "multipleChoice",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "multipleChoice",
                 "question":"Did you enjoy the course?",
                 "options":["Not at all","It was an average course","It was an excellent course"],
             },
             {
-                "question-id" : "Unique-ID",
-                "type" : "freeResponse",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "freeResponse",
                 "question":"Did you enjoy the course?",
                 "options":[],
             }
         ]
     },
     {
-        "survey-id" : "Unique-ID",
+        "survey_id" : "Unique-ID",
         "department":"",
         "creator":"",
         "isInstructor":"",
         "questions" : [
              {
-                "question-id" : "Unique-ID",
-                "type" : "trueOrFalse",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "trueOrFalse",
                 "question":"Did you enjoy the course?",
             },
             {
-                "question-id" : "Unique-ID",
-                "type" : "multipleChoice",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "multipleChoice",
                 "question":"Did you enjoy the course?",
                 "options":["Not at all","It was an average course","It was an excellent course"],
             },
             {
-                "question-id" : "Unique-ID",
-                "type" : "freeResponse",
+                "question_id" : "Unique-ID",
+                "reponse_format" : "freeResponse",
                 "question":"Did you enjoy the course?",
                 "options":[],
             }
