@@ -6,7 +6,7 @@ class Section(BaseModel):
         return ['course_id', 'course_name', 'average_grade', 'credit_hours', 'section_time', 'instructor_id']
 
     def fields():
-        b = super(User, self)
+        b = super(Section, self)
         return {
             'section_id' : (b.is_string, ),
             'course_id' : (b.is_int, ),

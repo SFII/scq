@@ -8,10 +8,10 @@ class Question(BaseModel):
         return ['text', 'reponse_format']
 
     def fields():
-        b = super(User, self)
+        b = super(Question, self)
         return {
             'question_id' : (b.is_string, ),
-            'text' : (b.is_str, ),
+            'text' : (b.is_str, b.is_not_empty, ),
             'response_format' : (b.is_str, b.is_reponse_format(USER_RESPONSE_FORMAT))
         }
 

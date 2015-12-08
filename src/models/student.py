@@ -25,7 +25,7 @@ class Student(BaseModel):
 
     # must be overrriden
     def fields():
-        b = super(User, self)
+        b = super(Student, self)
         return {
             'student_id' : (b.is_string, ),
             'college' : (b.is_in_list(COLLEGES), ),

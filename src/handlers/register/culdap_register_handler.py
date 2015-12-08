@@ -81,8 +81,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         user_id = User().create_item(data)
         user_data = User().get_item(user_id)
         self.set_current_user(user_data)
-        return self.redirect(self.get_argument("next", "/"))
-
+        return self.redirect(self.get_argument("next", "/dashboard"))
 
     def CULdapRegister(self):
         username = self.get_argument('username',strip = True)
