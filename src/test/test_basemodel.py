@@ -23,7 +23,7 @@ class TestBaseModel(unittest.TestCase):
         #    BaseModel().is_int(False)
         with self.assertRaises(AssertionError):
             BaseModel().is_int([1,2,3])
-               
+
     def test_is_truthy(self):
         try:
             BaseModel().is_truthy(True)
@@ -45,6 +45,17 @@ class TestBaseModel(unittest.TestCase):
             BaseModel().is_truthy(False)
         with self.assertRaises(AssertionError):
             BaseModel().is_truthy(0)
+
+    def test_not_empty(self):
+        try:
+            BaseModel().is_not_empty('fdsa')
+            BaseModel().is_not_empty([1,2,3])
+        except:
+            self.fail('Error: data should not be empty / have length > 0')
+        with self.assertRaises(AssertionError):
+            BaseModel().is_not_empty([])
+        with self.assertRaises(AssertionError):
+            BaseModel().is_not_empty('')
 
     def test_is_date_string(self):
         try:
@@ -165,7 +176,7 @@ class TestBaseModel(unittest.TestCase):
         try:
             BaseModel().is_none(None)
         except:
-            self.fail('Error: None should be empty') 
+            self.fail('Error: None should be empty')
         with self.assertRaises(AssertionError):
             BaseModel().is_none('')
         with self.assertRaises(AssertionError):

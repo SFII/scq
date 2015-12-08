@@ -17,6 +17,9 @@ class BaseModel:
     def is_falsey(self, data):
         assert (data or False), "Must be Falsey"
 
+    def is_not_empty(self, data):
+        assert (len(data) != 0), "Must not be empty"
+
     def is_date_string(self, data):
         try:
             time.strptime(data, '%a %b %d %H:%M:%S %Z %Y')
@@ -32,8 +35,10 @@ class BaseModel:
     def is_list(self, data):
         assert isinstance(data, (list, tuple)), "Must be a list"
 
-    def is_unique(self, data):
-        assert len(self.find(data)) == 0, 'Must be unique / Value already taken'
+    def is_unique(self, data, key):
+        def _unique(data):
+            assert len(self.find({key : data})) == 0, "Must must be a unique value"
+        return _unique
 
     def is_none(self, data):
         assert data is None, "Must be empty"
@@ -96,6 +101,41 @@ class BaseModel:
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(idnum).run(BaseModel.conn)
 
+    def update_item(self, idnum, data):
+        table = self.__class__.__name__
+        return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
+
+    def subscribe_user(self, user_id, row_id):
+        row_table = self.__class__.__name__
+        user_table = 'User'
+        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(conn)
+        row_data = r.db(BaseModel.DB).table(row_table).get(row_id).run(conn)
+        if user_data is None:
+            logging.error("User {0} does not exist".format(user_data))
+            return False
+        if user_data is None:
+            logging.error("{0} {1} does not exist".format(table, row_data))
+            return False
+        updated_subscribers = { 'subscribers' : row_data['subscribers'].append(user_id) }
+        return r.db(BaseModel.DB).table(row_table).get(row_id).update(updated_subscribers).run(BaseModel.conn)
+
+
+    # adds a survey_id to a user's unanswered_surveys list.
+    # maybe this should live somewhere else? like user? or survey?
+    def send_user_survey(self, user_id, survey_id):
+        survey_table = 'Survey'
+        user_table = 'User'
+        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(conn)
+        survey_data = r.db(BaseModel.DB).table(survey_table).get(survey_id).run(conn)
+        if user_data is None:
+            logging.error("User {0} does not exist".format(user_data))
+            return False
+        if survey_data is None:
+            logging.error("Survey {0} does not exist".format(survey_data))
+            return False
+        updated_surveys = { 'unanswered_surveys' : row_data['unanswered_surveys'].append(survey_id) }
+        return r.db(BaseModel.DB).table(user_table).get(user_id).update(updated_surveys).run(BaseModel.conn)
+
     def find(self, key):
         table = self.__class__.__name__
         return list(r.db(BaseModel.DB).table(table).filter(key).run(BaseModel.conn))
@@ -125,6 +165,8 @@ class BaseModel:
                 for method in methods:
                     try:
                         method(data[key])
+                    except TypeError:
+                        method(data[key], key)
                     except Exception as e:
                         if isinstance(getattr(e,'message',None), (list, tuple)):
                             for error in e.message:

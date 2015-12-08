@@ -44,9 +44,9 @@ gulp.task('dev-js', function() {
 
 gulp.task('prod-js', function(){
     return gulp.src(js_files)
-        .pipe(concat('all.js'))
         .pipe(babel())
-        .pipe(gulp.dest('./dist/js/'))
+        .pipe(concat('all.js'))
+        .pipe(gulp.dest('./src/static/dist/'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./src/static/dist/'));

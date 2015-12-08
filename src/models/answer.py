@@ -10,7 +10,7 @@ class Answer(BaseModel):
         return ['user_id', 'survey_id', 'question_id', 'response_format']
 
     def fields():
-        b = super(User, self)
+        b = super(Answer, self)
         return {
             'answer_id' : (b.is_string, ),
             'user_id' : (b.is_int, ),
