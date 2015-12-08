@@ -58,7 +58,7 @@ var Page = React.createClass({
     
     handleSurveySubmit: function(survey){
     $.ajax({
-    url: this.props.routes.surveys,
+    url: this.props.routes.response,
     dataType: 'json'.
     type: 'POST',
     data: survey,
