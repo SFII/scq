@@ -21,8 +21,8 @@ class Surveys(BaseHandler):
         Survey().create_item(data)
 
     def get(self):
-        user_data = self.current_user
-        classes = user_data['courses']
+        user_data = self.get_current_user()
+        courses = user_data['courses']
         for course in courses:
             data += models.survey.Survey().find({'course': course,})
         self.write(json.dumps(data))
