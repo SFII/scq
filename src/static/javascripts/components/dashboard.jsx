@@ -43,10 +43,45 @@ var MainDiv = React.createClass({
 });
 
 var Page = React.createClass({
+
+    loadPageJSON: function() {
+    $.ajax({
+    url:this.props.routes.surveys,
+    type: 'GET',
+    dataType: 'json',
+    cache: false,
+    success: function(data){
+    this.setState({data: data});
+    }.bind(this)
+    });
+    },
+    
+    handleSurveySubmit: function(survey){
+    $.ajax({
+    url: this.props.routes.surveys,
+    dataType: 'json'.
+    type: 'POST',
+    data: survey,
+    success: function(data){
+    }.bind(this)
+    error: function(xhr, status,err){
+    console.error(this.props.url.surveys, status, err.toString());
+    }.bind(this)
+    });
+    },
+    
+    getInitialState: function() {
+    return{data:[]};
+    },
+    
+    componentDidMount: function(){
+        this.loadPageJSON()
+    },
+    
     render: function(){
       return (
         <div className="mdl-grid mdl-cell--12-col content">
-            <MainDiv question={this.props.question}/>
+            <MainDiv pageJson={this.state.data} />
         </div>
         );
     }

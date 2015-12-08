@@ -22,7 +22,11 @@
   {% include body/scripts.html %}
   {% block react %}
   <script>
-  ReactDOM.render(React.createElement(Page, null), document.getElementById('main-grid'));
+  var routes = {
+      surveys = "/api/surveys"
+      response = "/api/response"
+  };
+  ReactDOM.render(React.createElement(Page, {route: routes}), document.getElementById('main-grid'));
   </script>
   {% end %}
 </div>
