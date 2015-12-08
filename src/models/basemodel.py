@@ -18,7 +18,7 @@ class BaseModel:
         assert (data or False), "Must be Falsey"
 
     def is_not_empty(self, data):
-        assert (len(data) == 0), "Must not be empty"
+        assert (len(data) != 0), "Must not be empty"
 
     def is_date_string(self, data):
         try:
@@ -37,7 +37,7 @@ class BaseModel:
 
     def is_unique(self, data, key):
         def _unique(data):
-            assert len(self.find({key : data})), "Must must be a unique value"
+            assert len(self.find({key : data})) == 0, "Must must be a unique value"
         return _unique
 
     def is_none(self, data):
@@ -165,6 +165,8 @@ class BaseModel:
                 for method in methods:
                     try:
                         method(data[key])
+                    except TypeError:
+                        method(data[key], key)
                     except Exception as e:
                         if isinstance(getattr(e,'message',None), (list, tuple)):
                             for error in e.message:
