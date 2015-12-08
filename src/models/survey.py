@@ -16,7 +16,7 @@ class Survey(BaseModel):
         }
 
     def create_item(self, data):
-        survey_id = super(User, self).create_item(data)
+        survey_id = super(Survey, self).create_item(data)
         course_id = data['course_id']
         course_data = Course().get_item(course_id)
         active_surveys = course_data['active_surveys']
