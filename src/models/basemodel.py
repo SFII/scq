@@ -148,7 +148,7 @@ class BaseModel:
             return o['generated_keys'][0]
         return None
 
-    def schema_list_check(method):
+    def schema_list_check(self, method):
         def _list_check(data):
             try:
                 all(method(d) for d in data)

@@ -3,23 +3,23 @@
     "department":"",
     "creator":"",
     "isInstructor":"",
-    "questions" : [
+    "questions": [
          {
             "question-id" : "Unique-ID",
             "type" : "trueOrFalse",
-            "question":"Did you enjoy the course?",
+            "question":"Did you enjoy the course?"
         },
         {
             "question-id" : "Unique-ID",
             "type" : "multipleChoice",
             "question":"Did you enjoy the course?",
-            "options":["Not at all","It was an average course","It was an excellent course"],
+            "options":["Not at all","It was an average course","It was an excellent course"]
         },
         {
             "question-id" : "Unique-ID",
             "type" : "freeResponse",
             "question":"Did you enjoy the course?",
-            "options":[],
+            "options":[]
         }
     ]
 }
