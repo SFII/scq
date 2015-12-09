@@ -9,13 +9,28 @@ var TitleSection = React.createClass({
 });
 
 var Card = React.createClass({
+    
+    handleSurveySubmit: function(survey){
+    $.ajax({
+    url: this.props.routes.response,
+    dataType: 'json',
+    type: 'POST',
+    data: survey,
+    success: function(data){
+    }.bind(this),
+    error: function(xhr, status,err){
+    console.error(this.props.routes.surveys, status, err.toString());
+    }.bind(this)
+    });
+    },
+    
     render: function(){
       if(this.props.type == "multipeChoice"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <MultipleChoice options={this.props.options}/>
+              <MultipleChoice options={this.props.options} onSubmit={this.handleSurveySubmit}/>
             </div>
           </div>
         );

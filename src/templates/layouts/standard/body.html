@@ -23,8 +23,8 @@
   {% block react %}
   <script>
   var routesObject = {
-      surveys = "/api/surveys"
-      response = "/api/response"
+      surveys: "/api/surveys",
+      response: "/api/response"
   };
   ReactDOM.render(React.createElement(Page, {routes: routesObject}), document.getElementById('main-grid'));
   </script>
