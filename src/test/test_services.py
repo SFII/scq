@@ -12,10 +12,6 @@ class TestServices(tornado.testing.AsyncHTTPTestCase):
     def get_app(self):
         return application
     
-    def test_home(self):
-        response = self.fetch('/')
-        self.assertEqual(response.code, 200)
-
     def test_surveys(self):
         secure_cookie = tornado.web.create_signed_value(
             config.config.SETTINGS['cookie_secret'],
