@@ -15,6 +15,7 @@ from models.section import Section
 from models.student import Student
 from models.survey import Survey
 from models.user import User
+from models.response import Response
 from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
@@ -49,6 +50,7 @@ def initialize_db():
     Student().init(connection)
     Survey().init(connection)
     User().init(connection)
+    Response().init(connection)
 
 if __name__ == "__main__":
     main()
