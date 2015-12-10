@@ -118,12 +118,12 @@ class BaseModel:
             return False
         subscribers = row_data['subscribers']
         subscribers.append(user_id)
-        return r.db(BaseModel.DB).table(row_table).get(row_id).update(subscribers).run(BaseModel.conn)
+        return r.db(BaseModel.DB).table(row_table).get(row_id).update({'subscribers' : subscribers}).run(BaseModel.conn)
 
 
     # adds a survey_id to a user's unanswered_surveys list.
     # maybe this should live somewhere else? like user? or survey?
-    def send_user_survey(self, user_id, survey_id):
+    def send_user_survey(self, user_id, survey_id, survey_key='unanswered_surveys'):
         survey_table = 'Survey'
         user_table = 'User'
         user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(BaseModel.conn)
@@ -134,8 +134,13 @@ class BaseModel:
         if survey_data is None:
             logging.error("Survey {0} does not exist".format(survey_data))
             return False
-        updated_surveys = { 'unanswered_surveys' : row_data['unanswered_surveys'].append(survey_id) }
-        return r.db(BaseModel.DB).table(user_table).get(user_id).update(updated_surveys).run(BaseModel.conn)
+        try:
+            user_survey_list = user_data[survey_key]
+        except KeyError:
+            logging.error("survey key {0} not known in user data".format(survey_key))
+            return False
+        user_survey_list.append(survey_id)
+        return r.db(BaseModel.DB).table(user_table).get(user_id).update({survey_key : user_survey_list}).run(BaseModel.conn)
 
     def find(self, key):
         table = self.__class__.__name__

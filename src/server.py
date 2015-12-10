@@ -19,6 +19,8 @@ from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
 from config.config import application
+import time
+
 
 def main():
     initialize_db()
@@ -51,11 +53,10 @@ def initialize_db():
     User().init(connection)
 
 def bootstrap_data():
-    user_id = '775f65ec-9507-49b9-bc6b-ca6495cc0294'
+    user_id = 'e64ad721-964a-436f-86c1-a516518c1440'
     course_id = Course().create_generic_item()
     Course().subscribe_user(user_id, course_id)
     survey_id = Survey().create_generic_item(user_id, course_id)
-
     print('survey id:\n'+survey_id)
 
 

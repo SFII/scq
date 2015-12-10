@@ -31,6 +31,7 @@ class User(BaseModel):
             'last_sign_in' : (b.is_date_string,),
             'courses' : (b.is_list,),
             'departments' : (b.is_list,),
+            'created_surveys' : (b.is_list,),
             'unanswered_surveys' : (b.is_list,),
             'answered_surveys' : (b.is_list,),
             'answers' : (b.is_list,),
