@@ -2,15 +2,15 @@ from models.basemodel import BaseModel
 
 class Course(BaseModel):
 
-    def requiredFields():
+    def requiredFields(self):
         return ['course_name', 'department', 'average_grade', 'credit_hours', 'active_surveys', 'inactive_surveys']
 
-    def fields():
+    def fields(self):
         b = super(Course, self)
         return {
             'course_id' : (b.is_string, b.is_not_empty,),
-            'course_name' : (b.is_str, b.is_not_empty,),
-            'department' : (b.is_str, ),
+            'course_name' : (b.is_string, b.is_not_empty,),
+            'department' : (b.is_string, ),
             'average_grade' : (b.is_int, ),
             'credit_hours' : (b.is_int, ),
             'active_surveys' : (b.is_list, ),

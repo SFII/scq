@@ -6,12 +6,15 @@ class DashboardHandler(BaseHandler):
     # @tornado.web.authenticated
     def get(self):
         self.refresh_current_user_cookie()
-        self.render('dashboard.html', page_json=self.page_json())
+        self.render('dashboard.html', survey_json=self.survey_json())
 
-    def page_json(self):
+    def survey_json(self):
+        survey_json = []
         user_data = self.current_user
-        print('-----------------------------------------------')
-        print(user_data)
+        print(self.current_user)
         unanswered_survey_ids = user_data['unanswered_surveys']
-        print(unanswered_survey_ids)
-        return []
+        for survey_id in unanswered_survey_ids:
+            survey_data = Survey().get_item(survey_id)
+            print(survey_json)
+            survey_json.append(survey_data)
+        print(survey_json)

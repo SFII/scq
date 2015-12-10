@@ -3,10 +3,10 @@ from models.course import Course
 
 class Survey(BaseModel):
 
-    def requiredFields():
+    def requiredFields(self):
         return ['question_id', 'course_id', 'creator_id']
 
-    def fields():
+    def fields(self):
         b = super(Survey, self)
         return {
             'survey_id' : (b.is_string, b.is_not_empty,),

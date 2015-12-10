@@ -2,15 +2,15 @@ from models.basemodel import BaseModel
 
 class Instructor(BaseModel):
 
-    def requiredFields():
+    def requiredFields(self):
         return ['instructor_name', 'department', 'college', 'section']
 
-    def fields():
+    def fields(self):
         b = super(Instructor, self)
         return {
             'instructor_id' : (b.is_string, ),
-            'instructor_name' : (b.is_str, ),
-            'department' : (b.is_str, ),
-            'college' : (b.is_str, ),
-            'section' : (b.is_str, )
+            'instructor_name' : (b.is_string, ),
+            'department' : (b.is_string, ),
+            'college' : (b.is_string, ),
+            'section' : (b.is_string, )
         }

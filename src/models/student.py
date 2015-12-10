@@ -20,11 +20,11 @@ class Student(BaseModel):
         pass
 
     # must be overridden
-    def requiredFields():
+    def requiredFields(self):
         return ['college']
 
     # must be overrriden
-    def fields():
+    def fields(self):
         b = super(Student, self)
         return {
             'student_id' : (b.is_string, ),

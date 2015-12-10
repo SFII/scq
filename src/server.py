@@ -50,5 +50,13 @@ def initialize_db():
     Survey().init(connection)
     User().init(connection)
 
+def bootstrap_data():
+    qid = Question().create_generic_item()
+    print(qid)
+    
+
+
+
+
 if __name__ == "__main__":
     main()
