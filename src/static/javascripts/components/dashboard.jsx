@@ -116,7 +116,7 @@ var MainDiv = React.createClass({
 		if (!loggedIn()) {
 		   return (<Welcome />);
 		}
-        var itemNodes = this.props.pageJson.map(function (item) {
+        var itemNodes = testQuestions.map(function (item) {
                 return (
                     <SurveyDiv 
                     questions={item.questions}>

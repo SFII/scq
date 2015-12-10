@@ -24,11 +24,14 @@ var MultipleChoice = React.createClass({
     },
     
     handleChange: function(){
-        this.setState({data[i]: event.target.checked})
+        var changeAnswer = this.state.data;
+        changeAnswer[i] = event.target.checked;
+        this.setState({data: changeAnswer})
     },
     handleSurveySubmit:function(survey){
         survey.preventDefault();
-        this.props.onSubmit({survey})
+        var myJsonString = JSON.stringify(this.state.data)
+        this.props.onSubmit({myJsonString})
     },
         
     render: function(){
@@ -40,9 +43,8 @@ var MultipleChoice = React.createClass({
                     type="checkbox" 
                     key={i} 
                     name = {option}
-                    checked = "checked"
                     className="mdl-checkbox__input" 
-                    onchange= {this.handleChange.bind(this,i)}>
+                    onChange= {this.handleChange.bind(this,i)}>
                 </input>
                 <span className="mdl-checkbox__label"> { option } <br/></span>
             </label>
@@ -64,12 +66,35 @@ var MultipleChoice = React.createClass({
 * Single Choice
 */
 var SingleChoice = React.createClass({
+    
+    getInitialState: function(){
+        var length = Object.keys(this.props.options).length;
+        return {data: [length]};
+    },
+    
+    handleChange: function(){
+        var changeAnswer = this.state.data;
+        changeAnswer[i] = event.target.checked;
+        this.setState({data: changeAnswer})
+    },
+    handleSurveySubmit:function(survey){
+        survey.preventDefault();
+        var myJsonString = JSON.stringify(this.state.data)
+        this.props.onSubmit({myJsonString})
+    },
+    
     render: function(){
-        const renderedOptions = this.props.options.map((option, type) => {
+        const renderedOptions = this.props.options.map((option, type, i) => {
             return (
                 <div>
                     <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-                      <input type="radio" className="mdl-radio__button" name ={ option } value={ option } key={ option }></input>
+                      <input type="radio"
+                      className="mdl-radio__button"
+                      name ={ option }
+                      value={ option } 
+                      key={ option }
+                      onChange={this.handleChange.bind(this,i)}>
+                      </input>
                       <span className="mdl-radio__label"> { option } </span>
                     </label>
                 </div>
@@ -80,7 +105,7 @@ var SingleChoice = React.createClass({
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
             <form className="mdl-card__supporting-text mdl-color-text--grey-600">
               { renderedOptions }
-              <SubmitButton />
+              <SubmitButton onSubmit={this.handleSurveySubmit} />
             </form>
           </div>
         );
@@ -93,13 +118,32 @@ var SingleChoice = React.createClass({
 */
 var FreeResponse = React.createClass({
 
+    getInitialState: function(){
+        return {answer: 'Change Me'};
+    },
+    
+    handleChange: function(e){
+        this.setState({answer: e.target.value});
+    },
+    
+    handleSurveySubmit:function(survey){
+        survey.preventDefault();
+        this.props.onSubmit({answer: answer});
+    },
+    
   render: function(){
     return (
-      <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-        <textarea className="mdl-textfield__input" type="text" rows="4" cols="110" id="test"></textarea>
+      <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+        <textarea 
+        className="mdl-textfield__input"
+        type="text"
+        rows="4"
+        id="test"
+        value={this.state.answer}
+        onChange={this.handleChange}></textarea>
         <br/>
-        <SubmitButton />
-      </div>
+        <SubmitButton onSubmit={this.handleSurveySubmit}/>
+      </form>
      );
   }
 });
