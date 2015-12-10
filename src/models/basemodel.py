@@ -148,7 +148,7 @@ class BaseModel:
             return o['generated_keys'][0]
         return None
 
-    def schema_list_check(method):
+    def schema_list_check(self, method):
         def _list_check(data):
             try:
                 all(method(d) for d in data)
@@ -175,3 +175,7 @@ class BaseModel:
                             yield (key, "{}: {}".format(key, e))
     def verify(self, data):
         return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
+
+    def get_all(self):
+        table = self.__class__.__name__
+        return list(r.db(BaseModel.DB).table(table).run(BaseModel.conn))
