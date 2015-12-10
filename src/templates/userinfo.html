@@ -1,0 +1,66 @@
+{% for err in errors %}
+<div class="alert alert-danger" role="alert">
+{{ err }}
+</div>
+{% end %}
+<h1>User Information</h1>
+<label><b>Username</b></label><br>
+<li>{{ username }}</li><br>
+<label><b>Email</b></label><br>
+<li>{{ email }}</li><br>
+<label><b>Student Year</b></label><br>
+<li>{{ status }}</li><br>
+<label><b>Birthday</b></label><br>
+<li>{{ dob }}</li><br>
+<label><b>Native Language</b></label><br>
+<li>{{ native_language }}</li><br>
+<label><b>Gender</b></label><br>
+<li>{{ gender }}</li><br>
+<label><b>Ethnicity</b></label><br>
+<li>{{ ethnicity }}</li><br>
+<label><b>Majors Declared</b></label><br>
+{% if not major1 and not major2 and not major3 and not major4 %}
+  <li>{{ 'did not declare an majors' }}</li><br>
+{% else %}
+  {% if major1 %}
+    <li>{{ major1 }}</li><br>
+  {% end %}
+  {% if major2 %}
+    <li>{{ major2 }}</li><br>
+  {% end %}
+  {% if major3 %}
+    <li>{{ major3 }}</li><br>
+  {% end %}
+  {% if major4 %}
+    <li>{{ major4 }}</li><br>
+  {% end %}
+{% end %}
+<label><b>Minors Declared</b></label><br>
+{% if not minor1 and not minor2 %}
+  <li>{{ 'did not declare an minors' }}</li><br>
+{% else %}
+  {% if minor1 %}
+    <li>{{ minor1 }}</li><br>
+  {% end %}
+  {% if minor2 %}
+    <li>{{ minor2 }}</li><br>
+  {% end %}
+{% end %}
+<label><b>Departments Enrolled</b></label><br>
+{% if len(departments) == 0 %}
+<li>{{ 'not enrolled into any departments' }}</li><br>
+{% else %}
+  {% for department in departments %}
+  <li>{{ departments }}</li><br>
+  {% end %}
+{% end %}
+<label><b>Courses Enrolled</b></label><br>
+{% if len(courses) == 0 %}
+<li>{{ 'not enrolled into any courses' }}</li><br>
+{% else %}
+  <li>{{ courses }}</li><br>
+{% end %}
+<form action="/userinfo/update" method="get">
+  <input type="submit" value="update" class="button"><br>
+  {% raw xsrf_form_html() %}
+</form>
