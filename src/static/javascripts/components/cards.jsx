@@ -9,13 +9,33 @@ var TitleSection = React.createClass({
 });
 
 var Card = React.createClass({
+    
+    getInitialState: function(){
+        return {response: []};
+    },
+    
+    handleSurveySubmit: function(survey){
+        console.log(survey);
+        $.ajax({
+            url: "/api/response",
+            dataType: 'json',
+            type: 'POST',
+            data: survey,
+            success: function(data){
+        }.bind(this),
+        error: function(xhr, status,err){
+            console.error("/api/response", status, err.toString());
+        }.bind(this)
+        });
+    },
+    
     render: function(){
       if(this.props.type == "multipeChoice"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
-              <TitleSection titleText={this.props.title}/>
-              <MultipleChoice options={this.props.options}/>
+              <TitleSection titleText={this.state.response}/>
+              <MultipleChoice options={this.props.options} onSubmit={this.handleSurveySubmit}/>
             </div>
           </div>
         );
@@ -24,7 +44,7 @@ var Card = React.createClass({
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText={this.props.title}/>
-                  <SingleChoice options={this.props.options} />
+                  <SingleChoice options={this.props.options} onSubmit={this.handleSurveySubmit} />
               </div>
             </div>
           );
@@ -33,7 +53,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <FreeResponse />
+              <FreeResponse onSubmit={this.handleSurveySubmit}/>
             </div>
         </div>
       );
