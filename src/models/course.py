@@ -33,7 +33,6 @@ class Course(BaseModel):
     def subscribe_user(self, user_id, course_id):
         super(Course, self).subscribe_user(user_id, course_id)
         course_data = self.get_item(course_id)
-        print(course_data)
         for survey_id in course_data['active_surveys']:
             self.send_user_survey(user_id, survey_id)
 

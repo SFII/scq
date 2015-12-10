@@ -22,7 +22,6 @@ class Survey(BaseModel):
         }
 
     def create_item(self, data):
-        print(data)
         course_id = data['course_id']
         creator_id = data['creator_id']
         creator_data = User().get_item(creator_id)
