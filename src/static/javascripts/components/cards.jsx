@@ -10,18 +10,23 @@ var TitleSection = React.createClass({
 
 var Card = React.createClass({
     
+    getInitialState: function(){
+        return {response: []};
+    },
+    
     handleSurveySubmit: function(survey){
-    $.ajax({
-    url: this.props.routes.response,
-    dataType: 'json',
-    type: 'POST',
-    data: survey,
-    success: function(data){
-    }.bind(this),
-    error: function(xhr, status,err){
-    console.error(this.props.routes.surveys, status, err.toString());
-    }.bind(this)
-    });
+        console.log(survey);
+        $.ajax({
+            url: "/api/response",
+            dataType: 'json',
+            type: 'POST',
+            data: survey,
+            success: function(data){
+        }.bind(this),
+        error: function(xhr, status,err){
+            console.error("/api/response", status, err.toString());
+        }.bind(this)
+        });
     },
     
     render: function(){
@@ -29,7 +34,7 @@ var Card = React.createClass({
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
-              <TitleSection titleText={this.props.title}/>
+              <TitleSection titleText={this.state.response}/>
               <MultipleChoice options={this.props.options} onSubmit={this.handleSurveySubmit}/>
             </div>
           </div>

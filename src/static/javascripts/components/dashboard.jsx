@@ -73,7 +73,7 @@ var testQuestions = [
 ];
 
 var Page = React.createClass({
-
+    /*
     loadPageJSON: function() {
     $.ajax({
     url:this.props.routes.surveys,
@@ -88,19 +88,19 @@ var Page = React.createClass({
     }.bind(this)
     });
     },
-    
+    */
     getInitialState: function() {
     return{data:[]};
     },
-    
+    /*
     componentDidMount: function(){
         this.loadPageJSON()
     },
-    
+    */
     render: function(){
       return (
         <div className="mdl-grid mdl-cell--12-col content">
-            <MainDiv pageJson={this.state.data} />
+            <MainDiv pageJson={this.state.data} routesObject={this.props.routes} />
         </div>
         );
     }
@@ -118,8 +118,7 @@ var MainDiv = React.createClass({
 		}
         var itemNodes = testQuestions.map(function (item) {
                 return (
-                    <SurveyDiv 
-                    questions={item.questions}>
+                    <SurveyDiv questions={item.questions}>
                     </SurveyDiv>
                 );
             });

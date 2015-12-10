@@ -3,7 +3,7 @@
 * Submit Button
 */
 var SubmitButton = React.createClass({
-    render: function(){
+    render: function() {
         return (
             <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                 Submit
@@ -20,16 +20,29 @@ var MultipleChoice = React.createClass({
     
     getInitialState: function(){
         var length = Object.keys(this.props.options).length;
-        return {data: [length]};
+        var questionObj =[];
+        for(var i =0; i < length; i++){
+            questionObj[i]=false;
+        }
+        return {data: questionObj};
     },
     
-    handleChange: function(i){
+    handleChange: function(i,value){
+        var NewValue = null;
+        console.log(value);
+        if(value == false){
+            NewValue = true;
+        }
+        else{
+            NewValue = false;
+        }
         var changeAnswer = this.state.data;
-        changeAnswer[i] = event.target.checked;
+        changeAnswer[i] = NewValue;
         this.setState({data: changeAnswer})
     },
-    handleSurveySubmit:function(survey){
-        survey.preventDefault();
+    handleSurveySubmit:function(event){
+        
+        event.preventDefault();
         var myJsonString = JSON.stringify(this.state.data)
         this.props.onSubmit({myJsonString})
     },
@@ -43,8 +56,9 @@ var MultipleChoice = React.createClass({
                     type="checkbox" 
                     key={i} 
                     name = {option}
+                    value = {this.state.data[i]}
                     className="mdl-checkbox__input" 
-                    onChange= {this.handleChange.bind(this,i)}>
+                    onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
                 </input>
                 <span className="mdl-checkbox__label"> { option } <br/></span>
             </label>
@@ -53,9 +67,11 @@ var MultipleChoice = React.createClass({
       });
 
       return (
-        <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+        <form 
+        className="mdl-card__supporting-text mdl-color-text--grey-600" 
+        onSubmit={this.handleSurveySubmit}>
             { renderedOptions }
-            <SubmitButton onSubmit={this.handleSurveySubmit}/>
+            <SubmitButton />
         </form>
       );
     }
@@ -69,12 +85,19 @@ var SingleChoice = React.createClass({
     
     getInitialState: function(){
         var length = Object.keys(this.props.options).length;
-        return {data: [length]};
+        return {data:[]};
     },
     
-    handleChange: function(i){
+    handleChange: function(i,value){
+        var NewValue = null;
+        if(value=="false"){
+            NewValue = "true";
+        }
+        else if(value=="true"){
+            NewValue = "false";
+        }
         var changeAnswer = this.state.data;
-        changeAnswer[i] = event.target.checked;
+        changeAnswer[i] = NewValue;
         this.setState({data: changeAnswer})
     },
     handleSurveySubmit:function(survey){
