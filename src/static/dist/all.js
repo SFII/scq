@@ -220,6 +220,9 @@ var MainDiv = React.createClass({
     displayName: "MainDiv",
 
     render: function render() {
+        if (!loggedIn()) {
+            return React.createElement(Welcome, null);
+        }
         var itemNodes = testQuestions.map(function (item) {
             return React.createElement(Card, { title: item.title, options: item.options, type: item.type });
         });
@@ -264,4 +267,95 @@ var Form = React.createClass({
             React.createElement("input", { type: "submit", value: "Click me" })
         );
     }
+});
+
+function loggedIn() {
+    return document.cookie.indexOf("user") > -1;
+}
+"use strict";
+
+var Welcome = React.createClass({
+	displayName: "Welcome",
+
+	render: function render() {
+		return React.createElement(
+			"div",
+			null,
+			React.createElement(About, null),
+			React.createElement(Login, null)
+		);
+	}
+});
+
+var About = React.createClass({
+	displayName: "About",
+
+	render: function render() {
+		return React.createElement(
+			"div",
+			{ className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--8-col" },
+			React.createElement(
+				"p",
+				null,
+				"Campus Consensus is a survey and data collection system developed for improving student-faculty relationships at universities being developed at University Colorado at Boulder. Our platform allows students and faculty to ask questions and offer short surveys to improve instructional quality, align student and faculty interests, and express consensus about campus issues."
+			),
+			React.createElement(
+				"p",
+				null,
+				"Students in the same class or department can learn about how other students feel about the quality of the course or what is working and what is not. Similarly, faculty can get fine-grain information about how their instruction is being received by their students."
+			),
+			React.createElement(
+				"p",
+				null,
+				"Our data will be available to the entire campus in an anonymous form. The project is being developed by computer science seniors at University of Colorado Boulder."
+			),
+			React.createElement(
+				"p",
+				null,
+				"Please contact our project leads with any questions:"
+			),
+			React.createElement(
+				"ul",
+				null,
+				React.createElement(
+					"li",
+					null,
+					"antsankov [at] gmail [dot] com"
+				),
+				React.createElement(
+					"li",
+					null,
+					"michael [dot] skirpan [at] colorado [dot] edu"
+				)
+			)
+		);
+	}
+});
+
+var Login = React.createClass({
+	displayName: "Login",
+
+	render: function render() {
+		return React.createElement(
+			"div",
+			{ className: "updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col" },
+			React.createElement(
+				"form",
+				{ action: "/register/culdap", method: "post" },
+				React.createElement(
+					"label",
+					null,
+					"CU Login Name"
+				),
+				React.createElement("input", { type: "text", name: "username", required: true }),
+				React.createElement(
+					"label",
+					null,
+					"Password"
+				),
+				React.createElement("input", { type: "password", name: "password", required: true }),
+				React.createElement("input", { type: "submit", id: "loginbtn", name: "login", value: "Log In", "class": "button" })
+			)
+		);
+	}
 });

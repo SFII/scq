@@ -6,7 +6,7 @@ class Instructor(BaseModel):
         return ['instructor_name', 'department', 'college', 'section']
 
     def fields():
-        b = super(User, self)
+        b = super(Instructor, self)
         return {
             'instructor_id' : (b.is_string, ),
             'instructor_name' : (b.is_str, ),

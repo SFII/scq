@@ -4,3 +4,4 @@ rethinkdb_data/
 node_modules/
 .DS_Store
 src/static/dist/*
+dist/

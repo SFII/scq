@@ -1,13 +1,6 @@
 from models.basemodel import BaseModel
 
 class Student(BaseModel):
-    'college'
-    'majors'
-    'minors'
-    'gpa'
-    'course_history'
-    'academic_years'
-    'credits_earned'
     COLLEGE_ARTS_AND_SCIENCES = 'College of Arts and Sciences'
     COLLEGE_ENGINEERING = 'College of Engineering and Applied Science'
     COLLEGE_BUSINESS = 'Leeds School of Business'
@@ -32,13 +25,12 @@ class Student(BaseModel):
 
     # must be overrriden
     def fields():
-        b = super(User, self)
+        b = super(Student, self)
         return {
             'student_id' : (b.is_string, ),
-            'email' : (b.is_string, b.is_valid_email, ),
-            'college' : (b.is_in_list(REGISTRATION_METHODS), ),
-            'majors' : (b.is_list, schema_list_check(is_major),),
-            'minors' : (b.is_list, schema_list_check(is_minor),),
+            'college' : (b.is_in_list(COLLEGES), ),
+            'majors' : (b.is_list, schema_list_check(b.is_major),),
+            'minors' : (b.is_list, schema_list_check(b.is_minor),),
             'gpa' : (b.is_int, ),
             'course_history' : (b.is_list, ),
             'credits_earned' : (b.is_int, )

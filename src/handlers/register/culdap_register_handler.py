@@ -55,7 +55,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         return self.registerUser(data)
 
     def collectUserData(self):
-        data = {}
+        data = User().default()
         data['email']           = self.get_argument('email',None,strip = True)
         data['dob']             = self.get_argument('dob',None,strip = True)
         data['gender']          = self.get_argument('gender',None,strip = True)
@@ -72,7 +72,6 @@ class CuLdapRegisterHandler(RegisterHandler):
 
 
     def registerUser(self,data):
-        data['date_registered'] = time.strftime('%a %b %d %H:%M:%S %Z %Y')
         username = self.get_argument('username',strip = True)
         verified = User().verify(data)
         if len(verified) != 0:
@@ -82,8 +81,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         user_id = User().create_item(data)
         user_data = User().get_item(user_id)
         self.set_current_user(user_data)
-        return self.redirect(self.get_argument("next", "/"))
-
+        return self.redirect(self.get_argument("next", "/dashboard"))
 
     def CULdapRegister(self):
         username = self.get_argument('username',strip = True)
@@ -93,8 +91,8 @@ class CuLdapRegisterHandler(RegisterHandler):
             return self.failWithErrors('register/culdapregister.html', errors)
         authorized = culdapauth.auth_user_ldap(username, password)
         if authorized:
-            user = self.getLdapUser(username, User().REGISTRATION_CULDAP)
-            if user is None:
+            simmilar_users = self.getLdapUser(username, User().REGISTRATION_CULDAP)
+            if len(simmilar_users) == 0:
                 return self.verifyCULdapRegistrationPage(username)
             else:
                 return self.failWithErrors('register/culdapregister.html', ['Registered user with those credentials already exists'])
