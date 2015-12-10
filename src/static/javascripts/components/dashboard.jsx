@@ -3,7 +3,7 @@ var testQuestions = [
     id : 1,
     type : "trueOrFalse",
     title :"Would you recommend this course?",
-    options : ["Yes", "No"]
+    options : ["yes", "No"]
 },
 {
     id : "asdasdad",
@@ -12,11 +12,14 @@ var testQuestions = [
 },
 {
     id : 2,
-    type : "multipeChoice",
-    title: "Did you enjoy the course?",
-    options: ["Not at all","It was an average course","It was an excellent course"]
+    type : "rating",
+    title: "Please rate the course.",
+    options : ["rate"]
 }
 ];
+
+
+
 
 /*
 *
