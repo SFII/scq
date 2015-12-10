@@ -15,4 +15,4 @@ class Setup:
         User().create_item(user)
 
 if __name__ == "__main__":
-    main()
+    Setup().init_data()

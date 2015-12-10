@@ -3,6 +3,7 @@
     "department":"",
     "creator":"",
     "isInstructor":"",
+	"course_id": "CSCI 1300",
     "questions": [
          {
             "question-id" : "Unique-ID",

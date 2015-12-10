@@ -22,7 +22,10 @@ class Surveys(BaseHandler):
 
     def get(self):
         user_data = self.get_current_user()
-        courses = user_data['courses']
-        for course in courses:
-            data += models.survey.Survey().find({'course': course,})
+        if user_data is None:
+            data = models.survey.Survey().get_all()
+        else:
+            courses = user_data['courses']
+            for course in courses:
+                data += models.survey.Survey().find({'course': course,})
         self.write(json.dumps(data))
