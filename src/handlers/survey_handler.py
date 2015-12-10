@@ -8,7 +8,7 @@ from models.user import User
 import models.answer
 from handlers.base_handler import BaseHandler
 
-class Response(BaseHandler):
+class Responses(BaseHandler):
     def post(self):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)

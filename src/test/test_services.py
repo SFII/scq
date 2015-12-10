@@ -25,5 +25,12 @@ class TestServices(tornado.testing.AsyncHTTPTestCase):
         response = self.fetch('/api/surveys', headers=headers)
         self.assertEqual(response.code, 200)
 
+    def test_response(self):
+        response = self.fetch(
+            '/api/response',
+            method='POST',
+            body='{"survey": "response"}')
+        self.assertEqual(response.code, 200)
+
 if __name__ == '__main__':
     unittest.main()

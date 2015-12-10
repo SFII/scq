@@ -1,10 +1,10 @@
 from models.basemodel import BaseModel
 
 class Response(BaseModel):
-    def requiredFields():
+    def requiredFields(self):
         return ['user_id', 'survey_id', 'answer_id']
 
-    def fields():
+    def fields(self):
         b = super(Response, self)
         return {
             'user_id' : (b.is_int, ),
