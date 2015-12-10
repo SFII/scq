@@ -164,14 +164,16 @@ class BaseModel:
             if key in data:
                 for method in methods:
                     try:
-                        method(data[key])
-                    except TypeError:
-                        method(data[key], key)
+                        if method in [is_unique]:
+                            method(data[key], key)
+                        else:
+                            method(data[key])
                     except Exception as e:
                         if isinstance(getattr(e,'message',None), (list, tuple)):
                             for error in e.message:
                                 yield error
                         else:
                             yield (key, "{}: {}".format(key, e))
+
     def verify(self, data):
         return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))

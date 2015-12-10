@@ -22,7 +22,7 @@ console:
 test:
 	cd src && python3 -m unittest discover test
 
-bootstrap:
+bootstrap_data:
 	cd ./src && python3 -c 'from server import bootstrap_data; bootstrap_data()'
 
 

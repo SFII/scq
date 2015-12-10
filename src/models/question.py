@@ -12,7 +12,7 @@ class Question(BaseModel):
         b = super(__class__, self)
         return {
             'text' : (b.is_string, b.is_not_empty, ),
-            'response_format' : (b.is_string, b.is_reponse_format(self.USER_RESPONSE_FORMAT))
+            'response_format' : (b.is_string, self.is_reponse_format(self.USER_RESPONSE_FORMAT))
         }
 
     def default(self):
@@ -22,7 +22,7 @@ class Question(BaseModel):
         }
 
     def is_reponse_format(self, data):
-       super(User, self).is_in_list(self.USER_RESPONSE_FORMAT, data)
+       super(Question, self).is_in_list(self.USER_RESPONSE_FORMAT)
 
     def create_generic_item(self):
         data = self.default()
