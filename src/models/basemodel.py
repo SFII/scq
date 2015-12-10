@@ -105,7 +105,7 @@ class BaseModel:
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
 
-    def subscribe_user(self, user_id, row_id):
+    def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         row_table = self.__class__.__name__
         user_table = 'User'
         user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(BaseModel.conn)
@@ -115,6 +115,14 @@ class BaseModel:
             return False
         if user_data is None:
             logging.error("{0} {1} does not exist".format(table, row_data))
+            return False
+        try:
+            if user_subscription_name is not None:
+                user_subscription = user_data[user_subscription_name]
+                user_subscription.append(row_id)
+                r.db(BaseModel.DB).table(user_table).get(user_id).update({ user_subscription_name : user_subscription}).run(BaseModel.conn)
+        except KeyError:
+            logging.error("user subscription {0} not known in user data".format(user_subscription_name))
             return False
         subscribers = row_data['subscribers']
         subscribers.append(user_id)
