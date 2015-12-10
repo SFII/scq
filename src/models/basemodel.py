@@ -108,33 +108,39 @@ class BaseModel:
     def subscribe_user(self, user_id, row_id):
         row_table = self.__class__.__name__
         user_table = 'User'
-        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(conn)
-        row_data = r.db(BaseModel.DB).table(row_table).get(row_id).run(conn)
+        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(BaseModel.conn)
+        row_data = r.db(BaseModel.DB).table(row_table).get(row_id).run(BaseModel.conn)
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
         if user_data is None:
             logging.error("{0} {1} does not exist".format(table, row_data))
             return False
-        updated_subscribers = { 'subscribers' : row_data['subscribers'].append(user_id) }
-        return r.db(BaseModel.DB).table(row_table).get(row_id).update(updated_subscribers).run(BaseModel.conn)
+        subscribers = row_data['subscribers']
+        subscribers.append(user_id)
+        return r.db(BaseModel.DB).table(row_table).get(row_id).update({'subscribers' : subscribers}).run(BaseModel.conn)
 
 
     # adds a survey_id to a user's unanswered_surveys list.
     # maybe this should live somewhere else? like user? or survey?
-    def send_user_survey(self, user_id, survey_id):
+    def send_user_survey(self, user_id, survey_id, survey_key='unanswered_surveys'):
         survey_table = 'Survey'
         user_table = 'User'
-        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(conn)
-        survey_data = r.db(BaseModel.DB).table(survey_table).get(survey_id).run(conn)
+        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(BaseModel.conn)
+        survey_data = r.db(BaseModel.DB).table(survey_table).get(survey_id).run(BaseModel.conn)
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
         if survey_data is None:
             logging.error("Survey {0} does not exist".format(survey_data))
             return False
-        updated_surveys = { 'unanswered_surveys' : row_data['unanswered_surveys'].append(survey_id) }
-        return r.db(BaseModel.DB).table(user_table).get(user_id).update(updated_surveys).run(BaseModel.conn)
+        try:
+            user_survey_list = user_data[survey_key]
+        except KeyError:
+            logging.error("survey key {0} not known in user data".format(survey_key))
+            return False
+        user_survey_list.append(survey_id)
+        return r.db(BaseModel.DB).table(user_table).get(user_id).update({survey_key : user_survey_list}).run(BaseModel.conn)
 
     def find(self, key):
         table = self.__class__.__name__
@@ -164,15 +170,17 @@ class BaseModel:
             if key in data:
                 for method in methods:
                     try:
-                        method(data[key])
-                    except TypeError:
-                        method(data[key], key)
+                        if method in [BaseModel.is_unique]:
+                            method(data[key], key)
+                        else:
+                            method(data[key])
                     except Exception as e:
                         if isinstance(getattr(e,'message',None), (list, tuple)):
                             for error in e.message:
                                 yield error
                         else:
                             yield (key, "{}: {}".format(key, e))
+
     def verify(self, data):
         return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
 

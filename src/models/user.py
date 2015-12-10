@@ -20,7 +20,6 @@ class User(BaseModel):
         b = super(User, self)
         return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
-            'user_id' : (b.is_string, b.is_not_empty,),
             'username' : (b.is_string,),
             'email' : (b.is_string, b.is_valid_email, ),
             'accepted_tos' : (b.is_truthy,),
@@ -31,6 +30,7 @@ class User(BaseModel):
             'last_sign_in' : (b.is_date_string,),
             'courses' : (b.is_list,),
             'departments' : (b.is_list,),
+            'created_surveys' : (b.is_list,),
             'unanswered_surveys' : (b.is_list,),
             'answered_surveys' : (b.is_list,),
             'answers' : (b.is_list,),
@@ -52,6 +52,7 @@ class User(BaseModel):
             'departments' : [],
             'unanswered_surveys' : [],
             'answered_surveys' : [],
+            'created_surveys' : [],
             'answers' : [],
         }
 

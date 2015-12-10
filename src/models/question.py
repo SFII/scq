@@ -1,19 +1,28 @@
 from models.basemodel import BaseModel
-
+import random
+import services.lorem_ipsum as lorem_ipsum
 class Question(BaseModel):
 
     USER_RESPONSE_FORMAT = ['Free reponse', 'Mutiple choice', 'Dichotomous', 'Rank order scaling', 'Rating scale']
 
-    def requiredFields():
-        return ['text', 'reponse_format']
+    def requiredFields(self):
+        return ['text', 'response_format']
 
-    def fields():
-        b = super(Question, self)
+    def fields(self):
+        b = super(__class__, self)
         return {
-            'question_id' : (b.is_string, ),
-            'text' : (b.is_str, b.is_not_empty, ),
-            'response_format' : (b.is_str, b.is_reponse_format(USER_RESPONSE_FORMAT))
+            'text' : (b.is_string, b.is_not_empty, ),
+            'response_format' : (b.is_string, b.is_in_list(self.USER_RESPONSE_FORMAT))
         }
 
-    def is_reponse_format(data):
-       super(User, self).is_in_list(USER_RESPONSE_FORMAT, data)
+    def default(self):
+        return {
+            'text' : "",
+            'response_format' : ""
+        }
+
+    def create_generic_item(self):
+        data = self.default()
+        data['text'] = lorem_ipsum.lorem_ipsum()
+        data['response_format'] = random.choice(self.USER_RESPONSE_FORMAT)
+        return super(Question, self).create_item(data)

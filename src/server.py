@@ -19,6 +19,8 @@ from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
 from config.config import application
+import time
+
 
 def main():
     initialize_db()
@@ -49,6 +51,21 @@ def initialize_db():
     Student().init(connection)
     Survey().init(connection)
     User().init(connection)
+
+def bootstrap_data():
+    user_id = 'e64ad721-964a-436f-86c1-a516518c1440'
+    user_data = User().get_item(user_id)
+    if user_data is None:
+        print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
+        return
+    course_id = Course().create_generic_item()
+    Course().subscribe_user(user_id, course_id)
+    survey_id = Survey().create_generic_item(user_id, course_id)
+    print('survey id:\n'+survey_id)
+    return
+
+
+
 
 if __name__ == "__main__":
     main()

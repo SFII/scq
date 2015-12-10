@@ -1,8 +1,10 @@
 [
     {
-        "survey_id" : "Unique-ID",
-        "department":"",
-        "creator":"",
+        "id" : "Unique-ID",
+        "course_id":"",
+        "course_name":"",
+        "creator_name":"",
+        "creator_id":"",
         "isInstructor":"",
         "questions" : [
              {
@@ -25,9 +27,11 @@
         ]
     },
     {
-        "survey_id" : "Unique-ID",
-        "department":"",
-        "creator":"",
+        "id" : "Unique-ID",
+        "course_id":"",
+        "course_name":"",
+        "creator_name":"",
+        "creator_id":"",
         "isInstructor":"",
         "questions" : [
              {
@@ -50,9 +54,11 @@
         ]
     },
     {
-        "survey_id" : "Unique-ID",
-        "department":"",
-        "creator":"",
+        "id" : "Unique-ID",
+        "course_id":"",
+        "course_name":"",
+        "creator_name":"",
+        "creator_id":"",
         "isInstructor":"",
         "questions" : [
              {

@@ -22,8 +22,8 @@ console:
 test:
 	cd src && python3 -m unittest discover test
 
-database:
-	echo "not yet implemented"
+bootstrap_data:
+	cd ./src && python3 -c 'from server import bootstrap_data; bootstrap_data()'
 
 build:
 	pip3 install -r requirements.txt

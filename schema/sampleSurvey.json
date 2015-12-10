@@ -1,9 +1,8 @@
 {
-    "survey-id" : "Unique-ID",
-    "department":"",
-    "creator":"",
-    "isInstructor":"",
-	"course_id": "CSCI 1300",
+    "course_id":"",
+    "course_name":"",
+    "creator_name":"",
+    "creator_id":"",
     "questions": [
          {
             "question-id" : "Unique-ID",
