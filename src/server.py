@@ -53,7 +53,7 @@ def initialize_db():
     User().init(connection)
 
 def bootstrap_data():
-    user_id = 'e64ad721-964a-516518c1440'
+    user_id = 'e64ad721-964a-436f-86c1-a516518c1440'
     user_data = User().get_item(user_id)
     if user_data is None:
         print("user_id {0} does not correspond to a valid user in the database!".format(user_id))

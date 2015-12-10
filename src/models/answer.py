@@ -12,7 +12,6 @@ class Answer(BaseModel):
     def fields(self):
         b = super(Answer, self)
         return {
-            'answer_id' : (b.is_string, ),
             'user_id' : (b.is_int, ),
             'survey_id' : (b.is_int, ),
             'question_id' : (b.is_int, ),

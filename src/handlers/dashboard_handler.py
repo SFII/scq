@@ -7,9 +7,9 @@ class DashboardHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         self.refresh_current_user_cookie()
-        self.render('dashboard.html', survey_json=self.survey_json())
+        self.render('dashboard.html', survey_json=self.get_survey_json())
 
-    def survey_json(self):
+    def get_survey_json(self):
         survey_json = []
         user_data = self.current_user
         print(self.current_user)
@@ -18,4 +18,4 @@ class DashboardHandler(BaseHandler):
             survey_data = Survey().decompose(survey_id)
             survey_json.append(survey_data)
         print(survey_json)
-        
+        return survey_json

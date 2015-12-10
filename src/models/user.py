@@ -20,7 +20,6 @@ class User(BaseModel):
         b = super(User, self)
         return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
-            'user_id' : (b.is_string, b.is_not_empty,),
             'username' : (b.is_string,),
             'email' : (b.is_string, b.is_valid_email, ),
             'accepted_tos' : (b.is_truthy,),

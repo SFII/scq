@@ -8,7 +8,6 @@ class Instructor(BaseModel):
     def fields(self):
         b = super(Instructor, self)
         return {
-            'instructor_id' : (b.is_string, ),
             'instructor_name' : (b.is_string, ),
             'department' : (b.is_string, ),
             'college' : (b.is_string, ),
