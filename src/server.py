@@ -51,9 +51,13 @@ def initialize_db():
     User().init(connection)
 
 def bootstrap_data():
-    qid = Question().create_generic_item()
-    print(qid)
-    
+    user_id = '775f65ec-9507-49b9-bc6b-ca6495cc0294'
+    course_id = Course().create_generic_item()
+    Course().subscribe_user(user_id, course_id)
+    survey_id = Survey().create_generic_item(user_id, course_id)
+
+    print('survey id:\n'+survey_id)
+
 
 
 

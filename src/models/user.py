@@ -52,6 +52,7 @@ class User(BaseModel):
             'departments' : [],
             'unanswered_surveys' : [],
             'answered_surveys' : [],
+            'created_surveys' : [],
             'answers' : [],
         }
 

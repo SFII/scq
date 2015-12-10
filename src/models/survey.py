@@ -1,16 +1,18 @@
 from models.basemodel import BaseModel
 from models.course import Course
+from models.user import User
+from models.question import Question
+import random
 
 class Survey(BaseModel):
 
     def requiredFields(self):
-        return ['question_id', 'course_id', 'creator_id']
+        return ['questions', 'course_id', 'creator_id']
 
     def fields(self):
         b = super(Survey, self)
         return {
-            'survey_id' : (b.is_string, b.is_not_empty,),
-            'questions' : (b.is_list, schema_list_check(b.is_string)),
+            'questions' : (b.is_list, ),
             'course_id' : (b.is_string, b.is_not_empty,),
             'creator_id' : (b.is_string, b.is_not_empty,)
         }
@@ -25,6 +27,7 @@ class Survey(BaseModel):
         Course().update_item(course_id, {'active_surveys' : active_surveys })
         for subscriber_id in subscribers:
             self.send_user_survey(subscriber_id, survey_id)
+        return survey_id
 
 
     # returns default survey data, that can be overwritten. Good for templating a new user
@@ -34,3 +37,11 @@ class Survey(BaseModel):
             'course_id' : "",
             'creator_id' : ""
         }
+
+    def create_generic_item(self, creator_id, course_id=None):
+        data = self.default()
+        data['course_id'] = course_id if course_id else Course().create_generic_item()
+        data['creator_id'] = creator_id
+        for i in range(4):
+            data['questions'].append(Question().create_generic_item())
+        return self.create_item(data)

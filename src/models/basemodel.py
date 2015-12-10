@@ -108,16 +108,17 @@ class BaseModel:
     def subscribe_user(self, user_id, row_id):
         row_table = self.__class__.__name__
         user_table = 'User'
-        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(conn)
-        row_data = r.db(BaseModel.DB).table(row_table).get(row_id).run(conn)
+        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(BaseModel.conn)
+        row_data = r.db(BaseModel.DB).table(row_table).get(row_id).run(BaseModel.conn)
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
         if user_data is None:
             logging.error("{0} {1} does not exist".format(table, row_data))
             return False
-        updated_subscribers = { 'subscribers' : row_data['subscribers'].append(user_id) }
-        return r.db(BaseModel.DB).table(row_table).get(row_id).update(updated_subscribers).run(BaseModel.conn)
+        subscribers = row_data['subscribers']
+        subscribers.append(user_id)
+        return r.db(BaseModel.DB).table(row_table).get(row_id).update(subscribers).run(BaseModel.conn)
 
 
     # adds a survey_id to a user's unanswered_surveys list.
@@ -125,8 +126,8 @@ class BaseModel:
     def send_user_survey(self, user_id, survey_id):
         survey_table = 'Survey'
         user_table = 'User'
-        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(conn)
-        survey_data = r.db(BaseModel.DB).table(survey_table).get(survey_id).run(conn)
+        user_data = r.db(BaseModel.DB).table(user_table).get(user_id).run(BaseModel.conn)
+        survey_data = r.db(BaseModel.DB).table(survey_table).get(survey_id).run(BaseModel.conn)
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
@@ -164,7 +165,7 @@ class BaseModel:
             if key in data:
                 for method in methods:
                     try:
-                        if method in [is_unique]:
+                        if method in [BaseModel.is_unique]:
                             method(data[key], key)
                         else:
                             method(data[key])

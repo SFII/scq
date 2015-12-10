@@ -25,7 +25,6 @@ test:
 bootstrap_data:
 	cd ./src && python3 -c 'from server import bootstrap_data; bootstrap_data()'
 
-
 build:
 	pip3 install -r requirements.txt
 	npm install

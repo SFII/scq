@@ -1,4 +1,5 @@
 from models.basemodel import BaseModel
+import random
 
 class Course(BaseModel):
 
@@ -8,7 +9,6 @@ class Course(BaseModel):
     def fields(self):
         b = super(Course, self)
         return {
-            'course_id' : (b.is_string, b.is_not_empty,),
             'course_name' : (b.is_string, b.is_not_empty,),
             'department' : (b.is_string, ),
             'average_grade' : (b.is_int, ),
@@ -33,5 +33,13 @@ class Course(BaseModel):
     def subscribe_user(self, user_id, course_id):
         super(Course, self).subscribe_user(user_id, course_id)
         course_data = self.get_item(course_id)
+        print(course_data)
         for survey_id in course_data['active_surveys']:
             self.send_user_survey(user_id, survey_id)
+
+    def create_generic_item(self):
+        data = self.default()
+        data['course_name'] = 'test_course'
+        data['department'] = 'test_dept'
+        data['average_grade'] = random.random() * 4
+        return super(Course, self).create_item(data)
