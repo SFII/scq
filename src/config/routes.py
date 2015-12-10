@@ -25,11 +25,7 @@ routes = [
     (r"/register", RegisterHandler),
     (r"/dashboard",DashboardHandler),
     (r"/api/surveys", Surveys),
-<<<<<<< HEAD
-    (r"/api/response", Responses)
-=======
     (r"/api/response", Response),
     (r"/userinfo", UserInfoHandler),
     (r"/userinfo/update", UserInfoUpdateHandler)
->>>>>>> f9fd7cb5ee2fa0e6269f4f0a50515da1f6ac3608
 ]
