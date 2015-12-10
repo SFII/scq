@@ -7,12 +7,16 @@ import random
 class Survey(BaseModel):
 
     def requiredFields(self):
+
         return ['questions', 'course_id', 'creator_id']
+        return ['question_id', 'course_id', 'creator_id']
 
     def fields(self):
         b = super(Survey, self)
         return {
             'questions' : (b.is_list, ),
+            'survey_id' : (b.is_string, b.is_not_empty,),
+            'questions' : (b.is_list, self.schema_list_check(b.is_string)),
             'course_id' : (b.is_string, b.is_not_empty,),
             'creator_id' : (b.is_string, b.is_not_empty,)
         }
