@@ -43,8 +43,8 @@ var MultipleChoice = React.createClass({
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var myJsonString = JSON.stringify(this.state.data)
-        this.props.onSubmit({myJsonString})
+        var myJsonString = JSON.stringify(this.state.data);
+        this.props.onSubmit({myJsonString});
     },
         
     render: function(){
@@ -83,40 +83,47 @@ var MultipleChoice = React.createClass({
 */
 var SingleChoice = React.createClass({
     
-    getInitialState: function(){
+getInitialState: function(){
         var length = Object.keys(this.props.options).length;
-        return {data:[]};
+        var questionObj =[];
+        for(var i =0; i < length; i++){
+            questionObj[i]=false;
+        }
+        return {data: questionObj};
     },
     
     handleChange: function(i,value){
         var NewValue = null;
-        if(value=="false"){
-            NewValue = "true";
+        console.log(value);
+        if(value == false){
+            NewValue = true;
         }
-        else if(value=="true"){
-            NewValue = "false";
+        else{
+            NewValue = false;
         }
         var changeAnswer = this.state.data;
         changeAnswer[i] = NewValue;
-        this.setState({data: changeAnswer})
+        this.setState({data: changeAnswer});
     },
-    handleSurveySubmit:function(survey){
-        survey.preventDefault();
-        var myJsonString = JSON.stringify(this.state.data)
-        this.props.onSubmit({myJsonString})
+    handleSurveySubmit:function(event){
+        
+        event.preventDefault();
+        var myJsonString = JSON.stringify(this.state.data);
+        this.props.onSubmit({myJsonString});
     },
     
     render: function(){
         const renderedOptions = this.props.options.map((option, i) => {
             return (
                 <div>
-                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-                      <input type="radio"
-                      className="mdl-radio__button"
-                      name ={ option }
-                      value={ option } 
-                      key={ option }
-                      onChange={this.handleChange.bind(this,i)}>
+                    <label 
+                    className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+                    <input type="radio"
+                     className="mdl-radio__button"
+                     name ={ option }
+                     value={ option } 
+                     key={ option }
+                     onChange={this.handleChange.bind(this,i,this.state.data[i])}>
                       </input>
                       <span className="mdl-radio__label"> { option } </span>
                     </label>
@@ -126,9 +133,12 @@ var SingleChoice = React.createClass({
 
         return (
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-            <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+            <form 
+            className="mdl-card__supporting-text mdl-color-text--grey-600"
+            onSubmit={this.handleSurveySubmit}>
+            
               { renderedOptions }
-              <SubmitButton onSubmit={this.handleSurveySubmit} />
+              <SubmitButton />
             </form>
           </div>
         );
@@ -151,12 +161,16 @@ var FreeResponse = React.createClass({
     
     handleSurveySubmit:function(survey){
         survey.preventDefault();
+        var answer = this.state.answer.trim();
         this.props.onSubmit({answer: answer});
     },
     
   render: function(){
     return (
-      <form className="mdl-card__supporting-text mdl-color-text--grey-600">
+      <form 
+        className="mdl-card__supporting-text mdl-color-text--grey-600"
+        onSubmit={this.handleSurveySubmit}>
+        
         <textarea 
         className="mdl-textfield__input"
         type="text"
@@ -165,7 +179,7 @@ var FreeResponse = React.createClass({
         value={this.state.answer}
         onChange={this.handleChange}></textarea>
         <br/>
-        <SubmitButton onSubmit={this.handleSurveySubmit}/>
+        <SubmitButton/>
       </form>
      );
   }

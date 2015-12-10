@@ -44,7 +44,7 @@ var Card = React.createClass({
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText={this.props.title}/>
-                  <SingleChoice options={this.props.options} />
+                  <SingleChoice options={this.props.options} onSubmit={this.handleSurveySubmit} />
               </div>
             </div>
           );
@@ -53,7 +53,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <FreeResponse />
+              <FreeResponse onSubmit={this.handleSurveySubmit}/>
             </div>
         </div>
       );
