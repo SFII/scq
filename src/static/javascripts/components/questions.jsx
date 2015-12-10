@@ -23,7 +23,7 @@ var MultipleChoice = React.createClass({
         return {data: [length]};
     },
     
-    handleChange: function(){
+    handleChange: function(i){
         var changeAnswer = this.state.data;
         changeAnswer[i] = event.target.checked;
         this.setState({data: changeAnswer})
@@ -72,7 +72,7 @@ var SingleChoice = React.createClass({
         return {data: [length]};
     },
     
-    handleChange: function(){
+    handleChange: function(i){
         var changeAnswer = this.state.data;
         changeAnswer[i] = event.target.checked;
         this.setState({data: changeAnswer})
