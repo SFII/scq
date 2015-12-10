@@ -84,7 +84,7 @@ var SingleChoice = React.createClass({
     },
     
     render: function(){
-        const renderedOptions = this.props.options.map((option, type, i) => {
+        const renderedOptions = this.props.options.map((option, i) => {
             return (
                 <div>
                     <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
