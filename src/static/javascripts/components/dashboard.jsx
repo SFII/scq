@@ -19,6 +19,11 @@ var testQuestions = [
                 type: "multipeChoice",
                 title: "Did you enjoy the course?",
                 options: ["Not at all", "It was an average course", "It was an excellent course"]
+            },
+            {
+            id:"test",
+            type:"rating",
+            title: "How would you rate this course?"
             }
         ]
     },

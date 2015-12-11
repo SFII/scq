@@ -184,3 +184,34 @@ var FreeResponse = React.createClass({
      );
   }
 });
+/*
+*Rating slider
+*/
+var Rating = React.createClass({
+   	getInitialState: function(){
+		return{data: 5};
+	},
+	
+	handleChange:function(e){
+		this.setState({data: e.target.value});
+	},
+	 render: function(){		
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+            <div>
+                <input className="mdl-slider mdl-js-slider"
+                    type="range" 
+                    min="0" 
+                    max="10" 
+                    value={this.state.data} 
+                    step="1" 
+                    onChange={this.handleChange}
+                />
+                <span id="sliderStatus">{this.state.data}</span>	
+            </div>
+            <SubmitButton />
+        </div>
+      );
+    }
+});
+
