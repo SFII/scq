@@ -39,7 +39,16 @@ var Card = React.createClass({
             </div>
           </div>
         );
-      } else if (this.props.type == "trueOrFalse"){
+      }else if(this.props.type == "rating"){
+        return (
+          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+            <div>
+              <TitleSection titleText={this.props.title}/>
+              <Rating />
+            </div>
+          </div>
+        );
+       }else if (this.props.type == "trueOrFalse"){
           return (
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
