@@ -78,14 +78,14 @@ var testQuestions = [
 ];
 
 var Page = React.createClass({
-    /*
     loadPageJSON: function() {
     $.ajax({
-    url:this.props.routes.surveys,
+    url:'api/surveys',
     type: 'GET',
     dataType: 'json',
     cache: true,
     success: function(data){
+    console.log(data)
     this.setState({data: data});
     }.bind(this),
     error: function(xhr, status, err){
@@ -93,15 +93,15 @@ var Page = React.createClass({
     }.bind(this)
     });
     },
-    */
     getInitialState: function() {
+    this.loadPageJSON();
     return{data:[]};
     },
-    /*
     componentDidMount: function(){
-        this.loadPageJSON()
+        console.log("success");
+        this.loadPageJSON();
     },
-    */
+    
     render: function(){
       return (
         <div className="mdl-grid mdl-cell--12-col content">
@@ -121,7 +121,7 @@ var MainDiv = React.createClass({
 		if (!loggedIn()) {
 		   return (<Welcome />);
 		}
-        var itemNodes = testQuestions.map(function (item) {
+        var itemNodes = this.props.pageJson.map(function (item) {
                 return (
                     <SurveyDiv questions={item.questions}>
                     </SurveyDiv>
