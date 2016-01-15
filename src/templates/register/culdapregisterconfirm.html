@@ -1,8 +1,6 @@
-{% for err in errors %}
-<div class="alert alert-danger" role="alert">
-{{ err }}
-</div>
-{% end %}
+{% extends "../layouts/base.html" %}
+{% block title %}Login{% end %}
+{% block content %}
 <h1>Almost finished. Please verify and complete the following fields.</h1>
 <form action="/register/culdap" method="post">
   <input type="hidden" name="confirming" value="True">
@@ -23,18 +21,28 @@
   <label><b>Date of Birth</b></label><br />
   <input type="date" name="dob" value="{{ dob }}" required=""><br />
   <label><b>Gender</b></label><br />
+    <select name="gender" required>
   {% for user_gender in user_genders %}
-  <input type="radio" name="gender" value="{{ user_gender }}"> {{ user_gender }}<br />
+    <option value="{{ user_gender }}"> {{ user_gender }}</option>
   {% end %}
+  <option selected disabled hidden value=''></option>
+</select><br />
   <label><b>Ethnicity</b></label><br />
+    <select name="ethnicity" required>
   {% for user_ethnicity in user_ethnicities %}
-  <input type="radio" name="ethnicity" value="{{ user_ethnicity }}"> {{ user_ethnicity }}<br />
+    <option value="{{ user_ethnicity }}"> {{ user_ethnicity }}</option>
   {% end %}
+  <option selected disabled hidden value=''></option>
+</select><br />
   <label><b>Native Language</b></label><br />
+    <select name="native_language" required>
   {% for user_native_language in user_native_languages %}
-  <input type="radio" name="native_language" value="{{ user_native_language }}"> {{ user_native_language }}<br />
+    <option value="{{ user_native_language }}"> {{ user_native_language }}</option>
   {% end %}
-
+    <option selected disabled hidden value=''></option>
+</select><br />
+<br />
   <input type="submit" id="submitbtn" name="submit" value="Confirm and Create Account" class="button"><br />
   {% raw xsrf_form_html() %}
 </form>
+{% end %}

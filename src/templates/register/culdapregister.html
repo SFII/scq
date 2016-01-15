@@ -1,8 +1,7 @@
-{% for err in errors %}
-<div class="alert alert-danger" role="alert">
-{{ err }}
-</div>
-{% end %}
+{% extends "../layouts/base.html" %}
+{% block title %}Login{% end %}
+{% block content %}
+
 <form action="/register/culdap" method="post">
   <label>CU Login Name</label><br />
   <input type="text" name="username" required><br>
@@ -12,3 +11,4 @@
   <input type="submit" id="loginbtn" name="login" value="REGISTER" class="button"><br />
   {% raw xsrf_form_html() %}
 </form>
+{% end %}
