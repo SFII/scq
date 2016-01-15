@@ -19,7 +19,8 @@ class CuLdapRegisterHandler(RegisterHandler):
     LDAP_MINOR_1 = 'cuEduPersonPrimaryMinor'
     LDAP_MINOR_2 = 'cuEduPersonSecondaryMinor'
     LDAP_STATUS = 'cuEduPersonClass'
-    LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL, LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS]
+    LDAP_PRIMARY_AFFILIATION = 'eduPersonPrimaryAffiliation'
+    LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL, LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS, LDAP_PRIMARY_AFFILIATION]
 
     COOKIE = 'registering'
     FIVE_MINUTES = 0.0035
@@ -123,6 +124,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         major4= self.get_argument('major4',info['major4'],strip = True),
         minor1= self.get_argument('minor1',info['minor1'],strip = True),
         minor2= self.get_argument('minor2',info['minor2'],strip = True),
+        primary_affiliation=self.get_argument('primary_affiliation',info['primary_affiliation'],strip = True)
         )
 
     #
@@ -171,4 +173,5 @@ class CuLdapRegisterHandler(RegisterHandler):
         info['major4'] = ldapinfo[self.LDAP_MAJOR_4].capitalize() if self.LDAP_MAJOR_4 in ldapinfo else ''
         info['minor1'] = ldapinfo[self.LDAP_MINOR_1].capitalize() if self.LDAP_MINOR_1 in ldapinfo else ''
         info['minor2'] = ldapinfo[self.LDAP_MINOR_2].capitalize() if self.LDAP_MINOR_2 in ldapinfo else ''
+        info['primary_affiliation'] = ldapinfo[self.LDAP_PRIMARY_AFFILIATION].capitalize() if self.LDAP_PRIMARY_AFFILIATION in ldapinfo else ''
         return info
