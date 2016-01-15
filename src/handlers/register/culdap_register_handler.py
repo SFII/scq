@@ -153,11 +153,11 @@ class CuLdapRegisterHandler(RegisterHandler):
         if dob is None:
             errors.append('a Date of Birth must be specified')
         if gender is None:
-            errors.append("a Gender must be specified (you may 'Prefer not to Disclose')")
+            errors.append("a Gender must be specified (you may choose 'Prefer not to Disclose')")
         if ethnicity is None:
-            errors.append("a Ethnicity must be specified (you may 'Prefer not to Disclose')")
+            errors.append("a Ethnicity must be specified (you may choose 'Prefer not to Disclose')")
         if native_language is None:
-            errors.append("a Native Language must be specified (you may 'Prefer not to Disclose')")
+            errors.append("a Native Language must be specified (you may choose 'Prefer not to Disclose')")
         return errors
 
     # queries the ldapserver for user info, returning a dictionary of information
