@@ -6,6 +6,7 @@ import tornado.options
 import tornado.web
 import logging
 import rethinkdb as r
+from config.config import application
 from models.answer import Answer
 from models.basemodel import BaseModel
 from models.course import Course
@@ -19,9 +20,7 @@ from models.response import Response
 from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
-from config.config import application
 import time
-
 
 def main():
     initialize_db()
@@ -34,27 +33,30 @@ def main():
 def initialize_db():
     logging.info("Connecting")
     try:
-        connection = BaseModel.conn
-        DB = BaseModel.DB
-        logging.info("Creating DB")
-        r.db_create(DB).run(connection)
+        conn = r.connect(host=options.database_host, port=options.database_port)
+        db = options.database_name
+        BaseModel.DB = db
+        BaseModel.conn = conn
+        logging.info("Creating database '{0}''".format(db))
+        r.db_create(db).run(conn)
     except r.errors.ReqlOpFailedError as e:
         logging.info(e.message)
     except Exception as e:
         logging.error(e.message)
 
     logging.info("Initializing tables")
-    Answer().init(connection)
-    Course().init(connection)
-    Instructor().init(connection)
-    Question().init(connection)
-    Section().init(connection)
-    Student().init(connection)
-    Survey().init(connection)
-    User().init(connection)
-    Response().init(connection)
+    Answer().init(db, conn)
+    Course().init(db, conn)
+    Instructor().init(db, conn)
+    Question().init(db, conn)
+    Section().init(db, conn)
+    Student().init(db, conn)
+    Survey().init(db, conn)
+    User().init(db, conn)
+    Response().init(db, conn)
 
 def bootstrap_data(user_id):
+    initialize_db()
     user_data = User().get_item(user_id)
     if user_data is None:
         print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
@@ -64,9 +66,6 @@ def bootstrap_data(user_id):
     survey_id = Survey().create_generic_item(user_id, course_id)
     print('survey id:\n'+survey_id)
     return
-
-
-
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,14 @@
 import unittest
-
+import tornado.testing
 from models.basemodel import BaseModel
 from models.user import User
 from models.answer import Answer
+from config.config import application
 
-class TestBaseModel(unittest.TestCase):
+class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
+    def get_app(self):
+        return application
+
     def test_is_int(self):
         try:
             BaseModel().is_int(3)
