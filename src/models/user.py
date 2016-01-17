@@ -62,7 +62,6 @@ class User(BaseModel):
     # and attempt to authenticate the user
     # returns True / False whether the authentication is successful
     def authenticate(self, user_id, password):
-        print("{0} , {1}".format(user_id, password))
         user = self.get_item(user_id)
         username = user['username']
         registration = user['registration']

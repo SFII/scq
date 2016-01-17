@@ -23,7 +23,8 @@ test:
 	cd src && python3 -m unittest discover test
 
 bootstrap_data:
-	cd ./src && python3 -c 'from server import bootstrap_data; bootstrap_data()'
+	@read -p "Enter User ID to boostrap (include surrounding quotes):" x; \
+	cd ./src && python3 -c 'from server import bootstrap_data; bootstrap_data('$$x')'
 
 build:
 	pip3 install -r requirements.txt
