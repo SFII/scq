@@ -1,7 +1,4 @@
-# scq
-
-# Configuration
-# TODO: finish tidying up these make tasks
+# scq makefile
 
 PROJECTPATH="`pwd`/src"
 TESTINGPATH="`pwd`/test"
@@ -22,8 +19,11 @@ console:
 test:
 	@cd src && python3 -m tornado.testing discover test --verbose
 
+initialize_test_db:
+	@cd src && python3 -c "from server import initialize_db; initialize_db('test')"
+
 bootstrap_data:
-	@read -p "Enter User ID to boostrap (include surrounding quotes):" x; \
+	@read -p 'Enter User ID to boostrap (include surrounding quotes):' x; \
 	cd src && python3 -c 'from server import bootstrap_data; bootstrap_data('$$x')'
 
 build:

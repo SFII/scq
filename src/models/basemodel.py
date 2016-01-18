@@ -163,6 +163,10 @@ class BaseModel:
             return o['generated_keys'][0]
         return None
 
+    def delete_item(self, item_id):
+        table = self.__class__.__name__
+        return r.db(BaseModel.DB).table(table).get(item_id).delete().run(BaseModel.conn)
+
     def schema_list_check(self, method):
         def _list_check(data):
             try:

@@ -21,7 +21,7 @@ class User(BaseModel):
         b = super(User, self)
         return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
-            'username' : (b.is_string,),
+            'username' : (b.is_string,b.is_not_empty,),
             'email' : (b.is_string, b.is_valid_email, ),
             'accepted_tos' : (b.is_truthy,),
             'gender' : (b.is_in_list(self.USER_GENDERS),),

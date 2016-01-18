@@ -30,21 +30,23 @@ def main():
     print("Listening for connections on localhost:{0}".format(options.port))
     tornado.ioloop.IOLoop.instance().start()
 
-def initialize_db():
+def initialize_db(db = options.database_name):
+    """
+    Initializes a database for use in the project with a specified name
+    Specified name defaults to options.database_name
+    """
     logging.info("Connecting")
     try:
         conn = r.connect(host=options.database_host, port=options.database_port)
-        db = options.database_name
         BaseModel.DB = db
         BaseModel.conn = conn
-        logging.info("Creating database '{0}''".format(db))
+        print("Creating database '{0}'".format(db))
         r.db_create(db).run(conn)
     except r.errors.ReqlOpFailedError as e:
-        logging.info(e.message)
+        print(e.message)
     except Exception as e:
         logging.error(e.message)
-
-    logging.info("Initializing tables")
+    print('Initializing tables')
     Answer().init(db, conn)
     Course().init(db, conn)
     Instructor().init(db, conn)
