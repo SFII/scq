@@ -33,9 +33,16 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
     def get_app(self):
         return application
 
+    def test_testing_authentication(self):
+        self.assertEqual(TestUser.user_data['registration'], User().REGISTRATION_TESTING)
+        good_auth = User().authenticate(TestUser.user_id, User().TESTING_PASSWORD)
+        bad_auth  = User().authenticate(TestUser.user_id,'wrong password')
+        self.assertTrue(good_auth)
+        self.assertFalse(bad_auth)
+
     def test_verify_valid_user(self):
         verify = User().verify(TestUser.user_data)
-        self.assertEqual(len(verify), 0)
+        self.assertEqual(verify,[])
 
     def test_verify_invalid_user(self):
         verify = User().verify(User().default())
