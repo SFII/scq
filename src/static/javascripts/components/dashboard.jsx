@@ -80,7 +80,7 @@ var testQuestions = [
 var Page = React.createClass({
     loadPageJSON: function() {
     $.ajax({
-    url:'api/surveys',
+    url: this.props.routes.surveys,
     type: 'GET',
     dataType: 'json',
     cache: true,
@@ -105,7 +105,7 @@ var Page = React.createClass({
     render: function(){
       return (
         <div className="mdl-grid mdl-cell--12-col content">
-            <MainDiv pageJson={this.state.data} routesObject={this.props.routes} />
+        <MainDiv pageJson={this.state.data} routes={this.props.routes}/>
         </div>
         );
     }
@@ -121,10 +121,10 @@ var MainDiv = React.createClass({
 		if (!loggedIn()) {
 		   return (<Welcome />);
 		}
-        var itemNodes = this.props.pageJson.map(function (item) {
+        console.log(this.props.routes);
+        var itemNodes = testQuestions.map(function (item) {
                 return (
-                    <SurveyDiv questions={item.questions}>
-                    </SurveyDiv>
+                <SurveyDiv questions={item.questions} routes={this.props.routes}/>
                 );
             });
         return (
@@ -137,12 +137,14 @@ var MainDiv = React.createClass({
     
 var SurveyDiv = React.createClass({
     render: function() {
+        console.log(this.props.routes);
         var itemSurvey = this.props.questions.map(function (itemSurvey) {  
             return(
                 <Card
                 title={itemSurvey.title}
                 options={itemSurvey.options}
-                type={itemSurvey.type}>
+                type={itemSurvey.type}
+                routes={this.props.routes}>
                 </Card>
             );
         });

@@ -17,7 +17,7 @@ var Card = React.createClass({
     handleSurveySubmit: function(survey){
         console.log(survey);
         $.ajax({
-            url: "/api/response",
+        url: this.props.routes.surveys,
             dataType: 'json',
             type: 'POST',
             data: survey,
