@@ -26,6 +26,10 @@ bootstrap_data:
 	@read -p 'Enter User ID to boostrap (include surrounding quotes):' x; \
 	cd src && python3 -c 'from server import bootstrap_data; bootstrap_data('$$x')'
 
+wipe_user_data:
+	@read -p 'Enter User ID to wipe (include surrounding quotes):' x; \
+	cd src && python3 -c 'from server import wipe_data; wipe_data('$$x')'
+
 build:
 	pip3 install -r requirements.txt
 	npm install

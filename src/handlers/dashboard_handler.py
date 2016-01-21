@@ -12,9 +12,12 @@ class DashboardHandler(BaseHandler):
     def get_survey_json(self):
         survey_json = []
         user_data = self.current_user
+        print(user_data)
         unanswered_survey_ids = user_data['unanswered_surveys']
         for survey_id in unanswered_survey_ids:
             survey_data = Survey().decompose(survey_id)
+            if survey_data is None:
+                continue
             survey_json.append(survey_data)
         print(tornado.escape.json_encode(survey_json))
         return tornado.escape.json_encode(survey_json)

@@ -38,7 +38,6 @@ class Survey(BaseModel):
             self.send_user_survey(subscriber_id, survey_id)
         return survey_id
 
-
     # returns default survey data, that can be overwritten. Good for templating a new user
     def default(self):
         return {
@@ -59,6 +58,8 @@ class Survey(BaseModel):
 
     def decompose(self, survey_id):
         survey_data = self.get_item(survey_id)
+        if survey_data is None:
+            return None
         decomposed_data = survey_data.copy()
         decomposed_question_data = []
         question_ids = survey_data['questions']
