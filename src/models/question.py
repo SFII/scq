@@ -11,7 +11,7 @@ class Question(BaseModel):
     USER_RESPONSE_FORMAT = [RESPONSE_FREE, RESPONSE_MULTIPLE_CHOICE, RESPONSE_TRUE_OR_FALSE, RESPONSE_RATING]
 
     def requiredFields(self):
-        return ['text', 'response_format']
+        return ['title', 'response_format']
 
     def fields(self):
         b = super(__class__, self)
@@ -29,9 +29,9 @@ class Question(BaseModel):
         }
 
     def create_generic_options(self, response_format):
-        if response_format == RESPONSE_TRUE_OR_FALSE:
+        if response_format == self.RESPONSE_TRUE_OR_FALSE:
             return ['yes', 'no']
-        if response_format == RESPONSE_MULTIPLE_CHOICE:
+        if response_format == self.RESPONSE_MULTIPLE_CHOICE:
             return ['alpha','beta','gamma','delta']
         return []
 
