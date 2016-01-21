@@ -69,5 +69,23 @@ def bootstrap_data(user_id):
     print('survey id:\n'+survey_id)
     return
 
+def wipe_data(user_id):
+    """
+    Wipes the data associated with a users surveys, classes and courses
+    Warning: Does not disassociate surveys with courses, user with courses, etc.
+    It just makes a user fresh and ready for new data
+    """
+    initialize_db()
+    user_data = User().get_item(user_id)
+    if user_data is None:
+        print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
+        return
+    user_data['courses'] = []
+    user_data['created_surveys'] = []
+    user_data['unanswered_surveys'] = []
+    update_response = User().update_item(user_id, user_data)
+    print(update_response)
+    return
+
 if __name__ == "__main__":
     main()

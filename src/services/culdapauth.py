@@ -65,8 +65,12 @@ def user_info_ldap(uname, attributes=None):
         logging.error("Username not supplied")
         return False
     server = ldap.Server(LDAP_URL, get_info=ldap.ALL)
-    conn = ldap.Connection(server, auto_bind=True)
-    conn.start_tls()
+    conn = None
+    try:
+        conn = ldap.Connection(server, auto_bind=True)
+        conn.start_tls()
+    except:
+        return False
     udn = conn.search(LDAP_SEARCH_BASE, '(%s=%s)' % (LDAP_UNAME_ATTR,uname), search_scope=LDAP_SEARCH_SCOPE, attributes=attributes)
     resp = conn.response
     if udn:
