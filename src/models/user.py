@@ -5,8 +5,10 @@ import services.culdapauth as culdapauth
 from models.basemodel import BaseModel
 
 class User(BaseModel):
+    TESTING_PASSWORD        = 't3sT1ng U$er P4ssw0rd'
+    REGISTRATION_TESTING    = 'registration_testing'
     REGISTRATION_CULDAP     = 'registration_culdap'
-    REGISTRATION_METHODS    = [REGISTRATION_CULDAP]
+    REGISTRATION_METHODS    = [REGISTRATION_TESTING, REGISTRATION_CULDAP]
     NO_DISCLOSURE           = 'Prefer Not to Disclose'
     USER_GENDERS            = ['Male', 'Female', 'Other', NO_DISCLOSURE]
     USER_ETHNICITIES        = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Hispanic or Latino', 'Native Hawaiian or Other Pacific Islander', 'White', 'Other', NO_DISCLOSURE]
@@ -21,7 +23,7 @@ class User(BaseModel):
         b = super(User, self)
         return {
             'registration' : (b.is_in_list(self.REGISTRATION_METHODS),),
-            'username' : (b.is_string,),
+            'username' : (b.is_string,b.is_not_empty,),
             'email' : (b.is_string, b.is_valid_email, ),
             'accepted_tos' : (b.is_truthy,),
             'gender' : (b.is_in_list(self.USER_GENDERS),),
@@ -40,7 +42,7 @@ class User(BaseModel):
     # returns default user data, that can be overwritten. Good for templating a new user
     def default(self):
         return {
-            'registration' : self.REGISTRATION_METHODS[0],
+            'registration' : self.REGISTRATION_TESTING,
             'username' : '',
             'email' : '',
             'accepted_tos' : False,
@@ -57,15 +59,17 @@ class User(BaseModel):
             'answers' : [],
         }
 
+    def authenticate_test_user(self,username,password):
+        return password == self.TESTING_PASSWORD
 
     # Given user_id and possible password, lookup how to authenticate the user
     # and attempt to authenticate the user
     # returns True / False whether the authentication is successful
     def authenticate(self, user_id, password):
-        print("{0} , {1}".format(user_id, password))
         user = self.get_item(user_id)
         username = user['username']
         registration = user['registration']
         return {
-            self.REGISTRATION_CULDAP : culdapauth.auth_user_ldap
+            self.REGISTRATION_TESTING : self.authenticate_test_user,
+            self.REGISTRATION_CULDAP  : culdapauth.auth_user_ldap
         }[registration](username, password)

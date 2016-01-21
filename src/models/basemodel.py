@@ -2,11 +2,12 @@ import rethinkdb as r
 import re
 import time
 import tornado.gen as gen
+from tornado.options import options, define
 import logging
 
 class BaseModel:
-    conn = r.connect(host='localhost', port=28015)
-    DB = "scq"
+    conn = None
+    DB = 'scq'
 
     def is_int(self, data):
         assert isinstance(data, (int, float)), "Must be a number"
@@ -87,10 +88,10 @@ class BaseModel:
         return []
 
 
-    def init(self, conn):
+    def init(self, DB, conn):
         table = self.__class__.__name__
         try:
-            r.db(BaseModel.DB).table_create(table).run(conn)
+            r.db(DB).table_create(table).run(conn)
         except:
             pass
 
@@ -161,6 +162,10 @@ class BaseModel:
             o = r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
             return o['generated_keys'][0]
         return None
+
+    def delete_item(self, item_id):
+        table = self.__class__.__name__
+        return r.db(BaseModel.DB).table(table).get(item_id).delete().run(BaseModel.conn)
 
     def schema_list_check(self, method):
         def _list_check(data):
