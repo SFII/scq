@@ -24,7 +24,7 @@ class Question(BaseModel):
     def default(self):
         return {
             'title' : "",
-            'response_format' : ""
+            'response_format' : "",
             'options' : []
         }
 

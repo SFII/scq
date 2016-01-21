@@ -83,7 +83,9 @@ def wipe_data(user_id):
     user_data['courses'] = []
     user_data['created_surveys'] = []
     user_data['unanswered_surveys'] = []
-    User().update_item(user_id)
+    update_response = User().update_item(user_id, user_data)
+    print(update_response)
+    return
 
 if __name__ == "__main__":
     main()
