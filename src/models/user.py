@@ -11,6 +11,7 @@ class User(BaseModel):
     USER_GENDERS            = ['Male', 'Female', 'Other', NO_DISCLOSURE]
     USER_ETHNICITIES        = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Hispanic or Latino', 'Native Hawaiian or Other Pacific Islander', 'White', 'Other', NO_DISCLOSURE]
     USER_NATIVE_LANGUAGES   = ['English', 'Spanish', 'French', 'German', 'Korean', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi', 'Other', NO_DISCLOSURE]
+    #USER_AFFLIATION = ['Student', 'Faculty']
 
     # must be overridden
     def requiredFields(self):
@@ -30,11 +31,12 @@ class User(BaseModel):
             'date_registered' : (b.is_date_string,),
             'last_sign_in' : (b.is_date_string,),
             'courses' : (b.is_list,),
-            'departments' : (b.is_list,),
+            'departments' : (),
             'created_surveys' : (b.is_list,),
             'unanswered_surveys' : (b.is_list,),
             'answered_surveys' : (b.is_list,),
             'answers' : (b.is_list,),
+            'primary_affiliation' : (),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -55,6 +57,7 @@ class User(BaseModel):
             'answered_surveys' : [],
             'created_surveys' : [],
             'answers' : [],
+            'primary_affiliation' : 'Student',
         }
 
 

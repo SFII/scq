@@ -20,6 +20,8 @@ class UserInfoUpdateHandler(BaseHandler):
         courses = user_info_dict['courses']
         if len(courses) == 0:
             courses = ''
+        departments = user_info_dict['departments']
+        primary_affiliation = user_info_dict['primary_affiliation']
         self.render('userupdate.html',
         errors=errors,
         next=self.get_argument("next","/"),
@@ -39,7 +41,9 @@ class UserInfoUpdateHandler(BaseHandler):
         major4= self.get_argument('major4','%s'%major4,strip = True),
         minor1= self.get_argument('minor1','%s'%minor1,strip = True),
         minor2= self.get_argument('minor2','%s'%minor2,strip = True),
-        courses = self.get_argument('courses', '%s'%courses,strip = True)
+        courses = self.get_argument('courses', '%s'%courses,strip = True),
+        departments = self.get_argument('departments', '%s'%departments, strip = True),
+        primary_affiliation = self.get_argument('primary_affiliation', '%s'%primary_affiliation,strip = True)
         )
 
     def post(self):
@@ -58,6 +62,8 @@ class UserInfoUpdateHandler(BaseHandler):
         data['minor1']          = self.get_argument('minor1',None,strip = True)
         data['minor2']          = self.get_argument('minor2',None,strip = True)
         data['courses']         = self.get_argument('courses',None,strip = True)
+        data['departments']     = self.get_argument('departments',None,strip = True)
+        data['primary_affiliation'] = self.get_argument('primary_affiliation',None,strip = True)
         User().verify(data)
         User().update_item(self.current_user['id'], data)
         return self.redirect(self.get_argument("next", "/dashboard"))

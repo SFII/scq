@@ -2,11 +2,15 @@ import tornado.web
 from handlers.base_handler import BaseHandler
 from models.user import User
 from models.basemodel import BaseModel
+from handlers.register.culdap_register_handler import CuLdapRegisterHandler
 
 class UserInfoHandler(BaseHandler):
 
     def get(self, input=None):
         user_info_dict = self.current_user
+        print("LOOK HERE ------")
+        print(user_info_dict)
+        print(user_info_dict['primary_affiliation'])
         if user_info_dict:
             return self.render('userinfo.html',
             errors = [],
@@ -25,5 +29,6 @@ class UserInfoHandler(BaseHandler):
             minor2 = user_info_dict['minor2'],
             departments = user_info_dict['departments'],
             courses = user_info_dict['courses'],
+            primary_affiliation = user_info_dict['primary_affiliation'],
             next = self.get_argument("next","/edituserinfo"))
         return self.render('login.html', errors=[], next=self.get_argument('next','/dashboard'))
