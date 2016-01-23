@@ -18,5 +18,8 @@ SETTINGS = {
 }
 
 define('port', default=8000, help='run on the given port', type=int)
+define('database_name', default='scq', help='rethink database name', type=str)
+define('database_host', default='localhost', help='rethink database host', type=str)
+define('database_port', default=28015, help='rethink database port', type=int)
 
 application = tornado.web.Application(handlers=routes, **SETTINGS)

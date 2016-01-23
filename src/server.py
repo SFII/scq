@@ -6,6 +6,7 @@ import tornado.options
 import tornado.web
 import logging
 import rethinkdb as r
+from config.config import application
 from models.answer import Answer
 from models.basemodel import BaseModel
 from models.course import Course
@@ -19,9 +20,7 @@ from models.response import Response
 from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
-from config.config import application
 import time
-
 
 def main():
     initialize_db()
@@ -31,31 +30,35 @@ def main():
     print("Listening for connections on localhost:{0}".format(options.port))
     tornado.ioloop.IOLoop.instance().start()
 
-def initialize_db():
+def initialize_db(db = options.database_name):
+    """
+    Initializes a database for use in the project with a specified name
+    Specified name defaults to options.database_name
+    """
     logging.info("Connecting")
     try:
-        connection = BaseModel.conn
-        DB = BaseModel.DB
-        logging.info("Creating DB")
-        r.db_create(DB).run(connection)
+        conn = r.connect(host=options.database_host, port=options.database_port)
+        BaseModel.DB = db
+        BaseModel.conn = conn
+        print("Creating database '{0}'".format(db))
+        r.db_create(db).run(conn)
     except r.errors.ReqlOpFailedError as e:
-        logging.info(e.message)
+        print(e.message)
     except Exception as e:
         logging.error(e.message)
+    print('Initializing tables')
+    Answer().init(db, conn)
+    Course().init(db, conn)
+    Instructor().init(db, conn)
+    Question().init(db, conn)
+    Section().init(db, conn)
+    Student().init(db, conn)
+    Survey().init(db, conn)
+    User().init(db, conn)
+    Response().init(db, conn)
 
-    logging.info("Initializing tables")
-    Answer().init(connection)
-    Course().init(connection)
-    Instructor().init(connection)
-    Question().init(connection)
-    Section().init(connection)
-    Student().init(connection)
-    Survey().init(connection)
-    User().init(connection)
-    Response().init(connection)
-
-def bootstrap_data():
-    user_id = 'e64ad721-964a-436f-86c1-a516518c1440'
+def bootstrap_data(user_id):
+    initialize_db()
     user_data = User().get_item(user_id)
     if user_data is None:
         print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
@@ -66,8 +69,23 @@ def bootstrap_data():
     print('survey id:\n'+survey_id)
     return
 
-
-
+def wipe_data(user_id):
+    """
+    Wipes the data associated with a users surveys, classes and courses
+    Warning: Does not disassociate surveys with courses, user with courses, etc.
+    It just makes a user fresh and ready for new data
+    """
+    initialize_db()
+    user_data = User().get_item(user_id)
+    if user_data is None:
+        print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
+        return
+    user_data['courses'] = []
+    user_data['created_surveys'] = []
+    user_data['unanswered_surveys'] = []
+    update_response = User().update_item(user_id, user_data)
+    print(update_response)
+    return
 
 if __name__ == "__main__":
     main()
