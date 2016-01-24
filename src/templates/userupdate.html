@@ -14,7 +14,21 @@ input.container {
 select.container {
   margin-left: 20px;
 }
+button.container {
+  margin-left: 20px;
+}
 </style>
+<script>
+var row = 1
+function appendRow() {
+  var button = document.getElementById('div');
+  button.type="text";
+  button.name="courses";
+  button.value="{{ courses }}";
+  //d.setAttribute("style", "margin-left:20px")
+  button.innerHTML += "<input type='text' id='add"+ row++ +"'><br>";
+}
+</script>
 <h3>Update Information</h3>
 {% if primary_affiliation == "Student" %}
   <div class="container">
@@ -27,6 +41,8 @@ select.container {
     <input class="container" type="email" name="email" value="{{ email }}" required><br>
     <label class="container"><b>Academic Status</b></label><br>
     <input class="container" type="text" name="status" value="{{ status }}"><br>
+    <label class="container"><b>Date of Birth</b></label><br />
+    <input class="container" type="date" name="dob" value="{{ dob }}" required=""><br />
     <label class="container"><b>Gender</b></label><br>
     <select class="container" name="gender" required>
     {% for user_gender in user_genders %}
@@ -76,6 +92,8 @@ select.container {
     <input class="container" type="text" name="primary_affiliation" value="{{ primary_affiliation }}" readonly><br>
     <label class="container"><b>Email</b></label><br>
     <input class="container" type="email" name="email" value="{{ email }}" required><br>
+    <label class="container"><b>Date of Birth</b></label><br />
+    <input class="container" type="date" name="dob" value="{{ dob }}" required=""><br />
     <label class="container"><b>Gender</b></label><br>
     <select class="container" name="gender" required>
     {% for user_gender in user_genders %}
@@ -99,11 +117,14 @@ select.container {
   </select><br/>
     <label class="container"><b>Departments</b></label><br>
     <input class="container" type="text" name="departments" value="{{ departments }}" required><br>
-    <label class="container"><b>Courses Instructed (Please seperate multiple courses with a comma)</b></label><br>
-    <input class="container" type="text" name="courses" value="{{ courses }}"><br>
-    <input class="container" type="submit" value="submit" class="button"><br>
+    <label class="container"><b>Courses Instructed</b></label><br>
+    <input class="container" type="text" name="courses" value="{{ courses }}">
+    <div id="div">
+    <button class="container" onclick="appendRow()">+</button><br>
+    </div>
+    <br>
+    <input class="container" type="submit" value="submit" class="button">
   </form>
   </div>
 {% end %}
-
 {% end %}
