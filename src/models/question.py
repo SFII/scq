@@ -1,6 +1,8 @@
 from models.basemodel import BaseModel
 import random
 import services.lorem_ipsum as lorem_ipsum
+
+
 class Question(BaseModel):
 
     RESPONSE_FREE = 'freeReponse'
@@ -16,25 +18,24 @@ class Question(BaseModel):
     def fields(self):
         b = super(__class__, self)
         return {
-            'title' : (b.is_string, b.is_not_empty, ),
-            'response_format' : (b.is_string, b.is_in_list(self.USER_RESPONSE_FORMAT)),
-            'options' : (b.is_list,)
+            'title': (b.is_string, b.is_not_empty, ),
+            'response_format': (b.is_string, b.is_in_list(self.USER_RESPONSE_FORMAT)),
+            'options': (b.is_list,)
         }
 
     def default(self):
         return {
-            'title' : "",
-            'response_format' : "",
-            'options' : []
+            'title': "",
+            'response_format': "",
+            'options': []
         }
 
     def create_generic_options(self, response_format):
         if response_format == self.RESPONSE_TRUE_OR_FALSE:
             return ['yes', 'no']
         if response_format == self.RESPONSE_MULTIPLE_CHOICE:
-            return ['alpha','beta','gamma','delta']
+            return ['alpha', 'beta', 'gamma', 'delta']
         return []
-
 
     def create_generic_item(self):
         data = self.default()

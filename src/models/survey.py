@@ -4,6 +4,7 @@ from models.user import User
 from models.question import Question
 import random
 
+
 class Survey(BaseModel):
 
     def requiredFields(self):
@@ -12,13 +13,13 @@ class Survey(BaseModel):
     def fields(self):
         b = super(Survey, self)
         return {
-            'questions' : (b.is_list, ),
-            'survey_id' : (b.is_string, b.is_not_empty,),
-            'questions' : (b.is_list, self.schema_list_check(b.is_string)),
-            'course_id' : (b.is_string, b.is_not_empty,),
-            'course_name' : (b.is_string, b.is_not_empty,),
-            'creator_id' : (b.is_string, b.is_not_empty,),
-            'creator_name' : (b.is_string, b.is_not_empty,)
+            'questions': (b.is_list, ),
+            'survey_id': (b.is_string, b.is_not_empty,),
+            'questions': (b.is_list, self.schema_list_check(b.is_string)),
+            'course_id': (b.is_string, b.is_not_empty,),
+            'course_name': (b.is_string, b.is_not_empty,),
+            'creator_id': (b.is_string, b.is_not_empty,),
+            'creator_name': (b.is_string, b.is_not_empty,)
         }
 
     def create_item(self, data):
@@ -32,7 +33,7 @@ class Survey(BaseModel):
         active_surveys = course_data['active_surveys']
         active_surveys.append(survey_id)
         subscribers = course_data['subscribers']
-        Course().update_item(course_id, {'active_surveys' : active_surveys })
+        Course().update_item(course_id, {'active_surveys': active_surveys})
         self.send_user_survey(creator_id, survey_id, 'created_surveys')
         for subscriber_id in subscribers:
             self.send_user_survey(subscriber_id, survey_id)
@@ -41,11 +42,11 @@ class Survey(BaseModel):
     # returns default survey data, that can be overwritten. Good for templating a new user
     def default(self):
         return {
-            'questions' : [],
-            'course_id' : "",
-            'creator_id' : "",
-            'course_name' : "",
-            'creator_name' : ""
+            'questions': [],
+            'course_id': "",
+            'creator_id': "",
+            'course_name': "",
+            'creator_name': ""
         }
 
     def create_generic_item(self, creator_id, course_id=None):
