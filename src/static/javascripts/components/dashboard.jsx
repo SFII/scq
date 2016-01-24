@@ -122,9 +122,10 @@ var MainDiv = React.createClass({
 		   return (<Welcome />);
 		}
         console.log(this.props.routes);
+        var routesObject=this.props.routes;
         var itemNodes = testQuestions.map(function (item) {
                 return (
-                <SurveyDiv questions={item.questions} routes={this.props.routes}/>
+                <SurveyDiv questions={item.questions} routes={routesObject}/>
                 );
             });
         return (
@@ -138,13 +139,14 @@ var MainDiv = React.createClass({
 var SurveyDiv = React.createClass({
     render: function() {
         console.log(this.props.routes);
+        var routesObject = this.props.routes
         var itemSurvey = this.props.questions.map(function (itemSurvey) {  
             return(
                 <Card
                 title={itemSurvey.title}
                 options={itemSurvey.options}
                 type={itemSurvey.type}
-                routes={this.props.routes}>
+                routes={routesObject}>
                 </Card>
             );
         });

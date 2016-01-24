@@ -43,8 +43,8 @@ var MultipleChoice = React.createClass({
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var myJsonString = JSON.stringify(this.state.data);
-        this.props.onSubmit({myJsonString});
+        var answer = JSON.stringify(this.state.data);
+        this.props.onSubmit({answer});
     },
         
     render: function(){
@@ -94,45 +94,38 @@ getInitialState: function(){
     
     handleChange: function(i,value){
         var NewValue = null;
-        console.log(value);
-        if(value == false){
-            NewValue = true;
-        }
-        else{
-            NewValue = false;
-        }
+        var length = Object.keys(this.props.options).length;
+        var questionObj=[];
         var changeAnswer = this.state.data;
-        changeAnswer[i] = NewValue;
+        for(var iter = 0; iter < length; iter++){
+            changeAnswer[iter]=false;
+        }
+        console.log(value);
+        changeAnswer[i] = true;
         this.setState({data: changeAnswer});
     },
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var myJsonString = JSON.stringify(this.state.data);
-        this.props.onSubmit({myJsonString});
+        var answer = JSON.stringify(this.state.data);
+        this.props.onSubmit({answer});
     },
     
     render: function(){
         const renderedOptions = this.props.options.map((option, i) => {
             return (
                 <div>
-                    <label 
-                    className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-                    <input type="radio"
-                     className="mdl-radio__button"
-                     name ={ option }
-                     value={ option } 
-                     key={ option }
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+                    <input type="radio" className="mdl-radio__button" name = "test" value={ option } key={ option }
                      onChange={this.handleChange.bind(this,i,this.state.data[i])}>
-                      </input>
+                    </input>
                       <span className="mdl-radio__label"> { option } </span>
                     </label>
-                </div>
+                </div>    
             )
         });
 
         return (
-          <div className="mdl-card__supporting-text mdl-color-text--grey-600">
             <form 
             className="mdl-card__supporting-text mdl-color-text--grey-600"
             onSubmit={this.handleSurveySubmit}>
@@ -140,7 +133,6 @@ getInitialState: function(){
               { renderedOptions }
               <SubmitButton />
             </form>
-          </div>
         );
     }
 });
