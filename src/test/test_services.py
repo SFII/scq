@@ -7,14 +7,12 @@ import rethinkdb as r
 from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
+from server import initialize_db
 
 class TestServices(tornado.testing.AsyncHTTPTestCase):
 
     def setUpClass():
-        # These two methods must be called to be sure a test database is used
-        BaseModel.DB = 'test'
-        BaseModel.conn = r.connect(host='localhost', port=28015)
-        return
+        initialize_db(db='test')
 
     def get_app(self):
         return application
