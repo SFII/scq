@@ -4,7 +4,7 @@ import tornado.web
 import config.config
 from models.basemodel import BaseModel
 import rethinkdb as r
-from handlers.survey_handler import Response, Surveys
+from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
 
