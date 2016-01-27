@@ -6,9 +6,11 @@ import time
 from models.basemodel import BaseModel
 from models.user import User
 import rethinkdb as r
-from handlers.survey_handler import Response, Surveys
+from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
+
+from server import initialize_db
 
 class TestUser(tornado.testing.AsyncHTTPTestCase):
     user_data = {}
@@ -16,6 +18,7 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
     username = None
 
     def setUpClass():
+        initialize_db(db='test')
         # Designates Basemodel to use the test database
         BaseModel.DB = 'test'
         # Gives Basemodel a direct connection to the rethinkdb
