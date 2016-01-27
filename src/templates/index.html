@@ -13,7 +13,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+      
+
     
       <style type="text/css">
 
@@ -26,198 +28,7 @@
       margin-bottom: 40px;
       z-index: 900;
     }    
-html, body {
-  font-family: 'Roboto', 'Helvetica', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-.mdl-demo .mdl-layout__header-row {
-  padding-left: 40px;
-}
-.mdl-demo .mdl-layout.is-small-screen .mdl-layout__header-row h3 {
-  font-size: inherit;
-}
-.mdl-demo .mdl-layout__tab-bar-button {
-  display: none;
-}
-.mdl-demo .mdl-layout.is-small-screen .mdl-layout__tab-bar .mdl-button {
-  display: none;
-}
-.mdl-demo .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar,
-.mdl-demo .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar-container {
-  overflow: visible;
-}
-.mdl-demo .mdl-layout__tab-bar-container {
-  height: 64px;
-}
-.mdl-demo .mdl-layout__tab-bar {
-  padding: 0;
-  padding-left: 16px;
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-}
-.mdl-demo .mdl-layout__tab-bar .mdl-layout__tab {
-  height: 64px;
-  line-height: 64px;
-}
-.mdl-demo .mdl-layout__tab-bar .mdl-layout__tab.is-active::after {
-  background-color: white;
-  height: 4px;
-}
-.mdl-demo main > .mdl-layout__tab-panel {
-  padding: 8px;
-  padding-top: 48px;
-}
-.mdl-demo .mdl-card {
-  height: auto;
-  display: flex;
-  flex-direction: column;
-}
-.mdl-demo .mdl-card > * {
-  height: auto;
-}
-.mdl-demo .mdl-card .mdl-card__supporting-text {
-  margin: 40px;
-  flex-grow: 1;
-  padding: 0;
-  color: inherit;
-  width: calc(100% - 80px);
-}
-.mdl-demo.mdl-demo .mdl-card__supporting-text h4 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-.mdl-demo .mdl-card__actions {
-  margin: 0;
-  padding: 4px 40px;
-  color: inherit;
-}
-.mdl-demo .mdl-card__actions a {
-  color: #00BCD4;
-  margin: 0;
-}
-.mdl-demo .mdl-card__actions a:hover,
-.mdl-demo .mdl-card__actions a:active {
-  color: inherit;
-  background-color: transparent;
-}
-.mdl-demo .mdl-card__supporting-text + .mdl-card__actions {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-.mdl-demo #add {
-  position: absolute;
-  right: 40px;
-  top: 36px;
-  z-index: 999;
-}
 
-.mdl-demo .mdl-layout__content section:not(:last-of-type) {
-  position: relative;
-  margin-bottom: 48px;
-}
-.mdl-demo section.section--center {
-  max-width: 860px;
-}
-.mdl-demo #features section.section--center {
-  max-width: 620px;
-}
-.mdl-demo section > header{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.mdl-demo section > .section__play-btn {
-  min-height: 200px;
-}
-.mdl-demo section > header > .material-icons {
-  font-size: 3rem;
-}
-.mdl-demo section > button {
-  position: absolute;
-  z-index: 99;
-  top: 8px;
-  right: 8px;
-}
-.mdl-demo section .section__circle {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-grow: 0;
-  flex-shrink: 1;
-}
-.mdl-demo section .section__text {
-  flex-grow: 1;
-  flex-shrink: 0;
-  padding-top: 8px;
-}
-.mdl-demo section .section__text h5 {
-  font-size: inherit;
-  margin: 0;
-  margin-bottom: 0.5em;
-}
-.mdl-demo section .section__text a {
-  text-decoration: none;
-}
-.mdl-demo section .section__circle-container > .section__circle-container__circle {
-  width: 64px;
-  height: 64px;
-  border-radius: 32px;
-  margin: 8px 0;
-}
-.mdl-demo section.section--footer .section__circle--big {
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
-  margin: 8px 32px;
-}
-.mdl-demo .is-small-screen section.section--footer .section__circle--big {
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  margin: 8px 16px;
-}
-.mdl-demo section.section--footer {
-  padding: 64px 0;
-  margin: 0 -8px -8px -8px;
-}
-.mdl-demo section.section--center .section__text:not(:last-child) {
-  border-bottom: 1px solid rgba(0,0,0,.13);
-}
-.mdl-demo .mdl-card .mdl-card__supporting-text > h3:first-child {
-  margin-bottom: 24px;
-}
-.mdl-demo .mdl-layout__tab-panel:not(#overview) {
-  background-color: white;
-}
-.mdl-demo #features section {
-  margin-bottom: 72px;
-}
-.mdl-demo #features h4, #features h5 {
-  margin-bottom: 16px;
-}
-.mdl-demo .toc {
-  border-left: 4px solid #C1EEF4;
-  margin: 24px;
-  padding: 0;
-  padding-left: 8px;
-  display: flex;
-  flex-direction: column;
-}
-.mdl-demo .toc h4 {
-  font-size: 0.9rem;
-  margin-top: 0;
-}
-.mdl-demo .toc a {
-  color: #4DD0E1;
-  text-decoration: none;
-  font-size: 16px;
-  line-height: 28px;
-  display: block;
-}
-.mdl-demo .mdl-menu__container {
-  z-index: 99;
-}      
         
     </style>
  
@@ -228,7 +39,7 @@ html, body {
       <div class="android-header mdl-layout__header mdl-layout__header--waterfall">
         <div class="mdl-layout__header-row">
           <span class="android-title mdl-layout-title">
-            <img class="fcq-logo" src="http://cufcq.com/assets/logo-full-min-7818badef60c941f9ba8c436edf570e3.png" style="width:70px;height:65px;">
+            <img class="fcq-logo" src="logo.png" style="width:70px;height:65px;">
           </span>
 
           <!-- Add spacer, to align navigation to the right in desktop -->
@@ -269,65 +80,89 @@ html, body {
           <div class="android-font android-sub-slogan">This is a website designed to help you understand FCQs and past grade data for instructors, courses, and departments. Select a search option, type in a parameter, and explore!</div>
 
         </div>
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-              <div class="mdl-card__supporting-text">
-                <h4>About Us</h4>
-                We are a group of students from the University of Colorado at Boulder. We are creating a way to communicate and share information about the classes way take everyday through the means of surveys and the visiualization of data. (this description will be updated later.) 
-              </div>
-              <div class="mdl-card__actions">
-                <a href="#" class="mdl-button">More Information</a>
-              </div>
-            </div>
 
 
 
-
-        <footer class="android-footer mdl-mega-footer">
-          <div class="mdl-mega-footer--top-section">
-            <div class="mdl-mega-footer--left-section">
-              <button class="mdl-mega-footer--social-btn"></button>
-              &nbsp;
-              <button class="mdl-mega-footer--social-btn"></button>
-              &nbsp;
-              <button class="mdl-mega-footer--social-btn"></button>
-            </div>
-            <div class="mdl-mega-footer--right-section">
-              <a class="mdl-typography--font-light" href="#top">
-                Back to Top
-                <i class="material-icons">expand_less</i>
-              </a>
-            </div>
-          </div>
-          <div class="mdl-mega-footer--bottom-section">
-            <a class="android-link android-link-menu mdl-typography--font-light" id="version-dropdown">
-              Versions
-              <i class="material-icons">arrow_drop_up</i>
-            </a>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--top-left mdl-js-ripple-effect" for="version-dropdown">
-              <li class="mdl-menu__item">5.0 Lollipop</li>
-              <li class="mdl-menu__item">4.4 KitKat</li>
-              <li class="mdl-menu__item">4.3 Jelly Bean</li>
-              <li class="mdl-menu__item">Android History</li>
-            </ul>
-            <a class="android-link android-link-menu mdl-typography--font-light" id="developers-dropdown">
-              For Developers
-              <i class="material-icons">arrow_drop_up</i>
-            </a>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--top-left mdl-js-ripple-effect" for="developers-dropdown">
-              <li class="mdl-menu__item">App developer resources</li>
-              <li class="mdl-menu__item">Android Open Source Project</li>
-              <li class="mdl-menu__item">Android SDK</li>
-              <li class="mdl-menu__item">Android for Work</li>
-            </ul>
-            <a class="android-link mdl-typography--font-light" href="">Blog</a>
-            <a class="android-link mdl-typography--font-light" href="">Privacy Policy</a>
-          </div>
-
-        </footer>
       </div>
 
     </div>
     <script src="../../material.min.js"></script>
+
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      
+      <main class="mdl-layout__content">
+        <div class="mdl-layout__tab-panel is-active" id="overview">
+ 
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+              <div class="mdl-card__supporting-text">
+                <h4>About Us</h4>
+                We are a group of students from the University of Colorado at Boulder. We are creating a way to communicate and share information about the classes way take everyday through the means of surveys and the visiualization of data. (this description will be updated later.)
+              </div>
+              <div class="mdl-card__actions">
+                <a href="#" class="mdl-button">More about us</a>
+              </div>
+                
+            </div>
+
+          </section>
+        </div>
+        <footer class="mdl-mega-footer">
+          <div class="mdl-mega-footer--middle-section">
+            <div class="mdl-mega-footer--drop-down-section">
+              <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+              <h1 class="mdl-mega-footer--heading">Features</h1>
+              <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">About</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Partners</a></li>
+                <li><a href="#">Updates</a></li>
+              </ul>
+            </div>
+            <div class="mdl-mega-footer--drop-down-section">
+              <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+              <h1 class="mdl-mega-footer--heading">Details</h1>
+              <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">Spec</a></li>
+                <li><a href="#">Tools</a></li>
+                <li><a href="#">Resources</a></li>
+              </ul>
+            </div>
+            <div class="mdl-mega-footer--drop-down-section">
+              <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+              <h1 class="mdl-mega-footer--heading">Technology</h1>
+              <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">How it works</a></li>
+                <li><a href="#">Patterns</a></li>
+                <li><a href="#">Usage</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Contracts</a></li>
+              </ul>
+            </div>
+            <div class="mdl-mega-footer--drop-down-section">
+              <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
+              <h1 class="mdl-mega-footer--heading">FAQ</h1>
+              <ul class="mdl-mega-footer--link-list">
+                <li><a href="#">Questions</a></li>
+                <li><a href="#">Answers</a></li>
+                <li><a href="#">Contact us</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="mdl-mega-footer--bottom-section">
+            <div class="mdl-logo">
+              More Information
+            </div>
+            <ul class="mdl-mega-footer--link-list">
+              <li><a href="https://developers.google.com/web/starter-kit/">Web Starter Kit</a></li>
+              <li><a href="#">Help</a></li>
+              <li><a href="#">Privacy and Terms</a></li>
+            </ul>
+          </div>
+        </footer>
+      </main>
+    </div>
 
 
   </body>
