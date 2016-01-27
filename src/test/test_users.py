@@ -10,6 +10,7 @@ from handlers.survey_handler import Response, Surveys
 from config.config import application
 from setup import Setup
 
+
 class TestUser(tornado.testing.AsyncHTTPTestCase):
     user_data = {}
     user_id = None
@@ -36,13 +37,13 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
     def test_testing_authentication(self):
         self.assertEqual(TestUser.user_data['registration'], User().REGISTRATION_TESTING)
         good_auth = User().authenticate(TestUser.user_id, User().TESTING_PASSWORD)
-        bad_auth  = User().authenticate(TestUser.user_id,'wrong password')
+        bad_auth = User().authenticate(TestUser.user_id, 'wrong password')
         self.assertTrue(good_auth)
         self.assertFalse(bad_auth)
 
     def test_verify_valid_user(self):
         verify = User().verify(TestUser.user_data)
-        self.assertEqual(verify,[])
+        self.assertEqual(verify, [])
 
     def test_verify_invalid_user(self):
         verify = User().verify(User().default())

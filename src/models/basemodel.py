@@ -88,9 +88,23 @@ class BaseModel:
         return False
 
     def init(self, DB, conn):
+        """
+        Initializes a new Table in the database, named after the model that calls it.
+        """
         table = self.__class__.__name__
         try:
             r.db(DB).table_create(table).run(conn)
+        except:
+            pass
+
+    def drop(self, DB, conn):
+        """
+        Drops the table in the rethink database that corresponds with the model that called it.
+        This will wipe all data in that table.
+        """
+        table = self.__class__.__name__
+        try:
+            r.db(DB).table_drop(table).run(conn)
         except:
             pass
 
@@ -168,14 +182,19 @@ class BaseModel:
         return r.db(BaseModel.DB).table(table).get(item_id).delete().run(BaseModel.conn)
 
     def schema_list_check(self, method):
-        def _list_check(data):
+        def _list_check(list_data):
             try:
-                all(method(d) for d in data)
+                for d in list_data:
+                    method(d)
             except Exception as e:
                 raise AssertionError("Not all elements satisfy:\n\t {}".format(e))
         return _list_check
 
-    def check_data(data, fields, required_fields=[]):
+    def check_data(data, fields, required_fields=[], strict_schema=False):
+        if strict_schema:
+            for field in data.keys():
+                if field not in (required_fields + ['id']):
+                    yield (field, 'Extraneous field: {}'.format(field))
         for field in required_fields:
             if field not in data:
                 yield (field, 'Missing field: {}'.format(field))
@@ -195,7 +214,7 @@ class BaseModel:
                             yield (key, "{}: {}".format(key, e))
 
     def verify(self, data):
-        return list(BaseModel.check_data(data, self.fields(), self.requiredFields()))
+        return list(BaseModel.check_data(data, self.fields(), self.requiredFields(), self.strictSchema()))
 
     def get_all(self):
         table = self.__class__.__name__

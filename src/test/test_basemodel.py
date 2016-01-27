@@ -1,6 +1,8 @@
 import unittest
 import tornado.testing
 import time
+import rethinkdb as r
+import logging
 from models.basemodel import BaseModel
 from models.user import User
 from models.answer import Answer
@@ -9,13 +11,44 @@ from config.config import application
 
 class MockModel(BaseModel):
     def requiredFields(self):
-        return ['a', 'b', 'c']
+        return ['a', 'b', 'c', 'x']
 
     def strictSchema(self):
         return True
 
+    def default(self):
+        return {
+            'a': 1,
+            'b': 'two',
+            'c': ['falsey', False, 'or', 0, 'Strings']
+        }
+
+    def fields(self):
+        b = super(MockModel, self)
+        return {
+            'a': (b.is_int, ),
+            'b': (b.is_string, ),
+            'c': (b.is_list, b.is_not_empty, b.schema_list_check(
+                b.schema_or(b.is_falsey, b.is_string),),),
+            'x': (b.is_timestamp,)
+        }
+
 
 class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
+    mock_data = {}
+    mock_id = ""
+    mock_x = 0
+
+    def setUpClass():
+        logging.disable(logging.CRITICAL)
+        # Designates Basemodel to use the test database
+        BaseModel.DB = 'test'
+        # Gives Basemodel a direct connection to the rethinkdb
+        BaseModel.conn = r.connect(host='localhost', port=28015)
+        # Initializes Mockmodel Table
+        MockModel().init(BaseModel.DB, BaseModel.conn)
+        return
+
     def get_app(self):
         return application
 
@@ -232,8 +265,29 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         with self.assertRaises(AssertionError):
             test_range(4.50001)
 
-    def test_schema_recurse(self):
-        pass
+    def test_schema_list_check(self):
+        b = BaseModel()
+        check_or = b.schema_list_check(b.schema_or(b.is_falsey, b.is_string))
+        check_int = b.schema_list_check(b.is_int)
+        check_truthy = b.schema_list_check(b.is_truthy)
+        or_data = ['falsey', 0, 'or', False, 'string']
+        int_data = [-1, -34.55, 0, 4321, 1, 1004.567]
+        truthy_data = ["Truthy", True, 1, "data"]
+        try:
+            check_or(or_data)
+            check_int(int_data)
+            check_truthy(truthy_data)
+        except:
+            self.fail('Error: schema_list_check should succeed')
+        for i in [or_data, int_data]:
+            with self.assertRaises(AssertionError):
+                check_truthy(i)
+        for i in [or_data, truthy_data]:
+            with self.assertRaises(AssertionError):
+                check_int(i)
+        for i in [truthy_data, int_data]:
+            with self.assertRaises(AssertionError):
+                check_or(i)
 
     def test_schema_or(self):
         is_truthy = BaseModel().is_truthy
@@ -260,15 +314,38 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
             with self.assertRaises(AssertionError):
                 int_or_str(i)
 
-
-
     def test_requiredFields(self):
         self.assertEqual(BaseModel().requiredFields(), [])
-        self.assertEqual(MockModel().requiredFields(), ['a', 'b', 'c'])
+        self.assertEqual(MockModel().requiredFields(), ['a', 'b', 'c', 'x'])
 
     def test_strictSchema(self):
         self.assertEqual(BaseModel().strictSchema(), False)
         self.assertEqual(MockModel().strictSchema(), True)
+
+    def test_verify(self):
+        # Check MockModel().default() doesn't verify by default
+        mock_data = MockModel().default()
+        verified = MockModel().verify(mock_data)
+        self.assertIn(('x', 'Missing field: x'), verified)
+        # Check strictSchema prohibits extraneous fields
+        mock_data['z'] = 1
+        verified = MockModel().verify(mock_data)
+        self.assertIn(('z', 'Extraneous field: z'), verified)
+        # Check id doesn't count as an extraneous field
+        mock_data = MockModel().default()
+        mock_data['id'] = '4321fdsa'
+        verified = MockModel().verify(mock_data)
+        self.assertNotIn(('id', 'Extraneous field: id'), verified)
+        # Check schema_list_check
+        mock_data['c'].append(True)
+        mock_data['x'] = time.time()
+        verified = MockModel().verify(mock_data)
+        self.assertNotEqual(len(verified), 0)
+        self.assertIn('c', verified[0])
+        # check a correct datatset passes
+        mock_data['c'].pop()
+        verified = MockModel().verify(mock_data)
+        self.assertEqual(len(verified), 0)
 
     def test_get_item(self):
         pass
@@ -277,7 +354,17 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         pass
 
     def test_create_item(self):
-        pass
+        mock_data = MockModel().default()
+        mock_id = MockModel().create_item(mock_data)
+        self.assertIsNone(mock_id)
+        mock_data['x'] = time.time()
+        mock_id = MockModel().create_item(mock_data)
+        self.assertIsNotNone(mock_id)
+
+    def tearDownClass():
+        logging.disable(logging.NOTSET)
+        # Drop the database
+        MockModel().drop(BaseModel.DB, BaseModel.conn)
 
 if __name__ == '__main__':
     unittest.main()

@@ -7,6 +7,7 @@ from handlers.survey_handler import Response, Surveys
 from config.config import application
 from setup import Setup
 
+
 class TestHandlers(tornado.testing.AsyncHTTPTestCase):
     def setUpClass():
         return
