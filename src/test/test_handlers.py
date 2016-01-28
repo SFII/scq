@@ -2,15 +2,14 @@ import unittest
 import tornado.testing
 import tornado.web
 import config.config
-
-from handlers.survey_handler import Response, Surveys
+from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
-
+from server import initialize_db
 
 class TestHandlers(tornado.testing.AsyncHTTPTestCase):
     def setUpClass():
-        return
+        initialize_db(db='test')
 
     def get_app(self):
         return application
