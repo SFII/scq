@@ -122,7 +122,7 @@ var MainDiv = React.createClass({
 		   return (<Welcome />);
 		}
         console.log(this.props.routes);
-        var routesObject=this.props.routes;
+        routesObject=this.props.routes;
         var itemNodes = testQuestions.map(function (item) {
                 return (
                 <SurveyDiv questions={item.questions} routes={routesObject}/>
@@ -137,26 +137,39 @@ var MainDiv = React.createClass({
 });
     
 var SurveyDiv = React.createClass({
+    getInitialState: function() {
+        return{
+            showCard: true
+        };
+    },  
+    removeCard: function() {
+        console.log("inside removeCard");
+        this.setState({showCard: false});
+    },
+    
     render: function() {
         console.log(this.props.routes);
-        var routesObject = this.props.routes
-        var itemSurvey = this.props.questions.map(function (itemSurvey) {  
+        var routesObject = this.props.routes;
+        var removeCard = this.removeCard;
+        var itemSurvey = this.state.showCard ? this.props.questions.map(function (itemSurvey) {  
             return(
                 <Card
+                id ={itemSurvey.surveyID}
                 title={itemSurvey.title}
                 options={itemSurvey.options}
                 type={itemSurvey.type}
-                routes={routesObject}>
+                routes={routesObject}
+                removeHandler={removeCard}>
                 </Card>
             );
-        });
+            }) : '';
         return(
         <div className="surveyDiv">
             {itemSurvey}
         </div>
         );
     }
-});
+    });
 
 
 /*

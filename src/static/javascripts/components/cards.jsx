@@ -17,18 +17,21 @@ var Card = React.createClass({
     handleSurveySubmit: function(survey){
         console.log(survey);
         $.ajax({
-        url: this.props.routes.surveys,
+            url: this.props.routes.surveys,
             dataType: 'json',
             type: 'POST',
             data: survey,
+            context: this,
             success: function(data){
-        }.bind(this),
-        error: function(xhr, status,err){
-            console.error("/api/response", status, err.toString());
-        }.bind(this)
+                this.props.removeHandler();
+            }.bind(this),
+            error: function(xhr, status,err){
+                this.props.removeHandler();
+                console.log("error function");
+                console.error("/api/response", status, err.toString());
+            }.bind(this)
         });
     },
-    
     render: function(){
       if(this.props.type == "multipeChoice"){
         return (
@@ -62,7 +65,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <FreeResponse onSubmit={this.handleSurveySubmit}/>
+              <FreeResponse onSubmit={this.handleSurveySubmit} />
             </div>
         </div>
       );
