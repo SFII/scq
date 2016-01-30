@@ -178,7 +178,6 @@ class CuLdapRegisterHandler(RegisterHandler):
         info['major4'] = ldapinfo[self.LDAP_MAJOR_4].capitalize() if self.LDAP_MAJOR_4 in ldapinfo else ''
         info['minor1'] = ldapinfo[self.LDAP_MINOR_1].capitalize() if self.LDAP_MINOR_1 in ldapinfo else ''
         info['minor2'] = ldapinfo[self.LDAP_MINOR_2].capitalize() if self.LDAP_MINOR_2 in ldapinfo else ''
-        info['primary_affiliation'] = 'Faculty'
         info['departments'] = ldapinfo[self.LDAP_DEPARTMENTS].capitalize() if self.LDAP_DEPARTMENTS in ldapinfo else ''
-        #info['primary_affiliation'] = ldapinfo[self.LDAP_PRIMARY_AFFILIATION].capitalize() if self.LDAP_PRIMARY_AFFILIATION in ldapinfo else ''
+        info['primary_affiliation'] = ldapinfo[self.LDAP_PRIMARY_AFFILIATION].capitalize() if self.LDAP_PRIMARY_AFFILIATION in ldapinfo else ''
         return info

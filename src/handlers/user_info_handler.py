@@ -8,9 +8,6 @@ class UserInfoHandler(BaseHandler):
 
     def get(self, input=None):
         user_info_dict = self.current_user
-        print("LOOK HERE ------")
-        print(user_info_dict)
-        print(user_info_dict['primary_affiliation'])
         if user_info_dict:
             return self.render('userinfo.html',
             errors = [],

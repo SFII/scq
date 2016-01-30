@@ -1,130 +1,59 @@
 {% extends "layouts/base.html" %}
-{% block title %}User information edit{% end %}
+{% block title %}User Information Update{% end %}
 {% block content %}
-<style>
-label.container {
-  margin-left: 20px;
-}
-div.container {
-  border-style: solid;
-}
-input.container {
-  margin-left: 20px;
-}
-select.container {
-  margin-left: 20px;
-}
-button.container {
-  margin-left: 20px;
-}
-</style>
-<script>
-var row = 1
-function appendRow() {
-  var button = document.getElementById('div');
-  button.type="text";
-  button.name="courses";
-  button.value="{{ courses }}";
-  //d.setAttribute("style", "margin-left:20px")
-  button.innerHTML += "<input type='text' id='add"+ row++ +"'><br>";
-}
-</script>
 <h3>Update Information</h3>
-{% if primary_affiliation == "Student" %}
-  <div class="container">
-  <form action="/userinfo/update" method="post">
-    <label class="container"><b>Username</b></label><br>
-    <input class="container" type="text" name="username" value="{{ username }}" readonly><br>
-    <label class="container"><b>Primary Affiliation</b></label><br>
-    <input class="container" type="text" name="primary_affiliation" value="{{ primary_affiliation }}" readonly><br>
-    <label class="container"><b>Email</b></label><br>
-    <input class="container" type="email" name="email" value="{{ email }}" required><br>
-    <label class="container"><b>Academic Status</b></label><br>
-    <input class="container" type="text" name="status" value="{{ status }}"><br>
-    <label class="container"><b>Date of Birth</b></label><br />
-    <input class="container" type="date" name="dob" value="{{ dob }}" required=""><br />
-    <label class="container"><b>Gender</b></label><br>
-    <select class="container" name="gender" required>
-    {% for user_gender in user_genders %}
-      <option value="{{ user_gender }}"> {{ user_gender }}</option>
-    {% end %}
-    <option selected disabled hidden value=''></option>
+<form action="/userinfo/update" method="post">
+  <label><b>Username</b></label><br>
+  <input type="text" name="username" value="{{ username }}" readonly><br>
+  <label><b>Primary Affiliation</b></label><br>
+  <input type="text" name="primary_affiliation" value="{{ primary_affiliation }}" readonly><br>
+  <label><b>Email</b></label><br>
+  <input type="email" name="email" value="{{ email }}" required><br>
+  <label><b>Date of Birth</b></label><br>
+  <input type="date" name="dob" value="{{ dob }}" required><br>
+  <label><b>Gender</b></label><br>
+  <select name="gender" required>
+  {% for user_gender in user_genders %}
+    <option value="{{ user_gender }}"> {{ user_gender }}</option>
+  {% end %}
+  <option selected disabled hidden value=""></option>
   </select><br/>
-    <label class="container"><b>Ethnicity</b></label><br>
-    <select class="container" name="ethnicity" required>
-    {% for user_ethnicity in user_ethnicities %}
-      <option value="{{ user_ethnicity }}"> {{ user_ethnicity }}</option>
-    {% end %}
-    <option selected disabled hidden value=''></option>
+  <label><b>Ethnicity</b></label><br>
+  <select name="ethnicity" required>
+  {% for user_ethnicity in user_ethnicities %}
+    <option value="{{ user_ethnicity }}"> {{ user_ethnicity }}</option>
+  {% end %}
+  <option selected disabled hidden value=""></option>
   </select><br/>
-    <label class="container"><b>Native Language</b></label><br>
-    <select class="container" name="native_language" required>
-    {% for user_native_language in user_native_languages %}
-      <option value="{{ user_native_language }}"> {{ user_native_language }}</option>
-    {% end %}
-    <option selected disabled hidden value=''></option>
+  <label><b>Native Language</b></label><br>
+  <select name="native_language" required>
+  {% for user_native_language in user_native_languages %}
+    <option value="{{ user_native_language }}"> {{ user_native_language }}</option>
+  {% end %}
+  <option selected disabled hidden value=""></option>
   </select><br/>
-    <label class="container"><b>Departments</b></label><br>
-    <input class="container" type="text" name="departments" value="{{ departments }}" required><br>
-    <label class="container"><b>Enrolled Majors</b></label><br>
-    <input class="container" type="text" name="major1" value="{{ major1 }}"><br>
-    <input class="container" type="text" name="major2" value="{{ major2 }}"><br>
-    <input class="container" type="text" name="major3" value="{{ major3 }}"><br>
-    <input class="container" type="text" name="major4" value="{{ major4 }}"><br>
-    <label class="container"><b>Enrolled Minors</b></label><br>
-    <input class="container" type="text" name="minor1" value="{{ minor1 }}"><br>
-    <input class="container" type="text" name="minor2" value="{{ minor2 }}"><br>
-    <label class="container"><b>Date of Birth</b></label><br>
-    <input class="container" type="date" name="dob" value="{{ dob }}" required=""><br>
-    <label class="container"><b>Courses Enrolled (Please seperate multiple courses with a comma)</b></label><br>
-    <input class="container" type="text" name="courses" value="{{ courses }}"><br>
-    <input class="container" type="submit" value="submit" class="button"><br>
-    {% raw xsrf_form_html() %}
-  </form>
-  </div>
-{% end %}
-{% if primary_affiliation == 'Faculty' %}
-  <div class="container">
-  <form action="/userinfo/update" method="post">
-    <label class="container"><b>Username</b></label><br>
-    <input class="container" type="text" name="username" value="{{ username }}" readonly><br>
-    <label class="container"><b>Primary Affiliation</b></label><br>
-    <input class="container" type="text" name="primary_affiliation" value="{{ primary_affiliation }}" readonly><br>
-    <label class="container"><b>Email</b></label><br>
-    <input class="container" type="email" name="email" value="{{ email }}" required><br>
-    <label class="container"><b>Date of Birth</b></label><br />
-    <input class="container" type="date" name="dob" value="{{ dob }}" required=""><br />
-    <label class="container"><b>Gender</b></label><br>
-    <select class="container" name="gender" required>
-    {% for user_gender in user_genders %}
-      <option value="{{ user_gender }}"> {{ user_gender }}</option>
-    {% end %}
-    <option selected disabled hidden value=''></option>
-  </select><br/>
-    <label class="container"><b>Ethnicity</b></label><br>
-    <select class="container" name="ethnicity" required>
-    {% for user_ethnicity in user_ethnicities %}
-      <option value="{{ user_ethnicity }}"> {{ user_ethnicity }}</option>
-    {% end %}
-    <option selected disabled hidden value=''></option>
-  </select><br/>
-    <label class="container"><b>Native Language</b></label><br>
-    <select class="container" name="native_language" required>
-    {% for user_native_language in user_native_languages %}
-      <option value="{{ user_native_language }}"> {{ user_native_language }}</option>
-    {% end %}
-    <option selected disabled hidden value=''></option>
-  </select><br/>
-    <label class="container"><b>Departments</b></label><br>
-    <input class="container" type="text" name="departments" value="{{ departments }}" required><br>
-    <label class="container"><b>Courses Instructed</b></label><br>
-    <input class="container" type="text" name="courses" value="{{ courses }}">
-    <div id="div">
-    <button class="container" onclick="appendRow()">+</button><br>
-    </div>
-    <br>
-    <input class="container" type="submit" value="submit" class="button">
-  </form>
-  </div>
-{% end %}
+  <label><b>Departments (Please separate departments with commas)</b></label><br>
+  <textarea name="departments" cols="40" rows="3" value="{{ departments }}">{{ departments }}</textarea><br>
+  {% if primary_affiliation == "Student" %}
+    <label><b>Academic Status</b></label><br>
+    <input type="text" name="status" value="{{ status }}"><br>
+    <label><b>Enrolled Majors</b></label><br>
+    <input type="text" name="major1" value="{{ major1 }}"><br>
+    <input type="text" name="major2" value="{{ major2 }}"><br>
+    <input type="text" name="major3" value="{{ major3 }}"><br>
+    <input type="text" name="major4" value="{{ major4 }}"><br>
+    <label><b>Enrolled Minors</b></label><br>
+    <input type="text" name="minor1" value="{{ minor1 }}"><br>
+    <input type="text" name="minor2" value="{{ minor2 }}"><br>
+    <label><b>Courses Enrolled (Please separate courses with commas)</b></label><br>
+    <textarea name="courses" cols="40" rows="5" value="{{ courses }}">{{ courses }}</textarea><br>
+    <input type="submit" value="submit" class="button"><br>
+  {% end %}
+  {% if primary_affiliation == 'Faculty' %}
+    <label><b>Courses Instructed (Please separate courses with commas)</b></label><br>
+    <textarea name="courses" cols="40" rows="5" value="{{ courses }}">{{ courses }}</textarea><br>
+    <input type="submit" value="submit" class="button">
+  {% end %}
+  {% raw xsrf_form_html() %}
+</form>
 {% end %}
