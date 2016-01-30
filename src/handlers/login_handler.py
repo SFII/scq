@@ -13,7 +13,7 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument('username',strip = True)
         password = self.get_argument('password',strip = True)
-        cursor = User().find({'username' : username})
+        cursor = User().find_item({'username' : username})
         for user_data in cursor:
             user_id = user_data['id']
             if User().authenticate(user_id, password):

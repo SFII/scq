@@ -10,6 +10,7 @@ from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
 from server import initialize_db
+import logging
 
 
 class TestUser(tornado.testing.AsyncHTTPTestCase):
@@ -18,6 +19,7 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
     username = None
 
     def setUpClass():
+        logging.disable(logging.CRITICAL)
         initialize_db(db='test')
         # Designates Basemodel to use the test database
         BaseModel.DB = 'test'
@@ -59,6 +61,7 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
 
     def tearDownClass():
         x = User().delete_item(TestUser.user_id)
+        logging.disable(logging.NOTSET)
 
 
 if __name__ == '__main__':

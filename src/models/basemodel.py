@@ -44,7 +44,7 @@ class BaseModel:
 
     def is_unique(self, data, key):
         def _unique(data):
-            assert len(self.find({key: data})) == 0, "data '{0}' Must must be a unique value in the database with respect to key {1}".format(data, key)
+            assert len(self.find_item({key: data})) == 0, "data '{0}' Must must be a unique value in the database with respect to key {1}".format(data, key)
         return _unique
 
     def is_none(self, data):
@@ -109,10 +109,19 @@ class BaseModel:
             pass
 
     def get_item(self, idnum):
+        """
+        Given an id number number of an item in the database, retrieve the data
+        the idnum corresponds to in the database
+        """
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(idnum).run(BaseModel.conn)
 
     def update_item(self, idnum, data):
+        """
+        Given an id number number of an item in the database and a data hash,
+        update the fields of the data in the database with the fields in the
+        data hash
+        """
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
 
@@ -163,9 +172,11 @@ class BaseModel:
         user_survey_list.append(survey_id)
         return r.db(BaseModel.DB).table(user_table).get(user_id).update({survey_key: user_survey_list}).run(BaseModel.conn)
 
-    def find(self, key):
+    def find_item(self, data):
+        """
+        """
         table = self.__class__.__name__
-        return list(r.db(BaseModel.DB).table(table).filter(key).run(BaseModel.conn))
+        return list(r.db(BaseModel.DB).table(table).filter(data).run(BaseModel.conn))
 
     # create a new database item from given data, if the data passes the validator
     def create_item(self, data):

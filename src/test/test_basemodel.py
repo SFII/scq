@@ -49,6 +49,11 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         MockModel().init(BaseModel.DB, BaseModel.conn)
         return
 
+    def setup():
+        mock_data = {}
+        mock_id = ""
+        mock_x = 0
+
     def get_app(self):
         return application
 
@@ -348,10 +353,42 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         self.assertEqual(len(verified), 0)
 
     def test_get_item(self):
-        pass
+        mock_data = MockModel().default()
+        mock_data['x'] = time.time()
+        mock_id = MockModel().create_item(mock_data)
+        item = MockModel().get_item(mock_id)
+        self.assertEqual(item['a'], mock_data['a'])
+        self.assertEqual(item['b'], mock_data['b'])
+        self.assertEqual(item['c'], mock_data['c'])
+        self.assertEqual(item['x'], mock_data['x'])
+        self.assertEqual(item['id'], mock_id)
 
-    def test_find(self):
-        pass
+    def test_find_item(self):
+        mock_data = MockModel().default()
+        mock_time = time.time()
+        mock_data['x'] = mock_time
+        mock_id = MockModel().create_item(mock_data)
+        found = MockModel().find_item({'x': (mock_time - 10)})
+        self.assertEqual(len(found), 0)
+        found = MockModel().find_item({'x': (mock_time)})
+        self.assertEqual(len(found), 1)
+        item = found[0]
+        self.assertEqual(item['a'], mock_data['a'])
+        self.assertEqual(item['b'], mock_data['b'])
+        self.assertEqual(item['c'], mock_data['c'])
+        self.assertEqual(item['x'], mock_data['x'])
+        self.assertEqual(item['id'], mock_id)
+
+    def test_delete_item(self):
+        mock_data = MockModel().default()
+        mock_time = time.time()
+        mock_data['x'] = mock_time
+        mock_id = MockModel().create_item(mock_data)
+        item = MockModel().get_item(mock_id)
+        self.assertIsNotNone(item)
+        MockModel().delete_item(mock_id)
+        item = MockModel().get_item(mock_id)
+        self.assertIsNone(item)
 
     def test_create_item(self):
         mock_data = MockModel().default()
@@ -360,6 +397,10 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         mock_data['x'] = time.time()
         mock_id = MockModel().create_item(mock_data)
         self.assertIsNotNone(mock_id)
+
+    def teardown():
+        if (mock_id is not None) or (mock_id is not ""):
+            MockModel.delete_item(mock_id)
 
     def tearDownClass():
         logging.disable(logging.NOTSET)

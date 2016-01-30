@@ -32,5 +32,5 @@ class SurveyHandler(BaseHandler):
         else:
             courses = user_data['courses']
             for course in courses:
-                data += models.survey.Survey().find({'course': course, })
+                data += models.survey.Survey().find_item({'course': course, })
         self.write(json.dumps(data))
