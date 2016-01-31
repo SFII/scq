@@ -12,8 +12,11 @@ class Question(BaseModel):
 
     USER_RESPONSE_FORMAT = [RESPONSE_FREE, RESPONSE_MULTIPLE_CHOICE, RESPONSE_TRUE_OR_FALSE, RESPONSE_RATING]
 
+    def strictSchema(self):
+        return True
+
     def requiredFields(self):
-        return ['title', 'response_format']
+        return ['title', 'response_format', 'options']
 
     def fields(self):
         b = super(__class__, self)
@@ -42,4 +45,4 @@ class Question(BaseModel):
         data['title'] = lorem_ipsum.lorem_ipsum()
         data['response_format'] = random.choice(self.USER_RESPONSE_FORMAT)
         data['options'] = self.create_generic_options(data['response_format'])
-        return super(Question, self).create_item(data)
+        return Question().create_item(data)

@@ -2,10 +2,12 @@ import tornado.web
 from models.user import User
 import logging
 import json
+
+
 class BaseHandler(tornado.web.RequestHandler):
 
     # any handler can call self.current_user to get the cookie-stored rethinkdb
-    #data for a User. The data is set at login (when the cookie is set)
+    # data for a User. The data is set at login (when the cookie is set)
     def get_current_user(self):
         user_cookie = self.get_secure_cookie('user')
         if user_cookie is None:
@@ -25,6 +27,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def set_current_user(self, user_data):
         if user_data:
+            user_data['last_sign_in'] = time.time()
             self.set_secure_cookie('user', tornado.escape.json_encode(user_data))
         else:
             self.clear_cookie('user')

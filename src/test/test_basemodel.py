@@ -327,6 +327,38 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         self.assertEqual(BaseModel().strictSchema(), False)
         self.assertEqual(MockModel().strictSchema(), True)
 
+    def test_is_unique(self):
+        MockModel().purge(BaseModel.DB, BaseModel.conn)
+        mock_data = MockModel().default()
+        mock_data['x'] = time.time()
+        is_unique_a = MockModel().is_unique('a')
+        is_unique_b = MockModel().is_unique('b')
+        is_unique_c = MockModel().is_unique('c')
+        try:
+            is_unique_a(mock_data)
+            is_unique_b(mock_data)
+            is_unique_c(mock_data)
+        except:
+            self.fail('Error: is_unique should succeed')
+        mock_id = MockModel().create_item(mock_data)
+        time.sleep(0.1)
+        self.assertIsNotNone(mock_id)
+        for is_unique in [is_unique_a, is_unique_b, is_unique_c]:
+            with self.assertRaises(AssertionError):
+                is_unique(mock_data)
+
+    def test_exists_in_table(self):
+        mock_data = MockModel().default()
+        mock_data['x'] = time.time()
+        exists_in_table = MockModel().exists_in_table('MockModel')
+        with self.assertRaises(AssertionError):
+            exists_in_table('0')
+        mock_id = MockModel().create_item(mock_data)
+        try:
+            exists_in_table(mock_id)
+        except:
+            self.fail('Error: exists_in_table should succeed')
+
     def test_verify(self):
         # Check MockModel().default() doesn't verify by default
         mock_data = MockModel().default()

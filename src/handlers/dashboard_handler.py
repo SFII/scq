@@ -2,6 +2,8 @@ import tornado.web
 from handlers.base_handler import BaseHandler
 from models.survey import Survey
 import logging
+
+
 class DashboardHandler(BaseHandler):
 
     @tornado.web.authenticated
@@ -15,7 +17,7 @@ class DashboardHandler(BaseHandler):
         print(user_data)
         unanswered_survey_ids = user_data['unanswered_surveys']
         for survey_id in unanswered_survey_ids:
-            survey_data = Survey().decompose(survey_id)
+            survey_data = Survey().decompose_from_id(survey_id)
             if survey_data is None:
                 continue
             survey_json.append(survey_data)
