@@ -15,21 +15,17 @@ var Card = React.createClass({
     },
     
     handleSurveySubmit: function(survey){
-        console.log(survey);
         $.ajax({
-            url: this.props.routes.surveys,
-            dataType: 'json',
+            url: this.props.routes.sruveys,
+			contentType: 'application/json',
             type: 'POST',
-            data: survey,
-            context: this,
+            data: JSON.stringify(survey),
             success: function(data){
                 this.props.removeHandler();
             }.bind(this),
-            error: function(xhr, status,err){
-                this.props.removeHandler();
-                console.log("error function");
-                console.error("/api/response", status, err.toString());
-            }.bind(this)
+			error: function(xhr, status,err){
+				console.error("/api/response", status, err.toString());
+			}.bind(this)
         });
     },
     render: function(){

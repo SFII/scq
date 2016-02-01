@@ -8,13 +8,14 @@ from models.user import User
 import models.answer
 from handlers.base_handler import BaseHandler
 
-class Responses(BaseHandler):
+class ResponseHandler(BaseHandler):
     def post(self):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
         Response().create_item(data)
+        self.write("success")
 
-class Surveys(BaseHandler):
+class SurveyHandler(BaseHandler):
     def post(self):
         body = self.request.body.decode("utf-8")
         data = json.loads(body)
