@@ -7,6 +7,11 @@ class UserInfoUpdateHandler(BaseHandler):
 
     def get(self, input=None, errors=[]):
         user_info_dict = self.current_user
+        verified = User().verify(user_info_dict)
+        if len(verified) != 0:
+            logging.error('User: verification errors!')
+            logging.error(verified)
+            return self.verifyCULdapRegistrationPage(user_info_dict['username'], verified)
         username = user_info_dict['username']
         email = user_info_dict['email']
         status = user_info_dict['status']

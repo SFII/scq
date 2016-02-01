@@ -20,9 +20,11 @@
 {% if len(departments) == 0 %}
   <li>{{ 'not enrolled into any departments' }}</li><br>
 {% else %}
-  <li>{{ departments }}</li><br>
+  {% for department in departments %}
+    <li>{{ department }}</li><br>
+  {% end %}
 {% end %}
-{% if primary_affiliation == "Student" %}
+{% if "Student" in primary_affiliation %}
   <label><b>Majors Declared</b></label><br>
   {% if not major1 and not major2 and not major3 and not major4 %}
     <li>{{ 'did not declare an majors' }}</li><br>
@@ -46,7 +48,7 @@
     <li>{{ courses }}</li><br>
   {% end %}
 {% end %}
-{% if primary_affiliation == "Faculty" %}
+{% if "Faculty" in primary_affiliation %}
   <label><b>Courses Instructed</b></label><br>
   {% if len(courses) == 0 %}
     <li>{{ 'not instructing any courses' }}</li><br>

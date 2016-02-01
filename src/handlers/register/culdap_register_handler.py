@@ -72,7 +72,9 @@ class CuLdapRegisterHandler(RegisterHandler):
         data['minor1']          = self.get_argument('minor1',None,strip = True)
         data['minor2']          = self.get_argument('minor2',None,strip = True)
         data['departments']      = self.get_argument('departments', None,strip = True)
+        data['departments'] = data['departments'].split(',')
         data['primary_affiliation'] = self.get_argument('primary_affiliation', None,strip = True)
+        data['primary_affiliation'] = data['primary_affiliation'].split(',')
         return data
 
 

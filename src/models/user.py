@@ -31,12 +31,12 @@ class User(BaseModel):
             'date_registered' : (b.is_date_string,),
             'last_sign_in' : (b.is_date_string,),
             'courses' : (b.is_list,),
-            'departments' : (),
+            'departments' : (b.is_list,),
             'created_surveys' : (b.is_list,),
             'unanswered_surveys' : (b.is_list,),
             'answered_surveys' : (b.is_list,),
             'answers' : (b.is_list,),
-            'primary_affiliation' : (),
+            'primary_affiliation' : (b.is_list,),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -57,7 +57,7 @@ class User(BaseModel):
             'answered_surveys' : [],
             'created_surveys' : [],
             'answers' : [],
-            'primary_affiliation' : 'Student',
+            'primary_affiliation' : [],
         }
 
 
