@@ -4,8 +4,6 @@ import time
 import rethinkdb as r
 import logging
 from models.basemodel import BaseModel
-from models.user import User
-from models.answer import Answer
 from config.config import application
 
 
