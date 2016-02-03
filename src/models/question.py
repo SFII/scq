@@ -5,8 +5,8 @@ import services.lorem_ipsum as lorem_ipsum
 
 class Question(BaseModel):
 
-    RESPONSE_FREE = 'freeReponse'
-    RESPONSE_MULTIPLE_CHOICE = 'mutipleChoice'
+    RESPONSE_FREE = 'freeResponse'
+    RESPONSE_MULTIPLE_CHOICE = 'multipleChoice'
     RESPONSE_TRUE_OR_FALSE = 'trueOrFalse'
     RESPONSE_RATING = 'rating'
 
