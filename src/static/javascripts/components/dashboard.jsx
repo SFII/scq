@@ -16,7 +16,7 @@ var testQuestions = [
                 title: "What things should be improved?"
             }, {
                 id: 2,
-                type: "multipeChoice",
+                type: "multipleChoice",
                 title: "Did you enjoy the course?",
                 options: ["Not at all", "It was an average course", "It was an excellent course"]
             },
@@ -69,23 +69,27 @@ var testQuestions = [
                 title: "What things should be improved?"
             }, {
                 id: 2,
-                type: "multipeChoice",
+                type: "multipleChoice",
                 title: "Did you enjoy the course?",
                 options: ["Not at all", "It was an average course", "It was an excellent course"]
             }
         ]
     }
 ];
-
+/*
+* Page is the overall container that gets mounted into our HTML file
+*/
 var Page = React.createClass({
-    /*
+//loadPageJSON is the function we call whenever we want to call GET on the surveys endpoint
     loadPageJSON: function() {
     $.ajax({
-    url:this.props.routes.surveys,
+    url: this.props.routes.surveys,
     type: 'GET',
     dataType: 'json',
     cache: true,
     success: function(data){
+    console.log(data)
+    //on success we set the state of Page to be equal to the JSON received
     this.setState({data: data});
     }.bind(this),
     error: function(xhr, status, err){
@@ -93,19 +97,22 @@ var Page = React.createClass({
     }.bind(this)
     });
     },
-    */
+    //This is where the initial loadPageJSON call happens, it happens when the React class is instantiated (Carlos we should put that 
+    //initial fetch Sam showed you here)
     getInitialState: function() {
+    this.loadPageJSON();
     return{data:[]};
     },
-    /*
+    //This is something we'll likely want to change, it calls loadPageJSON again once the component mounts, which doesn't really make sense, oops
     componentDidMount: function(){
-        this.loadPageJSON()
+        this.loadPageJSON();
     },
-    */
+    
+    //MainDiv is sent the data state as "pageJson" and the api routes json as "routes"
     render: function(){
       return (
         <div className="mdl-grid mdl-cell--12-col content">
-            <MainDiv pageJson={this.state.data} routesObject={this.props.routes} />
+        <MainDiv pageJson={this.state.data} routes={this.props.routes}/>
         </div>
         );
     }
@@ -114,17 +121,26 @@ var Page = React.createClass({
 /*
 *
 * MainDiv
-*ask michael about this.props.class
+* At this layer we separate each Survey into separate SurveyDiv objects
 */
 var MainDiv = React.createClass({
     render: function() {
 		if (!loggedIn()) {
 		   return (<Welcome />);
 		}
+        routesObject=this.props.routes;
+        //itemNodes is the set of mapped items (each one is a survey) and each is passed it's set of questions, routes, and other relevant information
+        /*this is set to testQuestions.map until the GET works, if it's
+        working switch it to this.props.pageJson and it should work */
         var itemNodes = testQuestions.map(function (item) {
                 return (
-                    <SurveyDiv questions={item.questions}>
-                    </SurveyDiv>
+                <SurveyDiv 
+                questions={item.questions}
+                routes={routesObject}
+                surveyID={item.surveyID}
+                department={item.department}
+                creator={item.creator}
+                isInstructor={item.isInstructor}/>
                 );
             });
         return (
@@ -136,47 +152,50 @@ var MainDiv = React.createClass({
 });
     
 var SurveyDiv = React.createClass({
+    //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
+    //that we check before/while rendering
+    getInitialState: function() {
+        return{
+            showCard: true
+        };
+    },  
+    removeCard: function() {
+        this.setState({showCard: false});
+    },
+    
     render: function() {
-        var itemSurvey = this.props.questions.map(function (itemSurvey) {  
+        //increasing the scope of the props, there has to be a better way to do this.
+        var routesObject = this.props.routes;
+        var removeCard = this.removeCard;
+        var surveyID = this.props.surveyID;
+        var department = this.props.department;
+        var creator = this.props.creator;
+        var isInstructor = this.props.isInstructor;
+        //if showCard state is true, then we map the surveys questions onto cards, else we map nothing, pass all properties again.
+        var itemSurvey = this.state.showCard ? this.props.questions.map(function (itemSurvey) {  
             return(
                 <Card
+                questionID ={itemSurvey.id}
                 title={itemSurvey.title}
                 options={itemSurvey.options}
-                type={itemSurvey.type}>
+                type={itemSurvey.type}
+                routes={routesObject}
+                removeHandler={removeCard}
+                surveyID={surveyID}
+                department={department}
+                creator={creator}
+                isInstructor={isInstructor}>
                 </Card>
             );
-        });
+            }) : '';
         return(
         <div className="surveyDiv">
             {itemSurvey}
         </div>
         );
     }
-});
+    });
 
-
-/*
-*
-* Form
-*
-*/
-var Form = React.createClass({
-
-    addItem: function(e) {
-        e.preventDefault();
-        this.props.onItemSubmit({});
-        return;
-
-    },
-
-    render: function() {
-        return (
-        <form className="listForm" onSubmit={this.addItem}>
-        <input  type="submit" value="Click me" />
-        </form>
-        );
-    }
-});
 
 function loggedIn() {
 	return document.cookie.indexOf("user") > -1
