@@ -2,6 +2,7 @@ import tornado.web
 import tornado.gen as gen
 import json
 import time
+import logging
 from models.response import Response
 from models.survey import Survey
 from models.user import User
@@ -62,17 +63,24 @@ class SurveyHandler(BaseHandler):
         if len(verified) != 0:
             return self.set_status(403, "Verification errors: {0}".format(verified))
         survey_id = Survey().create_item(survey_data)
-        return self.set_status(200, survey_id)
+        self.set_status(200, "Success")
+        return self.write(survey_id)
 
     def edit_survey(self):
         pass
 
+
+    @tornado.web.authenticated
     def get(self):
         user_data = self.get_current_user()
-        if user_data is None:
-            data = models.survey.Survey().get_all()
-        else:
-            courses = user_data['courses']
-            for course in courses:
-                data += models.survey.Survey().find_item({'course': course, })
-        self.write(json.dumps(data))
+        surveys = []
+        unanswered_survey_ids = user_data['unanswered_surveys']
+        for survey_id in unanswered_survey_ids:
+            survey_data = Survey().decompose_from_id(survey_id)
+            if survey_data is None:
+                continue
+            surveys.append(survey_data)
+        logging.info(unanswered_survey_ids)
+        logging.info(surveys)
+        self.set_status(200, "Success")
+        return self.write(tornado.escape.json_encode(surveys))

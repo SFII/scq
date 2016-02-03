@@ -36,7 +36,7 @@ class Survey(BaseModel):
             return None
         data['course_name'] = course_data['course_name']
         data['creator_name'] = creator_data['username']
-        survey_id = self.create_item(data)
+        survey_id = super(Survey, self).create_item(data)
         active_surveys = course_data['active_surveys']
         active_surveys.append(survey_id)
         subscribers = course_data['subscribers']

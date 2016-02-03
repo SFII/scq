@@ -2,6 +2,7 @@ import tornado.web
 from models.user import User
 import logging
 import json
+import time
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -12,6 +13,7 @@ class BaseHandler(tornado.web.RequestHandler):
         user_cookie = self.get_secure_cookie('user')
         if user_cookie is None:
             return None
+        logging.info(user_cookie)
         return json.loads(user_cookie.decode("utf-8"))
 
     def refresh_current_user_cookie(self):
