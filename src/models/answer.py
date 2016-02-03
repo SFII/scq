@@ -1,5 +1,6 @@
 from models.basemodel import BaseModel
 
+
 class Answer(BaseModel):
     # Dichotomous: two possible responses (i.e. yes or no)
     # Rank order scaling: Among the choices given, rank them in order
@@ -12,10 +13,10 @@ class Answer(BaseModel):
     def fields(self):
         b = super(Answer, self)
         return {
-            'user_id' : (b.is_int, ),
-            'survey_id' : (b.is_int, ),
-            'question_id' : (b.is_int, ),
-            'response_format' : (b.is_string, is_reponse_format,)
+            'user_id': (b.is_int, ),
+            'survey_id': (b.is_int, ),
+            'question_id': (b.is_int, ),
+            'response_format': (b.is_string, is_reponse_format,)
         }
 
     def is_reponse_format(self, data):

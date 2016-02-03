@@ -1,5 +1,6 @@
 from models.basemodel import BaseModel
 
+
 class Student(BaseModel):
     COLLEGE_ARTS_AND_SCIENCES = 'College of Arts and Sciences'
     COLLEGE_ENGINEERING = 'College of Engineering and Applied Science'
@@ -27,10 +28,10 @@ class Student(BaseModel):
     def fields(self):
         b = super(Student, self)
         return {
-            'college' : (b.is_in_list(COLLEGES), ),
-            'majors' : (b.is_list, schema_list_check(b.is_major),),
-            'minors' : (b.is_list, schema_list_check(b.is_minor),),
-            'gpa' : (b.is_int, ),
-            'course_history' : (b.is_list, ),
-            'credits_earned' : (b.is_int, )
+            'college': (b.is_in_list(COLLEGES), ),
+            'majors': (b.is_list, schema_list_check(b.is_major),),
+            'minors': (b.is_list, schema_list_check(b.is_minor),),
+            'gpa': (b.is_int, ),
+            'course_history': (b.is_list, ),
+            'credits_earned': (b.is_int, )
         }
