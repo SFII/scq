@@ -33,7 +33,7 @@
   <option selected disabled hidden value=""></option>
   </select><br/>
   <label><b>Departments (Please separate departments with commas)</b></label><br>
-  <textarea name="departments" cols="40" rows="3" value="{{ departments }}">{{ (departments) }}</textarea><br>
+  <textarea name="departments" cols="40" rows="3" value="{{ departments }}">{{ departments }}</textarea><br>
   {% if "Student" in primary_affiliation %}
     <label><b>Academic Status</b></label><br>
     <input type="text" name="status" value="{{ status }}"><br>
