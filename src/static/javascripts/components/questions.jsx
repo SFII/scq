@@ -1,6 +1,7 @@
 /*
 *
 * Submit Button
+* Just an mdl submit button, behaves as a normal submit button would
 */
 var SubmitButton = React.createClass({
     render: function() {
@@ -15,9 +16,12 @@ var SubmitButton = React.createClass({
 /*
 *
 * Multiple Choice
+* All the cards are very similar so I'm not going to copy and paste
 */
 var MultipleChoice = React.createClass({
-    
+    //getInitialState finds how many options there are and creates an
+    //object questionObj with a corresponding amount of slots set to
+    //false and we initialize the data state to be this
     getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
@@ -26,10 +30,13 @@ var MultipleChoice = React.createClass({
         }
         return {data: questionObj};
     },
+    /*whenever a change happens this is called, the value of the 
+    checkbox is found, and we go into our data state and set the 
+    corresponding slot to be the same so the data state matches the
+    visual state of the form */
     
     handleChange: function(i,value){
         var NewValue = null;
-        console.log(value);
         if(value == false){
             NewValue = true;
         }
@@ -40,13 +47,17 @@ var MultipleChoice = React.createClass({
         changeAnswer[i] = NewValue;
         this.setState({data: changeAnswer})
     },
+    /*once the submit button is clicked we change the data to be a 
+    JSON object and we send it to the ajax POST*/
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var myJsonString = JSON.stringify(this.state.data);
-        this.props.onSubmit({myJsonString});
+        var answer = JSON.stringify(this.state.data);
+        this.props.onSubmit({answer});
     },
-        
+    /*Nothing fancy here, except we also map with an extra parameter i
+    which acts as a key value for each option so we can update the state
+    correctly*/
     render: function(){
       const renderedOptions = this.props.options.map((option,i) => {
         return (
@@ -80,6 +91,9 @@ var MultipleChoice = React.createClass({
 *
 *
 * Single Choice
+* This is the same as multiple choice, but the handlers are different
+* so that once a new option is chosen all other options are set to false
+* since it simulates a radio form
 */
 var SingleChoice = React.createClass({
     
@@ -94,45 +108,38 @@ getInitialState: function(){
     
     handleChange: function(i,value){
         var NewValue = null;
-        console.log(value);
-        if(value == false){
-            NewValue = true;
-        }
-        else{
-            NewValue = false;
-        }
+        var length = Object.keys(this.props.options).length;
+        var questionObj=[];
         var changeAnswer = this.state.data;
-        changeAnswer[i] = NewValue;
+        for(var iter = 0; iter < length; iter++){
+            changeAnswer[iter]=false;
+        }
+        changeAnswer[i] = true;
         this.setState({data: changeAnswer});
     },
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var myJsonString = JSON.stringify(this.state.data);
-        this.props.onSubmit({myJsonString});
+        var answer = JSON.stringify(this.state.data);
+        this.props.onSubmit({answer});
     },
     
     render: function(){
+        var surveyID = String(this.props.surveyID);
         const renderedOptions = this.props.options.map((option, i) => {
             return (
                 <div>
-                    <label 
-                    className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-                    <input type="radio"
-                     className="mdl-radio__button"
-                     name ={ option }
-                     value={ option } 
-                     key={ option }
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+                    <input type="radio" className="mdl-radio__button" name = {surveyID} value={ option } key={ option }
                      onChange={this.handleChange.bind(this,i,this.state.data[i])}>
-                      </input>
+                    </input>
                       <span className="mdl-radio__label"> { option } </span>
                     </label>
-                </div>
+                </div>    
             )
         });
 
         return (
-          <div className="mdl-card__supporting-text mdl-color-text--grey-600">
             <form 
             className="mdl-card__supporting-text mdl-color-text--grey-600"
             onSubmit={this.handleSurveySubmit}>
@@ -140,7 +147,6 @@ getInitialState: function(){
               { renderedOptions }
               <SubmitButton />
             </form>
-          </div>
         );
     }
 });
@@ -148,6 +154,8 @@ getInitialState: function(){
 *
 *
 * Free
+* Same as the other cards, but simpler, we just take whatever is in the
+* textfield and get it to POST
 */
 var FreeResponse = React.createClass({
 
@@ -186,6 +194,7 @@ var FreeResponse = React.createClass({
 });
 /*
 *Rating slider
+*This still needs work from Michael and I
 */
 var Rating = React.createClass({
    	getInitialState: function(){
