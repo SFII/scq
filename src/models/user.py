@@ -45,7 +45,7 @@ class User(BaseModel):
             'registration' : self.REGISTRATION_METHODS[0],
             'username' : '',
             'email' : '',
-            'accepted_tos' : False,
+            'accepted_tos' : True,
             'gender' : self.USER_GENDERS[-1],
             'ethnicity' : self.USER_ETHNICITIES[-1],
             'native_language' : self.USER_NATIVE_LANGUAGES[-1],
