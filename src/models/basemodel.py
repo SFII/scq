@@ -42,10 +42,16 @@ class BaseModel:
     def is_list(self, data):
         assert isinstance(data, (list, tuple)), "data '{0}' Must be a list".format(data)
 
-    def is_unique(self, data, key):
+    def is_unique(self, key):
         def _unique(data):
-            assert len(self.find_item({key: data})) == 0, "data '{0}' Must must be a unique value in the database with respect to key {1}".format(data, key)
+            value = data[key]
+            assert len(self.find_item({key: value})) == 0, "data '{0}' Must must be a unique value in the database with respect to key {1}".format(data, key)
         return _unique
+
+    def exists_in_table(self, table):
+        def _exists(data):
+            assert r.db(BaseModel.DB).table(table).get(data).run(BaseModel.conn) is not None, "id '{0}' does not exist in table {1}".format(data, table)
+        return _exists
 
     def is_none(self, data):
         assert data is None, "Must be empty"
@@ -100,11 +106,21 @@ class BaseModel:
     def drop(self, DB, conn):
         """
         Drops the table in the rethink database that corresponds with the model that called it.
-        This will wipe all data in that table.
+        This will wipe all data in that table, and drop the table from the db
         """
         table = self.__class__.__name__
         try:
             r.db(DB).table_drop(table).run(conn)
+        except:
+            pass
+
+    def purge(self, DB, conn):
+        """
+        Deletes every row from a table in the db
+        """
+        table = self.__class__.__name__
+        try:
+            r.db(DB).table(table).delete().run(conn)
         except:
             pass
 
@@ -174,12 +190,17 @@ class BaseModel:
 
     def find_item(self, data):
         """
+        Given a dictionary of data, find the items in the database that match
+        those fields and values.
         """
         table = self.__class__.__name__
         return list(r.db(BaseModel.DB).table(table).filter(data).run(BaseModel.conn))
 
-    # create a new database item from given data, if the data passes the validator
     def create_item(self, data):
+        """
+        Given data, creates a new database item if the data passes the validator
+        Returns an id of the created item, or None if it fails to pass the validator
+        """
         table = self.__class__.__name__
         verified = self.verify(data)
         if len(verified) == 0:
@@ -213,10 +234,7 @@ class BaseModel:
             if key in data:
                 for method in methods:
                     try:
-                        if method in [BaseModel.is_unique]:
-                            method(data[key], key)
-                        else:
-                            method(data[key])
+                        method(data[key])
                     except Exception as e:
                         if isinstance(getattr(e, 'message', None), (list, tuple)):
                             for error in e.message:
