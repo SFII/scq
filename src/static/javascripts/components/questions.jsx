@@ -120,7 +120,8 @@ getInitialState: function(){
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var answer = JSON.stringify(this.state.data);
+        var data = this.state.data;
+        var answer = JSON.stringify(data);
         this.props.onSubmit({answer});
     },
     

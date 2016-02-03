@@ -88,7 +88,6 @@ var Page = React.createClass({
     dataType: 'json',
     cache: true,
     success: function(data){
-    console.log(data)
     //on success we set the state of Page to be equal to the JSON received
     this.setState({data: data});
     }.bind(this),
@@ -132,7 +131,7 @@ var MainDiv = React.createClass({
         //itemNodes is the set of mapped items (each one is a survey) and each is passed it's set of questions, routes, and other relevant information
         /*this is set to testQuestions.map until the GET works, if it's
         working switch it to this.props.pageJson and it should work */
-        var itemNodes = testQuestions.map(function (item) {
+        var itemNodes = this.props.pageJson.map(function (item) {
                 return (
                 <SurveyDiv 
                 questions={item.questions}
@@ -178,7 +177,7 @@ var SurveyDiv = React.createClass({
                 questionID ={itemSurvey.id}
                 title={itemSurvey.title}
                 options={itemSurvey.options}
-                type={itemSurvey.type}
+                response_format={itemSurvey.response_format}
                 routes={routesObject}
                 removeHandler={removeCard}
                 surveyID={surveyID}

@@ -39,7 +39,7 @@ var Card = React.createClass({
     //case matching of the question type, generates the corresponding
     //card, eventually we want one card per survey, this will be tricky
     render: function(){
-      if(this.props.type == "multipleChoice"){
+      if(this.props.response_format == "multipleChoice"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
@@ -54,7 +54,7 @@ var Card = React.createClass({
             </div>
           </div>
         );
-      }else if(this.props.type == "rating"){
+      }else if(this.props.response_format == "rating"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
@@ -67,7 +67,7 @@ var Card = React.createClass({
             </div>
           </div>
         );
-       }else if (this.props.type == "trueOrFalse"){
+       }else if (this.props.response_format == "trueOrFalse"){
           return (
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
@@ -82,7 +82,7 @@ var Card = React.createClass({
               </div>
             </div>
           );
-    } else if (this.props.type == "freeResponse"){
+    } else if (this.props.response_format == "freeResponse"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
