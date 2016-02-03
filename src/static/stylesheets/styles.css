@@ -241,3 +241,11 @@ _:-ms-input-placeholder, :root .graph {
       -ms-flex-align: center;
           align-items: center;
 }
+.campus_consensus_title {
+    position: relative;
+    left: 300px;
+}
+
+.join_us {
+    margin-bottom: 30px;
+}

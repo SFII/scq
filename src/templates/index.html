@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.css">
+      <link rel="stylesheet" href="https://code.getmdl.io/1.1.0/material.indigo-pink.min.css" />
     <link href="/static/stylesheets/style.css" rel="stylesheet" type="text/css">
       
 
@@ -51,12 +52,10 @@
           <!-- Navigation -->
           <div class="android-navigation-container">
             <nav class="android-navigation mdl-navigation">
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">About</a>
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Courses</a>
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Instructors</a>
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Sign&nbsp;In</a>
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="/register">Create&nbsp;an&nbsp;Account</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">about</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">data explorer</a>
               <a class="mdl-navigation__link mdl-typography--text-uppercase" href="/userinfo">User&nbsp;Info</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="/register">Sign&nbsp;In</a>
             </nav>
           </div>
           <button class="android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
@@ -72,39 +71,74 @@
       <div class="android-content mdl-layout__content">
         <a name="top"></a>
         <div class="android-wear-section  mdl-typography--text-center">
-          <div class="android-font android-slogan">Welcome to CU FCQ.</div>
-          <div class="android-font android-sub-slogan">This is a website designed to help you understand FCQs and past grade data for instructors, courses, and departments. Select a search option, type in a parameter, and explore!</div>
+          <div class="android-font android-slogan">           <h1 class= "campus_consensus_title" >Campus Consensus</h1> </div>
+          <div class="android-font android-sub-slogan"></div>
 
         </div>
-
-
-
+            
       </div>
 
     </div>
     <script src="../../material.min.js"></script>
-
-<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+        
+      
+<body class="mdl-demo mdl-color--cyan mdl-color-text--black-700 mdl-base">
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       
       <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="overview">
  
+       
+        <section class="section--center mdl-grid mdl-grid--no-spacing ">
+
+             <h2>What do we do?</h2> 
+
+              <p>
+                  We are creating a way to communicate and share information about the classes way take everyday through the means of surveys and the visiualization of data. (put more info about what we do here)
+            </p>
+            
+            <h2>Who are we?</h2>
+            <p>We are a group of students from the University of Colorado at Boulder.(put more info about who we are here)</p>
+          </div>
+          </section> 
+
+
+          
+            <!--card-->
+       
           <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
             <div class="mdl-card mdl-cell mdl-cell--12-col">
               <div class="mdl-card__supporting-text">
-                <h4>About Us</h4>
+                <h2>What do we do?</h2>
                 We are a group of students from the University of Colorado at Boulder. We are creating a way to communicate and share information about the classes way take everyday through the means of surveys and the visiualization of data. (this description will be updated later.)
-              </div>
-              <div class="mdl-card__actions">
-                <a href="#" class="mdl-button">More about us</a>
               </div>
                 
             </div>
-
-          </section>
-        </div>
-        <footer class="mdl-mega-footer">
+          </section>  
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+              <div class="mdl-card__supporting-text">
+                <h2>Who are we?</h2>
+                We are a group of students from the University of Colorado at Boulder. We are creating a way to communicate and share information about the classes way take everyday through the means of surveys and the visiualization of data. (this description will be updated later.)
+              </div>
+                
+            </div>
+          </section>        
+          
+          
+        <center class="join_us" >
+            <center><h5>Join Us?</h5></center>
+          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="/register">
+  Create Account
+          </a>
+          </center>          
+          
+          
+          </div>
+          
+        <br> 
+<!-- foooter section -->           
+        <footer class="mdl-mega-footer mdl-color-text--black mdl-color--primary">
           <div class="mdl-mega-footer--middle-section">
             <div class="mdl-mega-footer--drop-down-section">
               <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
