@@ -6,9 +6,12 @@ import time
 from models.basemodel import BaseModel
 from models.user import User
 import rethinkdb as r
-from handlers.survey_handler import Response, Surveys
+from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
+from server import initialize_db
+import logging
+
 
 class TestUser(tornado.testing.AsyncHTTPTestCase):
     user_data = {}
@@ -16,6 +19,8 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
     username = None
 
     def setUpClass():
+        logging.disable(logging.CRITICAL)
+        initialize_db(db='test')
         # Designates Basemodel to use the test database
         BaseModel.DB = 'test'
         # Gives Basemodel a direct connection to the rethinkdb
@@ -36,13 +41,13 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
     def test_testing_authentication(self):
         self.assertEqual(TestUser.user_data['registration'], User().REGISTRATION_TESTING)
         good_auth = User().authenticate(TestUser.user_id, User().TESTING_PASSWORD)
-        bad_auth  = User().authenticate(TestUser.user_id,'wrong password')
+        bad_auth = User().authenticate(TestUser.user_id, 'wrong password')
         self.assertTrue(good_auth)
         self.assertFalse(bad_auth)
 
     def test_verify_valid_user(self):
         verify = User().verify(TestUser.user_data)
-        self.assertEqual(verify,[])
+        self.assertEqual(verify, [])
 
     def test_verify_invalid_user(self):
         verify = User().verify(User().default())
@@ -56,6 +61,7 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
 
     def tearDownClass():
         x = User().delete_item(TestUser.user_id)
+        logging.disable(logging.NOTSET)
 
 
 if __name__ == '__main__':

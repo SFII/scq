@@ -9,8 +9,9 @@ from handlers.index_handler import IndexHandler
 from handlers.register_handler import RegisterHandler
 from handlers.register.culdap_register_handler import CuLdapRegisterHandler
 from handlers.dashboard_handler import DashboardHandler
-from handlers.survey_handler import Surveys
-from handlers.survey_handler import Response
+from handlers.survey_handler import SurveyHandler
+from handlers.refresh_handler import RefreshHandler
+from handlers.survey_handler import ResponseHandler
 from handlers.user_info_handler import UserInfoHandler
 from handlers.user_info_update_handler import UserInfoUpdateHandler
 
@@ -23,9 +24,10 @@ routes = [
     (r"/logout", LogoutHandler),
     (r"/register/culdap", CuLdapRegisterHandler),
     (r"/register", RegisterHandler),
-    (r"/dashboard",DashboardHandler),
-    (r"/api/surveys", Surveys),
-    (r"/api/response", Response),
+    (r"/dashboard", DashboardHandler),
+    (r"/api/surveys", SurveyHandler),
+    (r"/api/response", ResponseHandler),
+    (r"/api/refresh", RefreshHandler),
     (r"/userinfo", UserInfoHandler),
     (r"/userinfo/update", UserInfoUpdateHandler)
 ]

@@ -10,9 +10,6 @@ serve:
 serve-nogulp:
 	@export PROJECTPATH=${PROJECTPATH} && cd ./src && python3 server.py
 
-serve-dev:
-	@gulp watch & cd ./src && python3 ./setup.py && python3 ./server.py
-
 console:
 	@export PROJECTPATH=${PROJECTPATH} && gulp dev-js && cd ./src && python3
 

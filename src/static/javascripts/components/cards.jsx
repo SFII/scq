@@ -7,62 +7,92 @@ var TitleSection = React.createClass({
       );
     }
 });
-
+//Card is really messy
 var Card = React.createClass({
-    
+    /* an initial state called response, actually not entirely sure
+     * why we have it.. :) 
+    */
     getInitialState: function(){
         return {response: []};
     },
     
+    //handleSurveySubmit is called whenever a submit button is pushed
+    //it calls POST on /api/response sending a JSON of the survey data
+    //and on success calls the removeHandler which removes the 
+    //corresponding cards 
     handleSurveySubmit: function(survey){
         console.log(survey);
         $.ajax({
-            url: "/api/response",
-            dataType: 'json',
+            url: this.props.routes.response,
+			contentType: 'application/json',
             type: 'POST',
-            data: survey,
+            data: JSON.stringify(survey),
             success: function(data){
-        }.bind(this),
-        error: function(xhr, status,err){
-            console.error("/api/response", status, err.toString());
-        }.bind(this)
+                console.log("Post success");
+                this.props.removeHandler();
+            }.bind(this),
+			error: function(xhr, status,err){
+				console.error("/api/response", status, err.toString());
+			}.bind(this)
         });
     },
-    
+    //case matching of the question type, generates the corresponding
+    //card, eventually we want one card per survey, this will be tricky
     render: function(){
-      if(this.props.type == "multipeChoice"){
-        return (
-          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-            <div>
-              <TitleSection titleText={this.state.response}/>
-              <MultipleChoice options={this.props.options} onSubmit={this.handleSurveySubmit}/>
-            </div>
-          </div>
-        );
-      }else if(this.props.type == "rating"){
+      if(this.props.response_format == "multipleChoice"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <Rating />
+              <MultipleChoice 
+              options={this.props.options}
+              onSubmit={this.handleSurveySubmit}
+              surveyID={this.props.surveyID}
+              department={this.props.department}
+              creator={this.props.creator}
+              isInstructor={this.props.isInstructor}/>
             </div>
           </div>
         );
-       }else if (this.props.type == "trueOrFalse"){
+      }else if(this.props.response_format == "rating"){
+        return (
+          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+            <div>
+              <TitleSection titleText={this.props.title}/>
+              <Rating 
+              surveyID={this.props.surveyID}
+              department={this.props.department}
+              creator={this.props.creator}
+              isInstructor={this.props.isInstructor}/>
+            </div>
+          </div>
+        );
+       }else if (this.props.response_format == "trueOrFalse"){
           return (
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText={this.props.title}/>
-                  <SingleChoice options={this.props.options} onSubmit={this.handleSurveySubmit} />
+                  <SingleChoice 
+                  options={this.props.options}
+                  onSubmit={this.handleSurveySubmit}
+                  surveyID={this.props.surveyID}
+                  department={this.props.department}
+                  creator={this.props.creator}
+                  isInstructor={this.props.isInstructor}/>
               </div>
             </div>
           );
-    } else if (this.props.type == "freeResponse"){
+    } else if (this.props.response_format == "freeResponse"){
         return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <FreeResponse onSubmit={this.handleSurveySubmit}/>
+              <FreeResponse 
+              onSubmit={this.handleSurveySubmit}
+              surveyID={this.props.surveyID}
+              department={this.props.department}
+              creator={this.props.creator}
+              isInstructor={this.props.isInstructor}/>
             </div>
         </div>
       );
