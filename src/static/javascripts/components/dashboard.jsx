@@ -19,18 +19,18 @@ var Page = React.createClass({
     }.bind(this)
     });
     },
-    //This is where the initial loadPageJSON call happens, it happens when the React class is instantiated (Carlos we should put that 
+    //This is where the initial loadPageJSON call happens, it happens when the React class is instantiated (Carlos we should put that
     //initial fetch Sam showed you here)
     getInitialState: function() {
     //this.loadPageJSON();
         return{data:[]};
     },
-    
+
     //This is something we'll likely want to change, it calls loadPageJSON again once the component mounts, which doesn't really make sense, oops
-    
+
     //MainDiv is sent the data state as "pageJson" and the api routes json as "routes"
     */
-    
+
     render: function(){
       return (
         <div className="mdl-grid mdl-cell--12-col content">
@@ -56,7 +56,7 @@ var MainDiv = React.createClass({
         working switch it to this.props.pageJson and it should work */
         var itemNodes = data.map(function (item) {
                 return (
-                <SurveyDiv 
+                <SurveyDiv
                 questions={item.questions}
                 routes={routesObject}
                 surveyID={item.surveyID}
@@ -72,7 +72,7 @@ var MainDiv = React.createClass({
         );
     }
 });
-    
+
 var SurveyDiv = React.createClass({
     //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
     //that we check before/while rendering
@@ -113,7 +113,7 @@ var SurveyDiv = React.createClass({
     handleSurveyChange: function(survey){
         var response = this.state.response;
         response.question_responses.push(JSON.stringify(survey));
-    }
+    },
     
     removeCard: function() {
         if(iter == 0){
@@ -121,7 +121,7 @@ var SurveyDiv = React.createClass({
         }
         this.setState({showCard: false});
     },
-    
+
     nextQuestion: function(){
         var iter == this.state.iter;
         if(iter == this.state.length){
@@ -129,16 +129,16 @@ var SurveyDiv = React.createClass({
         }
         this.setState({iter: iter + 1});
     },
-    
+
     prevQuestion: function(){
         var iter == this.state.iter;
         this.setState({iter: iter - 1});
     },
-    
+
     render: function() {
         //increasing the scope of the props, there has to be a better way to do this.
         //if showCard state is true, then we map the surveys questions onto cards, else we map nothing, pass all properties again.
-        if(this.state.showCard == true) {  
+        if(this.state.showCard == true) {
             return(
             <div className="surveyDiv">
                 <Card
@@ -159,7 +159,7 @@ var SurveyDiv = React.createClass({
                 </Card>
             </div>
             );
-        } 
+        }
         else{
         }
     }
