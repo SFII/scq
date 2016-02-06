@@ -4,7 +4,7 @@ import tornado.web
 import config.config
 from models.basemodel import BaseModel
 import rethinkdb as r
-from handlers.survey_handler import ResponseHandler, SurveyHandler
+from handlers.survey_handler import SurveyHandler
 from config.config import application
 from setup import Setup
 from server import initialize_db
@@ -29,12 +29,12 @@ class TestServices(tornado.testing.AsyncHTTPTestCase):
         response = self.fetch('/api/surveys', headers=headers)
         self.assertEqual(response.code, 200)
 
-    def test_response(self):
-        response = self.fetch(
-            '/api/response',
-            method='POST',
-            body='{"survey": "response"}')
-        self.assertEqual(response.code, 200)
+    # def test_response(self):
+    #     response = self.fetch(
+    #         '/api/response',
+    #         method='POST',
+    #         body='{"survey": "response"}')
+    #     self.assertEqual(response.code, 200)
 
     def tearDownClass():
         logging.disable(logging.NOTSET)

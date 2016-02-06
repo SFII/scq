@@ -13,7 +13,6 @@ class BaseHandler(tornado.web.RequestHandler):
         user_cookie = self.get_secure_cookie('user')
         if user_cookie is None:
             return None
-        logging.info(user_cookie)
         return json.loads(user_cookie.decode("utf-8"))
 
     def refresh_current_user_cookie(self):
@@ -22,7 +21,7 @@ class BaseHandler(tornado.web.RequestHandler):
         user_id = self.current_user['id']
         user_data = User().get_item(user_id)
         self.set_current_user(user_data)
-        return
+        return self.get_current_user()
 
     def clear_current_user_cookie(self):
         self.set_current_user(None)
@@ -33,3 +32,4 @@ class BaseHandler(tornado.web.RequestHandler):
             self.set_secure_cookie('user', tornado.escape.json_encode(user_data))
         else:
             self.clear_cookie('user')
+        return self.get_current_user()

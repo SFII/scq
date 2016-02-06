@@ -242,8 +242,10 @@ class BaseModel:
                         else:
                             yield (key, "{}: {}".format(key, e))
 
-    def verify(self, data):
-        return list(BaseModel.check_data(data, self.fields(), self.requiredFields(), self.strictSchema()))
+    def verify(self, data, skipRequiredFields=False, skipStrictSchema=False):
+        requiredFields = [] if skipRequiredFields else self.requiredFields()
+        strictSchema = False if skipStrictSchema else self.strictSchema()
+        return list(BaseModel.check_data(data, self.fields(), requiredFields, strictSchema))
 
     def get_all(self):
         table = self.__class__.__name__

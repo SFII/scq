@@ -2,28 +2,35 @@ from models.basemodel import BaseModel
 from models.course import Course
 from models.user import User
 from models.question import Question
+import time
 import random
 
 
 class Survey(BaseModel):
 
     def requiredFields(self):
-        return ['questions', 'course_id', 'creator_id', 'course_name', 'creator_name']
+        return ['questions', 'course_id', 'creator_id', 'course_name', 'creator_name', 'responses', 'closed_timestamp', 'created_timestamp']
 
     def strictSchema(self):
         return True
 
     def fields(self):
-        b = super(Survey, self)
         return {
-            'questions': (b.is_list, b.is_not_empty, self.schema_list_check(b.is_string)),
-            'course_id': (b.is_string, b.is_not_empty, b.exists_in_table('Course')),
-            'course_name': (b.is_string, b.is_not_empty,),
-            'creator_id': (b.is_string, b.is_not_empty, b.exists_in_table('User')),
-            'creator_name': (b.is_string, b.is_not_empty,)
+            'questions': (self.is_list, self.is_not_empty, self.schema_list_check((self.is_string,)),),
+            'course_id': (self.is_string, self.is_not_empty, self.exists_in_table('Course')),
+            'course_name': (self.is_string, self.is_not_empty,),
+            'creator_id': (self.is_string, self.is_not_empty, self.exists_in_table('User'),),
+            'creator_name': (self.is_string, self.is_not_empty,),
+            'responses': (self.is_list, self.schema_list_check((self.is_string,)),),
+            'created_timestamp': (self.is_timestamp, ),
+            'closed_timestamp': (self.schema_or(self.is_timestamp, self.is_none), ),
         }
 
     def create_item(self, data):
+        data['responses'] = []
+        data['created_timestamp'] = time.time()
+        if 'closed_timestamp' not in data.keys():
+            data['closed_timestamp'] = None
         course_id = data['course_id']
         creator_id = data['creator_id']
         creator_data = User().get_item(creator_id)

@@ -22,7 +22,7 @@ class Question(BaseModel):
         b = super(__class__, self)
         return {
             'title': (b.is_string, b.is_not_empty, ),
-            'response_format': (b.is_string, b.is_in_list(self.USER_RESPONSE_FORMAT)),
+            'response_format': (b.is_string, b.is_in_list(self.USER_RESPONSE_FORMAT),),
             'options': (b.is_list,)
         }
 

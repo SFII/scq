@@ -3,31 +3,21 @@ import tornado.gen as gen
 import json
 import time
 import logging
-from models.response import Response
 from models.survey import Survey
 from models.user import User
 from models.course import Course
-import models.answer
 from handlers.base_handler import BaseHandler
-
-
-class ResponseHandler(BaseHandler):
-
-    def post(self):
-        body = self.request.body.decode("utf-8")
-        data = json.loads(body)
-        Response().create_item(data)
-        self.write("success")
 
 
 class SurveyHandler(BaseHandler):
 
-    @tornado.web.authenticated
     def post(self):
         """
         Creates or updates an existing survey object
         If the id is present, it will update the existing survey
         """
+        if self.current_user() is None:
+            return None
         survey_id = self.get_argument('id', None)
         if survey_id is None:
             return self.create_survey()
@@ -60,7 +50,7 @@ class SurveyHandler(BaseHandler):
             'questions': questions,
         }
         verified = Survey().verify(survey_data)
-        if len(verified) != 0:
+        if not len(verified):
             return self.set_status(403, "Verification errors: {0}".format(verified))
         survey_id = Survey().create_item(survey_data)
         self.set_status(200, "Success")
@@ -69,10 +59,10 @@ class SurveyHandler(BaseHandler):
     def edit_survey(self):
         pass
 
-
-    @tornado.web.authenticated
     def get(self):
         user_data = self.get_current_user()
+        if user_data is None:
+            return None
         surveys = []
         unanswered_survey_ids = user_data['unanswered_surveys']
         for survey_id in unanswered_survey_ids:
