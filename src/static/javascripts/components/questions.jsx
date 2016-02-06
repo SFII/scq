@@ -6,7 +6,7 @@
 var SubmitButton = React.createClass({
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Submit
             </button>
         )
@@ -53,7 +53,7 @@ var MultipleChoice = React.createClass({
         
         event.preventDefault();
         var answer = JSON.stringify(this.state.data);
-        this.props.onSubmit({answer});
+        this.props.onChange({answer});
     },
     /*Nothing fancy here, except we also map with an extra parameter i
     which acts as a key value for each option so we can update the state
@@ -76,11 +76,8 @@ var MultipleChoice = React.createClass({
             </div>
         )
       });
-
       return (
-        <form 
-        className="mdl-card__supporting-text mdl-color-text--grey-600" 
-        onSubmit={this.handleSurveySubmit}>
+        <form className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600" onSubmit={this.handleSurveySubmit}>
             { renderedOptions }
             <SubmitButton />
         </form>

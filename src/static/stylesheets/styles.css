@@ -241,3 +241,17 @@ _:-ms-input-placeholder, :root .graph {
       -ms-flex-align: center;
           align-items: center;
 }
+
+.leftButton {
+    margin-bottom: auto;
+    margin-top: auto;
+    float: left;
+}
+
+.options {
+}
+.rightButton{
+    margin-top: auto;
+    margin-bottom: auto;
+    float: right;
+}
