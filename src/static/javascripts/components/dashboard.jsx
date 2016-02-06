@@ -79,19 +79,59 @@ var SurveyDiv = React.createClass({
     getInitialState: function() {
         return{
             showCard: true,
-            iter: 2,
+            iter: 0,
             length: Object.keys(this.props.questions).length
+            return{
+                response: {
+                    survey_id: this.props.surveyID,
+                    question_responses:[]
+                }
+            };
+            
         };
     },  
+    
+    handleSurveySubmit: function(survey){
+        console.log(survey);
+        var response = this.state.response
+        response.question_responses.push(JSON.stringify(survey));
+        $.ajax({
+            url: this.props.routes.response,
+			contentType: 'application/json',
+            type: 'POST',
+            data: JSON.stringify(survey),
+            success: function(data){
+                console.log("Post success");
+                this.props.removeHandler();
+            }.bind(this),
+			error: function(xhr, status,err){
+				console.error("/api/response", status, err.toString());
+			}.bind(this)
+        });
+    },
+    
+    handleSurveyChange: function(survey){
+        var response = this.state.response;
+        response.question_responses.push(JSON.stringify(survey));
+    }
+    
     removeCard: function() {
+        if(iter == 0){
+            return;
+        }
         this.setState({showCard: false});
     },
     
     nextQuestion: function(){
+        var iter == this.state.iter;
+        if(iter == this.state.length){
+            return;
+        }
         this.setState({iter: iter + 1});
     },
     
     prevQuestion: function(){
+        var iter == this.state.iter;
         this.setState({iter: iter - 1});
     },
     
@@ -102,16 +142,20 @@ var SurveyDiv = React.createClass({
             return(
             <div className="surveyDiv">
                 <Card
+                routes={this.props.routes}
+                questionNum={this.state.iter}
                 questionID = {this.props.questions[this.state.iter].id}
                 title={this.props.questions[this.state.iter].title}
                 options={this.props.questions[this.state.iter].options}
                 response_format={this.props.questions[this.state.iter].response_format}
-                routes={this.props.routes}
-                removeHandler={this.removeCard}
                 surveyID={this.props.surveyID}
                 department={this.props.department}
                 creator={this.props.creator}
-                isInstructor={this.props.isInstructor}>
+                isInstructor={this.props.isInstructor}
+                removeHandler={this.removeCard}
+                nextHandler={this.nextQuestion}
+                prevHandler={this.prevQuestion}
+                onSubmit={this.handleSurveySubmit}>
                 </Card>
             </div>
             );

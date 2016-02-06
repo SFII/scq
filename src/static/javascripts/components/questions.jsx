@@ -53,7 +53,7 @@ var MultipleChoice = React.createClass({
         
         event.preventDefault();
         var answer = JSON.stringify(this.state.data);
-        this.props.onChange({answer});
+        this.props.onSubmit(answer);
     },
     /*Nothing fancy here, except we also map with an extra parameter i
     which acts as a key value for each option so we can update the state
@@ -117,8 +117,7 @@ getInitialState: function(){
     handleSurveySubmit:function(event){
         
         event.preventDefault();
-        var answer = JSON.stringify(this.state.data);
-        this.props.onSubmit({answer});
+        this.props.onSubmit(answer);
     },
     
     render: function(){
@@ -167,7 +166,7 @@ var FreeResponse = React.createClass({
     handleSurveySubmit:function(survey){
         survey.preventDefault();
         var answer = this.state.answer.trim();
-        this.props.onSubmit({answer: answer});
+        this.props.onSubmit(answer);
     },
     
   render: function(){
