@@ -17,7 +17,7 @@
 <label><b>Ethnicity</b></label><br>
 <li>{{ ethnicity }}</li><br>
 <label><b>Departments Enrolled</b></label><br>
-{% if len(departments) == 0 %}
+{% if len(departments) == 0 or departments == [''] %}
   <li>{{ 'not enrolled into any departments' }}</li><br>
 {% else %}
   {% for department in departments %}
@@ -42,18 +42,22 @@
     {% if minor2 %}<li>{{ minor2 }}</li><br>{% end %}
   {% end %}
   <label><b>Courses Enrolled</b></label><br>
-  {% if len(courses) == 0 %}
+  {% if len(courses) == 0 or courses == [''] %}
     <li>{{ 'not enrolled into any courses' }}</li><br>
   {% else %}
-    <li>{{ courses }}</li><br>
+    {% for course in courses %}
+      <li>{{ course }}</li>
+    {% end %}
   {% end %}
 {% end %}
 {% if "Faculty" in primary_affiliation %}
   <label><b>Courses Instructed</b></label><br>
-  {% if len(courses) == 0 %}
+  {% if len(courses_taught) == 0 or courses_taught == [''] %}
     <li>{{ 'not instructing any courses' }}</li><br>
   {% else %}
-    <li>{{ courses }}</li><br>
+    {% for course in courses_taught %}
+      <li>{{ course }}</li><br>
+    {% end %}
   {% end %}
 {% end %}
 <form action="/userinfo/update" method="get">

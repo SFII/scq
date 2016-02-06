@@ -47,13 +47,12 @@
     <input type="text" name="minor2" value="{{ minor2 }}"><br>
     <label><b>Courses Enrolled (Please separate courses with commas)</b></label><br>
     <textarea name="courses" cols="40" rows="5" value="{{ courses }}">{{ courses }}</textarea><br>
-    <input type="submit" value="submit" class="button"><br>
   {% end %}
   {% if "Faculty" in primary_affiliation %}
     <label><b>Courses Instructed (Please separate courses with commas)</b></label><br>
-    <textarea name="courses" cols="40" rows="5" value="{{ courses }}">{{ courses }}</textarea><br>
-    <input type="submit" value="submit" class="button">
+    <textarea name="courses_taught" cols="40" rows="5" value="{{ courses_taught }}">{{ courses_taught }}</textarea><br>
   {% end %}
+  <input type="submit" value="submit" class="button">
   {% raw xsrf_form_html() %}
 </form>
 {% end %}
