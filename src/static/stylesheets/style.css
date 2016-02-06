@@ -206,3 +206,11 @@ html, body {
 .mdl-demo .mdl-menu__container {
   z-index: 99;
 }
+
+.main_info {
+    text-align: left;
+}
+
+.add_vertical_space {
+    margin-bottom: 45px;
+}
