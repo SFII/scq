@@ -1,17 +1,55 @@
 /*
 *
-* Submit Button
+* Footer
 * Just an mdl submit button, behaves as a normal submit button would
 */
-var SubmitButton = React.createClass({
+var Footer = React.createClass({
+    render: function() {
+        return (
+        <div className="mdl-card__title mdl-card--expand mdl-300">
+            <PrevButton/>
+            <NextButton/>
+        </div>
+
+
+        )
+    }
+})
+
+
+var Progress = React.createClass({
+    render: function() {
+        return (
+            <div id="p1" class="mdl-progress mdl-js-progress"  style={style1}></div>
+        )
+    }
+})
+
+
+
+var PrevButton = React.createClass({
     render: function() {
         return (
             <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                Submit
+                Previous
             </button>
         )
     }
 })
+
+var NextButton = React.createClass({
+    render: function() {
+        return (
+            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                &nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;&nbsp;
+            </button>
+        )
+    }
+})
+
+
+
+
 
 /*
 *
@@ -30,11 +68,11 @@ var MultipleChoice = React.createClass({
         }
         return {data: questionObj};
     },
-    /*whenever a change happens this is called, the value of the 
-    checkbox is found, and we go into our data state and set the 
+    /*whenever a change happens this is called, the value of the
+    checkbox is found, and we go into our data state and set the
     corresponding slot to be the same so the data state matches the
     visual state of the form */
-    
+
     handleChange: function(i,value){
         var NewValue = null;
         if(value == false){
@@ -47,10 +85,10 @@ var MultipleChoice = React.createClass({
         changeAnswer[i] = NewValue;
         this.setState({data: changeAnswer})
     },
-    /*once the submit button is clicked we change the data to be a 
+    /*once the submit button is clicked we change the data to be a
     JSON object and we send it to the ajax POST*/
     handleSurveySubmit:function(event){
-        
+
         event.preventDefault();
         var answer = JSON.stringify(this.state.data);
         this.props.onChange({answer});
@@ -64,11 +102,11 @@ var MultipleChoice = React.createClass({
             <div>
             <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
                 <input
-                    type="checkbox" 
-                    key={i} 
+                    type="checkbox"
+                    key={i}
                     name = {option}
                     value = {this.state.data[i]}
-                    className="mdl-checkbox__input" 
+                    className="mdl-checkbox__input"
                     onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
                 </input>
                 <span className="mdl-checkbox__label"> { option } <br/></span>
@@ -79,7 +117,7 @@ var MultipleChoice = React.createClass({
       return (
         <form className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600" onSubmit={this.handleSurveySubmit}>
             { renderedOptions }
-            <SubmitButton />
+            <Footer />
         </form>
       );
     }
@@ -93,7 +131,7 @@ var MultipleChoice = React.createClass({
 * since it simulates a radio form
 */
 var SingleChoice = React.createClass({
-    
+
 getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
@@ -102,7 +140,7 @@ getInitialState: function(){
         }
         return {data: questionObj};
     },
-    
+
     handleChange: function(i,value){
         var NewValue = null;
         var length = Object.keys(this.props.options).length;
@@ -115,12 +153,12 @@ getInitialState: function(){
         this.setState({data: changeAnswer});
     },
     handleSurveySubmit:function(event){
-        
+
         event.preventDefault();
         var answer = JSON.stringify(this.state.data);
         this.props.onSubmit({answer});
     },
-    
+
     render: function(){
         var surveyID = String(this.props.surveyID);
         const renderedOptions = this.props.options.map((option, i) => {
@@ -132,17 +170,17 @@ getInitialState: function(){
                     </input>
                       <span className="mdl-radio__label"> { option } </span>
                     </label>
-                </div>    
+                </div>
             )
         });
 
         return (
-            <form 
+            <form
             className="mdl-card__supporting-text mdl-color-text--grey-600"
             onSubmit={this.handleSurveySubmit}>
-            
+
               { renderedOptions }
-              <SubmitButton />
+              <Footer />
             </form>
         );
     }
@@ -159,24 +197,24 @@ var FreeResponse = React.createClass({
     getInitialState: function(){
         return {answer: 'Change Me'};
     },
-    
+
     handleChange: function(e){
         this.setState({answer: e.target.value});
     },
-    
+
     handleSurveySubmit:function(survey){
         survey.preventDefault();
         var answer = this.state.answer.trim();
         this.props.onSubmit({answer: answer});
     },
-    
+
   render: function(){
     return (
-      <form 
+      <form
         className="mdl-card__supporting-text mdl-color-text--grey-600"
         onSubmit={this.handleSurveySubmit}>
-        
-        <textarea 
+
+        <textarea
         className="mdl-textfield__input"
         type="text"
         rows="4"
@@ -184,7 +222,7 @@ var FreeResponse = React.createClass({
         value={this.state.answer}
         onChange={this.handleChange}></textarea>
         <br/>
-        <SubmitButton/>
+        <Footer/>
       </form>
      );
   }
@@ -197,27 +235,26 @@ var Rating = React.createClass({
    	getInitialState: function(){
 		return{data: 5};
 	},
-	
+
 	handleChange:function(e){
 		this.setState({data: e.target.value});
 	},
-	 render: function(){		
+	 render: function(){
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
             <div>
                 <input className="mdl-slider mdl-js-slider"
-                    type="range" 
-                    min="0" 
-                    max="10" 
-                    value={this.state.data} 
-                    step="1" 
+                    type="range"
+                    min="0"
+                    max="10"
+                    value={this.state.data}
+                    step="1"
                     onChange={this.handleChange}
                 />
-                <span id="sliderStatus">{this.state.data}</span>	
+                <span id="sliderStatus">{this.state.data}</span>
             </div>
-            <SubmitButton />
+            <Footer />
         </div>
       );
     }
 });
-
