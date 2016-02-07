@@ -36,7 +36,9 @@ var Card = React.createClass({
               surveyID={this.props.surveyID}
               department={this.props.department}
               creator={this.props.creator}
-              isInstructor={this.props.isInstructor}/>
+              isInstructor={this.props.isInstructor}
+              questionID={this.props.questionID}
+              response_format={this.props.response_format}/>
             </div>
           </div>
         );
@@ -53,7 +55,9 @@ var Card = React.createClass({
               onSubmit={this.props.onSubmit}
               nextHandler={this.props.nextHandler}
               prevHandler={this.props.prevHandler}
-              surveyID={this.props.surveyID}/>
+              surveyID={this.props.surveyID}
+              questionID={this.props.questionID}
+              response_format={this.props.response_format}/>
             </div>
           </div>
         );
@@ -70,7 +74,9 @@ var Card = React.createClass({
                   surveyID={this.props.surveyID}
                   department={this.props.department}
                   creator={this.props.creator}
-                  isInstructor={this.props.isInstructor}/>
+                  isInstructor={this.props.isInstructor}
+                  questionID={this.props.questionID}
+                  response_format={this.props.response_format}/>
               </div>
             </div>
           );
@@ -86,7 +92,9 @@ var Card = React.createClass({
               surveyID={this.props.surveyID}
               department={this.props.department}
               creator={this.props.creator}
-              isInstructor={this.props.isInstructor}/>
+              isInstructor={this.props.isInstructor}
+              questionID={this.props.questionID}
+              response_format={this.props.response_format}/>
             </div>
         </div>
       );

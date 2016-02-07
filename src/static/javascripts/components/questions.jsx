@@ -7,8 +7,18 @@ var Footer = React.createClass({
     render: function() {
         return (
         <div className="mdl-card__title mdl-card--expand mdl-300">
-        <PrevButton prevHandler={this.props.prevHandler} surveyData={this.props.surveyData}/>
-        <NextButton nextHandler={this.props.nextHandler} surveyData={this.props.surveyData}/>
+        
+        <PrevButton 
+        prevHandler={this.props.prevHandler}
+        surveyData={this.props.surveyData}
+        questionID={this.props.questionID}
+        response_format={this.props.response_format}/>
+        
+        <NextButton
+        nextHandler={this.props.nextHandler} 
+        surveyData={this.props.surveyData}
+        questionID={this.props.questionID}
+        response_format={this.props.response_format}/>
         </div>
 
 
@@ -30,7 +40,9 @@ var Progress = React.createClass({
 var PrevButton = React.createClass({
     clickHandler: function() {
         var surveyData = this.props.surveyData;
-        this.props.prevHandler(surveyData);
+        var questionID = this.props.questionID;
+        var response_format = this.props.response_format;
+        this.props.prevHandler(surveyData,questionID,response_format);
     },
     render: function() {
         return (
@@ -44,7 +56,9 @@ var PrevButton = React.createClass({
 var NextButton = React.createClass({
     clickHandler: function() {
         var surveyData = this.props.surveyData;
-        this.props.nextHandler(surveyData);
+        var questionID = this.props.questionID;
+        var response_format = this.props.response_format;
+        this.props.nextHandler(surveyData,questionID,response_format);
     },
     render: function() {
         return (
@@ -123,10 +137,15 @@ var MultipleChoice = React.createClass({
         )
       });
       return (
-        <form className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600">
+        <div className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600">
             { renderedOptions }
-            <Footer prevHandler={this.props.prevHandler} nextHandler={this.props.nextHandler} surveyData={this.state.data}/>
-        </form>
+            <Footer 
+            prevHandler={this.props.prevHandler}
+            nextHandler={this.props.nextHandler} 
+            surveyData={this.state.data} 
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}/>
+        </div>
       );
     }
 })
@@ -187,7 +206,12 @@ getInitialState: function(){
             <div
             className="mdl-card__supporting-text mdl-color-text--grey-600">
               { renderedOptions }
-              <Footer prevHandler={this.props.prevHandler} nextHandler={this.props.nextHandler} surveyData={this.state.data}/>
+              <Footer
+              prevHandler={this.props.prevHandler} 
+              nextHandler={this.props.nextHandler} 
+              surveyData={this.state.data}
+              questionID={this.props.questionID}
+              response_format={this.props.response_format}/>
             </div>
         );
     }
@@ -228,7 +252,12 @@ var FreeResponse = React.createClass({
         value={this.state.answer}
         onChange={this.handleChange}></textarea>
         <br/>
-        <Footer prevHandler={this.props.prevHandler} nextHandler={this.props.nextHandler} surveyData={this.state.answer}/>
+        <Footer 
+        prevHandler={this.props.prevHandler}
+        nextHandler={this.props.nextHandler}
+        surveyData={this.state.answer}
+        questionID={this.props.questionID}
+        response_format={this.props.response_format}/>
       </form>
      );
   }

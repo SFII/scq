@@ -59,7 +59,7 @@ var MainDiv = React.createClass({
                 <SurveyDiv
                 questions={item.questions}
                 routes={routesObject}
-                surveyID={item.surveyID}
+                surveyID={item.id}
                 department={item.department}
                 creator={item.creator}
                 isInstructor={item.isInstructor}/>
@@ -76,7 +76,9 @@ var MainDiv = React.createClass({
 var SurveyDiv = React.createClass({
     //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
     //that we check before/while rendering
+    
     getInitialState: function() {
+    console.log(this.props.surveyID);
     return({
             length: Object.keys(this.props.questions).length,
             showCard: true,
@@ -100,7 +102,7 @@ var SurveyDiv = React.createClass({
             data: JSON.stringify(survey),
             success: function(data){
                 console.log("Post success");
-                this.props.removeHandler();
+                this.removeCard();
             }.bind(this),
 			error: function(xhr, status,err){
 				console.error("/api/response", status, err.toString());
@@ -109,29 +111,35 @@ var SurveyDiv = React.createClass({
     },
     
     removeCard: function() {
-        if(iter == 0){
-            return;
-        }
         this.setState({showCard: false});
     },
 
-    nextQuestion: function(survey){
-        console.log("nextQuestion");
+    nextQuestion: function(survey,questionID,response_format){
         var response = this.state.response;
-        response.question_responses.push(JSON.stringify(survey));
-        console.log(response);
+        var question_responses_object = {
+            response_format: response_format,
+            questionID: questionID,
+            response_data: survey
+        }
+        response.question_responses.push(question_responses_object);
         var iter = this.state.iter;
-        if(iter == this.state.length){
+        if(iter == this.state.length - 1){
+            this.handleSurveySubmit(this.state.response);
         }
         else{
-            this.setState({iter: iter + 1});
+          this.setState({iter: iter + 1});
         }
     },
 
-    prevQuestion: function(survey){
-        console.log("prevQuestion");
+    prevQuestion: function(survey,questionID,response_format){
         var response = this.state.response;
-        response.question_responses.push(JSON.stringify(survey));
+        var question_responses_object = {
+            response_format: response_format,
+            questionID: questionID,
+            response_data: survey
+        }
+        response.question_responses.push(question_responses_object);
+        console.log(response);
         var iter = this.state.iter;
         if(iter == 0){
         }
@@ -166,6 +174,9 @@ var SurveyDiv = React.createClass({
             );
         }
         else{
+        return(
+        <div></div>
+        );
         }
     }
     });
