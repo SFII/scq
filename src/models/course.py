@@ -1,6 +1,7 @@
 from models.basemodel import BaseModel
 import random
 
+
 class Course(BaseModel):
 
     def requiredFields(self):
@@ -9,25 +10,25 @@ class Course(BaseModel):
     def fields(self):
         b = super(Course, self)
         return {
-            'course_name' : (b.is_string, b.is_not_empty,),
-            'department' : (b.is_string, ),
-            'average_grade' : (b.is_int, ),
-            'credit_hours' : (b.is_int, ),
-            'active_surveys' : (b.is_list, ),
-            'inactive_surveys' : (b.is_list,),
-            'subscribers' : (b.is_list,),
+            'course_name': (b.is_string, b.is_not_empty,),
+            'department': (b.is_string, ),
+            'average_grade': (b.is_int, ),
+            'credit_hours': (b.is_int, ),
+            'active_surveys': (b.is_list, ),
+            'inactive_surveys': (b.is_list,),
+            'subscribers': (b.is_list,),
         }
 
     # returns default survey data, that can be overwritten. Good for templating a new user
     def default(self):
         return {
-            'course_name' : "",
-            'department' : "",
-            'average_grade' : 0,
-            'credit_hours' : 0,
-            'active_surveys' : [],
-            'inactive_surveys' : [],
-            'subscribers' : []
+            'course_name': "",
+            'department': "",
+            'average_grade': 0,
+            'credit_hours': 0,
+            'active_surveys': [],
+            'inactive_surveys': [],
+            'subscribers': []
         }
 
     def subscribe_user(self, user_id, course_id):

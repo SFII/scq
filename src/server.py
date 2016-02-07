@@ -22,6 +22,7 @@ from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
 import time
 
+
 def main():
     initialize_db()
     tornado.options.parse_command_line()
@@ -30,7 +31,8 @@ def main():
     print("Listening for connections on localhost:{0}".format(options.port))
     tornado.ioloop.IOLoop.instance().start()
 
-def initialize_db(db = options.database_name):
+
+def initialize_db(db=options.database_name):
     """
     Initializes a database for use in the project with a specified name
     Specified name defaults to options.database_name
@@ -40,10 +42,10 @@ def initialize_db(db = options.database_name):
         conn = r.connect(host=options.database_host, port=options.database_port)
         BaseModel.DB = db
         BaseModel.conn = conn
-        print("Creating database '{0}'".format(db))
+        logging.info("Creating database '{0}'".format(db))
         r.db_create(db).run(conn)
     except r.errors.ReqlOpFailedError as e:
-        print(e.message)
+        logging.error(e.message)
     except Exception as e:
         logging.error(e.message)
     print('Initializing tables')
@@ -57,17 +59,19 @@ def initialize_db(db = options.database_name):
     User().init(db, conn)
     Response().init(db, conn)
 
+
 def bootstrap_data(user_id):
     initialize_db()
     user_data = User().get_item(user_id)
     if user_data is None:
-        print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
+        logging.error("user_id {0} does not correspond to a valid user in the database!".format(user_id))
         return
     course_id = Course().create_generic_item()
     Course().subscribe_user(user_id, course_id)
     survey_id = Survey().create_generic_item(user_id, course_id)
-    print('survey id:\n'+survey_id)
+    logging.info('survey id:\n' + survey_id)
     return
+
 
 def wipe_data(user_id):
     """
@@ -78,13 +82,13 @@ def wipe_data(user_id):
     initialize_db()
     user_data = User().get_item(user_id)
     if user_data is None:
-        print("user_id {0} does not correspond to a valid user in the database!".format(user_id))
+        logging.error("user_id {0} does not correspond to a valid user in the database!".format(user_id))
         return
     user_data['courses'] = []
     user_data['created_surveys'] = []
     user_data['unanswered_surveys'] = []
     update_response = User().update_item(user_id, user_data)
-    print(update_response)
+    logging.info(update_response)
     return
 
 if __name__ == "__main__":

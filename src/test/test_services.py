@@ -8,10 +8,13 @@ from handlers.survey_handler import ResponseHandler, SurveyHandler
 from config.config import application
 from setup import Setup
 from server import initialize_db
+import logging
+
 
 class TestServices(tornado.testing.AsyncHTTPTestCase):
 
     def setUpClass():
+        logging.disable(logging.CRITICAL)
         initialize_db(db='test')
 
     def get_app(self):
@@ -32,6 +35,9 @@ class TestServices(tornado.testing.AsyncHTTPTestCase):
             method='POST',
             body='{"survey": "response"}')
         self.assertEqual(response.code, 200)
+
+    def tearDownClass():
+        logging.disable(logging.NOTSET)
 
 if __name__ == '__main__':
     unittest.main()

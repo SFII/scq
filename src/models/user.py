@@ -44,6 +44,7 @@ class User(BaseModel):
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
+    # str(datetime.fromtimestamp(time.time()))
     def default(self):
         return {
             'registration': self.REGISTRATION_METHODS[0],
@@ -53,8 +54,8 @@ class User(BaseModel):
             'gender': self.USER_GENDERS[-1],
             'ethnicity': self.USER_ETHNICITIES[-1],
             'native_language': self.USER_NATIVE_LANGUAGES[-1],
-            'date_registered': time.strftime('%a %b %d %H:%M:%S %Z %Y'),
-            'last_sign_in': time.strftime('%a %b %d %H:%M:%S %Z %Y'),
+            'date_registered': time.time(),
+            'last_sign_in': time.time(),
             'courses': [],
             'courses_taught': [],
             'departments': [],

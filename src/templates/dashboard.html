@@ -1,6 +1,9 @@
 {% extends "layouts/base.html" %}
 {% block title %}Dashboard{% end %}
 {% block content %}
+<script>
+    var data={% raw survey_json %};
+</script>
   <div class = "mdl-grid content" id="main-grid">
   </div>
 {% end %}
