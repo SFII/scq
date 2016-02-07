@@ -139,9 +139,12 @@ class BaseModel:
         data hash
         """
         table = self.__class__.__name__
+        '''
         if self.isValid(data):
             return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
         return None
+        '''
+        return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
 
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         """

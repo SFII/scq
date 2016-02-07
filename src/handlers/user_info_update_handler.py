@@ -80,6 +80,6 @@ class UserInfoUpdateHandler(BaseHandler):
         if len(verified) != 0:
             logging.error('User: verification errors in user update page!')
             logging.error(verified)
-            return self.get(verified)
+            return self.redirect(self.get_argument("/userinfo"))
         User().update_item(self.current_user['id'], data)
         return self.redirect(self.get_argument("next", "/dashboard"))

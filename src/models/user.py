@@ -31,8 +31,8 @@ class User(BaseModel):
             'gender': (b.is_in_list(self.USER_GENDERS),),
             'ethnicity': (b.is_in_list(self.USER_ETHNICITIES),),
             'native_language': (b.is_in_list(self.USER_NATIVE_LANGUAGES),),
-            'date_registered': (b.is_date_string,),
-            'last_sign_in': (b.is_date_string,),
+            'date_registered': (b.is_timestamp,),
+            'last_sign_in': (b.is_timestamp,),
             'courses': (b.is_list,),
             'courses_taught': (b.is_list,),
             'departments': (b.is_list,),
@@ -47,7 +47,7 @@ class User(BaseModel):
     # str(datetime.fromtimestamp(time.time()))
     def default(self):
         return {
-            'registration': self.REGISTRATION_METHODS[0],
+            'registration': self.REGISTRATION_TESTING,
             'username': '',
             'email': '',
             'accepted_tos': True,
@@ -65,6 +65,9 @@ class User(BaseModel):
             'answers': [],
             'primary_affiliation': [],
         }
+
+    def authenticate_test_user(self, username, password):
+        return password == self.TESTING_PASSWORD
 
     def authenticate(self, user_id, password):
         """
