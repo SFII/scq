@@ -4,25 +4,56 @@
 * Just an mdl submit button, behaves as a normal submit button would
 */
 var Footer = React.createClass({
-    render: function() {
-        return (
-        <div className="mdl-card__title mdl-card--expand mdl-300">
-        
-        <PrevButton 
-        prevHandler={this.props.prevHandler}
-        surveyData={this.props.surveyData}
-        questionID={this.props.questionID}
-        response_format={this.props.response_format}/>
-        
-        <NextButton
-        nextHandler={this.props.nextHandler} 
-        surveyData={this.props.surveyData}
-        questionID={this.props.questionID}
-        response_format={this.props.response_format}/>
+    render: function() {        
+        if(this.props.questionNum == 0){
+            return(
+                <div className="mdl-card__title mdl-card--expand mdl-300">
+                <button className="mdl-button mdl-js-button mdl-button--raised" disabled>
+                    Previous
+                </button>
+                
+                <NextButton
+                nextHandler={this.props.nextHandler} 
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
+                
+                </div>
+            );
+        }
+        else if(this.props.questionNum == this.props.numQuestions-1){
+            return(
+                <div className="mdl-card__title mdl-card--expand mdl-300">
+                    <PrevButton 
+                    prevHandler={this.props.prevHandler}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+
+                    <button className="mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Next
+                    </button>
+                </div>
+            );
+        }
+        else{
+        return(
+       <div className="mdl-card__title mdl-card--expand mdl-300"> 
+            
+            <PrevButton 
+            prevHandler={this.props.prevHandler}
+            surveyData={this.props.surveyData}
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}/>
+            
+            <NextButton
+            nextHandler={this.props.nextHandler} 
+            surveyData={this.props.surveyData}
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}/>
         </div>
-
-
-        )
+        );
+        }
     }
 })
 
@@ -144,7 +175,9 @@ var MultipleChoice = React.createClass({
             nextHandler={this.props.nextHandler} 
             surveyData={this.state.data} 
             questionID={this.props.questionID}
-            response_format={this.props.response_format}/>
+            response_format={this.props.response_format}
+            questionNum={this.props.questionNum}
+            numQuestions={this.props.numQuestions}/>
         </div>
       );
     }
@@ -211,7 +244,9 @@ getInitialState: function(){
               nextHandler={this.props.nextHandler} 
               surveyData={this.state.data}
               questionID={this.props.questionID}
-              response_format={this.props.response_format}/>
+              response_format={this.props.response_format}
+              questionNum={this.props.questionNum}
+              numQuestions={this.props.numQuestions}/>
             </div>
         );
     }
@@ -257,7 +292,9 @@ var FreeResponse = React.createClass({
         nextHandler={this.props.nextHandler}
         surveyData={this.state.answer}
         questionID={this.props.questionID}
-        response_format={this.props.response_format}/>
+        response_format={this.props.response_format}
+        questionNum={this.props.questionNum}
+        numQuestions={this.props.numQuestions}/>
       </form>
      );
   }

@@ -172,11 +172,9 @@ var SurveyDiv = React.createClass({
         
         var iter = this.state.iter;
         
-        if(iter == 0){
-        }
-        else{
-            this.setState({iter: iter - 1});
-        }
+
+        this.setState({iter: iter - 1});
+        
     },
 
     render: function() {
@@ -189,6 +187,7 @@ var SurveyDiv = React.createClass({
                 routes={this.props.routes}
                 questionNum={this.state.iter}
                 questionID = {this.props.questions[this.state.iter].id}
+                numQuestions={this.state.length}
                 title={this.props.questions[this.state.iter].title}
                 options={this.props.questions[this.state.iter].options}
                 response_format={this.props.questions[this.state.iter].response_format}

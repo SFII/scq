@@ -38,7 +38,9 @@ var Card = React.createClass({
               creator={this.props.creator}
               isInstructor={this.props.isInstructor}
               questionID={this.props.questionID}
-              response_format={this.props.response_format}/>
+              response_format={this.props.response_format}
+              questionNum={this.props.questionNum}
+              numQuestions={this.props.numQuestions}/>
             </div>
           </div>
         );
@@ -57,7 +59,9 @@ var Card = React.createClass({
               prevHandler={this.props.prevHandler}
               surveyID={this.props.surveyID}
               questionID={this.props.questionID}
-              response_format={this.props.response_format}/>
+              response_format={this.props.response_format}
+              questionNum={this.props.questionNum}
+              numQuestions={this.props.numQuestions}/>
             </div>
           </div>
         );
@@ -76,7 +80,9 @@ var Card = React.createClass({
                   creator={this.props.creator}
                   isInstructor={this.props.isInstructor}
                   questionID={this.props.questionID}
-                  response_format={this.props.response_format}/>
+                  response_format={this.props.response_format}
+                  questionNum={this.props.questionNum}
+                  numQuestions={this.props.numQuestions}/>
               </div>
             </div>
           );
@@ -94,7 +100,9 @@ var Card = React.createClass({
               creator={this.props.creator}
               isInstructor={this.props.isInstructor}
               questionID={this.props.questionID}
-              response_format={this.props.response_format}/>
+              response_format={this.props.response_format}
+              questionNum={this.props.questionNum}
+              numQuestions={this.props.numQuestions}/>
             </div>
         </div>
       );
