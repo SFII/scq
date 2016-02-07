@@ -7,8 +7,8 @@ var Footer = React.createClass({
     render: function() {
         return (
         <div className="mdl-card__title mdl-card--expand mdl-300">
-            <PrevButton/>
-            <NextButton/>
+        <PrevButton prevHandler={this.props.prevHandler} surveyData={this.props.surveyData}/>
+        <NextButton nextHandler={this.props.nextHandler} surveyData={this.props.surveyData}/>
         </div>
 
 
@@ -28,9 +28,13 @@ var Progress = React.createClass({
 
 
 var PrevButton = React.createClass({
+    clickHandler: function() {
+        var surveyData = this.props.surveyData;
+        this.props.prevHandler(surveyData);
+    },
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+        <button onClick={this.clickHandler} className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Previous
             </button>
         )
@@ -38,9 +42,13 @@ var PrevButton = React.createClass({
 })
 
 var NextButton = React.createClass({
+    clickHandler: function() {
+        var surveyData = this.props.surveyData;
+        this.props.nextHandler(surveyData);
+    },
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+        <button onClick={this.clickHandler} className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 &nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
         )
@@ -115,9 +123,9 @@ var MultipleChoice = React.createClass({
         )
       });
       return (
-        <form className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600" onSubmit={this.handleSurveySubmit}>
+        <form className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600">
             { renderedOptions }
-            <Footer />
+            <Footer prevHandler={this.props.prevHandler} nextHandler={this.props.nextHandler} surveyData={this.state.data}/>
         </form>
       );
     }
@@ -155,7 +163,9 @@ getInitialState: function(){
     handleSurveySubmit:function(event){
 
         event.preventDefault();
-        this.props.onSubmit(answer);
+        var answer = this.state.data;
+        console.log(answer);
+        this.props.onSubmit({answer});
     },
 
     render: function(){
@@ -174,13 +184,11 @@ getInitialState: function(){
         });
 
         return (
-            <form
-            className="mdl-card__supporting-text mdl-color-text--grey-600"
-            onSubmit={this.handleSurveySubmit}>
-
+            <div
+            className="mdl-card__supporting-text mdl-color-text--grey-600">
               { renderedOptions }
-              <Footer />
-            </form>
+              <Footer prevHandler={this.props.prevHandler} nextHandler={this.props.nextHandler} surveyData={this.state.data}/>
+            </div>
         );
     }
 });
@@ -210,8 +218,7 @@ var FreeResponse = React.createClass({
   render: function(){
     return (
       <form
-        className="mdl-card__supporting-text mdl-color-text--grey-600"
-        onSubmit={this.handleSurveySubmit}>
+        className="mdl-card__supporting-text mdl-color-text--grey-600">
 
         <textarea
         className="mdl-textfield__input"
@@ -221,7 +228,7 @@ var FreeResponse = React.createClass({
         value={this.state.answer}
         onChange={this.handleChange}></textarea>
         <br/>
-        <Footer/>
+        <Footer prevHandler={this.props.prevHandler} nextHandler={this.props.nextHandler} surveyData={this.state.answer}/>
       </form>
      );
   }

@@ -30,7 +30,7 @@ var Card = React.createClass({
               <TitleSection titleText={this.props.title}/>
               <MultipleChoice 
               options={this.props.options}
-              onSubmit={this.props.handleSurveyChange}
+              onSubmit={this.props.onSubmit}
               nextHandler={this.props.nextHandler}
               prevHandler={this.props.prevHandler}
               surveyID={this.props.surveyID}
@@ -50,6 +50,7 @@ var Card = React.createClass({
               department={this.props.department}
               creator={this.props.creator}
               isInstructor={this.props.isInstructor}
+              onSubmit={this.props.onSubmit}
               nextHandler={this.props.nextHandler}
               prevHandler={this.props.prevHandler}
               surveyID={this.props.surveyID}/>
@@ -63,7 +64,7 @@ var Card = React.createClass({
                   <TitleSection titleText={this.props.title}/>
                   <SingleChoice 
                   options={this.props.options}
-                  onSubmit={this.props.handleSurveySubmit}
+                  onSubmit={this.props.onSubmit}
                   nextHandler={this.props.nextHandler}
                   prevHandler={this.props.prevHandler}
                   surveyID={this.props.surveyID}
@@ -79,7 +80,7 @@ var Card = React.createClass({
             <div>
               <TitleSection titleText={this.props.title}/>
               <FreeResponse 
-              onSubmit={this.props.handleSurveySubmit}
+              onSubmit={this.props.onSubmit}
               nextHandler={this.props.nextHandler}
               prevHandler={this.props.prevHandler}
               surveyID={this.props.surveyID}

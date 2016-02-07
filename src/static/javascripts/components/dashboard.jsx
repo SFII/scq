@@ -77,18 +77,16 @@ var SurveyDiv = React.createClass({
     //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
     //that we check before/while rendering
     getInitialState: function() {
-        return{
+    return({
+            length: Object.keys(this.props.questions).length,
             showCard: true,
             iter: 0,
-            length: Object.keys(this.props.questions).length
-            return{
-                response: {
-                    survey_id: this.props.surveyID,
-                    question_responses:[]
-                }
-            };
+            response: {
+                survey_id: this.props.surveyID,
+                question_responses:[]
+            },
             
-        };
+            });
     },  
     
     handleSurveySubmit: function(survey){
@@ -110,11 +108,6 @@ var SurveyDiv = React.createClass({
         });
     },
     
-    handleSurveyChange: function(survey){
-        var response = this.state.response;
-        response.question_responses.push(JSON.stringify(survey));
-    },
-    
     removeCard: function() {
         if(iter == 0){
             return;
@@ -122,17 +115,29 @@ var SurveyDiv = React.createClass({
         this.setState({showCard: false});
     },
 
-    nextQuestion: function(){
-        var iter == this.state.iter;
+    nextQuestion: function(survey){
+        console.log("nextQuestion");
+        var response = this.state.response;
+        response.question_responses.push(JSON.stringify(survey));
+        console.log(response);
+        var iter = this.state.iter;
         if(iter == this.state.length){
-            return;
         }
-        this.setState({iter: iter + 1});
+        else{
+            this.setState({iter: iter + 1});
+        }
     },
 
-    prevQuestion: function(){
-        var iter == this.state.iter;
-        this.setState({iter: iter - 1});
+    prevQuestion: function(survey){
+        console.log("prevQuestion");
+        var response = this.state.response;
+        response.question_responses.push(JSON.stringify(survey));
+        var iter = this.state.iter;
+        if(iter == 0){
+        }
+        else{
+            this.setState({iter: iter - 1});
+        }
     },
 
     render: function() {
