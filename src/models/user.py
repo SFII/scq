@@ -37,7 +37,7 @@ class User(BaseModel):
             'created_surveys': (b.is_list,),
             'unanswered_surveys': (b.is_list,),
             'answered_surveys': (b.is_list,),
-            'answers': (b.is_list,),
+            'survey_responses': (b.is_list,),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -58,7 +58,7 @@ class User(BaseModel):
             'unanswered_surveys': [],
             'answered_surveys': [],
             'created_surveys': [],
-            'answers': [],
+            'survey_responses': [],
         }
 
     def authenticate_test_user(self, username, password):
