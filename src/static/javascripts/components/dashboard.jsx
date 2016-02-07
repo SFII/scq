@@ -78,17 +78,16 @@ var SurveyDiv = React.createClass({
     //that we check before/while rendering
     
     getInitialState: function() {
-    console.log(this.props.surveyID);
-    return({
-            length: Object.keys(this.props.questions).length,
-            showCard: true,
-            iter: 0,
-            response: {
-                survey_id: this.props.surveyID,
-                question_responses:[]
-            },
-            
-            });
+        console.log(this.props.surveyID);
+        return({
+                length: Object.keys(this.props.questions).length,
+                showCard: true,
+                iter: 0,
+                response: {
+                    survey_id: this.props.surveyID,
+                    question_responses:[]
+                },
+        });
     },  
     
     handleSurveySubmit: function(survey){
@@ -118,10 +117,26 @@ var SurveyDiv = React.createClass({
         var response = this.state.response;
         var question_responses_object = {
             response_format: response_format,
-            questionID: questionID,
+            question_id: questionID,
             response_data: survey
+        };
+
+        var length = Object.keys(response.question_responses).length;
+        for(var i=length-1; i >= 0; i--){
+            console.log(i);
+            console.log(response.question_responses[i].question_id + " vs. " + questionID);
+            if(response.question_responses[i].question_id == questionID){
+                console.log("Duplicate detected");
+                response.question_responses.splice(i,1);
+            }
         }
+
         response.question_responses.push(question_responses_object);
+       
+        this.setState({response: response});
+        
+        console.log(this.state.response);
+        
         var iter = this.state.iter;
         if(iter == this.state.length - 1){
             this.handleSurveySubmit(this.state.response);
@@ -135,12 +150,28 @@ var SurveyDiv = React.createClass({
         var response = this.state.response;
         var question_responses_object = {
             response_format: response_format,
-            questionID: questionID,
+            question_id: questionID,
             response_data: survey
+        };
+
+        var length = Object.keys(response.question_responses).length;
+        for(var i = length-1; i >= 0; i--){
+            console.log(i);
+            console.log(response.question_responses[i].question_id + " vs. " + questionID);
+            if(response.question_responses[i].question_id == questionID){
+                console.log("Duplicate detected");
+                response.question_responses.splice(i,1);
+            }
         }
+        
         response.question_responses.push(question_responses_object);
-        console.log(response);
+        
+        this.setState({response: response});
+        
+        console.log(this.state.response);
+        
         var iter = this.state.iter;
+        
         if(iter == 0){
         }
         else{
