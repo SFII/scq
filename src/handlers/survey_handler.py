@@ -50,11 +50,11 @@ class SurveyHandler(BaseHandler):
             'questions': questions,
         }
         verified = Survey().verify(survey_data)
-        if not len(verified):
+        if len(verified):
             return self.set_status(403, "Verification errors: {0}".format(verified))
         survey_id = Survey().create_item(survey_data)
         self.set_status(200, "Success")
-        return self.write(survey_id)
+        return self.write(tornado.escape.json_encode(survey_id))
 
     def edit_survey(self):
         pass

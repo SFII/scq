@@ -196,22 +196,44 @@ class BaseModel:
         table = self.__class__.__name__
         return list(r.db(BaseModel.DB).table(table).filter(data).run(BaseModel.conn))
 
-    def create_item(self, data):
+    def create_item(self, data, skip_verify=False):
         """
         Given data, creates a new database item if the data passes the validator
         Returns an id of the created item, or None if it fails to pass the validator
         """
         table = self.__class__.__name__
-        verified = self.verify(data)
-        if len(verified) == 0:
-            o = r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
-            return o['generated_keys'][0]
-        logging.error(verified)
-        return None
+        if not skip_verify:
+            verified = self.verify(data)
+            if len(verified):
+                logging.error("Verification errors: {0}".format(verified))
+                return None
+        o = r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
+        return o['generated_keys'][0]
 
     def delete_item(self, item_id):
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(item_id).delete().run(BaseModel.conn)
+
+    def append_item_to_listfield(self, idnum, listfield, value):
+        """
+        Given an id number of an item in the database, a listfield of that item, and
+        a value, this will append that value to the list.
+        """
+        table = self.__class__.__name__
+        return r.db(self.DB).table(table).get(idnum).update({
+            listfield: r.row[listfield].append(value)
+        }).run(self.conn)
+
+    def remove_item_from_listfield(self, idnum, listfield, value):
+        """
+        Given an id number of an item in the database, a listfield of that item, and
+        a value, this will remove that value from the listfield
+        """
+        table = self.__class__.__name__
+        return r.db(self.DB).table(table).get(idnum).update({
+            listfield: r.row[listfield].remove(value)
+        }).run(self.conn)
+
 
     def schema_list_check(self, method):
         def _list_check(list_data):
