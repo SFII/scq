@@ -6,6 +6,7 @@ from models.basemodel import BaseModel
 
 
 class User(BaseModel):
+
     TESTING_PASSWORD = 't3sT1ng U$er P4ssw0rd'
     REGISTRATION_TESTING = 'registration_testing'
     REGISTRATION_CULDAP = 'registration_culdap'
@@ -33,11 +34,14 @@ class User(BaseModel):
             'date_registered': (b.is_timestamp,),
             'last_sign_in': (b.is_timestamp,),
             'courses': (b.is_list,),
+            'courses_taught': (b.is_list,),
             'departments': (b.is_list,),
             'created_surveys': (b.is_list,),
             'unanswered_surveys': (b.is_list,),
             'answered_surveys': (b.is_list,),
             'survey_responses': (b.is_list,),
+            'answers': (b.is_list,),
+            'primary_affiliation': (b.is_list,),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -47,18 +51,21 @@ class User(BaseModel):
             'registration': self.REGISTRATION_TESTING,
             'username': '',
             'email': '',
-            'accepted_tos': False,
+            'accepted_tos': True,
             'gender': self.USER_GENDERS[-1],
             'ethnicity': self.USER_ETHNICITIES[-1],
             'native_language': self.USER_NATIVE_LANGUAGES[-1],
             'date_registered': time.time(),
             'last_sign_in': time.time(),
             'courses': [],
+            'courses_taught': [],
             'departments': [],
             'unanswered_surveys': [],
             'answered_surveys': [],
             'created_surveys': [],
             'survey_responses': [],
+            'answers': [],
+            'primary_affiliation': [],
         }
 
     def authenticate_test_user(self, username, password):
@@ -67,7 +74,7 @@ class User(BaseModel):
     def authenticate(self, user_id, password):
         """
         Given user_id and possible password, lookup how to authenticate the user
-        and then attempt to authenticate the user with their credentials
+        and attempt to authenticate the user
         returns True / False whether the authentication is successful
         """
         user = self.get_item(user_id)

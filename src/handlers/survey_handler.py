@@ -59,6 +59,10 @@ class SurveyHandler(BaseHandler):
     def edit_survey(self):
         pass
 
+<<<<<<< HEAD
+=======
+    @tornado.web.authenticated
+>>>>>>> 73700f6bb8c0c11575bd1c6d163f8d156f83004c
     def get(self):
         user_data = self.get_current_user()
         if user_data is None:
