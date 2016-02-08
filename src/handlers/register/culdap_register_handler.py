@@ -8,6 +8,7 @@ from models.user import User
 from models.basemodel import BaseModel
 import rethinkdb as r
 
+
 class CuLdapRegisterHandler(RegisterHandler):
 
     LDAP_NAME = 'cn'
@@ -19,7 +20,10 @@ class CuLdapRegisterHandler(RegisterHandler):
     LDAP_MINOR_1 = 'cuEduPersonPrimaryMinor'
     LDAP_MINOR_2 = 'cuEduPersonSecondaryMinor'
     LDAP_STATUS = 'cuEduPersonClass'
-    LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL, LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS]
+    LDAP_PRIMARY_AFFILIATION = 'eduPersonPrimaryAffiliation'
+    LDAP_DEPARTMENTS = 'cuEduPersonHomeDepartment'
+    LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL,
+        LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS, LDAP_PRIMARY_AFFILIATION, LDAP_DEPARTMENTS]
 
     COOKIE = 'registering'
     FIVE_MINUTES = 0.0035
@@ -68,11 +72,12 @@ class CuLdapRegisterHandler(RegisterHandler):
         data['major4']          = self.get_argument('major4',None,strip = True)
         data['minor1']          = self.get_argument('minor1',None,strip = True)
         data['minor2']          = self.get_argument('minor2',None,strip = True)
+        data['departments']      = self.get_arguments('departments',strip = True)
+        data['primary_affiliation'] = self.get_arguments('primary_affiliation',strip = True)
         return data
 
-
-    def registerUser(self,data):
-        username = self.get_argument('username',strip = True)
+    def registerUser(self, data):
+        username = self.get_argument('username', strip=True)
         verified = User().verify(data)
         if len(verified) != 0:
             logging.error('User: verification errors!')
@@ -84,8 +89,8 @@ class CuLdapRegisterHandler(RegisterHandler):
         return self.redirect(self.get_argument("next", "/dashboard"))
 
     def CULdapRegister(self):
-        username = self.get_argument('username',strip = True)
-        password = self.get_argument('password',strip = True)
+        username = self.get_argument('username', strip=True)
+        password = self.get_argument('password', strip=True)
         errors = self.getErrors()
         if len(errors) != 0:
             return self.failWithErrors('register/culdapregister.html', errors)
@@ -100,34 +105,34 @@ class CuLdapRegisterHandler(RegisterHandler):
             return self.failWithErrors('register/culdapregister.html', ['Failed to authenticate LDAP username and password'])
         return
 
-
     def verifyCULdapRegistrationPage(self, username, errors=[]):
         self.set_secure_cookie(self.COOKIE, value=username, expires_days=self.FIVE_MINUTES)
         info = self.ldapInfo(username)
         self.render('register/culdapregisterconfirm.html',
-        errors=errors,
-        next=self.get_argument("next","/"),
-        user_genders=User().USER_GENDERS,
-        user_ethnicities=User().USER_ETHNICITIES,
-        user_native_languages=User().USER_NATIVE_LANGUAGES,
-        email=info['email'],
-        username=username,
-        dob= self.get_argument('dob','',strip = True),
-        gender= self.get_argument('gender','',strip = True),
-        ethnicity= self.get_argument('ethnicity','',strip = True),
-        native_language= self.get_argument('native_language','',strip = True),
-        status= self.get_argument('status',info['status'],strip = True),
-        major1= self.get_argument('major1',info['major1'],strip = True),
-        major2= self.get_argument('major2',info['major2'],strip = True),
-        major3= self.get_argument('major3',info['major3'],strip = True),
-        major4= self.get_argument('major4',info['major4'],strip = True),
-        minor1= self.get_argument('minor1',info['minor1'],strip = True),
-        minor2= self.get_argument('minor2',info['minor2'],strip = True),
-        )
+            errors=errors,
+            next=self.get_argument("next", "/"),
+            user_genders=User().USER_GENDERS,
+            user_ethnicities=User().USER_ETHNICITIES,
+            user_native_languages=User().USER_NATIVE_LANGUAGES,
+            email=info['email'],
+            username=username,
+            dob= self.get_argument('dob', '', strip=True),
+            gender= self.get_argument('gender', '', strip=True),
+            ethnicity= self.get_argument('ethnicity', '', strip=True),
+            native_language=self.get_argument('native_language', '', strip=True),
+            status=self.get_argument('status', info['status'], strip=True),
+            major1=self.get_argument('major1', info['major1'], strip=True),
+            major2=self.get_argument('major2', info['major2'], strip=True),
+            major3=self.get_argument('major3', info['major3'], strip=True),
+            major4=self.get_argument('major4', info['major4'], strip=True),
+            minor1=self.get_argument('minor1', info['minor1'], strip=True),
+            minor2=self.get_argument('minor2', info['minor2'], strip=True),
+            primary_affiliation=self.get_argument('primary_affiliation', info['primary_affiliation'], strip=True),
+            departments=self.get_argument('departments', info['departments'], strip=True))
 
     #
     def verifyCULdapRegistration(self):
-        username = self.get_argument('username',None,strip = True)
+        username = self.get_argument('username', None, strip=True)
         if username is None:
             return self.failWithErrors('register/culdapregister.html')
         errors = self.getVerificationErrors()
@@ -138,12 +143,12 @@ class CuLdapRegisterHandler(RegisterHandler):
     # no errors is indicated by an empty array
     def getVerificationErrors(self):
         errors = []
-        email = self.get_argument('email',None,strip = True)
-        status = self.get_argument('status',None,strip = True)
-        dob = self.get_argument('dob',None,strip = True)
-        gender = self.get_argument('gender',None,strip = True)
-        ethnicity = self.get_argument('ethnicity',None,strip = True)
-        native_language = self.get_argument('native_language',None,strip = True)
+        email = self.get_argument('email', None, strip=True)
+        status = self.get_argument('status', None, strip=True)
+        dob = self.get_argument('dob', None, strip=True)
+        gender = self.get_argument('gender', None, strip=True)
+        ethnicity = self.get_argument('ethnicity', None, strip=True)
+        native_language = self.get_argument('native_language', None, strip=True)
         if email is None:
             errors.append('a .colorado.edu email address is required')
         if not email.lower().endswith('@colorado.edu'):
@@ -171,4 +176,6 @@ class CuLdapRegisterHandler(RegisterHandler):
         info['major4'] = ldapinfo[self.LDAP_MAJOR_4].capitalize() if self.LDAP_MAJOR_4 in ldapinfo else ''
         info['minor1'] = ldapinfo[self.LDAP_MINOR_1].capitalize() if self.LDAP_MINOR_1 in ldapinfo else ''
         info['minor2'] = ldapinfo[self.LDAP_MINOR_2].capitalize() if self.LDAP_MINOR_2 in ldapinfo else ''
+        info['departments'] = ldapinfo[self.LDAP_DEPARTMENTS].capitalize() if self.LDAP_DEPARTMENTS in ldapinfo else ''
+        info['primary_affiliation'] = ldapinfo[self.LDAP_PRIMARY_AFFILIATION].capitalize() if self.LDAP_PRIMARY_AFFILIATION in ldapinfo else ''
         return info

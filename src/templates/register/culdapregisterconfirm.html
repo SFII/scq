@@ -1,47 +1,51 @@
 {% extends "../layouts/base.html" %}
-{% block title %}Login{% end %}
+{% block title %}Register{% end %}
 {% block content %}
-<h1>Almost finished. Please verify and complete the following fields.</h1>
+<h3>Almost finished. Please verify and complete the following fields.</h3>
 <form action="/register/culdap" method="post">
   <input type="hidden" name="confirming" value="True">
   <label><b>Username</b></label><br/>
   <input type="text" name="username" value="{{ username }}" readonly><br>
+  <input type="hidden" name="departments" value="{{ departments }}">
+  <input type="hidden" name="primary_affiliation" value="{{ primary_affiliation }}">
   <label><b>Email</b></label><br />
   <input type="email" name="email" value="{{ email }}" required><br>
-  <label><b>Academic Status</b></label><br />
-  <input type="text" name="status" value="{{ status }}"><br>
-  <label><b>Enrolled Majors</b></label><br />
-  <input type="text" name="major1" value="{{ major1 }}"><br>
-  <input type="text" name="major2" value="{{ major2 }}"><br>
-  <input type="text" name="major3" value="{{ major3 }}"><br>
-  <input type="text" name="major4" value="{{ major4 }}"><br>
-  <label><b>Enrolled Minors</b></label><br />
-  <input type="text" name="minor1" value="{{ minor1 }}"><br>
-  <input type="text" name="minor2" value="{{ minor2 }}"><br>
   <label><b>Date of Birth</b></label><br />
   <input type="date" name="dob" value="{{ dob }}" required=""><br />
   <label><b>Gender</b></label><br />
-    <select name="gender" required>
+  <select name="gender" required>
   {% for user_gender in user_genders %}
     <option value="{{ user_gender }}"> {{ user_gender }}</option>
   {% end %}
   <option selected disabled hidden value=''></option>
-</select><br />
+  </select><br />
   <label><b>Ethnicity</b></label><br />
     <select name="ethnicity" required>
   {% for user_ethnicity in user_ethnicities %}
     <option value="{{ user_ethnicity }}"> {{ user_ethnicity }}</option>
   {% end %}
   <option selected disabled hidden value=''></option>
-</select><br />
+  </select><br />
   <label><b>Native Language</b></label><br />
-    <select name="native_language" required>
+  <select name="native_language" required>
   {% for user_native_language in user_native_languages %}
     <option value="{{ user_native_language }}"> {{ user_native_language }}</option>
   {% end %}
     <option selected disabled hidden value=''></option>
-</select><br />
-<br />
+  </select><br />
+  {% if primary_affiliation == "Student" %}
+    <label><b>Academic Status</b></label><br />
+    <input type="text" name="status" value="{{ status }}"><br>
+    <label><b>Enrolled Majors</b></label><br />
+    <input type="text" name="major1" value="{{ major1 }}"><br>
+    <input type="text" name="major2" value="{{ major2 }}"><br>
+    <input type="text" name="major3" value="{{ major3 }}"><br>
+    <input type="text" name="major4" value="{{ major4 }}"><br>
+    <label><b>Enrolled Minors</b></label><br />
+    <input type="text" name="minor1" value="{{ minor1 }}"><br>
+    <input type="text" name="minor2" value="{{ minor2 }}"><br>
+  {% end %}
+  <br />
   <input type="submit" id="submitbtn" name="submit" value="Confirm and Create Account" class="button"><br />
   {% raw xsrf_form_html() %}
 </form>

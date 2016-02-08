@@ -69,7 +69,6 @@ class SurveyHandler(BaseHandler):
     def edit_survey(self):
         pass
 
-
     @tornado.web.authenticated
     def get(self):
         user_data = self.get_current_user()
