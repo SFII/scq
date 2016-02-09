@@ -10,12 +10,12 @@ var TitleSection = React.createClass({
 //Card is really messy
 var Card = React.createClass({
     /* an initial state called response, actually not entirely sure
-     * why we have it.. :) 
+     * why we have it.. :)
     */
     getInitialState: function(){
         return {response: []};
     },
-    
+
     //handleSurveySubmit is called whenever a submit button is pushed
     //it calls POST on /api/response sending a JSON of the survey data
     //and on success calls the removeHandler which removes the 
@@ -28,7 +28,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <MultipleChoice 
+              <MultipleChoice
               options={this.props.options}
               onSubmit={this.props.onSubmit}
               nextHandler={this.props.nextHandler}
@@ -40,7 +40,8 @@ var Card = React.createClass({
               questionID={this.props.questionID}
               response_format={this.props.response_format}
               questionNum={this.props.questionNum}
-              numQuestions={this.props.numQuestions}/>
+              numQuestions={this.props.numQuestions}
+              responseSize={this.props.responseSize}/>
             </div>
           </div>
         );
@@ -49,7 +50,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <Rating 
+              <Rating
               surveyID={this.props.surveyID}
               department={this.props.department}
               creator={this.props.creator}
@@ -61,7 +62,8 @@ var Card = React.createClass({
               questionID={this.props.questionID}
               response_format={this.props.response_format}
               questionNum={this.props.questionNum}
-              numQuestions={this.props.numQuestions}/>
+              numQuestions={this.props.numQuestions}
+              responseSize={this.props.responseSize}/>
             </div>
           </div>
         );
@@ -70,7 +72,7 @@ var Card = React.createClass({
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText={this.props.title}/>
-                  <SingleChoice 
+                  <SingleChoice
                   options={this.props.options}
                   onSubmit={this.props.onSubmit}
                   nextHandler={this.props.nextHandler}
@@ -82,7 +84,8 @@ var Card = React.createClass({
                   questionID={this.props.questionID}
                   response_format={this.props.response_format}
                   questionNum={this.props.questionNum}
-                  numQuestions={this.props.numQuestions}/>
+                  numQuestions={this.props.numQuestions}
+                  responseSize={this.props.responseSize}/>
               </div>
             </div>
           );
@@ -102,7 +105,8 @@ var Card = React.createClass({
               questionID={this.props.questionID}
               response_format={this.props.response_format}
               questionNum={this.props.questionNum}
-              numQuestions={this.props.numQuestions}/>
+              numQuestions={this.props.numQuestions}
+              responseSize={this.props.responseSize}/>
             </div>
         </div>
       );

@@ -78,11 +78,11 @@ var SurveyDiv = React.createClass({
     //that we check before/while rendering
     
     getInitialState: function() {
-        console.log(this.props.surveyID);
         return({
                 length: Object.keys(this.props.questions).length,
                 showCard: true,
                 iter: 0,
+                responseSize: 0,
                 response: {
                     survey_id: this.props.surveyID,
                     question_responses:[]
@@ -90,17 +90,30 @@ var SurveyDiv = React.createClass({
         });
     },  
     
-    handleSurveySubmit: function(survey){
-        console.log(survey);
-        var response = this.state.response
-        response.question_responses.push(JSON.stringify(survey));
+    handleSurveySubmit: function(survey,questionID,response_format){
+        var response = this.state.response;
+        var question_responses_object = {
+            response_format: response_format,
+            question_id: questionID,
+            response_data: survey
+        };
+
+        var length = Object.keys(response.question_responses).length;
+        for(var i=length-1; i >= 0; i--){
+            if(response.question_responses[i].question_id == questionID){
+                response.question_responses.splice(i,1);
+            }
+        }
+        response.question_responses.push(question_responses_object);
+        this.setState({response: response});
+        
         $.ajax({
             url: this.props.routes.response,
 			contentType: 'application/json',
             type: 'POST',
-            data: JSON.stringify(survey),
+            data: JSON.stringify(this.state.response),
             success: function(data){
-                console.log("Post success");
+                console.log(this.state.response);
                 this.removeCard();
             }.bind(this),
 			error: function(xhr, status,err){
@@ -123,10 +136,7 @@ var SurveyDiv = React.createClass({
 
         var length = Object.keys(response.question_responses).length;
         for(var i=length-1; i >= 0; i--){
-            console.log(i);
-            console.log(response.question_responses[i].question_id + " vs. " + questionID);
             if(response.question_responses[i].question_id == questionID){
-                console.log("Duplicate detected");
                 response.question_responses.splice(i,1);
             }
         }
@@ -134,8 +144,7 @@ var SurveyDiv = React.createClass({
         response.question_responses.push(question_responses_object);
        
         this.setState({response: response});
-        
-        console.log(this.state.response);
+        this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
         
         var iter = this.state.iter;
         if(iter == this.state.length - 1){
@@ -156,10 +165,7 @@ var SurveyDiv = React.createClass({
 
         var length = Object.keys(response.question_responses).length;
         for(var i = length-1; i >= 0; i--){
-            console.log(i);
-            console.log(response.question_responses[i].question_id + " vs. " + questionID);
             if(response.question_responses[i].question_id == questionID){
-                console.log("Duplicate detected");
                 response.question_responses.splice(i,1);
             }
         }
@@ -167,8 +173,7 @@ var SurveyDiv = React.createClass({
         response.question_responses.push(question_responses_object);
         
         this.setState({response: response});
-        
-        console.log(this.state.response);
+        this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
         
         var iter = this.state.iter;
         
@@ -187,6 +192,7 @@ var SurveyDiv = React.createClass({
                 routes={this.props.routes}
                 questionNum={this.state.iter}
                 questionID = {this.props.questions[this.state.iter].id}
+                responseSize = {this.state.responseSize}
                 numQuestions={this.state.length}
                 title={this.props.questions[this.state.iter].title}
                 options={this.props.questions[this.state.iter].options}
