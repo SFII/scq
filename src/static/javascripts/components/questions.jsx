@@ -8,29 +8,25 @@ var Footer = React.createClass({
         return (
         <div className="mdl-card__title mdl-card--expand mdl-300">
             <PrevButton/>
+            <Progress/>
             <NextButton/>
         </div>
-
-
         )
     }
 })
-
 
 var Progress = React.createClass({
     render: function() {
         return (
-            <div id="p1" class="mdl-progress mdl-js-progress"  style={style1}></div>
+        <progress id="myProgress" className="bar" value="0" max="100"></progress>
         )
     }
 })
 
-
-
 var PrevButton = React.createClass({
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">
                 Previous
             </button>
         )
@@ -40,8 +36,8 @@ var PrevButton = React.createClass({
 var NextButton = React.createClass({
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                &nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent bar right_absolute">
+                Next
             </button>
         )
     }
@@ -115,7 +111,7 @@ var MultipleChoice = React.createClass({
         )
       });
       return (
-        <form className="options mdl-cell mdl-cell--4-col mdl-card__supporting-text mdl-color-text--grey-600" onSubmit={this.handleSurveySubmit}>
+        <form className="options mdl-cell mdl-card__supporting-text mdl-color-text--grey-600" onSubmit={this.handleSurveySubmit}>
             { renderedOptions }
             <Footer />
         </form>
