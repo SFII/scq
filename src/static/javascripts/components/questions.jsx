@@ -124,7 +124,7 @@ var SubmitButton = React.createClass({
     },
     render: function(){
         return(
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--purple">
                 Submit
         </button>
         )
