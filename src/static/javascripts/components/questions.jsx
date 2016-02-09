@@ -4,29 +4,95 @@
 * Just an mdl submit button, behaves as a normal submit button would
 */
 var Footer = React.createClass({
-    render: function() {
-        return (
-        <div className="mdl-card__title mdl-card--expand mdl-300">
-            <PrevButton/>
-            <Progress/>
-            <NextButton/>
+    render: function() {        
+        if(this.props.questionNum == 0){
+            return(
+                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                    Previous
+                </button>
+                
+                <Progress 
+                questionNum = {this.props.questionNum}
+                numQuestions = {this.props.numQuestions}
+                responseSize={this.props.responseSize}/>
+                
+                <NextButton
+                nextHandler={this.props.nextHandler} 
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
+                
+                </div>
+            );
+        }
+        else if(this.props.questionNum == this.props.numQuestions-1){
+            return(
+                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                    <PrevButton 
+                    prevHandler={this.props.prevHandler}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                    
+                    <Progress
+                    questionNum = {this.props.questionNum}
+                    numQuestions = {this.props.numQuestions}
+                    responseSize={this.props.responseSize}/>
+                    
+                    <SubmitButton
+                    onSubmit={this.props.onSubmit}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                </div>
+            );
+        }
+        else{
+        return(
+       <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300"> 
+            
+            <PrevButton 
+            prevHandler={this.props.prevHandler}
+            surveyData={this.props.surveyData}
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}/>
+            
+            <Progress
+            questionNum = {this.props.questionNum}
+            numQuestions = {this.props.numQuestions}
+            responseSize={this.props.responseSize}/>
+            
+            <NextButton
+            nextHandler={this.props.nextHandler} 
+            surveyData={this.props.surveyData}
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}/>
         </div>
-        )
+        );
+        }
     }
 })
 
 var Progress = React.createClass({
     render: function() {
+    var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
         return (
-        <progress id="myProgress" className="bar" value="0" max="100"></progress>
+        <progress id="myProgress" className="mdl-cell mdl-cell--4-col bar" value={progressValue} max="100"></progress>
         )
     }
 })
 
 var PrevButton = React.createClass({
+    clickHandler: function() {
+        var surveyData = this.props.surveyData;
+        var questionID = this.props.questionID;
+        var response_format = this.props.response_format;
+        this.props.prevHandler(surveyData,questionID,response_format);
+    },
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ">
+        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Previous
             </button>
         )
@@ -34,16 +100,36 @@ var PrevButton = React.createClass({
 })
 
 var NextButton = React.createClass({
+    clickHandler: function() {
+        var surveyData = this.props.surveyData;
+        var questionID = this.props.questionID;
+        var response_format = this.props.response_format;
+        this.props.nextHandler(surveyData,questionID,response_format);
+    },
     render: function() {
         return (
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent bar right_absolute">
+        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Next
-            </button>
+        </button>
         )
     }
 })
 
-
+var SubmitButton = React.createClass({
+    clickHandler:function(){
+        var surveyData = this.props.surveyData;
+        var questionID = this.props.questionID;
+        var response_format = this.props.response_format;
+        this.props.onSubmit(surveyData, questionID, response_format);
+    },
+    render: function(){
+        return(
+        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--purple">
+                Submit
+        </button>
+        )
+    }
+})
 
 
 
@@ -87,7 +173,7 @@ var MultipleChoice = React.createClass({
 
         event.preventDefault();
         var answer = JSON.stringify(this.state.data);
-        this.props.onChange({answer});
+        this.props.onSubmit(answer);
     },
     /*Nothing fancy here, except we also map with an extra parameter i
     which acts as a key value for each option so we can update the state
@@ -111,10 +197,19 @@ var MultipleChoice = React.createClass({
         )
       });
       return (
-        <form className="options mdl-cell mdl-card__supporting-text mdl-color-text--grey-600" onSubmit={this.handleSurveySubmit}>
+        <div className="options mdl-card__supporting-text mdl-color-text--grey-600">
             { renderedOptions }
-            <Footer />
-        </form>
+            <Footer 
+            prevHandler={this.props.prevHandler}
+            nextHandler={this.props.nextHandler} 
+            onSubmit={this.props.onSubmit}
+            surveyData={this.state.data} 
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}
+            questionNum={this.props.questionNum}
+            numQuestions={this.props.numQuestions}
+            responseSize={this.props.responseSize}/>
+        </div>
       );
     }
 })
@@ -151,7 +246,8 @@ getInitialState: function(){
     handleSurveySubmit:function(event){
 
         event.preventDefault();
-        var answer = JSON.stringify(this.state.data);
+        var answer = this.state.data;
+        console.log(answer);
         this.props.onSubmit({answer});
     },
 
@@ -171,13 +267,20 @@ getInitialState: function(){
         });
 
         return (
-            <form
-            className="mdl-card__supporting-text mdl-color-text--grey-600"
-            onSubmit={this.handleSurveySubmit}>
-
+            <div
+            className="mdl-card__supporting-text mdl-color-text--grey-600">
               { renderedOptions }
-              <Footer />
-            </form>
+              <Footer
+              prevHandler={this.props.prevHandler} 
+              nextHandler={this.props.nextHandler} 
+              onSubmit={this.props.onSubmit}
+              surveyData={this.state.data}
+              questionID={this.props.questionID}
+              response_format={this.props.response_format}
+              questionNum={this.props.questionNum}
+              numQuestions={this.props.numQuestions}
+              responseSize={this.props.responseSize}/>
+            </div>
         );
     }
 });
@@ -201,14 +304,13 @@ var FreeResponse = React.createClass({
     handleSurveySubmit:function(survey){
         survey.preventDefault();
         var answer = this.state.answer.trim();
-        this.props.onSubmit({answer: answer});
+        this.props.onSubmit(answer);
     },
 
   render: function(){
     return (
       <form
-        className="mdl-card__supporting-text mdl-color-text--grey-600"
-        onSubmit={this.handleSurveySubmit}>
+        className="mdl-card__supporting-text mdl-color-text--grey-600">
 
         <textarea
         className="mdl-textfield__input"
@@ -218,7 +320,16 @@ var FreeResponse = React.createClass({
         value={this.state.answer}
         onChange={this.handleChange}></textarea>
         <br/>
-        <Footer/>
+        <Footer 
+        prevHandler={this.props.prevHandler}
+        nextHandler={this.props.nextHandler}
+        onSubmit={this.props.onSubmit}
+        surveyData={this.state.answer}
+        questionID={this.props.questionID}
+        response_format={this.props.response_format}
+        questionNum={this.props.questionNum}
+        numQuestions={this.props.numQuestions}
+        responseSize={this.props.responseSize}/>
       </form>
      );
   }
