@@ -10,16 +10,16 @@ var TitleSection = React.createClass({
 //Card is really messy
 var Card = React.createClass({
     /* an initial state called response, actually not entirely sure
-     * why we have it.. :) 
+     * why we have it.. :)
     */
     getInitialState: function(){
         return {response: []};
     },
-    
+
     //handleSurveySubmit is called whenever a submit button is pushed
     //it calls POST on /api/response sending a JSON of the survey data
-    //and on success calls the removeHandler which removes the 
-    //corresponding cards 
+    //and on success calls the removeHandler which removes the
+    //corresponding cards
     handleSurveySubmit: function(survey){
         console.log(survey);
         $.ajax({
@@ -44,7 +44,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <MultipleChoice 
+              <MultipleChoice
               options={this.props.options}
               onSubmit={this.handleSurveySubmit}
               surveyID={this.props.surveyID}
@@ -59,7 +59,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <Rating 
+              <Rating
               surveyID={this.props.surveyID}
               department={this.props.department}
               creator={this.props.creator}
@@ -72,7 +72,7 @@ var Card = React.createClass({
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText={this.props.title}/>
-                  <SingleChoice 
+                  <SingleChoice
                   options={this.props.options}
                   onSubmit={this.handleSurveySubmit}
                   surveyID={this.props.surveyID}
@@ -87,7 +87,7 @@ var Card = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <div>
               <TitleSection titleText={this.props.title}/>
-              <FreeResponse 
+              <FreeResponse
               onSubmit={this.handleSurveySubmit}
               surveyID={this.props.surveyID}
               department={this.props.department}
