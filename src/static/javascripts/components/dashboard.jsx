@@ -117,6 +117,7 @@ var SurveyDiv = React.createClass({
                 this.removeCard();
             }.bind(this),
 			error: function(xhr, status,err){
+                console.log(this.state.response);
 				console.error("/api/response", status, err.toString());
 			}.bind(this)
         });
