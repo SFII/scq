@@ -10,25 +10,22 @@ from models.user import User
 from models.course import Course
 from models.question_response import QuestionResponse
 from models.survey_response import SurveyResponse
-from handlers.base_handler import BaseHandler
-import requests
+from handlers.base_handler import BaseHandler, api_authorized
 
 
 class ResponseHandler(BaseHandler):
 
+    @api_authorized
     def post(self):
         """
         Creates and records a users response to a survey
         """
         user_data = self.get_current_user()
-        # user must be logged in
-        if user_data is None:
-            return self.set_status(400, "you must be signed in to use this api")
         user_responses = user_data.get('survey_responses')
         user_id = user_data['id']
         # If user_responses is not initialized, or is not a list
         if not isinstance(user_responses, list):
-            User.update(user_id, {'survey_responses', []}, skip_verify=True)
+            User.update_item(user_id, {'survey_responses': []}, skip_verify=True)
         survey_id = self.get_argument('survey_id', None)
         if survey_id is None:
             return self.set_status(400, "survey_id cannot be null")
@@ -70,7 +67,6 @@ class ResponseHandler(BaseHandler):
             'response_time': response_time
         }
         survey_response_id = SurveyResponse().create_item(survey_response_data, skip_verify=True)
-        logging.info(User().get_item(user_id))
         User().remove_item_from_listfield(user_id, 'unanswered_surveys', survey_id)
         User().append_item_to_listfield(user_id, 'answered_surveys', survey_id)
         User().append_item_to_listfield(user_id, 'survey_responses', survey_response_id)
