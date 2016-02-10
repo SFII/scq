@@ -59,7 +59,7 @@ var MainDiv = React.createClass({
                 <SurveyDiv
                 questions={item.questions}
                 routes={routesObject}
-                surveyID={item.surveyID}
+                surveyID={item.id}
                 department={item.department}
                 creator={item.creator}
                 isInstructor={item.isInstructor}/>
@@ -76,23 +76,110 @@ var MainDiv = React.createClass({
 var SurveyDiv = React.createClass({
     //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
     //that we check before/while rendering
+    
     getInitialState: function() {
-        return{
-            showCard: true,
-            iter: 2,
-            length: Object.keys(this.props.questions).length
+        return({
+                length: Object.keys(this.props.questions).length,
+                showCard: true,
+                iter: 0,
+                responseSize: 0,
+                response: {
+                    survey_id: this.props.surveyID,
+                    question_responses:[]
+                },
+        });
+    },  
+    
+    handleSurveySubmit: function(survey,questionID,response_format){
+        var response = this.state.response;
+        var question_responses_object = {
+            response_format: response_format,
+            question_id: questionID,
+            response_data: survey
         };
+
+        var length = Object.keys(response.question_responses).length;
+        for(var i=length-1; i >= 0; i--){
+            if(response.question_responses[i].question_id == questionID){
+                response.question_responses.splice(i,1);
+            }
+        }
+        response.question_responses.push(question_responses_object);
+        this.setState({response: response});
+        
+        $.ajax({
+            url: this.props.routes.response,
+			contentType: 'application/json',
+            type: 'POST',
+            data: JSON.stringify(this.state.response),
+            success: function(data){
+                console.log(this.state.response);
+                this.removeCard();
+            }.bind(this),
+			error: function(xhr, status,err){
+				console.error("/api/response", status, err.toString());
+			}.bind(this)
+        });
     },
+    
     removeCard: function() {
         this.setState({showCard: false});
     },
 
-    nextQuestion: function(){
-        this.setState({iter: iter + 1});
+    nextQuestion: function(survey,questionID,response_format){
+        var response = this.state.response;
+        var question_responses_object = {
+            response_format: response_format,
+            question_id: questionID,
+            response_data: survey
+        };
+
+        var length = Object.keys(response.question_responses).length;
+        for(var i=length-1; i >= 0; i--){
+            if(response.question_responses[i].question_id == questionID){
+                response.question_responses.splice(i,1);
+            }
+        }
+
+        response.question_responses.push(question_responses_object);
+       
+        this.setState({response: response});
+        this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
+        
+        var iter = this.state.iter;
+        if(iter == this.state.length - 1){
+            this.handleSurveySubmit(this.state.response);
+        }
+        else{
+          this.setState({iter: iter + 1});
+        }
     },
 
-    prevQuestion: function(){
+    prevQuestion: function(survey,questionID,response_format){
+        var response = this.state.response;
+        var question_responses_object = {
+            response_format: response_format,
+            question_id: questionID,
+            response_data: survey
+        };
+
+        var length = Object.keys(response.question_responses).length;
+        for(var i = length-1; i >= 0; i--){
+            if(response.question_responses[i].question_id == questionID){
+                response.question_responses.splice(i,1);
+            }
+        }
+        
+        response.question_responses.push(question_responses_object);
+        
+        this.setState({response: response});
+        this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
+        
+        var iter = this.state.iter;
+        
+
         this.setState({iter: iter - 1});
+        
     },
 
     render: function() {
@@ -102,21 +189,30 @@ var SurveyDiv = React.createClass({
             return(
             <div className="surveyDiv">
                 <Card
+                routes={this.props.routes}
+                questionNum={this.state.iter}
                 questionID = {this.props.questions[this.state.iter].id}
+                responseSize = {this.state.responseSize}
+                numQuestions={this.state.length}
                 title={this.props.questions[this.state.iter].title}
                 options={this.props.questions[this.state.iter].options}
                 response_format={this.props.questions[this.state.iter].response_format}
-                routes={this.props.routes}
-                removeHandler={this.removeCard}
                 surveyID={this.props.surveyID}
                 department={this.props.department}
                 creator={this.props.creator}
-                isInstructor={this.props.isInstructor}>
+                isInstructor={this.props.isInstructor}
+                removeHandler={this.removeCard}
+                nextHandler={this.nextQuestion}
+                prevHandler={this.prevQuestion}
+                onSubmit={this.handleSurveySubmit}>
                 </Card>
             </div>
             );
         }
         else{
+        return(
+        <div></div>
+        );
         }
     }
     });
