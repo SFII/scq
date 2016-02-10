@@ -84,7 +84,7 @@ var SurveyDiv = React.createClass({
                 iter: 0,
                 responseSize: 0,
                 response: {
-                    survey_id: this.props.surveyID,
+                    "survey_id": this.props.surveyID,
                     question_responses:[]
                 },
         });
@@ -117,6 +117,7 @@ var SurveyDiv = React.createClass({
                 this.removeCard();
             }.bind(this),
 			error: function(xhr, status,err){
+                console.log(this.state.response);
 				console.error("/api/response", status, err.toString());
 			}.bind(this)
         });
