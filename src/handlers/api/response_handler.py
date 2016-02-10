@@ -25,7 +25,7 @@ class ResponseHandler(BaseHandler):
         user_id = user_data['id']
         # If user_responses is not initialized, or is not a list
         if not isinstance(user_responses, list):
-            User.update(user_id, {'survey_responses', []}, skip_verify=True)
+            User.update_item(user_id, {'survey_responses', []}, skip_verify=True)
         survey_id = self.get_argument('survey_id', None)
         if survey_id is None:
             return self.set_status(400, "survey_id cannot be null")
