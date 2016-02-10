@@ -1,13 +1,13 @@
 {% extends "layouts/base.html" %}
 {% block title %}User Information{% end %}
 {% block content %}
+<div class="container">
+{% include "../static/stylesheets/margin.html" %}
 <h3>User Information</h3>
 <label><b>Username</b></label><br>
 <li>{{ username }}</li><br>
 <label><b>Email</b></label><br>
 <li>{{ email }}</li><br>
-<label><b>Academic Status</b></label><br>
-<li>{{ status }}</li><br>
 <label><b>Date of Birth</b></label><br>
 <li>{{ dob }}</li><br>
 <label><b>Native Language</b></label><br>
@@ -21,25 +21,34 @@
   <li>{{ 'not enrolled into any departments' }}</li><br>
 {% else %}
   {% for department in departments %}
-    <li>{{ department }}</li><br>
+    <li>{{ department }}</li>
   {% end %}
+  <br>
 {% end %}
 {% if "Student" in primary_affiliation %}
+  <label><b>Academic Year</b></label><br>
+  {% if not status %}
+    <li>{{ 'did not specify academic year' }}</li><br>
+  {% else %}
+    <li>{{ status }}</li><br>
+  {% end %}
   <label><b>Majors Declared</b></label><br>
   {% if not major1 and not major2 and not major3 and not major4 %}
     <li>{{ 'did not declare an majors' }}</li><br>
   {% else %}
-    {% if major1 %}<li>{{ major1 }}</li><br>{% end %}
-    {% if major2 %}<li>{{ major2 }}</li><br>{% end %}
-    {% if major3 %}<li>{{ major3 }}</li><br>{% end %}
-    {% if major4 %}<li>{{ major4 }}</li><br>{% end %}
+    {% if major1 %}<li>{{ major1 }}</li>{% end %}
+    {% if major2 %}<li>{{ major2 }}</li>{% end %}
+    {% if major3 %}<li>{{ major3 }}</li>{% end %}
+    {% if major4 %}<li>{{ major4 }}</li>{% end %}
+    <br>
   {% end %}
   <label><b>Minors Declared</b></label><br>
   {% if not minor1 and not minor2 %}
     <li>{{ 'did not declare an minors' }}</li><br>
   {% else %}
-    {% if minor1 %}<li>{{ minor1 }}</li><br>{% end %}
-    {% if minor2 %}<li>{{ minor2 }}</li><br>{% end %}
+    {% if minor1 %}<li>{{ minor1 }}</li>{% end %}
+    {% if minor2 %}<li>{{ minor2 }}</li>{% end %}
+    <br>
   {% end %}
   <label><b>Courses Enrolled</b></label><br>
   {% if len(courses) == 0 or courses == [''] %}
@@ -48,6 +57,7 @@
     {% for course in courses %}
       <li>{{ course }}</li>
     {% end %}
+    <br>
   {% end %}
 {% end %}
 {% if "Faculty" in primary_affiliation %}
@@ -56,12 +66,14 @@
     <li>{{ 'not instructing any courses' }}</li><br>
   {% else %}
     {% for course in courses_taught %}
-      <li>{{ course }}</li><br>
+      <li>{{ course }}</li>
     {% end %}
+    <br>
   {% end %}
 {% end %}
 <form action="/userinfo/update" method="get">
   <input type="submit" value="update" class="button"><br>
   {% raw xsrf_form_html() %}
 </form>
+</div>
 {% end %}
