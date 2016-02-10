@@ -4,6 +4,7 @@ from models.user import User
 from models.question import Question
 import time
 import random
+import logging
 
 
 class Survey(BaseModel):
@@ -16,7 +17,7 @@ class Survey(BaseModel):
 
     def fields(self):
         return {
-            'questions': (self.is_list, self.is_not_empty, self.schema_list_check((self.is_string,)),),
+            'questions': (self.is_list, self.is_not_empty, self.schema_list_check(self.is_string),),
             'course_id': (self.is_string, self.is_not_empty, self.exists_in_table('Course')),
             'course_name': (self.is_string, self.is_not_empty,),
             'creator_id': (self.is_string, self.is_not_empty, self.exists_in_table('User'),),
@@ -60,7 +61,10 @@ class Survey(BaseModel):
             'course_id': "",
             'creator_id': "",
             'course_name': "",
-            'creator_name': ""
+            'creator_name': "",
+            'responses': [],
+            'closed_timestamp': None,
+            'created_timestamp': time.time()
         }
 
     def create_generic_item(self, creator_id, course_id=None):

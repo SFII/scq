@@ -14,7 +14,7 @@ class DashboardHandler(BaseHandler):
     def get_survey_json(self):
         survey_json = []
         user_data = self.current_user
-        print(user_data)
+        logging.info(user_data)
         unanswered_survey_ids = user_data['unanswered_surveys']
         for survey_id in unanswered_survey_ids:
             survey_data = Survey().decompose_from_id(survey_id)

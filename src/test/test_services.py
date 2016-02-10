@@ -27,7 +27,7 @@ class TestServices(tornado.testing.AsyncHTTPTestCase):
             'userid')
         headers = {'Cookie': '='.join(('user', str(secure_cookie)))}
         response = self.fetch('/api/surveys', headers=headers)
-        self.assertEqual(response.code, 200)
+        self.assertEqual(response.code, 403)
 
     # def test_response(self):
     #     response = self.fetch(

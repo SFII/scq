@@ -56,6 +56,9 @@ class BaseModel:
     def is_none(self, data):
         assert data is None, "Must be empty"
 
+    def is_not_none(self, data):
+        assert data is not None, "Must not be empty"
+
     def is_in_list(self, alias=[]):
         def _in_list(data):
             assert data in alias, "Must be in {}".format(alias)
@@ -84,7 +87,7 @@ class BaseModel:
                 try:
                     method_b(data)
                 except Exception as exb:
-                    raise AssertionError("Must be one of the following:\n\t {}\n or\n\t {}".format(exa, exb))
+                    raise AssertionError("Must be one of the following: {}\n or {}".format(exa, exb))
         return _or
 
     def requiredFields(self):
@@ -132,18 +135,18 @@ class BaseModel:
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(idnum).run(BaseModel.conn)
 
-    def update_item(self, idnum, data):
+    def update_item(self, idnum, data, skip_verify=False):
         """
         Given an id number number of an item in the database and a data hash,
         update the fields of the data in the database with the fields in the
         data hash
         """
         table = self.__class__.__name__
-        '''
-        if self.isValid(data):
-            return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
-        return None
-        '''
+        if not skip_verify:
+            verified = self.verify(data)
+            if len(verified):
+                logging.error("Verification errors: {0}".format(verified))
+                return None
         return r.db(BaseModel.DB).table(table).get(idnum).update(data).run(BaseModel.conn)
 
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
@@ -215,6 +218,24 @@ class BaseModel:
         o = r.db(BaseModel.DB).table(table).insert(data).run(BaseModel.conn)
         return o['generated_keys'][0]
 
+    # TODO: Write Test for this
+    # TODO: spec out skip_verify for other skip_verify calls
+    def create_batch(self, batch_data, skip_verify=False):
+        """
+        Given batch data, creates a new database item for each value in batch_data
+        Returns an array of ids of the created items if they all pass verification
+        otherwise returns None
+        """
+        table = self.__class__.__name__
+        if not skip_verify:
+            for data in batch_data:
+                verified = self.verify(data)
+                if len(verified):
+                    logging.error("Verification errors: {0}".format(verified))
+                    return None
+        result = r.db(BaseModel.DB).table(table).insert(batch_data).run(BaseModel.conn)
+        return result['generated_keys']
+
     def delete_item(self, item_id):
         table = self.__class__.__name__
         return r.db(BaseModel.DB).table(table).get(item_id).delete().run(BaseModel.conn)
@@ -236,18 +257,33 @@ class BaseModel:
         """
         table = self.__class__.__name__
         return r.db(self.DB).table(table).get(idnum).update({
-            listfield: r.row[listfield].remove(value)
+            listfield: r.row[listfield].set_difference([value])
         }).run(self.conn)
 
+    def schema_list_check(self, method_or_list):
+        method = method_or_list
 
-    def schema_list_check(self, method):
-        def _list_check(list_data):
+        def _method_check(list_data):
             try:
                 for d in list_data:
                     method(d)
             except Exception as e:
-                raise AssertionError("Not all elements satisfy:\n\t {}".format(e))
-        return _list_check
+                raise AssertionError("Not all elements satisfy: {}".format(e))
+
+        def _list_check(list_data):
+            for method in method_or_list:
+                try:
+                    for d in list_data:
+                        method(d)
+                except Exception as e:
+                    raise AssertionError("Not all elements satisfy: {}".format(e))
+        # switch on case
+        if callable(method_or_list):
+            return _method_check
+        if isinstance(method_or_list, (list, tuple)):
+            return _list_check
+        raise AssertionError("Not all elements satisfy: {}".format(e))
+        return None
 
     def check_data(data, fields, required_fields=[], strict_schema=False):
         if strict_schema:
