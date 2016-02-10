@@ -309,7 +309,7 @@ var FreeResponse = React.createClass({
 
   render: function(){
     return (
-      <form
+      <div
         className="mdl-card__supporting-text mdl-color-text--grey-600">
 
         <textarea
@@ -330,7 +330,7 @@ var FreeResponse = React.createClass({
         questionNum={this.props.questionNum}
         numQuestions={this.props.numQuestions}
         responseSize={this.props.responseSize}/>
-      </form>
+      </div>
      );
   }
 });
@@ -340,11 +340,11 @@ var FreeResponse = React.createClass({
 */
 var Rating = React.createClass({
    	getInitialState: function(){
-		return{data: 5};
+		return{answer: 5};
 	},
 
 	handleChange:function(e){
-		this.setState({data: e.target.value});
+		this.setState({answer: e.target.value});
 	},
 	 render: function(){
       return (
@@ -354,14 +354,23 @@ var Rating = React.createClass({
                     type="range"
                     min="0"
                     max="10"
-                    value={this.state.data}
+                    value={this.state.answer}
                     step="1"
                     onChange={this.handleChange}
                 />
-                <span id="sliderStatus">{this.state.data}</span>
+                <span id="sliderStatus">{this.state.answer}</span>
             </div>
-            <Footer />
-        </div>
+            <Footer 
+            prevHandler={this.props.prevHandler}
+            nextHandler={this.props.nextHandler}
+            onSubmit={this.props.onSubmit}
+            surveyData={this.state.answer}
+            questionID={this.props.questionID}
+            response_format={this.props.response_format}
+            questionNum={this.props.questionNum}
+            numQuestions={this.props.numQuestions}
+            responseSize={this.props.responseSize}/>
+            </div>
       );
     }
 });

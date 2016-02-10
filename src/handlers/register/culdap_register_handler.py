@@ -22,26 +22,24 @@ class CuLdapRegisterHandler(RegisterHandler):
     LDAP_STATUS = 'cuEduPersonClass'
     LDAP_PRIMARY_AFFILIATION = 'eduPersonPrimaryAffiliation'
     LDAP_DEPARTMENTS = 'cuEduPersonHomeDepartment'
-    LDAP_ATTRS = [LDAP_NAME,LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL,
+    LDAP_ATTRS = [LDAP_NAME, LDAP_MAJOR_1, LDAP_MAJOR_2, LDAP_MAJOR_3, LDAP_MAJOR_4, LDAP_MAIL,
         LDAP_MINOR_1, LDAP_MINOR_2, LDAP_STATUS, LDAP_PRIMARY_AFFILIATION, LDAP_DEPARTMENTS]
 
     COOKIE = 'registering'
     FIVE_MINUTES = 0.0035
 
     def get(self):
-        return self.render("register/culdapregister.html", errors=[], next=self.get_argument("next","/"))
-
+        return self.render("register/culdapregister.html", errors=[], next=self.get_argument("next", "/"))
 
     def post(self):
-        confirming = self.get_argument('confirming',False,strip = True)
+        confirming = self.get_argument('confirming', False, strip=True)
         if confirming:
             return self.confirmCULdapRegistration()
         else:
             return self.CULdapRegister()
 
-
     def confirmCULdapRegistration(self):
-        username = self.get_argument('username',strip = True)
+        username = self.get_argument('username', strip=True)
         errors = self.getVerificationErrors()
         if len(errors) != 0:
             return self.verifyCULdapRegistrationPage(username, errors)
@@ -53,27 +51,27 @@ class CuLdapRegisterHandler(RegisterHandler):
             logging.error('username %s did not match cookie username %s' % (username, decoded_cookie_username))
             return self.failWithErrors('register/culdapregister.html', ['Registration failed: cookie data is invalid'])
         data = self.collectUserData()
-        data['username']        = username
-        data['registration']    = User().REGISTRATION_CULDAP
-        data['accepted_tos']    = True
+        data['username'] = username
+        data['registration'] = User().REGISTRATION_CULDAP
+        data['accepted_tos'] = True
         return self.registerUser(data)
 
     def collectUserData(self):
         data = User().default()
-        data['email']           = self.get_argument('email',None,strip = True)
-        data['dob']             = self.get_argument('dob',None,strip = True)
-        data['gender']          = self.get_argument('gender',None,strip = True)
-        data['ethnicity']       = self.get_argument('ethnicity',None,strip = True)
-        data['native_language'] = self.get_argument('native_language',None,strip = True)
-        data['status']          = self.get_argument('status',None,strip = True)
-        data['major1']          = self.get_argument('major1',None,strip = True)
-        data['major2']          = self.get_argument('major2',None,strip = True)
-        data['major3']          = self.get_argument('major3',None,strip = True)
-        data['major4']          = self.get_argument('major4',None,strip = True)
-        data['minor1']          = self.get_argument('minor1',None,strip = True)
-        data['minor2']          = self.get_argument('minor2',None,strip = True)
-        data['departments']      = self.get_arguments('departments',strip = True)
-        data['primary_affiliation'] = self.get_arguments('primary_affiliation',strip = True)
+        data['email'] = self.get_argument('email', None, strip=True)
+        data['dob'] = self.get_argument('dob', None, strip=True)
+        data['gender'] = self.get_argument('gender', None, strip=True)
+        data['ethnicity'] = self.get_argument('ethnicity', None, strip=True)
+        data['native_language'] = self.get_argument('native_language', None, strip=True)
+        data['status'] = self.get_argument('status', '', strip=True)
+        data['major1'] = self.get_argument('major1', '', strip=True)
+        data['major2'] = self.get_argument('major2', '', strip=True)
+        data['major3'] = self.get_argument('major3', '', strip=True)
+        data['major4'] = self.get_argument('major4', '', strip=True)
+        data['minor1'] = self.get_argument('minor1', '', strip=True)
+        data['minor2'] = self.get_argument('minor2', '', strip=True)
+        data['departments'] = self.get_arguments('departments', strip=True)
+        data['primary_affiliation'] = self.get_arguments('primary_affiliation', strip=True)
         return data
 
     def registerUser(self, data):
