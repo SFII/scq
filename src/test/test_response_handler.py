@@ -13,13 +13,11 @@ from models.question import Question
 from models.survey_response import SurveyResponse
 import rethinkdb as r
 from handlers.base_handler import BaseHandler
-from handlers.survey_handler import SurveyHandler
 from config.config import application
 from setup import Setup
 from server import initialize_db
 import logging
 import mock
-import requests
 
 try:
     import urllib.parse as urllib_parse  # py3

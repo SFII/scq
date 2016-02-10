@@ -9,7 +9,7 @@ from handlers.index_handler import IndexHandler
 from handlers.register_handler import RegisterHandler
 from handlers.register.culdap_register_handler import CuLdapRegisterHandler
 from handlers.dashboard_handler import DashboardHandler
-from handlers.survey_handler import SurveyHandler
+from handlers.api.survey_handler import SurveyHandler
 from handlers.api.response_handler import ResponseHandler
 from handlers.refresh_handler import RefreshHandler
 from handlers.user_info_handler import UserInfoHandler
