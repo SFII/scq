@@ -32,18 +32,17 @@ def auth_user_ldap(uname, pwd):
     if not uname or not pwd:
         logging.error("Username or password not supplied")
         return False
-    resp = user_info_ldap(uname,LDAP_BIND_ATTRS)
+    resp = user_info_ldap(uname, LDAP_BIND_ATTRS)
     if resp:
         dn = resp[0]['dn']
         server = ldap.Server(LDAP_URL, get_info=ldap.ALL, use_ssl=True)
         conn = ldap.Connection(server, user=dn, password=pwd)
-        error = {}
-        success = {}
-        result = {}
         # attempt bind twice to start_tls
         # amazing hack, sam is quite proud
-        if not conn.bind(): conn.start_tls()
+        if not conn.bind():
+            conn.start_tls()
         conn.bind()
+        logging.info('C gamma')
         result = conn.result
         if result['description'] == 'success':
             return True
@@ -51,8 +50,7 @@ def auth_user_ldap(uname, pwd):
             logging.error("Invalid or incomplete credentials for %s", uname)
             return False
         else:
-            logging.error("Auth attempt for %s had an unexpected error: %s",
-                         uname, error)
+            logging.error("Auth attempt for %s had an unexpected error: %s", uname, error)
             return False
     else:
         logging.error("No user by that name")
@@ -64,14 +62,16 @@ def user_info_ldap(uname, attributes=None):
     if not uname:
         logging.error("Username not supplied")
         return False
-    server = ldap.Server(LDAP_URL, get_info=ldap.ALL)
-    conn = None
+    server = ldap.Server(LDAP_URL, get_info=ldap.ALL, use_ssl=True)
+    logging.info('A alpha')
     try:
-        conn = ldap.Connection(server, auto_bind=True)
+        conn = ldap.Connection(server)
+        conn.bind()
         conn.start_tls()
     except:
         return False
-    udn = conn.search(LDAP_SEARCH_BASE, '(%s=%s)' % (LDAP_UNAME_ATTR,uname), search_scope=LDAP_SEARCH_SCOPE, attributes=attributes)
+    logging.info('B beta')
+    udn = conn.search(LDAP_SEARCH_BASE, '(%s=%s)' % (LDAP_UNAME_ATTR, uname), search_scope=LDAP_SEARCH_SCOPE, attributes=attributes)
     resp = conn.response
     if udn:
         return resp

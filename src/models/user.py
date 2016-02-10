@@ -39,6 +39,7 @@ class User(BaseModel):
             'created_surveys': (b.is_list,),
             'unanswered_surveys': (b.is_list,),
             'answered_surveys': (b.is_list,),
+            'survey_responses': (b.is_list,),
             'answers': (b.is_list,),
             'primary_affiliation': (b.is_list,),
         }
@@ -62,6 +63,7 @@ class User(BaseModel):
             'unanswered_surveys': [],
             'answered_surveys': [],
             'created_surveys': [],
+            'survey_responses': [],
             'answers': [],
             'primary_affiliation': [],
         }

@@ -6,7 +6,7 @@ import time
 from models.basemodel import BaseModel
 from models.user import User
 import rethinkdb as r
-from handlers.survey_handler import ResponseHandler, SurveyHandler
+from handlers.survey_handler import SurveyHandler
 from config.config import application
 from setup import Setup
 from server import initialize_db

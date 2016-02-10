@@ -3,7 +3,7 @@ import tornado.testing
 import tornado.web
 import config.config
 import logging
-from handlers.survey_handler import ResponseHandler, SurveyHandler
+from handlers.survey_handler import SurveyHandler
 from config.config import application
 from setup import Setup
 from server import initialize_db

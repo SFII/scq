@@ -3,6 +3,7 @@ from models.user import User
 import logging
 import json
 import time
+from functools import wraps
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -11,10 +12,11 @@ class BaseHandler(tornado.web.RequestHandler):
     # data for a User. The data is set at login (when the cookie is set)
     def get_current_user(self):
         user_cookie = self.get_secure_cookie('user')
+        logging.info(self.get_cookie('user'))
+        logging.info(self.get_secure_cookie('user'))
         if user_cookie is None:
             return None
-        logging.info(user_cookie)
-        return json.loads(user_cookie.decode("utf-8"))
+        return json.loads(user_cookie.decode('utf-8'))
 
     def refresh_current_user_cookie(self):
         if self.current_user is None:
@@ -22,7 +24,7 @@ class BaseHandler(tornado.web.RequestHandler):
         user_id = self.current_user['id']
         user_data = User().get_item(user_id)
         self.set_current_user(user_data)
-        return
+        return self.get_current_user()
 
     def clear_current_user_cookie(self):
         self.set_current_user(None)
@@ -33,3 +35,17 @@ class BaseHandler(tornado.web.RequestHandler):
             self.set_secure_cookie('user', tornado.escape.json_encode(user_data))
         else:
             self.clear_cookie('user')
+        return self.get_current_user()
+
+
+def api_authorized(method):
+    """
+    Decorate methods with this to require that the user be logged in to use the api function.
+    If the user is not logged in, the api will return 403 "you must be signed in to use this api"
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if self.current_user is None:
+            return self.set_status(403, "you must be signed in to use this api resource")
+        return method(self, *args, **kwargs)
+    return wrapper
