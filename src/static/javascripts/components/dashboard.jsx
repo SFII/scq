@@ -84,7 +84,7 @@ var SurveyDiv = React.createClass({
                 iter: 0,
                 responseSize: 0,
                 response: {
-                    "survey_id": this.props.surveyID,
+                    survey_id: this.props.surveyID,
                     question_responses:[]
                 },
         });
