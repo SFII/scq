@@ -111,7 +111,7 @@ var SurveyDiv = React.createClass({
             url: this.props.routes.response,
 			contentType: 'application/json',
             type: 'POST',
-            data: JSON.stringify(this.state.response),
+            data: JSON.stringify(response),
             success: function(data){
                 console.log(this.state.response);
                 this.removeCard();
