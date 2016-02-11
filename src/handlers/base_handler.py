@@ -7,6 +7,7 @@ from functools import wraps
 
 
 class BaseHandler(tornado.web.RequestHandler):
+    json_data = {}
 
     # any handler can call self.current_user to get the cookie-stored rethinkdb
     # data for a User. The data is set at login (when the cookie is set)
@@ -47,5 +48,18 @@ def api_authorized(method):
     def wrapper(self, *args, **kwargs):
         if self.current_user is None:
             return self.set_status(403, "you must be signed in to use this api resource")
+        return method(self, *args, **kwargs)
+    return wrapper
+
+def parse_request_json(method):
+    """
+    Decorate methods with this to parse json from the request body"
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        try:
+            self.json_data = tornado.escape.json_decode(self.request.body)
+        except:
+            self.json_data = {}
         return method(self, *args, **kwargs)
     return wrapper

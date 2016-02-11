@@ -8,18 +8,19 @@ from models.survey import Survey
 from models.user import User
 from models.course import Course
 from models.question import Question
-from handlers.base_handler import BaseHandler, api_authorized
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
 
 
 class SurveyHandler(BaseHandler):
 
     @api_authorized
+    @parse_request_json
     def post(self):
         """
         Creates or updates an existing survey object
         If the id is present, it will update the existing survey
         """
-        survey_id = self.get_argument('id', None)
+        survey_id = self.json_data.get('id', None)
         if survey_id is None:
             return self._create_survey()
         else:
@@ -28,9 +29,9 @@ class SurveyHandler(BaseHandler):
     def _create_survey(self):
         creator_id = self.current_user['id']
         creator_name = self.current_user['username']
-        course_id = self.get_argument('course_id', None)
-        course_name = self.get_argument('course_name', None)
-        questions_json = self.get_argument('questions', None)
+        course_id = self.json_data.get('course_id', None)
+        course_name = self.json_data.get('course_name', None)
+        questions_json = self.json_data.get('questions', None)
         if course_id is None:
             return self.set_status(400, "course_id cannot be null")
         if course_name is None:
@@ -74,6 +75,7 @@ class SurveyHandler(BaseHandler):
         pass
 
     @api_authorized
+    @parse_request_json
     def get(self):
         surveys = []
         unanswered_survey_ids = self.current_user['unanswered_surveys']
