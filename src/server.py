@@ -92,7 +92,7 @@ def wipe_data(user_id):
     user_data['courses'] = []
     user_data['created_surveys'] = []
     user_data['unanswered_surveys'] = []
-    update_response = User().update_item(user_id, user_data)
+    update_response = User().update_item(user_id, user_data, skip_verify=True)
     logging.info(update_response)
     return
 

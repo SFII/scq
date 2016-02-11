@@ -39,8 +39,8 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
         Question().RESPONSE_TRUE_OR_FALSE: True,
         Question().RESPONSE_RATING: 5
     }
-    bad_responses = str([{"response_data": None, "response_format": "NOT A FORMAT", "extraneous_field": True}])
-    bad_questions = str([{"title": "", "response_format": "NOT A FORMAT", "extraneous_field": True}])
+    bad_responses = [{"response_data": None, "response_format": "NOT A FORMAT", "extraneous_field": True}]
+    bad_questions = [{"title": "", "response_format": "NOT A FORMAT", "extraneous_field": True}]
     q1 = {
         "title": "q1",
         "response_format": Question().RESPONSE_FREE,
@@ -61,10 +61,10 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
         "response_format": Question().RESPONSE_RATING,
         "options": []
     }
-    good_questions = str([q1, q2, q3, q4])
+    good_questions = [q1, q2, q3, q4]
 
     def setUpClass():
-        logging.disable(logging.CRITICAL)
+        # logging.disable(logging.CRITICAL)
         initialize_db(db='test')
         # Creates a bare minimum user data
         data = User().default()
@@ -113,7 +113,7 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
                 'response_format': response_format
             }
         questions = self.survey_data['questions']
-        return str(list(map(_build, questions)))
+        return list(map(_build, questions))
 
     def _test_survey_create(self):
         with mock.patch.object(BaseHandler, 'get_current_user') as m:
@@ -124,14 +124,13 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
             response2 = self.fetch('/api/surveys', body=body2, method="POST")
             body3 = tornado.escape.json_encode({'course_id': self.course_id, 'questions': 'not an array'})
             response3 = self.fetch('/api/surveys', body=body3, method="POST")
-            body4 = tornado.escape.json_encode({'course_id': self.course_id, "questions": tornado.escape.json_encode(self.bad_questions)})
+            body4 = tornado.escape.json_encode({'course_id': self.course_id, "questions": self.bad_questions})
             response4 = self.fetch('/api/surveys', body=body4, method="POST")
-            body5 = tornado.escape.json_encode({'course_id': self.course_id, "questions": tornado.escape.json_encode(self.good_questions)})
+            body5 = tornado.escape.json_encode({'course_id': self.course_id, "questions": self.good_questions})
             response5 = self.fetch('/api/surveys', body=body5, method="POST")
         self.assertEqual(response1.code, 400)
         self.assertTrue(str(response1.error).endswith('course_id cannot be null'))
         self.assertEqual(response2.code, 400)
-        logging.info(response2.error)
         self.assertTrue(str(response2.error).endswith('questions cannot be null'))
         self.assertEqual(response3.code, 400)
         self.assertTrue(str(response3.error).endswith("questions must be a json array object"))
@@ -154,9 +153,9 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
             response2 = self.fetch('/api/response', body=body2, method="POST")
             body3 = tornado.escape.json_encode({'survey_id': self.survey_id, 'question_responses': 'not an array'})
             response3 = self.fetch('/api/response', body=body3, method="POST")
-            body4 = tornado.escape.json_encode({'survey_id': self.survey_id, "question_responses": tornado.escape.json_encode(self.bad_responses)})
+            body4 = tornado.escape.json_encode({'survey_id': self.survey_id, "question_responses": self.bad_responses})
             response4 = self.fetch('/api/response', body=body4, method="POST")
-            body5 = tornado.escape.json_encode({'survey_id': self.survey_id, "question_responses": tornado.escape.json_encode(self.build_response_questions())})
+            body5 = tornado.escape.json_encode({'survey_id': self.survey_id, "question_responses": self.build_response_questions()})
             response5 = self.fetch('/api/response', body=body5, method="POST")
         self.assertEqual(response1.code, 400)
         self.assertTrue('survey_id cannot be null' in str(response1.error))

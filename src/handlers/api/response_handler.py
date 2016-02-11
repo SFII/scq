@@ -42,14 +42,10 @@ class ResponseHandler(BaseHandler):
         # survey_id must be in the list of users unanswered_surveys
         if survey_id not in user_data['unanswered_surveys']:
             return self.set_status(400, "users can only respond to surveys in their unanswered_surveys lists")
-        question_responses_json = self.json_data.get('question_responses', None)
+        question_responses = self.json_data.get('question_responses', None)
         # question_responses must be present
-        if question_responses_json is None:
+        if question_responses is None:
             return self.set_status(400, "question_responses cannot be null")
-        try:
-            question_responses = ast.literal_eval(tornado.escape.json_decode(question_responses_json))
-        except:
-            return self.set_status(400, "question_responses must be an array")
         # question_responses must be a list
         if not isinstance(question_responses, (list, tuple)):
             return self.set_status(400, "question_responses must be an array")
