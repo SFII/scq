@@ -17,7 +17,10 @@ js_files = [
     './src/static/javascripts/components/questions.jsx',
     './src/static/javascripts/components/cards.jsx',
     './src/static/javascripts/components/dashboard.jsx',
-    './src/static/javascripts/components/welcome.jsx'
+    './src/static/javascripts/components/welcome.jsx',
+    './src/static/javascripts/components/survey_card.jsx',
+    './src/static/javascripts/components/survey_sample.jsx'
+
 ]
 
 // Lint Task

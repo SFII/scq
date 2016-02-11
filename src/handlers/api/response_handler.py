@@ -10,12 +10,13 @@ from models.user import User
 from models.course import Course
 from models.question_response import QuestionResponse
 from models.survey_response import SurveyResponse
-from handlers.base_handler import BaseHandler, api_authorized
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
 
 
 class ResponseHandler(BaseHandler):
 
     @api_authorized
+    @parse_request_json
     def post(self):
         """
         Creates and records a users response to a survey
@@ -26,7 +27,7 @@ class ResponseHandler(BaseHandler):
         # If user_responses is not initialized, or is not a list
         if not isinstance(user_responses, list):
             User.update_item(user_id, {'survey_responses': []}, skip_verify=True)
-        survey_id = self.get_argument('survey_id', None)
+        survey_id = self.json_data.get('survey_id', None)
         if survey_id is None:
             return self.set_status(400, "survey_id cannot be null")
         survey_data = Survey().get_item(survey_id)
@@ -41,7 +42,7 @@ class ResponseHandler(BaseHandler):
         # survey_id must be in the list of users unanswered_surveys
         if survey_id not in user_data['unanswered_surveys']:
             return self.set_status(400, "users can only respond to surveys in their unanswered_surveys lists")
-        question_responses_json = self.get_argument('question_responses', None)
+        question_responses_json = self.json_data.get('question_responses', None)
         # question_responses must be present
         if question_responses_json is None:
             return self.set_status(400, "question_responses cannot be null")

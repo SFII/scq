@@ -1,7 +1,8 @@
 {
     "id":"",
-    "course_id":"",
-    "course_name":"",
+    "item_id":"",
+    "item_name":"",
+    "item_type":"",
     "creator_name":"",
     "creator_id":"",
     "questions": [
@@ -22,5 +23,7 @@
             "question":"Did you enjoy the course?",
             "options":[]
         }
-    ]
+    ],
+    "created_timestamp": 4567.8910,
+    "closed_timestamp": 9191.8765
 }
