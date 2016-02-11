@@ -31,7 +31,7 @@ class SurveyHandler(BaseHandler):
         creator_name = self.current_user['username']
         course_id = self.json_data.get('course_id', None)
         course_name = self.json_data.get('course_name', None)
-        questions_json = self.json_data.get('questions', None)
+        questions = self.json_data.get('questions', None)
         if course_id is None:
             return self.set_status(400, "course_id cannot be null")
         if course_name is None:
@@ -39,12 +39,8 @@ class SurveyHandler(BaseHandler):
             if course_data is None:
                 return self.set_status(400, "course_id {0} does not correspond to value in database".format(course_id))
             course_name = course_data['course_name']
-        if questions_json is None:
+        if questions is None:
             return self.set_status(400, "questions cannot be null")
-        try:
-            questions = ast.literal_eval(tornado.escape.json_decode(questions_json))
-        except:
-            return self.set_status(400, "questions must be a json array object")
         if not isinstance(questions, (list, tuple)):
             return self.set_status(400, "questions must be a json array object")
         # verify question_response_data
