@@ -113,7 +113,7 @@ var SurveyDiv = React.createClass({
             type: 'POST',
             data: JSON.stringify(response),
             success: function(data){
-                console.log(this.state.response);
+                console.log(response);
                 this.removeCard();
             }.bind(this),
 			error: function(xhr, status,err){
