@@ -185,7 +185,7 @@ var MultipleChoice = React.createClass({
     render: function(){
       const renderedOptions = this.props.options.map((option,i) => {
         return (
-            <label className="mdl-checkbox mdl-js-checkbox">
+            <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
                 <input
                     type="checkbox"
                     value = {this.state.data[i]}
