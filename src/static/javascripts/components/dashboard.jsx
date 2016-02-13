@@ -57,6 +57,7 @@ var MainDiv = React.createClass({
         var itemNodes = data.map(function (item) {
                 return (
                 <SurveyDiv
+                key = {item.id}
                 questions={item.questions}
                 routes={routesObject}
                 surveyID={item.id}
@@ -113,9 +114,9 @@ var SurveyDiv = React.createClass({
             url: this.props.routes.response,
 			contentType: 'application/json',
             type: 'POST',
-            data: JSON.stringify(this.state.response),
+            data: JSON.stringify(response),
             success: function(data){
-                console.log(this.state.response);
+                console.log(response);
                 this.removeCard();
             }.bind(this),
 			error: function(xhr, status,err){
