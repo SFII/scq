@@ -189,6 +189,8 @@ var MultipleChoice = React.createClass({
                 <input
                     type="checkbox"
                     value = {this.state.data[i]}
+                    name = {option}
+                    key = {i}
                     className="mdl-checkbox__input"
                     onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
                 </input>
@@ -254,8 +256,7 @@ getInitialState: function(){
                     type="radio" 
                     className="mdl-radio__button"
                     name = {surveyID}
-                    value={option}
-                    key={i}
+                    value= {i}
                     onChange={this.handleChange.bind(this,i,this.state.data[i])}>
                     </input>
                       <span className="mdl-radio__label"> { option } </span>
