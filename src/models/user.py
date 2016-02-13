@@ -68,6 +68,15 @@ class User(BaseModel):
             'primary_affiliation': [],
         }
 
+    def create_generic_item(self):
+        data = self.default()
+        data = User().default()
+        username = str(time.time())
+        data['username'] = username
+        data['accepted_tos'] = True
+        data['email'] = 'xxx@colorado.edu'
+        return self.create_item(data)
+
     def authenticate_test_user(self, username, password):
         return password == self.TESTING_PASSWORD
 

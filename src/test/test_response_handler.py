@@ -64,7 +64,7 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
     good_questions = [q1, q2, q3, q4]
 
     def setUpClass():
-        # logging.disable(logging.CRITICAL)
+        logging.disable(logging.CRITICAL)
         initialize_db(db='test')
         # Creates a bare minimum user data
         data = User().default()

@@ -5,6 +5,8 @@ from datetime import datetime
 import tornado.gen as gen
 from tornado.options import options, define
 import logging
+import inspect
+import traceback
 
 
 class BaseModel:
@@ -95,6 +97,9 @@ class BaseModel:
 
     def strictSchema(self):
         return False
+
+    def default(self):
+        return {}
 
     def init(self, DB, conn):
         """
