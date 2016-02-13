@@ -20,3 +20,11 @@ class SurveyResponse(BaseModel):
             'responder_id': (self.is_string, self.is_not_empty, self.exists_in_table('User'),),
             'response_time': (self.is_timestamp, ),
         }
+
+    def default(self):
+        return {
+            'question_responses': [],
+            'responder_id': "",
+            'survey_id': "",
+            'response_time': 0
+        }

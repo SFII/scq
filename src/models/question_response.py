@@ -19,3 +19,10 @@ class QuestionResponse(BaseModel):
             'question_id': (self.is_string, self.is_not_empty, self.exists_in_table('Question'),),
             'response_data': (self.is_not_none, )
         }
+
+    def default(self):
+        return {
+            'response_format': "",
+            'response_data': "",
+            'question_id': None
+        }
