@@ -48,7 +48,7 @@ class Survey(BaseModel):
         active_surveys = course_data['active_surveys']
         active_surveys.append(survey_id)
         subscribers = course_data['subscribers']
-        Course().update_item(course_id, {'active_surveys': active_surveys})
+        Course().update_item(course_id, {'active_surveys': active_surveys}, skip_verify=True)
         self.send_user_survey(creator_id, survey_id, 'created_surveys')
         for subscriber_id in subscribers:
             self.send_user_survey(subscriber_id, survey_id)
@@ -67,13 +67,14 @@ class Survey(BaseModel):
             'created_timestamp': time.time()
         }
 
-    def create_generic_item(self, creator_id, course_id=None):
+    def create_generic_item(self, creator_id=None, course_id=None):
         data = self.default()
         data['course_id'] = course_id if course_id else Course().create_generic_item()
-        data['creator_id'] = creator_id
+        data['creator_id'] = creator_id if creator_id else User().create_generic_item()
         for i in range(4):
             data['questions'].append(Question().create_generic_item())
-        return self.create_item(data)
+        x = self.create_item(data)
+        return x
 
     def decompose_from_id(self, survey_id):
         survey_data = self.get_item(survey_id)
