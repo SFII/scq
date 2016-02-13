@@ -57,6 +57,7 @@ var MainDiv = React.createClass({
         var itemNodes = data.map(function (item) {
                 return (
                 <SurveyDiv
+                key = {item.id}
                 questions={item.questions}
                 routes={routesObject}
                 surveyID={item.id}

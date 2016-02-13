@@ -15,6 +15,9 @@ var Card = React.createClass({
     getInitialState: function(){
         return {response: []};
     },
+    componentDidUpdate: function(){
+        componentHandler.upgradeDom();    
+    },
 
     //handleSurveySubmit is called whenever a submit button is pushed
     //it calls POST on /api/response sending a JSON of the survey data

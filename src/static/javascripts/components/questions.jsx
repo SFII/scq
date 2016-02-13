@@ -74,6 +74,27 @@ var Footer = React.createClass({
     }
 })
 
+/* I made an mdl progress bar, but it doesn't work well with React, so I'm only saving this in case we decide our current progress bar is ugly.
+var Progress = React.createClass({
+    
+    getInitialState: function() {
+    var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
+    return({progressValue: progressValue})
+    },
+    
+    componentDidUpdate: function() {
+        console.log("update");
+        document.querySelector('#myProgress').MaterialProgress.setProgress(this.state.progressValue);
+    },
+    
+    render: function() {
+        return (
+        <div id="myProgress" className="mdl-cell mdl-cell--4-col mdl-progress mdl-js-progress"></div>
+        )
+    }
+})
+*/
+
 var Progress = React.createClass({
     render: function() {
     var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
@@ -139,9 +160,6 @@ var SubmitButton = React.createClass({
 * All the cards are very similar so I'm not going to copy and paste
 */
 var MultipleChoice = React.createClass({
-    //getInitialState finds how many options there are and creates an
-    //object questionObj with a corresponding amount of slots set to
-    //false and we initialize the data state to be this
     getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
@@ -150,10 +168,6 @@ var MultipleChoice = React.createClass({
         }
         return {data: questionObj};
     },
-    /*whenever a change happens this is called, the value of the
-    checkbox is found, and we go into our data state and set the
-    corresponding slot to be the same so the data state matches the
-    visual state of the form */
 
     handleChange: function(i,value){
         var NewValue = null;
@@ -167,33 +181,19 @@ var MultipleChoice = React.createClass({
         changeAnswer[i] = NewValue;
         this.setState({data: changeAnswer})
     },
-    /*once the submit button is clicked we change the data to be a
-    JSON object and we send it to the ajax POST*/
-    handleSurveySubmit:function(event){
 
-        event.preventDefault();
-        var answer = JSON.stringify(this.state.data);
-        this.props.onSubmit(answer);
-    },
-    /*Nothing fancy here, except we also map with an extra parameter i
-    which acts as a key value for each option so we can update the state
-    correctly*/
     render: function(){
       const renderedOptions = this.props.options.map((option,i) => {
         return (
-            <div>
-            <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <label className="mdl-checkbox mdl-js-checkbox">
                 <input
                     type="checkbox"
-                    key={i}
-                    name = {option}
                     value = {this.state.data[i]}
                     className="mdl-checkbox__input"
                     onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
                 </input>
-                <span className="mdl-checkbox__label"> { option } <br/></span>
+                <span className="mdl-checkbox__label"> { option } </span>
             </label>
-            </div>
         )
       });
       return (
@@ -243,13 +243,6 @@ getInitialState: function(){
         changeAnswer[i] = true;
         this.setState({data: changeAnswer});
     },
-    handleSurveySubmit:function(event){
-
-        event.preventDefault();
-        var answer = this.state.data;
-        console.log(answer);
-        this.props.onSubmit({answer});
-    },
 
     render: function(){
         var surveyID = String(this.props.surveyID);
@@ -257,8 +250,13 @@ getInitialState: function(){
             return (
                 <div>
                     <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-                    <input type="radio" className="mdl-radio__button" name = {surveyID} value={ option } key={ option }
-                     onChange={this.handleChange.bind(this,i,this.state.data[i])}>
+                    <input 
+                    type="radio" 
+                    className="mdl-radio__button"
+                    name = {surveyID}
+                    value={option}
+                    key={i}
+                    onChange={this.handleChange.bind(this,i,this.state.data[i])}>
                     </input>
                       <span className="mdl-radio__label"> { option } </span>
                     </label>
@@ -299,12 +297,6 @@ var FreeResponse = React.createClass({
 
     handleChange: function(e){
         this.setState({answer: e.target.value});
-    },
-
-    handleSurveySubmit:function(survey){
-        survey.preventDefault();
-        var answer = this.state.answer.trim();
-        this.props.onSubmit(answer);
     },
 
   render: function(){
