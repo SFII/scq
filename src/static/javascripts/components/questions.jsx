@@ -4,42 +4,42 @@
 * Just an mdl submit button, behaves as a normal submit button would
 */
 var Footer = React.createClass({
-    render: function() {        
+    render: function() {
         if(this.props.questionNum == 0){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                 <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
                     Previous
                 </button>
-                
-                <Progress 
+
+                <Progress
                 questionNum = {this.props.questionNum}
                 numQuestions = {this.props.numQuestions}
                 responseSize={this.props.responseSize}/>
-                
+
                 <NextButton
-                nextHandler={this.props.nextHandler} 
+                nextHandler={this.props.nextHandler}
                 surveyData={this.props.surveyData}
                 questionID={this.props.questionID}
                 response_format={this.props.response_format}/>
-                
+
                 </div>
             );
         }
         else if(this.props.questionNum == this.props.numQuestions-1){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
-                    <PrevButton 
+                    <PrevButton
                     prevHandler={this.props.prevHandler}
                     surveyData={this.props.surveyData}
                     questionID={this.props.questionID}
                     response_format={this.props.response_format}/>
-                    
+
                     <Progress
                     questionNum = {this.props.questionNum}
                     numQuestions = {this.props.numQuestions}
                     responseSize={this.props.responseSize}/>
-                    
+
                     <SubmitButton
                     onSubmit={this.props.onSubmit}
                     surveyData={this.props.surveyData}
@@ -50,21 +50,21 @@ var Footer = React.createClass({
         }
         else{
         return(
-       <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300"> 
-            
-            <PrevButton 
+       <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+
+            <PrevButton
             prevHandler={this.props.prevHandler}
             surveyData={this.props.surveyData}
             questionID={this.props.questionID}
             response_format={this.props.response_format}/>
-            
+
             <Progress
             questionNum = {this.props.questionNum}
             numQuestions = {this.props.numQuestions}
             responseSize={this.props.responseSize}/>
-            
+
             <NextButton
-            nextHandler={this.props.nextHandler} 
+            nextHandler={this.props.nextHandler}
             surveyData={this.props.surveyData}
             questionID={this.props.questionID}
             response_format={this.props.response_format}/>
@@ -199,11 +199,11 @@ var MultipleChoice = React.createClass({
       return (
         <div className="options mdl-card__supporting-text mdl-color-text--grey-600">
             { renderedOptions }
-            <Footer 
+            <Footer
             prevHandler={this.props.prevHandler}
-            nextHandler={this.props.nextHandler} 
+            nextHandler={this.props.nextHandler}
             onSubmit={this.props.onSubmit}
-            surveyData={this.state.data} 
+            surveyData={this.state.data}
             questionID={this.props.questionID}
             response_format={this.props.response_format}
             questionNum={this.props.questionNum}
@@ -271,8 +271,8 @@ getInitialState: function(){
             className="mdl-card__supporting-text mdl-color-text--grey-600">
               { renderedOptions }
               <Footer
-              prevHandler={this.props.prevHandler} 
-              nextHandler={this.props.nextHandler} 
+              prevHandler={this.props.prevHandler}
+              nextHandler={this.props.nextHandler}
               onSubmit={this.props.onSubmit}
               surveyData={this.state.data}
               questionID={this.props.questionID}
@@ -320,7 +320,7 @@ var FreeResponse = React.createClass({
         value={this.state.answer}
         onChange={this.handleChange}></textarea>
         <br/>
-        <Footer 
+        <Footer
         prevHandler={this.props.prevHandler}
         nextHandler={this.props.nextHandler}
         onSubmit={this.props.onSubmit}
@@ -360,7 +360,7 @@ var Rating = React.createClass({
                 />
                 <span id="sliderStatus">{this.state.answer}</span>
             </div>
-            <Footer 
+            <Footer
             prevHandler={this.props.prevHandler}
             nextHandler={this.props.nextHandler}
             onSubmit={this.props.onSubmit}

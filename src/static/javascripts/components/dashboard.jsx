@@ -68,7 +68,9 @@ var MainDiv = React.createClass({
         return (
         <div className="mainDiv ">
             {itemNodes}
+            <SurveyCreationCard/>
         </div>
+
         );
     }
 });
@@ -76,7 +78,7 @@ var MainDiv = React.createClass({
 var SurveyDiv = React.createClass({
     //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
     //that we check before/while rendering
-    
+
     getInitialState: function() {
         return({
                 length: Object.keys(this.props.questions).length,
@@ -88,8 +90,8 @@ var SurveyDiv = React.createClass({
                     question_responses:[]
                 },
         });
-    },  
-    
+    },
+
     handleSurveySubmit: function(survey,questionID,response_format){
         var response = this.state.response;
         var question_responses_object = {
@@ -106,7 +108,7 @@ var SurveyDiv = React.createClass({
         }
         response.question_responses.push(question_responses_object);
         this.setState({response: response});
-        
+
         $.ajax({
             url: this.props.routes.response,
 			contentType: 'application/json',
@@ -122,7 +124,7 @@ var SurveyDiv = React.createClass({
 			}.bind(this)
         });
     },
-    
+
     removeCard: function() {
         this.setState({showCard: false});
     },
@@ -143,10 +145,10 @@ var SurveyDiv = React.createClass({
         }
 
         response.question_responses.push(question_responses_object);
-       
+
         this.setState({response: response});
         this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
-        
+
         var iter = this.state.iter;
         if(iter == this.state.length - 1){
             this.handleSurveySubmit(this.state.response);
@@ -170,17 +172,17 @@ var SurveyDiv = React.createClass({
                 response.question_responses.splice(i,1);
             }
         }
-        
+
         response.question_responses.push(question_responses_object);
-        
+
         this.setState({response: response});
         this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
-        
+
         var iter = this.state.iter;
-        
+
 
         this.setState({iter: iter - 1});
-        
+
     },
 
     render: function() {
