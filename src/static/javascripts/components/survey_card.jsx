@@ -62,8 +62,16 @@ var Question = React.createClass({
 
         if(this.props.value == "multipleChoice"){
           return (
-          <input type="text" value={this.props.value} onChange={this.changeHandler}/>
-
+              <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <input
+                  type="checkbox"
+                  name = "option1"
+                  value = "option1"
+                  className="mdl-checkbox__input"
+                  />
+              <input className="mdl-checkbox__label" type="text" value={this.props.value} onChange={this.changeHandler}/>
+          </label>
+          );
 
         } else if(this.props.value == "singleChoice"){
           return (
