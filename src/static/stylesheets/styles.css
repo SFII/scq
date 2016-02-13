@@ -217,7 +217,7 @@ _:-ms-input-placeholder, :root .graph {
   margin: 0;
 }
 .options .mdl-checkbox__box-outline {
-  border-color: rgba(255, 255, 255, 0.89);
+  border-color: teal;
 }
 .options ul {
   margin: 0;
@@ -247,9 +247,6 @@ _:-ms-input-placeholder, :root .graph {
     margin-bottom: auto;
     margin-top: auto;
     float: left;
-}
-
-.options {
 }
 
 .rightButton{
