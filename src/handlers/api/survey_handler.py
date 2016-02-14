@@ -6,8 +6,8 @@ import logging
 import ast
 from models.survey import Survey
 from models.user import User
-from models.course import Course
 from models.question import Question
+from models.instructor import Instructor
 from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
 
 
@@ -29,16 +29,26 @@ class SurveyHandler(BaseHandler):
     def _create_survey(self):
         creator_id = self.current_user['id']
         creator_name = self.current_user['username']
-        course_id = self.json_data.get('course_id', None)
-        course_name = self.json_data.get('course_name', None)
+        item_type = self.json_data.get('item_type', None)
+        item_id = self.json_data.get('item_id', None)
+        item_name = self.json_data.get('item_name', None)
         questions = self.json_data.get('questions', None)
-        if course_id is None:
-            return self.set_status(400, "course_id cannot be null")
-        if course_name is None:
-            course_data = Course().get_item(course_id)
-            if course_data is None:
-                return self.set_status(400, "course_id {0} does not correspond to value in database".format(course_id))
-            course_name = course_data['course_name']
+        if item_type not in Survey().ITEM_TYPES:
+            return self.set_status(400, "item_type must be one of {0}".format(Survey().ITEM_TYPES))
+        if item_id is None:
+            return self.set_status(400, "item_id cannot be null")
+        if item_name is None:
+            model = Survey()._model_from_item_type(item_type)
+            item_data = model.get_item(item_id)
+            if item_data is None:
+                message = "{0} item_id {1} does not correspond to value in database".format(item_type, item_id)
+                return self.set_status(400, message)
+            name = {
+                'Instructor': 'instructor_last',
+                'Course': 'course_name',
+                'User': 'username'
+            }[item_type]
+            item_name = item_data[name]
         if questions is None:
             return self.set_status(400, "questions cannot be null")
         if not isinstance(questions, (list, tuple)):
@@ -53,8 +63,9 @@ class SurveyHandler(BaseHandler):
         survey_data = {
             'creator_id': creator_id,
             'creator_name': creator_name,
-            'course_id': course_id,
-            'course_name': course_name,
+            'item_type': item_type,
+            'item_id': item_id,
+            'item_name': item_name,
             'questions': question_ids,
             'responses': [],
             'created_timestamp': time.time(),

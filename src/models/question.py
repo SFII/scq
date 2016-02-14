@@ -19,11 +19,10 @@ class Question(BaseModel):
         return ['title', 'response_format', 'options']
 
     def fields(self):
-        b = super(__class__, self)
         return {
-            'title': (b.is_string, b.is_not_empty, ),
-            'response_format': (b.is_string, b.is_in_list(self.USER_RESPONSE_FORMAT),),
-            'options': (b.is_list,)
+            'title': (self.is_string, self.is_not_empty, ),
+            'response_format': (self.is_string, self.is_in_list(self.USER_RESPONSE_FORMAT),),
+            'options': (self.is_list,)
         }
 
     def default(self):

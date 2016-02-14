@@ -4,7 +4,7 @@ from models.basemodel import BaseModel
 class Instructor(BaseModel):
 
     def requiredFields(self):
-        return ['instructor_first', 'instructor_last', 'department', 'college', 'section']
+        return ['instructor_first', 'instructor_last', 'department', 'college']
 
     def fields(self):
         return {
@@ -12,14 +12,21 @@ class Instructor(BaseModel):
             'instructor_last': (self.is_string, self.is_not_empty, ),
             'department': (self.is_string, ),
             'college': (self.is_string, ),
-            'section': (self.is_string, )
         }
 
     def default(self):
         return {
-            'instructor_first': "",
-            'instructor_last': "",
-            'department': "",
-            'college': "",
-            'section': ""
+            'instructor_first': '',
+            'instructor_last': '',
+            'department': '',
+            'college': ''
         }
+
+    def create_generic_item(self):
+        data = self.default()
+        data['instructor_first'] = 'Mike'
+        data['instructor_last'] = 'Rawtch'
+        data['department'] = 'ENGR'
+        data['college'] = 'AS'
+        instructor_id = self.create_item(data)
+        return instructor_id

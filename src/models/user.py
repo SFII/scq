@@ -10,6 +10,7 @@ class User(BaseModel):
     TESTING_PASSWORD = 't3sT1ng U$er P4ssw0rd'
     REGISTRATION_TESTING = 'registration_testing'
     REGISTRATION_CULDAP = 'registration_culdap'
+    REGISTRATION_DENY = 'registration_deny'
     REGISTRATION_METHODS = [REGISTRATION_TESTING, REGISTRATION_CULDAP]
     NO_DISCLOSURE = 'Prefer Not to Disclose'
     USER_GENDERS = ['Male', 'Female', 'Other', NO_DISCLOSURE]
@@ -80,16 +81,20 @@ class User(BaseModel):
     def authenticate_test_user(self, username, password):
         return password == self.TESTING_PASSWORD
 
+    def authenticate_deny(self, username, password):
+        return False
+
     def authenticate(self, user_id, password):
         """
         Given user_id and possible password, lookup how to authenticate the user
         and attempt to authenticate the user
         returns True / False whether the authentication is successful
         """
-        user = self.get_item(user_id)
-        username = user['username']
-        registration = user['registration']
+        user_data = self.get_item(user_id)
+        username = user_data['username']
+        registration = user_data['registration']
         return {
             self.REGISTRATION_TESTING: self.authenticate_test_user,
-            self.REGISTRATION_CULDAP: culdapauth.auth_user_ldap
+            self.REGISTRATION_CULDAP: culdapauth.auth_user_ldap,
+            self.REGISTRATION_DENY: authenticate_deny
         }[registration](username, password)

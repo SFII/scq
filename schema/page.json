@@ -1,8 +1,9 @@
 [
     {
         "id" : "Unique-ID",
-        "course_id":"",
-        "course_name":"",
+        "item_type": "Course",
+        "item_id":"",
+        "item_name":"",
         "creator_name":"",
         "creator_id":"",
         "isInstructor":"",
@@ -28,8 +29,9 @@
     },
     {
         "id" : "Unique-ID",
-        "course_id":"",
-        "course_name":"",
+        "item_type": "Course",
+        "item_id":"",
+        "item_name":"",
         "creator_name":"",
         "creator_id":"",
         "isInstructor":"",
@@ -55,8 +57,9 @@
     },
     {
         "id" : "Unique-ID",
-        "course_id":"",
-        "course_name":"",
+        "item_type": "Course",
+        "item_id":"",
+        "item_name":"",
         "creator_name":"",
         "creator_id":"",
         "isInstructor":"",

@@ -5,8 +5,6 @@ from datetime import datetime
 import tornado.gen as gen
 from tornado.options import options, define
 import logging
-import inspect
-import traceback
 
 
 class BaseModel:

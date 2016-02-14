@@ -22,19 +22,105 @@ from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
 import time
 
+define('debug', default=True, help='set True for debug mode', type=bool)
+define('test', default=False, help='set True to run Tests', type=bool)
 define('port', default=8000, help='run on the given port', type=int)
 define('database_name', default='scq', help='rethink database name', type=str)
 define('database_host', default='localhost', help='rethink database host', type=str)
 define('database_port', default=28015, help='rethink database port', type=int)
 
+SETTINGS = {
+    'cookie_secret': "8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=",
+    'autoreload': True,
+    'template_path': 'templates/',
+    'static_path': 'static/',
+    'login_url': '/login'
+    'user': User(),
+    'survey': Survey(),
+    'question': Question(),
+    'surveyResponse': SurveyResponse(),
+    'questionResponse': QuestionResponse(),
+    'instructor': Instructor(),
+    'course': Course()
+}
+
+def initialize():
+    settings['debug'] = options.debug
+    settings['site_port'] = options.port
+    database_name = options.database_name
+    database_port = options.database_port
+    database_host = options.database_host
+    if options.debug:
+        database_name += '_debug'
+    if options.test:
+        database_name += '_test'
+    settings['database_name'] = database_name
+    try:
+        conn = r.connect(host=options.database_host, port=options.database_port)
+        settings['conn'] = conn
+        r.db_create(database_name).run(conn)
+    except Exception as e:
+        logging.warning(e.message)
+    settings['user'].init(database_name, conn)
+    settings['instructor'].init(database_name, conn)
+    settings['course'].init(database_name, conn)
+    settings['survey'].init(database_name, conn)
+    settings['question'].init(database_name, conn)
+    settings['questionResponse'].init(database_name, conn)
+    settings['surveyResponse'].init(database_name, conn)
+    settings['meta'] = settings['user'].get_item('meta')
+    if settings['meta'] is None:
+        meta_data = settings['user'].default()
+        meta_data['id'] = 'meta'
+        meta_data['registration'] = User().REGISTRATION_DENY
+        meta_data['username'] = 'Campus Consensus Team'
+        meta_data['accepted_tos'] = True
+        meta_data['email'] = 'xxx@colorado.edu'
+        settings[meta] = settings['user'].create_item(meta_data)
+
 
 def main():
     tornado.options.parse_command_line()
-    initialize_db()
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
-    logging.info("Listening for connections on localhost:{0}".format(options.port))
+    initialize()
+    application = tornado.web.Application(handlers=routes, **settings)
+    httpserver = HTTPServer(application, xheaders=True)
+    MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 0
+
+    # signal handler
+    def sig_handler(sig, frame):
+        logging.warn("Caught Signal: %s" % sig)
+        tornado.ioloop.IOLoop.instance().add_callback(shutdown)
+
+    # signal handler's callback
+    def shutdown():
+        logging.info("Stopping HttpServer ...")
+        httpserver.stop()  # No longer accept new http traffic
+        instance = tornado.ioloop.IOLoop.instance()
+        deadline = time.time() + MAX_WAIT_SECONDS_BEFORE_SHUTDOWN
+        # recursion for terminate IOLoop.instance()
+
+        def terminate():
+            now = time.time()
+            if now < deadline and (instance._callbacks or instance._timeouts):
+                instance.add_timeout(now + 1, terminate)
+            else:
+                instance.stop()  # After process all _callbacks and _timeouts, break IOLoop.instance()
+                logging.info('Shutdown ...')
+        # process recursion
+        terminate()
+    if options.test:
+        testsuite = unittest.TestLoader().discover('test')
+        return unittest.TextTestRunner(verbosity=2).run(testsuite)
+    if options.debug:
+        httpserver.listen(settings['site_port'])
+        signal.signal(signal.SIGINT, sig_handler)
+        signal.signal(signal.SIGTERM, sig_handler)
+    else:
+        httpserver.bind(settings['site_port'])  # port
+        httpserver.start(0)
+    logging.info("Now serving on http://localhost:{0}".format(settings['site_port']))
     tornado.ioloop.IOLoop.instance().start()
+    logging.info('Exit ...')
 
 
 def initialize_db(db=options.database_name):

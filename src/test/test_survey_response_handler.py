@@ -19,17 +19,13 @@ from server import initialize_db
 import logging
 import mock
 
-try:
-    import urllib.parse as urllib_parse  # py3
-except ImportError:
-    import urllib as urllib_parse  # py2
-
 
 class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
     user_data = {}
     user_id = None
     username = None
-    course_id = ''
+    item_type = 'Course'
+    item_id = ''
     survey_id = ''
     response_id = ''
     survey_data = {}
@@ -76,12 +72,13 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
         # create a user
         user_id = User().create_item(data)
         user_data['id'] = user_id
-        course_id = Course().create_generic_item()
-        Course().subscribe_user(user_id, course_id)
+        item_id = Course().create_generic_item()
+        Course().subscribe_user(user_id, item_id)
         TestResponseHandler.user_data = user_data
         TestResponseHandler.user_id = user_id
         TestResponseHandler.username = username
-        TestResponseHandler.course_id = course_id
+        TestResponseHandler.item_type = 'Course'
+        TestResponseHandler.item_id = item_id
         return
 
     def get_app(self):
@@ -118,18 +115,22 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
     def _test_survey_create(self):
         with mock.patch.object(BaseHandler, 'get_current_user') as m:
             m.return_value = self.user_data
-            body1 = b""
+            body0 = b""
+            response0 = self.fetch('/api/surveys', body=body0, method="POST")
+            body1 = tornado.escape.json_encode({'item_type': self.item_type})
             response1 = self.fetch('/api/surveys', body=body1, method="POST")
-            body2 = tornado.escape.json_encode({'course_id': self.course_id})
+            body2 = tornado.escape.json_encode({'item_type': self.item_type, 'item_id': self.item_id})
             response2 = self.fetch('/api/surveys', body=body2, method="POST")
-            body3 = tornado.escape.json_encode({'course_id': self.course_id, 'questions': 'not an array'})
+            body3 = tornado.escape.json_encode({'item_type': self.item_type, 'item_id': self.item_id, 'questions': 'not an array'})
             response3 = self.fetch('/api/surveys', body=body3, method="POST")
-            body4 = tornado.escape.json_encode({'course_id': self.course_id, "questions": self.bad_questions})
+            body4 = tornado.escape.json_encode({'item_type': self.item_type, 'item_id': self.item_id, "questions": self.bad_questions})
             response4 = self.fetch('/api/surveys', body=body4, method="POST")
-            body5 = tornado.escape.json_encode({'course_id': self.course_id, "questions": self.good_questions})
+            body5 = tornado.escape.json_encode({'item_type': self.item_type, 'item_id': self.item_id, "questions": self.good_questions})
             response5 = self.fetch('/api/surveys', body=body5, method="POST")
+        self.assertEqual(response0.code, 400)
+        self.assertTrue('item_type must be one of' in str(response0.error))
         self.assertEqual(response1.code, 400)
-        self.assertTrue(str(response1.error).endswith('course_id cannot be null'))
+        self.assertTrue(str(response1.error).endswith('item_id cannot be null'))
         self.assertEqual(response2.code, 400)
         self.assertTrue(str(response2.error).endswith('questions cannot be null'))
         self.assertEqual(response3.code, 400)
@@ -183,12 +184,12 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
     def tearDownClass():
         user_id = TestResponseHandler.user_id
         survey_id = TestResponseHandler.survey_id
-        course_id = TestResponseHandler.course_id
+        item_id = TestResponseHandler.item_id
         response_id = TestResponseHandler.response_id
         User().delete_item(user_id)
         Survey().delete_item(survey_id)
         SurveyResponse().delete_item(response_id)
-        Course().delete_item(course_id)
+        Course().delete_item(item_id)
         logging.disable(logging.NOTSET)
 
 if __name__ == '__main__':

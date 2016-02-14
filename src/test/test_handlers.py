@@ -7,6 +7,7 @@ from config.config import application
 from setup import Setup
 from server import initialize_db
 
+
 class TestHandlers(tornado.testing.AsyncHTTPTestCase):
     def setUpClass():
         logging.disable(logging.CRITICAL)
