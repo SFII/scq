@@ -1,9 +1,9 @@
 import unittest
 import tornado.testing
 from tornado.httputil import HTTPHeaders
+from test.test_runner import BaseAsyncTest
 import ast
 import tornado.web
-import config.config
 import time
 from models.basemodel import BaseModel
 from models.course import Course
@@ -13,14 +13,11 @@ from models.question import Question
 from models.survey_response import SurveyResponse
 import rethinkdb as r
 from handlers.base_handler import BaseHandler
-from config.config import application
-from setup import Setup
-from server import initialize_db
 import logging
 import mock
 
 
-class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
+class TestResponseHandler(BaseAsyncTest):
     user_data = {}
     user_id = None
     username = None
@@ -61,7 +58,8 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
 
     def setUpClass():
         logging.disable(logging.CRITICAL)
-        initialize_db(db='test')
+        db = BaseAsyncTest.application.settings['database_name']
+        conn = BaseAsyncTest.application.settings['conn']
         # Creates a bare minimum user data
         data = User().default()
         username = str(time.time())
@@ -80,9 +78,6 @@ class TestResponseHandler(tornado.testing.AsyncHTTPTestCase):
         TestResponseHandler.item_type = 'Course'
         TestResponseHandler.item_id = item_id
         return
-
-    def get_app(self):
-        return application
 
     def test_survey_creation_and_response(self):
         self._test_survey_create()

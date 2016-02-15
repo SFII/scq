@@ -1,29 +1,19 @@
 import unittest
-import tornado.testing
+from test.test_runner import BaseAsyncTest
 import tornado.web
-import config.config
 import time
-from models.basemodel import BaseModel
 from models.user import User
 import rethinkdb as r
-from config.config import application
-from setup import Setup
-from server import initialize_db
 import logging
 
 
-class TestUser(tornado.testing.AsyncHTTPTestCase):
+class TestUser(BaseAsyncTest):
     user_data = {}
     user_id = None
     username = None
 
     def setUpClass():
         logging.disable(logging.CRITICAL)
-        initialize_db(db='test')
-        # Designates Basemodel to use the test database
-        BaseModel.DB = 'test'
-        # Gives Basemodel a direct connection to the rethinkdb
-        BaseModel.conn = r.connect(host='localhost', port=28015)
         # Creates a bare minimum user data
         data = User().default()
         TestUser.username = str(time.time())
@@ -33,9 +23,6 @@ class TestUser(tornado.testing.AsyncHTTPTestCase):
         TestUser.user_data = data
         TestUser.user_id = User().create_item(data)
         return
-
-    def get_app(self):
-        return application
 
     def test_testing_authentication(self):
         self.assertEqual(TestUser.user_data['registration'], User().REGISTRATION_TESTING)
