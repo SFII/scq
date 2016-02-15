@@ -260,3 +260,7 @@ _:-ms-input-placeholder, :root .graph {
  margin-right: auto;
  right: 0;
 }
+
+.no_bullets {
+    list-style-type: none;
+}
