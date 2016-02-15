@@ -17,6 +17,7 @@ import rethinkdb as r
 settings = {
     'cookie_secret': "8goWPH9uTyO+9e2NzuaW6pbR6WKH1EbmrXIfxttXq00=",
     'autoreload': True,
+    'sigint_timeout': 0,
     'template_path': 'templates/',
     'static_path': 'static/',
     'login_url': '/login',
@@ -30,7 +31,7 @@ settings = {
 }
 
 
-def initialize():
+def initialize_settings():
     settings['debug'] = options.debug
     settings['site_port'] = options.port
     database_name = options.database_name
@@ -40,6 +41,9 @@ def initialize():
         database_name += '_test'
     elif options.debug:
         database_name += '_debug'
+    if not options.debug:
+        settings['sigint_timeout'] = 10
+        settings['autoreload'] = False
     settings['database_name'] = database_name
     try:
         conn = r.connect(host=options.database_host, port=options.database_port)
@@ -63,8 +67,8 @@ def initialize():
         meta_data['accepted_tos'] = True
         meta_data['email'] = 'xxx@colorado.edu'
         settings['meta'] = settings['user'].create_item(meta_data, skip_verify=True)
+    return settings
 
 
-def make_application():
-    initialize()
+def make_application(settings):
     return Application(handlers=routes, **settings)

@@ -7,17 +7,28 @@ import logging
 import rethinkdb as r
 import signal
 import time
+from models.basemodel import BaseModel
+from models.course import Course
+from models.instructor import Instructor
+from models.question import Question
+from models.section import Section
+from models.student import Student
+from models.survey import Survey
+from models.user import User
 from tornado.httpserver import HTTPServer
 from test.test_runner import run_tests
-from config.application import make_application
+from config.application import make_application, initialize_settings
 from tornado import ioloop, gen
 from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
 
 application = None
+settings = {}
 
 define('debug', default=True, help='set True for debug mode', type=bool)
 define('test', default=False, help='set True to run Tests', type=bool)
+define('wipe_user_data', default=False, help='set True to violently wipe user survey and course data', type=bool)
+define('bootstrap_data', default=False, help='set True to provision a user with surveys and courses', type=bool)
 define('port', default=8000, help='run on the given port', type=int)
 define('database_name', default='scq', help='rethink database name', type=str)
 define('database_host', default='localhost', help='rethink database host', type=str)
@@ -26,9 +37,9 @@ define('database_port', default=28015, help='rethink database port', type=int)
 
 def main():
     tornado.options.parse_command_line()
-    application = make_application()
+    settings = initialize_settings()
+    application = make_application(settings)
     httpserver = HTTPServer(application, xheaders=True)
-    MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 0
 
     # signal handler
     def sig_handler(sig, frame):
@@ -40,7 +51,7 @@ def main():
         logging.info("Stopping HttpServer ...")
         httpserver.stop()  # No longer accept new http traffic
         instance = tornado.ioloop.IOLoop.instance()
-        deadline = time.time() + MAX_WAIT_SECONDS_BEFORE_SHUTDOWN
+        deadline = time.time() + settings['sigint_timeout']
         # recursion for terminate IOLoop.instance()
 
         def terminate():
@@ -54,6 +65,17 @@ def main():
         terminate()
     if options.test:
         return run_tests(application)
+    if options.bootstrap_data or options.wipe_user_data:
+        username = input("please input username: ")
+        cursor = User().find_item({'username': username})
+        for user_data in cursor:
+            user_id = user_data['id']
+            logging.info('user_id: ' + user_id)
+            if options.wipe_user_data:
+                return wipe_data(user_id)
+            if options.bootstrap_data:
+                return bootstrap_data(user_id)
+        return logging.error('no found user with username: ' + username)
     if options.debug:
         httpserver.listen(settings['site_port'])
         signal.signal(signal.SIGINT, sig_handler)
@@ -66,36 +88,10 @@ def main():
     logging.info('Exit ...')
 
 
-# def initialize_db(db=options.database_name):
-#     """
-#     Initializes a database for use in the project with a specified name
-#     Specified name defaults to options.database_name
-#     """
-#     logging.info("Connecting")
-#     try:
-#         conn = r.connect(host=options.database_host, port=options.database_port)
-#         BaseModel.DB = db
-#         BaseModel.conn = conn
-#         logging.info("Creating database '{0}'".format(db))
-#         r.db_create(db).run(conn)
-#     except r.errors.ReqlOpFailedError as e:
-#         logging.warning(e.message)
-#     except Exception as e:
-#         logging.error(e.message)
-#     logging.info('Initializing tables')
-#     Course().init(db, conn)
-#     Instructor().init(db, conn)
-#     Question().init(db, conn)
-#     Section().init(db, conn)
-#     Student().init(db, conn)
-#     Survey().init(db, conn)
-#     User().init(db, conn)
-#     SurveyResponse().init(db, conn)
-#     QuestionResponse().init(db, conn)
-
-
 def bootstrap_data(user_id):
-    initialize_db()
+    """
+    Creates new course and survey objects, and associates all of this data
+    """
     user_data = User().get_item(user_id)
     if user_data is None:
         logging.error("user_id {0} does not correspond to a valid user in the database!".format(user_id))
@@ -113,7 +109,6 @@ def wipe_data(user_id):
     Warning: Does not disassociate surveys with courses, user with courses, etc.
     It just makes a user fresh and ready for new data
     """
-    initialize_db()
     user_data = User().get_item(user_id)
     if user_data is None:
         logging.error("user_id {0} does not correspond to a valid user in the database!".format(user_id))

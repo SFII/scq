@@ -96,5 +96,5 @@ class User(BaseModel):
         return {
             self.REGISTRATION_TESTING: self.authenticate_test_user,
             self.REGISTRATION_CULDAP: culdapauth.auth_user_ldap,
-            self.REGISTRATION_DENY: authenticate_deny
+            self.REGISTRATION_DENY: self.authenticate_deny
         }[registration](username, password)

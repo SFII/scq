@@ -7,8 +7,7 @@ from test.test_runner import BaseAsyncTest
 
 class TestHandlers(BaseAsyncTest):
     def setUpClass():
-        pass
-        # logging.disable(logging.CRITICAL)
+        logging.disable(logging.CRITICAL)
 
     def test_home(self):
         response = self.fetch('/')
