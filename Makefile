@@ -1,26 +1,25 @@
 # scq makefile
 
-PROJECTPATH="`pwd`/src"
-TESTINGPATH="`pwd`/test"
+PROJECTPATH="`pwd`"
 TESTS = $(wildcard test/*.py)
 
 serve:
-	@export PROJECTPATH=${PROJECTPATH} && gulp prod-js && python3 server.py
+	@export PROJECTPATH=${PROJECTPATH} && gulp prod-js && python3 main.py
 
 serve-nogulp:
-	@export PROJECTPATH=${PROJECTPATH} && python3 server.py
+	@export PROJECTPATH=${PROJECTPATH} && python3 main.py
 
 console:
 	@export PROJECTPATH=${PROJECTPATH} && gulp dev-js && python3
 
 test:
-	@export PROJECTPATH=${PROJECTPATH} && python3 server.py --test
+	@export PROJECTPATH=${PROJECTPATH} && python3 main.py --test
 
 bootstrap_data:
-	@export PROJECTPATH=${PROJECTPATH} && python3 server.py --bootstrap_data
+	@export PROJECTPATH=${PROJECTPATH} && python3 main.py --bootstrap_data
 
 wipe_user_data:
-	@export PROJECTPATH=${PROJECTPATH} && python3 server.py --wipe_user_data
+	@export PROJECTPATH=${PROJECTPATH} && python3 main.py --wipe_user_data
 
 build:
 	pip3 install -r requirements.txt
