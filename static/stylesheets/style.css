@@ -214,3 +214,8 @@ html, body {
 .add_vertical_space {
     margin-bottom: 45px;
 }
+
+
+.no_bullets {
+    list-style-type: none;
+}
