@@ -1,19 +1,13 @@
 import unittest
 import tornado.testing
 import tornado.web
-import config.config
 import logging
-from config.config import application
-from setup import Setup
-from server import initialize_db
+from test.test_runner import BaseAsyncTest
 
-class TestHandlers(tornado.testing.AsyncHTTPTestCase):
+
+class TestHandlers(BaseAsyncTest):
     def setUpClass():
         logging.disable(logging.CRITICAL)
-        initialize_db(db='test')
-
-    def get_app(self):
-        return application
 
     def test_home(self):
         response = self.fetch('/')

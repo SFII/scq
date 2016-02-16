@@ -24,7 +24,7 @@ routes = [
     (r"/login", LoginHandler),
     (r"/logout", LogoutHandler),
     (r"/register/culdap", CuLdapRegisterHandler),
-    (r"/register", RegisterHandler),
+    (r"/register", CuLdapRegisterHandler),
     (r"/dashboard", DashboardHandler),
     (r"/api/surveys", SurveyHandler),
     (r"/api/response", ResponseHandler),

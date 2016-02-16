@@ -1,10 +1,9 @@
 import unittest
-import tornado.testing
+from test.test_runner import BaseAsyncTest
 import time
 import rethinkdb as r
 import logging
 from models.basemodel import BaseModel
-from config.config import application
 
 
 class MockModel(BaseModel):
@@ -32,28 +31,21 @@ class MockModel(BaseModel):
         }
 
 
-class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
+class TestBaseModel(BaseAsyncTest):
     mock_data = {}
     mock_id = ""
     mock_x = 0
 
     def setUpClass():
         logging.disable(logging.CRITICAL)
-        # Designates Basemodel to use the test database
-        BaseModel.DB = 'test'
-        # Gives Basemodel a direct connection to the rethinkdb
-        BaseModel.conn = r.connect(host='localhost', port=28015)
         # Initializes Mockmodel Table
-        MockModel().init(BaseModel.DB, BaseModel.conn)
+        MockModel().init(BaseAsyncTest.database_name, BaseAsyncTest.conn)
         return
 
     def setup():
         mock_data = {}
         mock_id = ""
         mock_x = 0
-
-    def get_app(self):
-        return application
 
     def test_is_int(self):
         try:
@@ -326,7 +318,7 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
         self.assertEqual(MockModel().strictSchema(), True)
 
     def test_is_unique(self):
-        MockModel().purge(BaseModel.DB, BaseModel.conn)
+        MockModel().purge(BaseAsyncTest.database_name, BaseAsyncTest.conn)
         mock_data = MockModel().default()
         mock_data['x'] = time.time()
         is_unique_a = MockModel().is_unique('a')
@@ -435,7 +427,7 @@ class TestBaseModel(tornado.testing.AsyncHTTPTestCase):
     def tearDownClass():
         logging.disable(logging.NOTSET)
         # Drop the database
-        MockModel().drop(BaseModel.DB, BaseModel.conn)
+        MockModel().drop(BaseAsyncTest.database_name, BaseAsyncTest.conn)
 
 if __name__ == '__main__':
     unittest.main()
