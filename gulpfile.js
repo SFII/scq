@@ -13,13 +13,13 @@ var plumber = require('gulp-plumber');
 
 
 js_files = [
-    './src/static/javascripts/db.js',
-    './src/static/javascripts/components/questions.jsx',
-    './src/static/javascripts/components/cards.jsx',
-    './src/static/javascripts/components/dashboard.jsx',
-    './src/static/javascripts/components/welcome.jsx',
-    './src/static/javascripts/components/survey_card.jsx',
-    './src/static/javascripts/components/survey_sample.jsx'
+    './static/javascripts/db.js',
+    './static/javascripts/components/questions.jsx',
+    './static/javascripts/components/cards.jsx',
+    './static/javascripts/components/dashboard.jsx',
+    './static/javascripts/components/welcome.jsx',
+    './static/javascripts/components/survey_card.jsx',
+    './static/javascripts/components/survey_sample.jsx'
 
 ]
 
@@ -42,26 +42,26 @@ gulp.task('dev-js', function() {
         .pipe(babel())
         .pipe(concat('all.js'))
         .pipe(rename('all.js'))
-        .pipe(gulp.dest('./src/static/dist/'));
+        .pipe(gulp.dest('./static/dist/'));
 });
 
 gulp.task('prod-js', function(){
     return gulp.src(js_files)
         .pipe(babel())
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('./src/static/dist/'))
+        .pipe(gulp.dest('./static/dist/'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('./src/static/dist/'));
+        .pipe(gulp.dest('./static/dist/'));
 })
 
 gulp.task('minify-css', function () {
-    gulp.src('./src/static/stylesheets/*.css')
+    gulp.src('./static/stylesheets/*.css')
         .pipe(minify({keepBreaks: true}))
         .pipe(rename({
             suffix: '.min.css'
         }))
-        .pipe(gulp.dest('./src/static/dist/'));
+        .pipe(gulp.dest('./static/dist/'));
 });
 
 // Watch Files For Changes
