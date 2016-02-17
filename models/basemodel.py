@@ -16,6 +16,9 @@ class BaseModel:
     def is_truthy(self, data):
         assert (data and True), "data '{0}' Must be Truthy".format(data)
 
+    def is_boolean(self, data):
+        assert (data == True or data == False)
+
     def is_falsey(self, data):
         assert not (data or False), "data '{0}' Must be Falsey".format(data)
 
