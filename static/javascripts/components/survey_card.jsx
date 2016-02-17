@@ -9,12 +9,13 @@ var SurveyCreationCard = React.createClass({
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <Fields/>
+                  <AddQuestion/>
+                  <FinishSurvey/>
               </div>
           </div>
       );
     }
 });
-
 
 
 var Fields = React.createClass({
@@ -67,11 +68,11 @@ var Question = React.createClass({
     /*
     *
     render: function(){
+
+      var mQuestions = [2];
       const options = this.props.options.map((option) => {
         return (
-          <li className="mdl-list__item">
-            <input  type="text"  placeholder="Introduce an option" onChange={this.changeHandler}/>
-          </li>
+            <p>Hello</p>
         )
       });
     *
@@ -79,12 +80,24 @@ var Question = React.createClass({
 
     render: function(){
 
+    /*
+    *
+    type = this.props.value;
+    var button = (<div></div>)
+    switch (type) {
+      case ¨multipleChoice":
+        button = <MCQuestion />
+    }
+    *
+    */
+
         if(this.props.value == "multipleChoice"){
+          var mQuestions = [2];
+
+
           return (
             <div>
-            <ul className="mdl-list">
-               {options}
-              </ul>
+                <MQuestions/>
 
               <ul className="no_bullets mdl-list">
                 <li className="mdl-list__item">
@@ -94,7 +107,7 @@ var Question = React.createClass({
 
                   </button>
 
-                &nbsp;&nbsp;&nbsp; ADD QUESTION
+                &nbsp;&nbsp;&nbsp; ADD OPTION
                 </p>
                </li>
 
@@ -122,5 +135,43 @@ var Question = React.createClass({
         <p onChange={this.changeHandler}></p>
         );
         }
+    }
+});
+
+
+var MQuestions = React.createClass({
+    render: function(){
+      return (
+      <ul className="mdl-list">
+      <li>
+      <input type="text"  onChange={this.changeHandler}/>
+      </li>
+      <li>
+      <input type="text"  onChange={this.changeHandler}/>
+      </li>
+
+        </ul>
+      );
+    }
+});
+
+
+var AddQuestion = React.createClass({
+    render: function(){
+      return (
+          <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              ADD QUESTION
+          </button>
+      );
+    }
+});
+
+var FinishSurvey = React.createClass({
+    render: function(){
+      return (
+          <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
+              FINNISH SURVEY
+          </button>
+      );
     }
 });

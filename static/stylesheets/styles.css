@@ -264,3 +264,9 @@ _:-ms-input-placeholder, :root .graph {
 .no_bullets {
     list-style-type: none;
 }
+
+.right_button{
+  position: absolute;
+    bottom: 0;
+    right: 0;
+}
