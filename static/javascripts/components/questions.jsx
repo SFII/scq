@@ -113,10 +113,26 @@ var SingleChoice = React.createClass({
 getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswers = [];
         for(var i =0; i < length; i++){
             questionObj[i]=false;
         }
-        return {data: questionObj};
+        for(var i = responseStateLength-1; i >= 0; i--){
+            if(responseState[i].question_id == this.props.questionID){
+                prevAnswers = responseState[i].response_data;
+                    for(var i2 = 0; i2 < length; i2++){
+                        if(prevAnswers[i2]==true){
+                            questionObj[i2] = true;
+                        }
+                    }
+            }
+        }
+        return {
+            data: questionObj,
+            currAnswers: prevAnswers
+        };
     },
 
     handleChange: function(i,value){
@@ -128,12 +144,33 @@ getInitialState: function(){
             changeAnswer[iter]=false;
         }
         changeAnswer[i] = true;
-        this.setState({data: changeAnswer});
+        this.setState({
+            data: changeAnswer,
+            currAnswers: this.state.data
+        });
     },
 
     render: function(){
         var surveyID = String(this.props.surveyID);
         const renderedOptions = this.props.options.map((option, i) => {
+        if(this.state.currAnswers[i] == true){
+            return (
+                <div>
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+                    <input 
+                    type="radio" 
+                    className="mdl-radio__button"
+                    name = {surveyID}
+                    value= {i}
+                    onChange={this.handleChange.bind(this,i,this.state.data[i])}
+                    checked>
+                    </input>
+                      <span className="mdl-radio__label"> { option } </span>
+                    </label>
+                </div>
+            )
+        }
+        else{
             return (
                 <div>
                     <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
@@ -148,6 +185,7 @@ getInitialState: function(){
                     </label>
                 </div>
             )
+        }
         });
 
         return (
@@ -178,7 +216,15 @@ getInitialState: function(){
 var FreeResponse = React.createClass({
 
     getInitialState: function(){
-        return {answer: 'Change Me'};
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswer = "Change Me!";
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswer = responseState[i].response_data;
+          }
+        }
+        return {answer: prevAnswer};
     },
 
     handleChange: function(e){
@@ -218,7 +264,17 @@ var FreeResponse = React.createClass({
 */
 var Rating = React.createClass({
    	getInitialState: function(){
-		return{answer: 5};
+		var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswer = 5;
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswer = responseState[i].response_data;
+          }
+        }
+        return{
+            answer: prevAnswer
+        }
 	},
 
 	handleChange:function(e){
