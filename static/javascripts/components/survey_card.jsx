@@ -1,14 +1,48 @@
+
+/*
+* Survey. Filled with data to send (JSON)
+* survey_handler.py/def _survey_from_request(self):
+*/
+var survey = [
+
+  {
+  "id": "",
+  "item_id":"",
+  "item_name":"",
+  "item_type":"",
+  "creator_name":"",
+  "creator_id":"",
+  "questions": [
+      {
+          "id" : "",
+          "type" : "",
+          "question":"",
+          "options":[]
+      }
+  ]
+}
+];
+
+
 /*
 * Page with the Card for the creation of surveys
+* is passing survey[0].questions
 */
 
+//can pass variables
 var SurveyCreationCard = React.createClass({
+
+    //mdl in new questions
+    componentDidUpdate: function(){
+        componentHandler.upgradeDom();
+    },
+
     render: function(){
       return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText="Create a Survey"/>
-                  <Fields/>
+                  <FieldDiv survey={survey[0].questions} />
                   <AddQuestion/>
                   <FinishSurvey/>
               </div>
@@ -17,23 +51,39 @@ var SurveyCreationCard = React.createClass({
     }
 });
 
+var FieldDiv = React.createClass({
+render: function(){
+    var questionNodes = this.props.survey.map(function(survey) {
+      return (
+        <Fields/>
+      );
+    });
+  return (
+    <div className="commentList">
+       {questionNodes}
+    </div>
+  );
+}
+});
 
+
+
+/*
+* Field is receiving the survey
+*/
 var Fields = React.createClass({
-
     //set initial value
     getInitialState: function() {
         return {value: 'select'};
     },
-
     //set value change
     changeHandler: function(event) {
         this.setState({value: event.target.value});
     },
-
     render: function(){
       return (
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <h4>Add a Question:</h4>
+              <h4>Add Questions:</h4>
               <form>
                   <p>Title:<input type="text" name="title_question"/></p>
                   <p>Type:
@@ -52,12 +102,9 @@ var Fields = React.createClass({
     }
 });
 
+
 var Question = React.createClass({
 
-    //mdl in new questions
-    componentDidUpdate: function(){
-        componentHandler.upgradeDom();
-    },
 
     changeHandler: function(event) {
         //not sure if needed
@@ -193,6 +240,10 @@ var SQuestions = React.createClass({
 });
 
 var AddQuestion = React.createClass({
+    clickHandler: function() {
+      survey[0].questions.push("option");
+    },
+
     render: function(){
       return (
           <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -203,6 +254,27 @@ var AddQuestion = React.createClass({
 });
 
 var FinishSurvey = React.createClass({
+
+    /* send Survey
+    *  url: this.props.routes.surveys, /api/surveys
+    *  not finished
+    */
+    loadPageJSON: function() {
+    $.ajax({
+    url: '/api/surveys',
+    type: 'POST',
+    dataType: 'json',
+    cache: true,
+    success: function(data){
+    //on success we set the state of Page to be equal to the JSON received
+    this.setState({data: data});
+    }.bind(this),
+    error: function(xhr, status, err){
+    console.error(this.props.routes.surveys, status, err.toString());
+    }.bind(this)
+    });
+    },
+
     render: function(){
       return (
           <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
