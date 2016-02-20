@@ -1,7 +1,7 @@
 var TitleSection = React.createClass({
     render: function(){
       return (
-        <div className="mdl-card__title mdl-card--expand mdl-color--teal-300">
+        <div className="mdl-card__title mdl-card--expand mdl-color--primary">
           <h2 className="mdl-card__title-text"> { this.props.titleText } </h2>
         </div>
       );
@@ -13,7 +13,9 @@ var Card = React.createClass({
      * why we have it.. :)
     */
     getInitialState: function(){
-        return {response: []};
+        return {
+            responseState: []
+        };
     },
     componentDidUpdate: function(){
         componentHandler.upgradeDom();    
