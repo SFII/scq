@@ -1,14 +1,35 @@
 {% extends "../layouts/base.html" %}
 {% block title %}Login{% end %}
 {% block content %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+<link href="/static/stylesheets/style.css" rel="stylesheet" type="text/css">
 
 <form action="/register/culdap" method="post">
-  <label>CU Login Name</label><br />
-  <input type="text" name="username" required><br>
-  <label>Password</label><br />
-  <input type="password" name="password" required><br />
+<center>
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+  <input class="mdl-textfield__input" type="text" id="usernameId" name="username" required><br/>
+<label class="mdl-textfield__label" for="usernameId">CU Login Name</label> 
+    </div>
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">    
+    <input class="mdl-textfield__input" input type="password" id="passwordId" name="password" required><br />
+    <label class="mdl-textfield__label" for="passwordId">Password</label>
+    </div>
+    
+    <div class="add_vertical_space">
+
   <input type="checkbox" name="accept" unchecked required>I accept the <a href="/tos">Terms and Conditions.</a><br>
-  <input type="submit" id="loginbtn" name="login" value="REGISTER" class="button"><br />
+    </div>
+  <input type="submit" id="loginbtn" name="login" value="REGISTER" class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"><br />
+
   {% raw xsrf_form_html() %}
+    </center>
 </form>
+
 {% end %}
+
+
+<!-- Textfield with Floating Label -->
+
+
