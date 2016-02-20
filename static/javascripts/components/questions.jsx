@@ -10,10 +10,22 @@ var MultipleChoice = React.createClass({
         for(var i =0; i < length; i++){
             questionObj[i]=false;
         }
-        return {data: questionObj};
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswers = [];
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswers = responseState[i].response_data;
+          }
+        }
+        return {
+            data: questionObj,
+            currAnswers: prevAnswers
+        };
     },
 
     handleChange: function(i,value){
+        console.log("we in here fam");
         var NewValue = null;
         if(value == false){
             NewValue = true;
@@ -23,11 +35,15 @@ var MultipleChoice = React.createClass({
         }
         var changeAnswer = this.state.data;
         changeAnswer[i] = NewValue;
-        this.setState({data: changeAnswer})
+        console.log(this.state.data);
+        this.setState({
+        data: changeAnswer,
+        currAnswers: this.state.data})
     },
 
     render: function(){
       const renderedOptions = this.props.options.map((option,i) => {
+      if(this.state.currAnswers[i] == true){
         return (
             <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
                 <input
@@ -36,11 +52,28 @@ var MultipleChoice = React.createClass({
                     name = {option}
                     key = {i}
                     className="mdl-checkbox__input"
-                    onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
+                    onChange= {this.handleChange.bind(this,i, this.state.data[i])}
+                    checked>
                 </input>
                 <span className="mdl-checkbox__label"> { option } </span>
             </label>
         )
+      }
+      else{
+          return (
+                <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                    <input
+                        type="checkbox"
+                        value = {this.state.data[i]}
+                        name = {option}
+                        key = {i}
+                        className="mdl-checkbox__input"
+                        onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
+                    </input>
+                    <span className="mdl-checkbox__label"> { option } </span>
+                </label>
+        )
+      }
       });
       return (
         <div className="options mdl-card__supporting-text mdl-color-text--grey-600">
