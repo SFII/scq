@@ -7,15 +7,22 @@ var MultipleChoice = React.createClass({
     getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
-        for(var i =0; i < length; i++){
-            questionObj[i]=false;
-        }
         var responseState = this.props.responseState;
         var responseStateLength = Object.keys(responseState).length;
         var prevAnswers = [];
+        for(var i =0; i < length; i++){
+            questionObj[i]=false;
+        }
+        console.log(responseStateLength);
         for(var i = responseStateLength-1; i >= 0; i--){
+          console.log(i);
           if(responseState[i].question_id == this.props.questionID){
              prevAnswers = responseState[i].response_data;
+             for(var i2 =0; i2 < length; i2++){
+                 if(prevAnswers[i2] == true){
+                    questionObj[i2]= true;
+                 }
+             }
           }
         }
         return {
@@ -37,8 +44,9 @@ var MultipleChoice = React.createClass({
         changeAnswer[i] = NewValue;
         console.log(this.state.data);
         this.setState({
-        data: changeAnswer,
-        currAnswers: this.state.data})
+            data: changeAnswer,
+            currAnswers: this.state.data
+        })
     },
 
     render: function(){
