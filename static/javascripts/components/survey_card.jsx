@@ -117,17 +117,37 @@ var Question = React.createClass({
 
         } else if(this.props.value == "singleChoice"){
           return (
-            <input type="text" value={this.props.value} onChange={this.changeHandler}/>
+          <div>
+              <SQuestions/>
+
+            <ul className="no_bullets mdl-list">
+              <li className="mdl-list__item">
+              <p>
+                <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                <i className="material-icons">add</i>
+
+                </button>
+
+              &nbsp;&nbsp;&nbsp; ADD OPTION
+              </p>
+             </li>
+
+          </ul>
+          </div>
           );
 
         } else if(this.props.value == "rating"){
           return (
-            <input type="text" value={this.props.value} onChange={this.changeHandler}/>
+          <p> Select scale
+          <input type="text" onChange={this.changeHandler}/>
+          </p>
           );
 
         } else if(this.props.value == "freeResponse"){
           return (
-            <input type="text" value={this.props.value} onChange={this.changeHandler}/>
+          <p> Select maximum of words
+          <input type="text" onChange={this.changeHandler}/>
+          </p>
           );
 
         } else {
@@ -155,6 +175,22 @@ var MQuestions = React.createClass({
     }
 });
 
+
+var SQuestions = React.createClass({
+    render: function(){
+      return (
+      <ul className="mdl-list">
+      <li>
+      <input type="text"  onChange={this.changeHandler}/>
+      </li>
+      <li>
+      <input type="text"  onChange={this.changeHandler}/>
+      </li>
+
+        </ul>
+      );
+    }
+});
 
 var AddQuestion = React.createClass({
     render: function(){
