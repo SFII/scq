@@ -17,23 +17,7 @@ var Card = React.createClass({
             responseState: []
         };
     },
-    /*
-    changeResponseState: function(newState,questionID){
-        responseState = this.state.responseState;
-        var responseStateObject = {
-            question_id: questionID,
-            newState: newState
-        }
-        var length = Object.keys(responseState).length;
-        for(var i = length-1; i >= 0; i--){
-            if(responseState[i].question_id == questionID){
-                responseState.splice(i,1);
-            }
-        }
-        responseState.push(responseStateObject);
-        this.setState({responseState: newState})
-    }
-    */
+    
     componentDidUpdate: function(){
         componentHandler.upgradeDom();
     },

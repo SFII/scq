@@ -5,28 +5,63 @@
 */
 var Footer = React.createClass({
     render: function() {
-        if(this.props.questionNum == 0){
+    //first question, survey not filled out
+        if(this.props.questionNum == 0 && this.props.responseSize != (this.props.numQuestions)){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
-                <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
-                    Previous
-                </button>
+                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Previous
+                    </button>
 
-                <Progress
-                questionNum = {this.props.questionNum}
-                numQuestions = {this.props.numQuestions}
-                responseSize={this.props.responseSize}/>
+                    <Progress
+                    questionNum = {this.props.questionNum}
+                    numQuestions = {this.props.numQuestions}
+                    responseSize={this.props.responseSize}/>
 
-                <NextButton
-                nextHandler={this.props.nextHandler}
-                surveyData={this.props.surveyData}
-                questionID={this.props.questionID}
-                response_format={this.props.response_format}/>
-
+                    <NextButton
+                    nextHandler={this.props.nextHandler}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                    
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                    <button className="surveySubmit mdl-cell mdl-cell--8-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Submit
+                    </button>
+                    <div className="mdl-cell mdl-cell--2-col"></div>
                 </div>
-            );
+            )
         }
-        else if(this.props.questionNum == this.props.numQuestions-1){
+        // first question, survey is filled out
+        else if(this.props.questionNum == 0 && this.props.responseSize == (this.props.numQuestions)){
+            return(
+                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Previous
+                    </button>
+
+                    <Progress
+                    questionNum = {this.props.questionNum}
+                    numQuestions = {this.props.numQuestions}
+                    responseSize={this.props.responseSize}/>
+
+                    <NextButton
+                    nextHandler={this.props.nextHandler}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                    
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                    <SubmitButton
+                    onSubmit={this.props.onSubmit}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                </div>
+            )
+        }
+        else if(this.props.questionNum == (this.props.numQuestions)-1){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <PrevButton
@@ -39,37 +74,109 @@ var Footer = React.createClass({
                     questionNum = {this.props.questionNum}
                     numQuestions = {this.props.numQuestions}
                     responseSize={this.props.responseSize}/>
-
+                    
+                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Next
+                    </button>
+                    
+                    <div className="mdl-cell mdl-cell--2-col"></div>
                     <SubmitButton
                     onSubmit={this.props.onSubmit}
                     surveyData={this.props.surveyData}
                     questionID={this.props.questionID}
                     response_format={this.props.response_format}/>
+                    <div className="mdl-cell mdl-cell--2-col"></div>
                 </div>
-            );
+            )
         }
-        else{
+        else if(this.props.questionNum == (this.props.numQuestions) && this.props.responseSize == this.props.numQuestions){
+            return(
+                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                    <PrevButton
+                    prevHandler={this.props.prevHandler}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+
+                    <Progress
+                    questionNum = {this.props.questionNum}
+                    numQuestions = {this.props.numQuestions}
+                    responseSize={this.props.responseSize}/>
+                    
+                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Next
+                    </button>
+                    
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                    <SubmitButton
+                    onSubmit={this.props.onSubmit}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                </div>
+            )
+        }
+        //not the first question, not the last question, and survey not filled out
+    else if(this.props.questionNum != 0 && this.props.questionNum != (this.props.numQuestions) && this.props.responseSize != (this.props.numQuestions)){
         return(
-       <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+            <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                <PrevButton
+                prevHandler={this.props.prevHandler}
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
 
-            <PrevButton
-            prevHandler={this.props.prevHandler}
-            surveyData={this.props.surveyData}
-            questionID={this.props.questionID}
-            response_format={this.props.response_format}/>
+                <Progress
+                questionNum = {this.props.questionNum}
+                numQuestions = {this.props.numQuestions}
+                responseSize={this.props.responseSize}/>
 
-            <Progress
-            questionNum = {this.props.questionNum}
-            numQuestions = {this.props.numQuestions}
-            responseSize={this.props.responseSize}/>
+                <NextButton
+                nextHandler={this.props.nextHandler}
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
+                
+                <div className="mdl-cell mdl-cell--2-col"></div>
+                <button className="surveySubmit mdl-cell mdl-cell--8-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                    Submit
+                </button>
+                <div className="mdl-cell mdl-cell--2-col"></div>
+            </div>
+        )
+        }
+        //not the first question, not the last question, survey is filled out
+    else if(this.props.questionNum != 0 && this.props.questionNum != (this.props.numQuestions) && this.props.responseSize == (this.props.numQuestions)){
+        return(
+            <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                <PrevButton
+                prevHandler={this.props.prevHandler}
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
 
-            <NextButton
-            nextHandler={this.props.nextHandler}
-            surveyData={this.props.surveyData}
-            questionID={this.props.questionID}
-            response_format={this.props.response_format}/>
-        </div>
-        );
+                <Progress
+                questionNum = {this.props.questionNum}
+                numQuestions = {this.props.numQuestions}
+                responseSize={this.props.responseSize}/>
+
+                <NextButton
+                nextHandler={this.props.nextHandler}
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
+                
+                <div className="mdl-cell mdl-cell--2-col"></div>
+                <SubmitButton
+                onSubmit={this.props.onSubmit}
+                surveyData={this.props.surveyData}
+                questionID={this.props.questionID}
+                response_format={this.props.response_format}/>
+                <div className="mdl-cell mdl-cell--2-col"></div>
+
+            </div>
+        )
         }
     }
 })
@@ -145,7 +252,7 @@ var SubmitButton = React.createClass({
     },
     render: function(){
         return(
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent">
+        <button onClick={this.clickHandler} className="surveySubmit mdl-cell mdl-cell--8-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent">
                 Submit
         </button>
         )
