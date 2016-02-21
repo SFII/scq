@@ -12,7 +12,7 @@ class Survey(BaseModel):
     ITEM_TYPES = ['Course', 'Instructor', 'User']
 
     def requiredFields(self):
-        return ['questions', 'item_id', 'item_type', 'item_name', 'creator_id', 'creator_name', 'responses', 'closed_timestamp', 'created_timestamp']
+        return ['questions', 'item_id', 'item_type', 'item_name', 'creator_id', 'creator_name', 'responses', 'closed_timestamp', 'created_timestamp', 'deleted']
 
     def strictSchema(self):
         return True
@@ -28,6 +28,7 @@ class Survey(BaseModel):
             'responses': (self.is_list, self.schema_list_check((self.is_string,)),),
             'created_timestamp': (self.is_timestamp, ),
             'closed_timestamp': (self.schema_or(self.is_timestamp, self.is_none), ),
+            'deleted': (self.is_boolean,),
         }
 
     def create_item(self, data):
@@ -68,7 +69,8 @@ class Survey(BaseModel):
             'creator_name': "",
             'responses': [],
             'closed_timestamp': None,
-            'created_timestamp': time.time()
+            'created_timestamp': time.time(),
+            'deleted': False,
         }
 
     # TODO: implement Departments as an item_type
@@ -105,3 +107,8 @@ class Survey(BaseModel):
             decomposed_question_data.append(question_data)
         decomposed_data['questions'] = decomposed_question_data
         return decomposed_data
+
+    def mark_deleted(self, survey_id):
+        survey = self.get_item(survey_id)
+        survey['deleted'] = True
+        Survey().update_item(survey_id, survey)

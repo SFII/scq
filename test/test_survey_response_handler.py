@@ -82,9 +82,9 @@ class TestResponseHandler(BaseAsyncTest):
     def test_survey_creation_and_response(self):
         self._test_survey_create()
         self._test_survey_read()
-        # self._test_survey_update()
-        # self._test_survey_destroy()
+        self._test_survey_delete()
         self._test_response_creation()
+        self._test_survey_update()
         # self._test_response_acquistion()
 
     def _test_survey_read(self):
@@ -175,6 +175,32 @@ class TestResponseHandler(BaseAsyncTest):
         self.assertEqual(self.user_data['answered_surveys'], user_dbdata['answered_surveys'])
         self.assertEqual(self.user_data['survey_responses'], user_dbdata['survey_responses'])
         self.assertEqual(self.survey_data['responses'], survey_dbdata['responses'])
+
+    def _test_survey_delete(self):
+        User().update_item(self.user_id, self.user_data)
+        with mock.patch.object(BaseHandler, 'get_current_user') as m:
+            m.return_value = self.user_data
+            endpoint = '/api/surveys?survey_id=' + self.survey_id
+            test = {'body': None, 'method': 'DELETE',}
+            resp = self.fetch(endpoint, **test)
+            self.assertEqual(200, resp.code)
+            response = self.fetch('/api/surveys', method="GET")
+            self.assertEqual(tornado.escape.json_decode(response.body), [])
+
+    def _test_survey_update(self):
+        User().update_item(self.user_id, self.user_data)
+        with mock.patch.object(BaseHandler, 'get_current_user') as m:
+            m.return_value = self.user_data
+            new_questions = [self.q1]
+            title = "a new title"
+            new_questions[0]['title'] = title
+            body = tornado.escape.json_encode({'item_type': self.item_type, 'item_id': self.item_id, "questions": new_questions, 'id': self.survey_id})
+            response = self.fetch('/api/surveys', body=body, method="POST")
+            self.assertEqual(200, response.code)
+
+            s = Survey().get_item(self.survey_id)
+            q = Question().get_item(s['questions'][0])
+            self.assertEqual(q['title'], title)
 
     def tearDownClass():
         user_id = TestResponseHandler.user_id

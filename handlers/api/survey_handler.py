@@ -24,9 +24,24 @@ class SurveyHandler(BaseHandler):
         if survey_id is None:
             return self._create_survey()
         else:
-            return self._edit_survey()
+            return self._edit_survey(survey_id)
 
     def _create_survey(self):
+        survey_data = self._survey_from_request()
+        if survey_data is None:
+            return
+        survey_id = Survey().create_item(survey_data)
+        self.set_status(200, "Success")
+        return self.write(tornado.escape.json_encode(survey_id))
+
+    def _edit_survey(self, survey_id):
+        survey_data = self._survey_from_request()
+        if survey_data is None:
+            return
+        Survey().update_item(survey_id, survey_data)
+        self.set_status(200, "Success")
+
+    def _survey_from_request(self):
         creator_id = self.current_user['id']
         creator_name = self.current_user['username']
         item_type = self.json_data.get('item_type', None)
@@ -69,17 +84,19 @@ class SurveyHandler(BaseHandler):
             'questions': question_ids,
             'responses': [],
             'created_timestamp': time.time(),
-            'closed_timestamp': None
+            'closed_timestamp': None,
+            'deleted': False,
         }
         verified = Survey().verify(survey_data)
         if len(verified):
             return self.set_status(400, "Verification errors: {0}".format(verified))
-        survey_id = Survey().create_item(survey_data)
-        self.set_status(200, "Success")
-        return self.write(tornado.escape.json_encode(survey_id))
+        return survey_data
 
-    def _edit_survey(self):
-        pass
+    @api_authorized
+    @parse_request_json
+    def delete(self):
+        survey_id = self.get_query_argument('survey_id')
+        Survey().mark_deleted(survey_id)
 
     @api_authorized
     @parse_request_json
@@ -89,6 +106,8 @@ class SurveyHandler(BaseHandler):
         for survey_id in unanswered_survey_ids:
             survey_data = Survey().decompose_from_id(survey_id)
             if survey_data is None:
+                continue
+            if survey_data['deleted']:
                 continue
             surveys.append(survey_data)
         self.set_status(200, "Success")
