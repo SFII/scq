@@ -13,9 +13,7 @@ var MultipleChoice = React.createClass({
         for(var i =0; i < length; i++){
             questionObj[i]=false;
         }
-        console.log(responseStateLength);
         for(var i = responseStateLength-1; i >= 0; i--){
-          console.log(i);
           if(responseState[i].question_id == this.props.questionID){
              prevAnswers = responseState[i].response_data;
              for(var i2 =0; i2 < length; i2++){
@@ -32,7 +30,6 @@ var MultipleChoice = React.createClass({
     },
 
     handleChange: function(i,value){
-        console.log("we in here fam");
         var NewValue = null;
         if(value == false){
             NewValue = true;
@@ -42,7 +39,6 @@ var MultipleChoice = React.createClass({
         }
         var changeAnswer = this.state.data;
         changeAnswer[i] = NewValue;
-        console.log(this.state.data);
         this.setState({
             data: changeAnswer,
             currAnswers: this.state.data
@@ -58,7 +54,6 @@ var MultipleChoice = React.createClass({
                     type="checkbox"
                     value = {this.state.data[i]}
                     name = {option}
-                    key = {i}
                     className="mdl-checkbox__input"
                     onChange= {this.handleChange.bind(this,i, this.state.data[i])}
                     checked>
