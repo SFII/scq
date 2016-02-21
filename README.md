@@ -86,38 +86,38 @@ sudo apt-get install rethinkdb
 GET /api/me
 ```
 **Response:**
-
-| Status: 200 OK                                                      |
-|---------------------------------------------------------------------|
-| {                                                                   |
-|    "answers": [],                                                   |
-|    "last_sign_in": 1456035511.3893418,                              |
-|    "id": "7423c6be-2ce7-4f9a-882e-1130d21cf52b",                    |
-|    "major3": "",                                                    |
-|    "date_registered": 1455754947.062986,                            |
-|    "gender": "Female",                                              |
-|    "created_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],     |
-|    "native_language": "English",                                    |
-|    "unanswered_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],  |
-|    "email": "sung.bae@colorado.edu",                                |
-|    "survey_responses": [],                                          |
-|    "dob": "2016-02-03",                                             |
-|    "status": "Senior",                                              |
-|    "answered_surveys": [],                                          |
-|    "courses": ["1c406ea0-6b4a-437f-acc6-372e4a37ac6f"],             |
-|    "courses_taught": [],                                            |
-|    "ethnicity": "American Indian or Alaska Native",                 |
-|    "major2": "Mathematics",                                         |
-|    "accepted_tos": true,                                            |
-|    "minor1": "",                                                    |
-|    "departments": ["Computer Science"],                             |
-|    "major4": "",                                                    |
-|    "major1": "",                                                    |
-|    "username": "suba8204",                                          |
-|    "primary_affiliation": ["Student"],                              |
-|    "minor2": "",                                                    |
-|    "registration": "registration_culdap"                            |
-| }                                                                   |
+```
+ Status: 200 OK
+ {
+    "answers": [],
+    "last_sign_in": 1456035511.3893418,
+    "id": "7423c6be-2ce7-4f9a-882e-1130d21cf52b",
+    "major3": "",
+    "date_registered": 1455754947.062986,
+    "gender": "Female",
+    "created_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
+    "native_language": "English",
+    "unanswered_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
+    "email": "sung.bae@colorado.edu",
+    "survey_responses": [],
+    "dob": "2016-02-03",
+    "status": "Senior",
+    "answered_surveys": [],
+    "courses": ["1c406ea0-6b4a-437f-acc6-372e4a37ac6f"],
+    "courses_taught": [],
+    "ethnicity": "American Indian or Alaska Native",
+    "major2": "Mathematics",
+    "accepted_tos": true,
+    "minor1": "",
+    "departments": ["Computer Science"],
+    "major4": "",
+    "major1": "",
+    "username": "suba8204",
+    "primary_affiliation": ["Student"],
+    "minor2": "",
+    "registration": "registration_culdap"
+ }
+ ```                                                         
 
 ### Change user information
 *Test: PASS*
@@ -127,7 +127,7 @@ POST /api/me
 **Parameter:**
 
 | Field               | Type          | Description                                                       |
-| ------------------- |:-------------:| -----------------------------------------------------------------:|
+| ------------------- | ------------- | ----------------------------------------------------------------- |
 | email               | String        | User's email must be Colorado domain (i.e. user@colorado.edu).    |
 | status              | String        | User's academic year (i.e. Freshman, Sophomore, Junior, Senior).  |
 | dob                 | String        | User's date of birth.                                             |
@@ -179,6 +179,6 @@ POST /api/response
 GET /api/refresh
 ```
 **Response:**
-
-| Status: 200 OK |
-| -------------- |
+```
+Status: 200 OK
+```
