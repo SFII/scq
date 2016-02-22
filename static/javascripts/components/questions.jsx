@@ -1,161 +1,5 @@
 /*
 *
-* Footer
-* Just an mdl submit button, behaves as a normal submit button would
-*/
-var Footer = React.createClass({
-    render: function() {
-        if(this.props.questionNum == 0){
-            return(
-                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
-                <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
-                    Previous
-                </button>
-
-                <Progress
-                questionNum = {this.props.questionNum}
-                numQuestions = {this.props.numQuestions}
-                responseSize={this.props.responseSize}/>
-
-                <NextButton
-                nextHandler={this.props.nextHandler}
-                surveyData={this.props.surveyData}
-                questionID={this.props.questionID}
-                response_format={this.props.response_format}/>
-
-                </div>
-            );
-        }
-        else if(this.props.questionNum == this.props.numQuestions-1){
-            return(
-                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
-                    <PrevButton
-                    prevHandler={this.props.prevHandler}
-                    surveyData={this.props.surveyData}
-                    questionID={this.props.questionID}
-                    response_format={this.props.response_format}/>
-
-                    <Progress
-                    questionNum = {this.props.questionNum}
-                    numQuestions = {this.props.numQuestions}
-                    responseSize={this.props.responseSize}/>
-
-                    <SubmitButton
-                    onSubmit={this.props.onSubmit}
-                    surveyData={this.props.surveyData}
-                    questionID={this.props.questionID}
-                    response_format={this.props.response_format}/>
-                </div>
-            );
-        }
-        else{
-        return(
-       <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
-
-            <PrevButton
-            prevHandler={this.props.prevHandler}
-            surveyData={this.props.surveyData}
-            questionID={this.props.questionID}
-            response_format={this.props.response_format}/>
-
-            <Progress
-            questionNum = {this.props.questionNum}
-            numQuestions = {this.props.numQuestions}
-            responseSize={this.props.responseSize}/>
-
-            <NextButton
-            nextHandler={this.props.nextHandler}
-            surveyData={this.props.surveyData}
-            questionID={this.props.questionID}
-            response_format={this.props.response_format}/>
-        </div>
-        );
-        }
-    }
-})
-
-/* I made an mdl progress bar, but it doesn't work well with React, so I'm only saving this in case we decide our current progress bar is ugly.
-var Progress = React.createClass({
-    
-    getInitialState: function() {
-    var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
-    return({progressValue: progressValue})
-    },
-    
-    componentDidUpdate: function() {
-        console.log("update");
-        document.querySelector('#myProgress').MaterialProgress.setProgress(this.state.progressValue);
-    },
-    
-    render: function() {
-        return (
-        <div id="myProgress" className="mdl-cell mdl-cell--4-col mdl-progress mdl-js-progress"></div>
-        )
-    }
-})
-*/
-
-var Progress = React.createClass({
-    render: function() {
-    var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
-        return (
-        <progress id="myProgress" className="mdl-cell mdl-cell--4-col bar" value={progressValue} max="100"></progress>
-        )
-    }
-})
-
-var PrevButton = React.createClass({
-    clickHandler: function() {
-        var surveyData = this.props.surveyData;
-        var questionID = this.props.questionID;
-        var response_format = this.props.response_format;
-        this.props.prevHandler(surveyData,questionID,response_format);
-    },
-    render: function() {
-        return (
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                Previous
-            </button>
-        )
-    }
-})
-
-var NextButton = React.createClass({
-    clickHandler: function() {
-        var surveyData = this.props.surveyData;
-        var questionID = this.props.questionID;
-        var response_format = this.props.response_format;
-        this.props.nextHandler(surveyData,questionID,response_format);
-    },
-    render: function() {
-        return (
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                Next
-        </button>
-        )
-    }
-})
-
-var SubmitButton = React.createClass({
-    clickHandler:function(){
-        var surveyData = this.props.surveyData;
-        var questionID = this.props.questionID;
-        var response_format = this.props.response_format;
-        this.props.onSubmit(surveyData, questionID, response_format);
-    },
-    render: function(){
-        return(
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--purple">
-                Submit
-        </button>
-        )
-    }
-})
-
-
-
-/*
-*
 * Multiple Choice
 * All the cards are very similar so I'm not going to copy and paste
 */
@@ -163,10 +7,26 @@ var MultipleChoice = React.createClass({
     getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswers = [];
         for(var i =0; i < length; i++){
             questionObj[i]=false;
         }
-        return {data: questionObj};
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswers = responseState[i].response_data;
+             for(var i2 =0; i2 < length; i2++){
+                 if(prevAnswers[i2] == true){
+                    questionObj[i2]= true;
+                 }
+             }
+          }
+        }
+        return {
+            data: questionObj,
+            currAnswers: prevAnswers
+        };
     },
 
     handleChange: function(i,value){
@@ -179,24 +39,44 @@ var MultipleChoice = React.createClass({
         }
         var changeAnswer = this.state.data;
         changeAnswer[i] = NewValue;
-        this.setState({data: changeAnswer})
+        this.setState({
+            data: changeAnswer,
+            currAnswers: this.state.data
+        })
     },
 
     render: function(){
       const renderedOptions = this.props.options.map((option,i) => {
+      if(this.state.currAnswers[i] == true){
         return (
             <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
                 <input
                     type="checkbox"
                     value = {this.state.data[i]}
                     name = {option}
-                    key = {i}
                     className="mdl-checkbox__input"
-                    onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
+                    onChange= {this.handleChange.bind(this,i, this.state.data[i])}
+                    checked>
                 </input>
                 <span className="mdl-checkbox__label"> { option } </span>
             </label>
         )
+      }
+      else{
+          return (
+                <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                    <input
+                        type="checkbox"
+                        value = {this.state.data[i]}
+                        name = {option}
+                        key = {i}
+                        className="mdl-checkbox__input"
+                        onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
+                    </input>
+                    <span className="mdl-checkbox__label"> { option } </span>
+                </label>
+        )
+      }
       });
       return (
         <div className="options mdl-card__supporting-text mdl-color-text--grey-600">
@@ -228,10 +108,26 @@ var SingleChoice = React.createClass({
 getInitialState: function(){
         var length = Object.keys(this.props.options).length;
         var questionObj =[];
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswers = [];
         for(var i =0; i < length; i++){
             questionObj[i]=false;
         }
-        return {data: questionObj};
+        for(var i = responseStateLength-1; i >= 0; i--){
+            if(responseState[i].question_id == this.props.questionID){
+                prevAnswers = responseState[i].response_data;
+                    for(var i2 = 0; i2 < length; i2++){
+                        if(prevAnswers[i2]==true){
+                            questionObj[i2] = true;
+                        }
+                    }
+            }
+        }
+        return {
+            data: questionObj,
+            currAnswers: prevAnswers
+        };
     },
 
     handleChange: function(i,value){
@@ -243,12 +139,33 @@ getInitialState: function(){
             changeAnswer[iter]=false;
         }
         changeAnswer[i] = true;
-        this.setState({data: changeAnswer});
+        this.setState({
+            data: changeAnswer,
+            currAnswers: this.state.data
+        });
     },
 
     render: function(){
         var surveyID = String(this.props.surveyID);
         const renderedOptions = this.props.options.map((option, i) => {
+        if(this.state.currAnswers[i] == true){
+            return (
+                <div>
+                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+                    <input 
+                    type="radio" 
+                    className="mdl-radio__button"
+                    name = {surveyID}
+                    value= {i}
+                    onChange={this.handleChange.bind(this,i,this.state.data[i])}
+                    checked>
+                    </input>
+                      <span className="mdl-radio__label"> { option } </span>
+                    </label>
+                </div>
+            )
+        }
+        else{
             return (
                 <div>
                     <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
@@ -263,6 +180,7 @@ getInitialState: function(){
                     </label>
                 </div>
             )
+        }
         });
 
         return (
@@ -293,7 +211,15 @@ getInitialState: function(){
 var FreeResponse = React.createClass({
 
     getInitialState: function(){
-        return {answer: 'Change Me'};
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswer = "Change Me!";
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswer = responseState[i].response_data;
+          }
+        }
+        return {answer: prevAnswer};
     },
 
     handleChange: function(e){
@@ -333,7 +259,17 @@ var FreeResponse = React.createClass({
 */
 var Rating = React.createClass({
    	getInitialState: function(){
-		return{answer: 5};
+		var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswer = 5;
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswer = responseState[i].response_data;
+          }
+        }
+        return{
+            answer: prevAnswer
+        }
 	},
 
 	handleChange:function(e){

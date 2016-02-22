@@ -19,7 +19,8 @@ js_files = [
     './static/javascripts/components/dashboard.jsx',
     './static/javascripts/components/welcome.jsx',
     './static/javascripts/components/survey_card.jsx',
-    './static/javascripts/components/survey_sample.jsx'
+    './static/javascripts/components/survey_sample.jsx',
+    './static/javascripts/components/footer.jsx'
 
 ]
 
