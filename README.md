@@ -230,11 +230,11 @@ POST /api/response
 ```
 **Parameter: Must be in JSON format, take a look at schema/sampleResponse.json**
 
-| Field              | Type          | Description                                 |
-| ------------------ | ------------- | ------------------------------------------- |
-| responder_id       | String        | User's id associated with to account.       |
-| survey_id          | String        | Survey id associated to User's survey.      |
-| question_responses | String[]      | User's answers to the survey questions.     |
+| Field              | Type          | Description                                               |
+| ------------------ | ------------- | --------------------------------------------------------- |
+| responder_id       | String        | **Required**. User's id associated with to account.       |
+| survey_id          | String        | **Required**. Survey id associated to User's survey.      |
+| question_responses | String[]      | **Required**. User's answers to the survey questions.     |
 
 **Response:**
 ```
