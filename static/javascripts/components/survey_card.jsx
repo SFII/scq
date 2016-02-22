@@ -2,6 +2,7 @@
 /*
 * Survey. Filled with data to send (JSON)
 * survey_handler.py/def _survey_from_request(self):
+* models/question.py
 */
 var survey = [
 
@@ -13,6 +14,12 @@ var survey = [
   "creator_name":"",
   "creator_id":"",
   "questions": [
+      {
+          "id" : "",
+          "type" : "",
+          "question":"",
+          "options":[]
+      },
       {
           "id" : "",
           "type" : "",
