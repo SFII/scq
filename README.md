@@ -117,20 +117,21 @@ GET /api/me
     "minor2": "",
     "registration": "registration_culdap"
  }
- ```                                                         
+ ```
 
 ### Change user information
-*Test: PASS*
+*Test: Fail*
 ```
 POST /api/me
 ```
-**Parameter:**
+**Parameter: Must be in JSON format, take a look at schema/sampleMe.json**
 
 | Field               | Type          | Description                                                       |
 | ------------------- | ------------- | ----------------------------------------------------------------- |
 | email               | String        | User's email must be Colorado domain (i.e. user@colorado.edu).    |
 | status              | String        | User's academic year (i.e. Freshman, Sophomore, Junior, Senior).  |
-| dob                 | String        | User's date of birth.                                             |
+| primary_affiliation | String[]      | User's affiliation to CU (i.e. Student, Faculty, Student/Faulty). |
+| dob                 | String        | User's date of birth in the form of year-month-day.               |
 | native_language     | String        | User's native language.                                           |
 | gender              | String        | User's gender.                                                    |
 | ethnicity           | String        | User's, ethnicity.                                                |
@@ -143,9 +144,42 @@ POST /api/me
 | departments         | String[]      | User's departments.                                               |
 | courses             | String[]      | Courses taken by user.                                            |
 | courses_taught      | String[]      | Courses taught by user.                                           |
-| primary_affiliation | String[]      | User's affiliation to CU (i.e. Student, Faculty, Student/Faulty). |
 
 **Response:**
+```
+ Status: 200 OK
+ {
+    "answers": [],
+    "last_sign_in": 1456035511.3893418,
+    "id": "7423c6be-2ce7-4f9a-882e-1130d21cf52b",
+    "major3": "",
+    "date_registered": 1455754947.062986,
+    "gender": "Female",
+    "created_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
+    "native_language": "English",
+    "unanswered_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
+    "email": "sung.bae@colorado.edu",
+    "survey_responses": [],
+    "dob": "2016-02-03",
+    "status": "Senior",
+    "answered_surveys": [],
+    "courses": ["1c406ea0-6b4a-437f-acc6-372e4a37ac6f"],
+    "courses_taught": [],
+    "ethnicity": "American Indian or Alaska Native",
+    "major2": "Mathematics",
+    "accepted_tos": true,
+    "minor1": "",
+    "departments": ["Computer Science"],
+    "major4": "",
+    "major1": "",
+    "username": "suba8204",
+    "primary_affiliation": ["Student"],
+    "minor2": "",
+    "registration": "registration_culdap"
+ }
+
+ Note: It did not update my information, instead it just gave back my old information.
+ ```
 
 ### Display surveys taken by user
 *Test: FAIL*
@@ -153,25 +187,58 @@ POST /api/me
 GET /api/surveys
 ```
 **Response:**
+```
+Status: 200 OK
+[]
+
+Note: I need to test this out with an actual survey that is stored and tied with the User/Question tables.
+```
 
 ### Create/update user's survey questions.
-*Test: IDK*
+*Test: FAIL*
 ```
 POST /api/surveys
 ```
-**Parameter:**
-######Take a look at schema/sampleSurvey.json for reference.
+**Parameter: Must be in JSON format, take a look at schema/sampleSurvey.json**
+
+| Field            | Type          | Description                                                                                |
+| ---------------- | ------------- | ------------------------------------------------------------------------------------------ |
+| item_id          | String        | **Required**. Id of the survey                                                             |
+| item_type        | String        | **Required**. Types can be of the following: Instructor, Course, User.                     |
+| item_name        | String[]      | **Required**. The name for the survey.                                                     |
+| creator_id       | String        | **Required**. User's id associated to account.                                             |
+| creator_name     | String        | **Required**. User's name.                                                                 |
+| questions        | String[]      | **Required**. Questions must be a contain a list with title, response_format, and options. |
+| title            | String        | **Required**. This is the actual question itself (i.e. Did you like this course?).         |
+| response_format  | String        | **Required**. Types of responses are: trueOrFalse, multipleChoice, freeResponse, etc.      |
+| options          | String[]      | **Required**. If it is a multipleChoice question, you must provide the options.            |
 
 **Response:**
+```
+Status: 200 OK
+null
+
+NOTE: Bug? This needs to tie in with survey and user tables. All it does right now is just create/update question tables.
+I don't know why this returns null... It started return null when I got rid of an extra field in the JSON called 'id'. Thought it was
+pretty redundant because we already have item_id so I took it out.
+```
 
 ### Create/update user's response to a survey
 *Test: IDK*
 ```
 POST /api/response
 ```
-**Parameter:**
+**Parameter: Must be in JSON format, take a look at schema/sampleResponse.json**
+
+| Field              | Type          | Description                                 |
+| ------------------ | ------------- | ------------------------------------------- |
+| responder_id       | String        | User's id associated with to account.       |
+| survey_id          | String        | Survey id associated to User's survey.      |
+| question_responses | String[]      | User's answers to the survey questions.     |
 
 **Response:**
+```
+```
 
 ### Refresh user's cookie
 *Test: PASS*

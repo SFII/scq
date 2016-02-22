@@ -1,29 +1,24 @@
 {
-    "id":"",
-    "item_id":"",
-    "item_name":"",
-    "item_type":"",
-    "creator_name":"",
-    "creator_id":"",
-    "questions": [
+    "item_id" : "123456",
+    "item_name" : "Sung Survey",
+    "item_type" : "Instructor",
+    "creator_name" : "Sung Bae",
+    "creator_id" :"cc48b18a-ea01-4837-942d-e3001611e1c8",
+    "questions" : [
          {
-            "id" : "Unique-ID",
-            "type" : "trueOrFalse",
-            "question":"Did you enjoy the course?"
+            "title" : "Did you enjoy the course (true or false question)?",
+            "response_format" : "trueOrFalse",
+            "options" : ["True","False"]
         },
         {
-            "id" : "Unique-ID",
-            "type" : "multipleChoice",
-            "question":"Did you enjoy the course?",
-            "options":["Not at all","It was an average course","It was an excellent course"]
+            "title" : "Did you enjoy the course (multiple choice question)?",
+            "response_format" : "multipleChoice",
+            "options" : ["Not at all","It was an average course","It was an excellent course"]
         },
         {
-            "id" : "Unique-ID",
-            "type" : "freeResponse",
-            "question":"Did you enjoy the course?",
-            "options":[]
+            "title" : "Did you enjoy the course (free response question)?",
+            "response_format" : "freeResponse",
+            "options" : []
         }
-    ],
-    "created_timestamp": 4567.8910,
-    "closed_timestamp": 9191.8765
+    ]
 }
