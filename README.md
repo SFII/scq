@@ -189,13 +189,61 @@ GET /api/surveys
 **Response:**
 ```
 Status: 200 OK
-[]
-
-Note: I need to test this out with an actual survey that is stored and tied with the User/Question tables.
+[
+  {
+    "creator_id": "3a1ae272-8eea-4dd5-8ba8-1d1aee042a8c",
+    "created_timestamp": 1456181796.9387083,
+    "responses": [],
+    "item_id": "1d1eda7f-9f53-42e3-b030-5e1977c354e1",
+    "id": "36057d08-dfe2-44a7-a368-29b19fd89bdc",
+    "closed_timestamp": null,
+    "deleted": false,
+    "questions": [
+      {
+        "id": "5839dadf-d840-4973-be35-e66903e7ade0",
+        "title": "nam illud quidem adduci vix possum, ut ea, quae senserit ille, tibi non vera videantur.",
+        "response_format": "multipleChoice",
+        "options": [
+          "alpha",
+          "beta",
+          "gamma",
+          "delta"
+        ]
+      },
+      {
+        "id": "ca88eae6-8200-4307-b465-bef63c54bad3",
+        "title": "Nec vero, ut noster Lucilius, recusabo, quo minus omnes mea legant.",
+        "response_format": "trueOrFalse",
+        "options": [
+          "yes",
+          "no"
+        ]
+      },
+      {
+        "id": "27fe2556-5a91-490a-9481-1aa7729f2d6d",
+        "title": "Qui autem alia malunt scribi a nobis, aequi esse debent, quod et scripta multa sunt, sic ut plura nemini e nostris, et scribentur fortasse plura, si vita suppetet; et tamen, qui diligenter haec, quae de philosophia litteris mandamus, legere assueverit, iudicabit nulla ad legendum his esse potiora.",
+        "response_format": "rating",
+        "options": []
+      },
+      {
+        "id": "41ff5241-0ec2-4849-a608-45e48f6e7707",
+        "title": "Contra quos omnis dicendum breviter existimo.",
+        "response_format": "trueOrFalse",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    ],
+    "item_name": "test_course",
+    "item_type": "Course",
+    "creator_name": "suba8204"
+  }
+]
 ```
 
 ### Create/update user's survey questions.
-*Test: FAIL*
+*Test: PASS*
 ```
 POST /api/surveys
 ```
@@ -216,11 +264,7 @@ POST /api/surveys
 **Response:**
 ```
 Status: 200 OK
-null
-
-NOTE: Bug? This needs to tie in with survey and user tables. All it does right now is just create/update question tables.
-I don't know why this returns null... It started return null when I got rid of an extra field in the JSON called 'id'. Thought it was
-pretty redundant because we already have item_id so I took it out.
+Survey_id : "caf49f12-0404-4590-882e-b6a7fa903d02"
 ```
 
 ### Create/update user's response to a survey

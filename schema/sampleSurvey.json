@@ -1,9 +1,9 @@
 {
-    "item_id" : "123456",
-    "item_name" : "Sung Survey",
-    "item_type" : "Instructor",
+    "item_id" : "1d1eda7f-9f53-42e3-b030-5e1977c354e1",
+    "item_name" : "CSCI-1300",
+    "item_type" : "Course",
     "creator_name" : "Sung Bae",
-    "creator_id" :"cc48b18a-ea01-4837-942d-e3001611e1c8",
+    "creator_id" :"3a1ae272-8eea-4dd5-8ba8-1d1aee042a8c",
     "questions" : [
          {
             "title" : "Did you enjoy the course (true or false question)?",
