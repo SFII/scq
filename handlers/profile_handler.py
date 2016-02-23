@@ -4,7 +4,7 @@ from models.survey import Survey
 import logging
 
 
-class DashboardHandler(BaseHandler):
+class ProfileHandler(BaseHandler):
 
     @tornado.web.authenticated
     def get(self):
