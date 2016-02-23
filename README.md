@@ -182,7 +182,7 @@ POST /api/me
  ```
 
 ### Display surveys taken by user
-*Test: FAIL*
+*Test: PASS*
 ```
 GET /api/surveys
 ```
