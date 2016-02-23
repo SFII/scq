@@ -21,7 +21,7 @@ class MeHandler(BaseHandler):
         """
         user_data = self.get_current_user()
         user_id = user_data['id']
-        primary_affiliation = [self.json_data.get('primary_affiliation', user_data['primary_affiliation'])]
+        primary_affiliation = self.json_data.get('primary_affiliation', user_data['primary_affiliation']).split(',')
         status = self.json_data.get('status', user_data['status'])
         email = self.json_data.get('email', user_data['email'])
         dob = self.json_data.get('dob', user_data['dob'])
@@ -34,9 +34,9 @@ class MeHandler(BaseHandler):
         major4 = self.json_data.get('major4', user_data['major4'])
         minor1 = self.json_data.get('minor1', user_data['minor1'])
         minor2 = self.json_data.get('minor2', user_data['minor2'])
-        departments = [self.json_data.get('departments', user_data['departments'])]
-        courses = [self.json_data.get('courses', user_data['courses'])]
-        courses_taught = [self.json_data.get('courses_taught', user_data['courses_taught'])]
+        departments = self.json_data.get('departments', user_data['departments']).split(',')
+        courses = self.json_data.get('courses', user_data['courses']).split(',')
+        courses_taught = self.json_data.get('courses_taught', user_data['courses_taught']).split(',')
         post_data = {
             'primary_affiliation': primary_affiliation,
             'status': status,

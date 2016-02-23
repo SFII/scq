@@ -120,7 +120,7 @@ GET /api/me
  ```
 
 ### Change user information
-*Test: Fail*
+*Test: PASS*
 ```
 POST /api/me
 ```
@@ -268,7 +268,7 @@ Survey_id : "caf49f12-0404-4590-882e-b6a7fa903d02"
 ```
 
 ### Create/update user's response to a survey
-*Test: IDK*
+*Test: FAIL*
 ```
 POST /api/response
 ```
@@ -282,6 +282,10 @@ POST /api/response
 
 **Response:**
 ```
+Status: 400
+Users can only respond to surveys in their unanswered survey list.
+
+TODO: Fix this.. My JSON is correct and my rethinkdb says that I have this unanswered survey I want to use to make this POST request.
 ```
 
 ### Refresh user's cookie
