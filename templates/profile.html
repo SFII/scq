@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block title %}Profile{% end %}
 {% block react %}
+  var user_data={% raw user_info_json %};
   var routesObject = {
       surveys: "/api/surveys",
       response: "/api/response"
