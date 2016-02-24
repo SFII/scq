@@ -208,7 +208,8 @@ var SurveyDiv = React.createClass({
                 removeHandler={this.removeCard}
                 nextHandler={this.nextQuestion}
                 prevHandler={this.prevQuestion}
-                onSubmit={this.handleSurveySubmit}>
+                onSubmit={this.handleSurveySubmit}
+                responseState = {this.state.response.question_responses}>
                 </Card>
             </div>
             );

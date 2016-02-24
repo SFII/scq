@@ -51,15 +51,18 @@ def api_authorized(method):
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def parse_request_json(method):
     """
     Decorate methods with this to parse json from the request body"
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        try:
-            self.json_data = tornado.escape.json_decode(self.request.body)
-        except:
-            self.json_data = {}
+        if len(self.request.body):
+            try:
+                self.json_data = tornado.escape.json_decode(self.request.body)
+            except Exception as e:
+                self.json_data = {}
+                return self.set_status(400, "JSON syntax error: {0}".format(e))
         return method(self, *args, **kwargs)
     return wrapper

@@ -1,29 +1,24 @@
 {
-    "id":"",
-    "item_id":"",
-    "item_name":"",
-    "item_type":"",
-    "creator_name":"",
-    "creator_id":"",
-    "questions": [
+    "item_id" : "1d1eda7f-9f53-42e3-b030-5e1977c354e1",
+    "item_name" : "CSCI-1300",
+    "item_type" : "Course",
+    "creator_name" : "Sung Bae",
+    "creator_id" :"3a1ae272-8eea-4dd5-8ba8-1d1aee042a8c",
+    "questions" : [
          {
-            "id" : "Unique-ID",
-            "type" : "trueOrFalse",
-            "question":"Did you enjoy the course?"
+            "title" : "Did you enjoy the course (true or false question)?",
+            "response_format" : "trueOrFalse",
+            "options" : ["True","False"]
         },
         {
-            "id" : "Unique-ID",
-            "type" : "multipleChoice",
-            "question":"Did you enjoy the course?",
-            "options":["Not at all","It was an average course","It was an excellent course"]
+            "title" : "Did you enjoy the course (multiple choice question)?",
+            "response_format" : "multipleChoice",
+            "options" : ["Not at all","It was an average course","It was an excellent course"]
         },
         {
-            "id" : "Unique-ID",
-            "type" : "freeResponse",
-            "question":"Did you enjoy the course?",
-            "options":[]
+            "title" : "Did you enjoy the course (free response question)?",
+            "response_format" : "freeResponse",
+            "options" : []
         }
-    ],
-    "created_timestamp": 4567.8910,
-    "closed_timestamp": 9191.8765
+    ]
 }
