@@ -24,14 +24,14 @@
     </div>
   {% include body/footer.html %}
   {% include body/scripts.html %}
-  {% block react %}
   <script>
+  {% block react %}
   var routesObject = {
       surveys: "/api/surveys",
       response: "/api/response"
   };
   ReactDOM.render(React.createElement(Page, {routes: routesObject}), document.getElementById('main-grid'));
-  </script>
   {% end %}
+  </script>
 </div>
 </body>
