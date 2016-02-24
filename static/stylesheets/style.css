@@ -219,3 +219,7 @@ html, body {
 .no_bullets {
     list-style-type: none;
 }
+
+.full-width {
+    width: 100%;
+}

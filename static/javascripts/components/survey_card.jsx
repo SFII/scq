@@ -48,7 +48,11 @@ var SurveyCreationCard = React.createClass({
                   <Creator creator={this.props.data}/>
                   <h4>Add Questions:</h4>
                   </div>
-                  <FieldDiv survey={survey[0].questions} />
+                  <table className="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp full-width">
+                      <tbody>
+                          <FieldDiv survey={survey[0].questions} />
+                      </tbody>
+                  </table>
                   <AddQuestion/>
                   <FinishSurvey/>
               </div>
@@ -61,7 +65,11 @@ var FieldDiv = React.createClass({
 render: function(){
     var questionNodes = this.props.survey.map(function(survey) {
       return (
-        <Fields/>
+        <tr>
+          <td className="mdl-data-table__cell--non-numeric">
+            <Fields/>
+          </td>
+        </tr>
       );
     });
   return (
@@ -78,6 +86,7 @@ render: function(){
 * Field is receiving the survey
 */
 var Fields = React.createClass({
+
     //set initial value
     getInitialState: function() {
         return {value: 'select'};
@@ -91,7 +100,7 @@ var Fields = React.createClass({
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
               <form>
                   <div className="mdl-textfield mdl-js-textfield">
-                    <input className="mdl-textfield__input" type="text" id="question_title" onChage={this.Handler}/>
+                    <input className="mdl-textfield__input" type="text" id="question_title" onChange={this.Handler}/>
                     <label className="mdl-textfield__label" for="text1">Title of Question:</label>
                   </div>
               </form>
@@ -220,19 +229,25 @@ var Question = React.createClass({
 
 
 var MQuestions = React.createClass({
+//set initial value
+getInitialState: function() {
+    return {value: 'select'};
+},
+//set value change
+changeHandler: function(event) {
+    this.setState({value: event.target.value});
+},
     render: function(){
       return (
       <div>
       <form>
           <div className="mdl-textfield mdl-js-textfield">
-            <input className="mdl-textfield__input" type="text" id="question_title" onChage={this.Handler}/>
-            <label className="mdl-textfield__label" for="text1">Title of Question:</label>
+            <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
           </div>
       </form>
       <form>
           <div className="mdl-textfield mdl-js-textfield">
-            <input className="mdl-textfield__input" type="text" id="question_title" onChage={this.Handler}/>
-            <label className="mdl-textfield__label" for="text1">Title of Question:</label>
+            <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
           </div>
       </form>
       </div>
@@ -247,18 +262,21 @@ var MQuestions = React.createClass({
 
 
 var SQuestions = React.createClass({
+
     render: function(){
       return (
-      <form>
-          <div className="mdl-textfield mdl-js-textfield">
-            <input className="mdl-textfield__input" type="text" onChange={this.changeHandler}/>
-            <label className="mdl-textfield__label" for="text1">Write question</label>
-          </div>
-          <div className="mdl-textfield mdl-js-textfield">
-            <input className="mdl-textfield__input" type="text" onChange={this.changeHandler}/>
-            <label className="mdl-textfield__label" for="text1">Write question</label>
-          </div>
-      </form>
+      <div>
+          <form>
+              <div className="mdl-textfield mdl-js-textfield">
+                <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
+              </div>
+          </form>
+          <form>
+              <div className="mdl-textfield mdl-js-textfield">
+                <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
+              </div>
+          </form>
+      </div>
       );
     }
 });
