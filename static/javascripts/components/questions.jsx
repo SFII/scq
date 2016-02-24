@@ -209,17 +209,8 @@ getInitialState: function(){
 * textfield and get it to POST
 */
 var FreeResponse = React.createClass({
-
     getInitialState: function(){
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswer = "Change Me!";
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswer = responseState[i].response_data;
-          }
-        }
-        return {answer: prevAnswer};
+        return {answer: ""};
     },
 
     handleChange: function(e){
@@ -233,10 +224,11 @@ var FreeResponse = React.createClass({
 
         <textarea
         className="mdl-textfield__input"
-        type="text"
+            type="text"
         rows="4"
         id="test"
         value={this.state.answer}
+        placeholder="Your answer"
         onChange={this.handleChange}></textarea>
         <br/>
         <Footer

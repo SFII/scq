@@ -77,9 +77,9 @@ var MainDiv = React.createClass({
 });
 
 var SurveyDiv = React.createClass({
+
     //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
     //that we check before/while rendering
-
     getInitialState: function() {
         return({
                 length: Object.keys(this.props.questions).length,
@@ -209,8 +209,7 @@ var SurveyDiv = React.createClass({
                 nextHandler={this.nextQuestion}
                 prevHandler={this.prevQuestion}
                 onSubmit={this.handleSurveySubmit}
-                responseState = {this.state.response.question_responses}>
-                </Card>
+                responseState = {this.state.response.question_responses}/>
             </div>
             );
         }
