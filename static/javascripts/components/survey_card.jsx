@@ -19,12 +19,6 @@ var survey = [
           "type" : "",
           "question":"",
           "options":[]
-      },
-      {
-          "id" : "",
-          "type" : "",
-          "question":"",
-          "options":[]
       }
   ]
 }
@@ -49,6 +43,11 @@ var SurveyCreationCard = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText="Create a Survey"/>
+                  <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+                  <TitleSurvey/>
+                  <Creator creator={this.props.data}/>
+                  <h4>Add Questions:</h4>
+                  </div>
                   <FieldDiv survey={survey[0].questions} />
                   <AddQuestion/>
                   <FinishSurvey/>
@@ -90,9 +89,14 @@ var Fields = React.createClass({
     render: function(){
       return (
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <h4>Add Questions:</h4>
               <form>
-                  <p>Title:<input type="text" name="title_question"/></p>
+                  <div className="mdl-textfield mdl-js-textfield">
+                    <input className="mdl-textfield__input" type="text" id="question_title" onChage={this.Handler}/>
+                    <label className="mdl-textfield__label" for="text1">Title of Question:</label>
+                  </div>
+              </form>
+
+                   <form>
                   <p>Type:
                      <select id="mySelect" onChange={this.changeHandler} value={this.state.value}>
                          <option disabled value="select"> Select an option </option>
@@ -213,38 +217,52 @@ var Question = React.createClass({
 });
 
 
+
+
 var MQuestions = React.createClass({
     render: function(){
       return (
-      <ul className="mdl-list">
-      <li>
-      <input type="text"  onChange={this.changeHandler}/>
-      </li>
-      <li>
-      <input type="text"  onChange={this.changeHandler}/>
-      </li>
+      <div>
+      <form>
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" id="question_title" onChage={this.Handler}/>
+            <label className="mdl-textfield__label" for="text1">Title of Question:</label>
+          </div>
+      </form>
+      <form>
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" id="question_title" onChage={this.Handler}/>
+            <label className="mdl-textfield__label" for="text1">Title of Question:</label>
+          </div>
+      </form>
+      </div>
 
-        </ul>
       );
     }
 });
+
+
+
+
 
 
 var SQuestions = React.createClass({
     render: function(){
       return (
-      <ul className="mdl-list">
-      <li>
-      <input type="text"  onChange={this.changeHandler}/>
-      </li>
-      <li>
-      <input type="text"  onChange={this.changeHandler}/>
-      </li>
-
-        </ul>
+      <form>
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" onChange={this.changeHandler}/>
+            <label className="mdl-textfield__label" for="text1">Write question</label>
+          </div>
+          <div className="mdl-textfield mdl-js-textfield">
+            <input className="mdl-textfield__input" type="text" onChange={this.changeHandler}/>
+            <label className="mdl-textfield__label" for="text1">Write question</label>
+          </div>
+      </form>
       );
     }
 });
+
 
 var AddQuestion = React.createClass({
     clickHandler: function() {
@@ -287,6 +305,36 @@ var FinishSurvey = React.createClass({
           <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
               FINNISH SURVEY
           </button>
+      );
+    }
+});
+
+
+var TitleSurvey = React.createClass({
+    /*
+    *Input for title
+    *
+    */
+    render: function(){
+      return (
+          <div>
+          <form>
+             <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input className="mdl-textfield__input" type="text" id="item_name"/>
+                <label className="mdl-textfield__label" for="text4">Survey Title</label>
+             </div>
+           </form>
+          </div>
+      );
+    }
+});
+
+var Creator = React.createClass({
+    render: function(){
+      return (
+        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+              <p>Survey creator:&nbsp;<p>{this.props.username}</p></p>
+        </div>
       );
     }
 });

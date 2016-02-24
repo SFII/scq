@@ -69,7 +69,7 @@ var MainDiv = React.createClass({
         return (
         <div className="mainDiv ">
             {itemNodes}
-            <SurveyCreationCard/>
+            <SurveyCreationCard user_data={this.props.data}/>
         </div>
 
         );
