@@ -278,7 +278,7 @@ var FinishSurvey = React.createClass({
     render: function(){
       return (
           <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
-              FINNISH SURVEY
+              FINISH SURVEY
           </button>
       );
     }
