@@ -66,7 +66,7 @@ class User(BaseModel):
             'created_surveys': [],
             'survey_responses': [],
             'answers': [],
-            'primary_affiliation': [],
+            'primary_affiliation': '',
         }
 
     def create_generic_item(self):
