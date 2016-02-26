@@ -74,7 +74,7 @@ getInitialState: function(){
             </div>
             <div className="mdl-card__supporting-text">
             Username: {user_data[0].username} <br/>
-            User Type: {user_data[0].primary_affiliation[0]} <br/>
+            User Type: {user_data[0].primary_affiliation} <br/>
             Email: {user_data[0].email} <br/>
             Birth Date: {user_data[0].dob} <br/>
             Gender: {user_data[0].gender} <br/>
