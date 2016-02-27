@@ -33,7 +33,7 @@ class TestModels(BaseAsyncTest):
         for model in self.models:
             create_generic_item = getattr(model, "create_generic_item", None)
             if callable(create_generic_item):
-                message = "model {0}.create_generic_item failed. If this method is implemented, it must pass.".format(model.__class__.__name__)
+                message = "model {0}.create_generic_item failed. If this method is implemented, it must pass verification".format(model.__class__.__name__)
                 self.assertTrue(type(create_generic_item()) == str, message)
 
     def tearDownClass():
