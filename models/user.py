@@ -42,7 +42,7 @@ class User(BaseModel):
             'answered_surveys': (b.is_list,),
             'survey_responses': (b.is_list,),
             'answers': (b.is_list,),
-            'primary_affiliation': (b.is_list,),
+            'primary_affiliation': (b.is_string,),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -66,7 +66,7 @@ class User(BaseModel):
             'created_surveys': [],
             'survey_responses': [],
             'answers': [],
-            'primary_affiliation': [],
+            'primary_affiliation': '',
         }
 
     def create_generic_item(self):

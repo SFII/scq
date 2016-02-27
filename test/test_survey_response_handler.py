@@ -14,7 +14,7 @@ from models.survey_response import SurveyResponse
 import rethinkdb as r
 from handlers.base_handler import BaseHandler
 import logging
-import mock
+from unittest import mock
 
 
 class TestResponseHandler(BaseAsyncTest):
