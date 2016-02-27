@@ -3,13 +3,14 @@ from models.course import Course
 from models.user import User
 from models.instructor import Instructor
 from models.question import Question
+from models.group import Group
 import time
 import random
 import logging
 
 
 class Survey(BaseModel):
-    ITEM_TYPES = ['Course', 'Instructor', 'User']
+    ITEM_TYPES = ['Course', 'Instructor', 'User', 'Group']
 
     def requiredFields(self):
         return ['questions', 'item_id', 'item_type', 'item_name', 'creator_id', 'creator_name', 'responses', 'closed_timestamp', 'created_timestamp', 'deleted']
@@ -34,25 +35,27 @@ class Survey(BaseModel):
     def create_item(self, data):
         data['responses'] = []
         data['created_timestamp'] = time.time()
+        item_type = data['item_type']
+        model = self._model_from_item_type(item_type)
         if 'closed_timestamp' not in data.keys():
             data['closed_timestamp'] = None
         item_id = data['item_id']
         creator_id = data['creator_id']
         creator_data = User().get_item(creator_id)
-        course_data = Course().get_item(item_id)
+        model_data = model.get_item(item_id)
         if creator_data is None:
             logging.error('creator_id does not correspond to value in database')
             return None
-        if course_data is None:
+        if model_data is None:
             logging.error('item_id does not correspond to value in database')
             return None
-        data['item_name'] = course_data['course_name']
         data['creator_name'] = creator_data['username']
+        data['item_name'] = model_data.get(self._item_name_from_item_type(item_type), '')
         survey_id = super(Survey, self).create_item(data)
-        active_surveys = course_data['active_surveys']
+        active_surveys = model_data['active_surveys']
         active_surveys.append(survey_id)
-        subscribers = course_data['subscribers']
-        Course().update_item(item_id, {'active_surveys': active_surveys}, skip_verify=True)
+        subscribers = model_data['subscribers']
+        model.update_item(item_id, {'active_surveys': active_surveys}, skip_verify=True)
         self.send_user_survey(creator_id, survey_id, 'created_surveys')
         for subscriber_id in subscribers:
             self.send_user_survey(subscriber_id, survey_id)
@@ -73,12 +76,20 @@ class Survey(BaseModel):
             'deleted': False,
         }
 
-    # TODO: implement Departments as an item_type
     def _model_from_item_type(self, item_type):
         return {
+            'Group': Group(),
             'Instructor': Instructor(),
             'Course': Course(),
             'User': User()
+        }[item_type]
+
+    def _item_name_from_item_type(self, item_type):
+        return {
+            'Group': 'name',
+            'Instructor': 'instructor_last',
+            'Course': 'course_name',
+            'User': 'username'
         }[item_type]
 
     def create_generic_item(self, creator_id=None, item_id=None, item_type='Course'):

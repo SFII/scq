@@ -9,6 +9,7 @@ from models.section import Section
 from models.student import Student
 from models.survey import Survey
 from models.user import User
+from models.group import Group
 from models.survey_response import SurveyResponse
 from models.question_response import QuestionResponse
 import logging
@@ -27,7 +28,8 @@ settings = {
     'surveyResponse': SurveyResponse(),
     'questionResponse': QuestionResponse(),
     'instructor': Instructor(),
-    'course': Course()
+    'course': Course(),
+    'group': Group()
 }
 
 
@@ -58,6 +60,7 @@ def initialize_settings():
     settings['question'].init(database_name, conn)
     settings['questionResponse'].init(database_name, conn)
     settings['surveyResponse'].init(database_name, conn)
+    settings['group'].init(database_name, conn)
     settings['meta'] = settings['user'].get_item('meta')
     if settings['meta'] is None:
         meta_data = settings['user'].default()
