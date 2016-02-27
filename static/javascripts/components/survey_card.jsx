@@ -19,11 +19,12 @@ var survey = [
           "type" : "",
           "question":"",
           "options":[]
-      }
+      },
   ]
 }
 ];
 
+var finalSurvey = [];
 
 /*
 * Page with the Card for the creation of surveys
@@ -32,6 +33,19 @@ var survey = [
 
 //can pass variables
 var SurveyCreationCard = React.createClass({
+
+    loadSurvey: function(){
+      this.setState({surveyQuestions: survey[0].questions});
+    },
+
+    componentDidMount: function() {
+      this.loadSurvey();
+    },
+
+    getInitialState: function() {
+      return {surveyQuestions: []};
+    },
+
 
     //mdl in new questions
     componentDidUpdate: function(){
@@ -48,11 +62,7 @@ var SurveyCreationCard = React.createClass({
                   <Creator creator={this.props.data}/>
                   <h4>Add Questions:</h4>
                   </div>
-                  <table className="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp full-width">
-                      <tbody>
-                          <FieldDiv survey={survey[0].questions} />
-                      </tbody>
-                  </table>
+                  <FieldDiv survey={this.state.surveyQuestions} />
                   <AddQuestion/>
                   <FinishSurvey/>
               </div>
@@ -65,11 +75,7 @@ var FieldDiv = React.createClass({
 render: function(){
     var questionNodes = this.props.survey.map(function(survey) {
       return (
-        <tr>
-          <td className="mdl-data-table__cell--non-numeric">
-            <Fields/>
-          </td>
-        </tr>
+        <Fields/>
       );
     });
   return (
@@ -124,39 +130,7 @@ var Fields = React.createClass({
 
 
 var Question = React.createClass({
-
-
-    changeHandler: function(event) {
-        //not sure if needed
-        this.setState({value: event.target.value});
-    },
-
-    //render different options for multiple & single choice
-    /*
-    *
     render: function(){
-
-      var mQuestions = [2];
-      const options = this.props.options.map((option) => {
-        return (
-            <p>Hello</p>
-        )
-      });
-    *
-    */
-
-    render: function(){
-
-    /*
-    *
-    type = this.props.value;
-    var button = (<div></div>)
-    switch (type) {
-      case ¨multipleChoice":
-        button = <MCQuestion />
-    }
-    *
-    */
 
         if(this.props.value == "multipleChoice"){
           var mQuestions = [2];
@@ -206,14 +180,12 @@ var Question = React.createClass({
         } else if(this.props.value == "rating"){
           return (
           <p> Select scale
-          <input type="text" onChange={this.changeHandler}/>
           </p>
           );
 
         } else if(this.props.value == "freeResponse"){
           return (
           <p> Select maximum of words
-          <input type="text" onChange={this.changeHandler}/>
           </p>
           );
 
@@ -348,10 +320,11 @@ var TitleSurvey = React.createClass({
 });
 
 var Creator = React.createClass({
+    //TODO: not getting data
     render: function(){
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <p>Survey creator:&nbsp;<p>{this.props.username}</p></p>
+              <p>Survey creator:&nbsp;{this.props.username}</p>
         </div>
       );
     }
