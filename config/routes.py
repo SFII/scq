@@ -12,6 +12,8 @@ from handlers.dashboard_handler import DashboardHandler
 from handlers.profile_handler import ProfileHandler
 from handlers.help_handler import HelpHandler
 from handlers.raw_dump_handler import RawDumpHandler
+from handlers.surveys_handler import SurveysHandler
+from handlers.groups_handler import GroupsHandler
 from handlers.api.survey_handler import SurveyHandler
 from handlers.api.response_handler import ResponseHandler
 from handlers.refresh_handler import RefreshHandler
@@ -32,6 +34,8 @@ routes = [
     (r"/profile", ProfileHandler),
     (r"/help", HelpHandler),
     (r"/rawdump", RawDumpHandler),
+    (r"/surveys", SurveysHandler),
+    (r"/groups", GroupsHandler),
     (r"/api/surveys", SurveyHandler),
     (r"/api/response", ResponseHandler),
     (r"/api/me", MeHandler),
