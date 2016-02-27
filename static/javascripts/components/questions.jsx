@@ -247,9 +247,16 @@ var FreeResponse = React.createClass({
     },
 
   render: function(){
+    var questionID = this.props.questionID;
+    var inputKey = String(questionID)+"."+"input";
+    var labelKey = String(questionID)+"."+"label";
+    var spanKey = String(questionID)+"."+"span";
+    var divKey = String(questionID)+"."+"div";
+    var textareaKey = String(questionID)+"textarea";
+    var footerKey = String(this.props.surveyID) + "." + "footer";
     return (
       <div
-        className="mdl-card__supporting-text mdl-color-text--grey-600">
+      className="mdl-card__supporting-text mdl-color-text--grey-600" key={divKey}>
 
         <textarea
         className="mdl-textfield__input"
@@ -257,9 +264,11 @@ var FreeResponse = React.createClass({
         rows="4"
         id="test"
         value={this.state.answer}
-        onChange={this.handleChange}></textarea>
+        onChange={this.handleChange}>
+        </textarea>
         <br/>
         <Footer
+        key={footerKey}
         prevHandler={this.props.prevHandler}
         nextHandler={this.props.nextHandler}
         onSubmit={this.props.onSubmit}
@@ -296,21 +305,28 @@ var Rating = React.createClass({
 		this.setState({answer: e.target.value});
 	},
 	 render: function(){
+    var questionID = this.props.questionID;
+    var inputKey = String(questionID)+"."+"input";
+    var spanKey = String(questionID)+"."+"span";
+    var divKey = String(questionID)+"."+"div";
+    var footerKey = String(this.props.surveyID) + "." + "footer";
       return (
-        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-            <div>
+      <div className="mdl-card__supporting-text mdl-color-text--grey-600" key={divKey}>
+        <div key={divKey}>
                 <input className="mdl-slider mdl-js-slider"
                     type="range"
+                    key={inputKey}
                     min="0"
                     max="10"
                     value={this.state.answer}
                     step="1"
                     onChange={this.handleChange}
                 />
-                <span id="sliderStatus">{this.state.answer}</span>
+                <span id="sliderStatus" key={spanKey}>{this.state.answer}</span>
             </div>
             <Footer
             prevHandler={this.props.prevHandler}
+            key={footerKey}
             nextHandler={this.props.nextHandler}
             onSubmit={this.props.onSubmit}
             surveyData={this.state.answer}
