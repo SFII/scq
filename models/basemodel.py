@@ -160,7 +160,7 @@ class BaseModel:
 
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
-        adds a user id to a model's subscription list.
+        adds a user id to a model's subscription list. Expects user_subscription_name
         """
         row_table = self.__class__.__name__
         user_table = 'User'
@@ -174,7 +174,7 @@ class BaseModel:
             return False
         try:
             if user_subscription_name is not None:
-                user_subscription = user_data[user_subscription_name]
+                user_subscription = user_data.get(user_subscription_name, [])
                 user_subscription.append(row_id)
                 r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
         except KeyError:
