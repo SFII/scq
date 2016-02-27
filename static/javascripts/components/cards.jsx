@@ -22,14 +22,15 @@ var Card = React.createClass({
     //card, eventually we want one card per survey, this will be tricky
     render: function(){
         var cardType = "";
+        var key = String(this.props.questionID) + "." + "card"; 
         if(this.props.response_format == "multipleChoice"){
-            cardType = <MultipleChoice {...this.props}/>
+            cardType = <MultipleChoice key={key} {...this.props}/>
         } else if(this.props.response_format == "rating"){
-            cardType = <Rating {...this.props}/>
+            cardType = <Rating key={key} {...this.props}/>
         } else if (this.props.response_format == "trueOrFalse"){
-            cardType = <SingleChoice {...this.props}/>
+            cardType = <SingleChoice key={key} {...this.props}/>
         } else if (this.props.response_format == "freeResponse"){
-            cardType = <FreeResponse {...this.props}/>
+            cardType = <FreeResponse key={key} {...this.props}/>
         } else {
             console.log("not Valid card type");
             return undefined;
