@@ -33,6 +33,7 @@ class TestGroupSubscribe(BaseAsyncTest):
         pass
 
     def _test_group_survey_percolation(self):
+        # see surveys in a group's list of active_surveys
         survey_id = Survey().create_generic_item(creator_id=None, item_id=self.generic_group_id, item_type='Group')
         self.generic_group_data = Group().get_item(self.generic_user_id)
         active_surveys = self.generic_group_data.get('active_surveys', [])
@@ -44,6 +45,7 @@ class TestGroupSubscribe(BaseAsyncTest):
         self._test_unsubscribe_user()
 
     def _test_subscribe_user(self):
+        # create a survey and subscribe a user to a group
         survey_id = Survey().create_generic_item(creator_id=None, item_id=self.generic_group_id, item_type='Group')
         Group().subscribe_user(self.generic_user_id, self.generic_group_id)
         self.generic_user_data = User().get_item(self.generic_user_id)
@@ -71,5 +73,5 @@ class TestGroupSubscribe(BaseAsyncTest):
     def tearDownClass():
         logging.disable(logging.NOTSET)
         # Drop the database
-        # Group().delete_item(TestGroupSubscribe.generic_group_id)
-        # User().delete_item(TestGroupSubscribe.generic_user_id)
+        Group().delete_item(TestGroupSubscribe.generic_group_id)
+        User().delete_item(TestGroupSubscribe.generic_user_id)
