@@ -73,9 +73,9 @@ class Survey(BaseModel):
             'deleted': False,
         }
 
-    # TODO: implement Departments as an item_type
     def _model_from_item_type(self, item_type):
         return {
+            'Group': Group(),
             'Instructor': Instructor(),
             'Course': Course(),
             'User': User()

@@ -10,12 +10,13 @@ from models.course import Course
 from models.survey import Survey
 from models.survey_response import SurveyResponse
 from models.user import User
+from models.group import Group
 import rethinkdb as r
 import logging
 
 
 class TestModels(BaseAsyncTest):
-    models = [User(), Course(), Instructor(), QuestionResponse(), Question(), Survey(), SurveyResponse()]
+    models = [Group(), User(), Course(), Instructor(), QuestionResponse(), Question(), Survey(), SurveyResponse()]
 
     def setUpClass():
         logging.disable(logging.CRITICAL)
