@@ -21,7 +21,7 @@ getInitialState: function(){
         }
     }
     
-    if(user_data[0].primary_affiliation[0] == "Student"){
+    if(user_data[0].primary_affiliation == "Student"){
         if(user_data[0].status){
             status = user_data[0].status;
         }
