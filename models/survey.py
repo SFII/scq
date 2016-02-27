@@ -42,12 +42,12 @@ class Survey(BaseModel):
         item_id = data['item_id']
         creator_id = data['creator_id']
         creator_data = User().get_item(creator_id)
-        model_data = model.get_item(item_id)
+        model_data = self._get_model_data(data)
         if creator_data is None:
-            logging.error('creator_id does not correspond to value in database')
+            logging.error("creator_id {0} does not correspond to value in database".format(creator_id))
             return None
         if model_data is None:
-            logging.error('item_id does not correspond to value in database')
+            logging.error("item_id {0} does not correspond to value in database".format(item_id))
             return None
         data['creator_name'] = creator_data['username']
         data['item_name'] = model_data.get(self._item_name_from_item_type(item_type), '')
@@ -86,7 +86,7 @@ class Survey(BaseModel):
 
     def _item_name_from_item_type(self, item_type):
         return {
-            'Group': 'name',
+            'Group': 'id',
             'Instructor': 'instructor_last',
             'Course': 'course_name',
             'User': 'username'
@@ -118,6 +118,21 @@ class Survey(BaseModel):
             decomposed_question_data.append(question_data)
         decomposed_data['questions'] = decomposed_question_data
         return decomposed_data
+
+    def _get_model_data(self, data):
+        item_type = data.get('item_type', None)
+        item_id = data.get('item_id', None)
+        if item_type not in self.ITEM_TYPES:
+            return None
+        model = self._model_from_item_type(item_type)
+        return model.get_item(item_id)
+
+    def verify(self, data, skipRequiredFields=False, skipStrictSchema=False):
+        results = super(Survey, self).verify(data, skipRequiredFields=skipRequiredFields, skipStrictSchema=skipStrictSchema)
+        model_data = self._get_model_data(data)
+        if model_data is None:
+            results.append(('item_id', "item_id {0} does not correspond to value in database".format(item_id)))
+        return results
 
     def mark_deleted(self, survey_id):
         survey = self.get_item(survey_id)
