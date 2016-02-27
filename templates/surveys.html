@@ -1,0 +1,15 @@
+{% extends "layouts/base.html" %}
+{% block title %}Surveys{% end %}
+{% block react %}
+  var user_data={% raw user_info_json %};
+  var routesObject = {
+    surveys: "/api/surveys",
+    response: "/api/response"
+  };
+
+  ReactDOM.render(React.createElement(surveysPage, {routes: routesObject}), document.getElementById('main-grid'));
+{% end %}
+{% block content %}
+  <div class = "mdl-grid content" id="main-grid">
+  </div>
+{% end %}
