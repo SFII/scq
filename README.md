@@ -251,7 +251,8 @@ POST /api/surveys
 
 | Field            | Type          | Description                                                                                |
 | ---------------- | ------------- | ------------------------------------------------------------------------------------------ |
-| item_id          | String        | **Required**. Id of the survey                                                             |
+| id               | String        | **Required**. Id of the survey.                                                            |
+| item_id          | String        | **Required**. Id of item (i.e. Course, Instructor, User).                                  |
 | item_type        | String        | **Required**. Types can be of the following: Instructor, Course, User.                     |
 | item_name        | String[]      | **Required**. The name for the survey.                                                     |
 | creator_id       | String        | **Required**. User's id associated to account.                                             |
@@ -264,10 +265,9 @@ POST /api/surveys
 **Response:**
 ```
 Status: 200 OK
-Survey_id : "caf49f12-0404-4590-882e-b6a7fa903d02"
 ```
 
-### Create/update user's response to a survey
+### Answer user's questions to a survey
 *Test: FAIL*
 ```
 POST /api/response
