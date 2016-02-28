@@ -25,9 +25,14 @@ class SubscribeAPIHandler(BaseHandler):
         action = self.json_data.get('action', None)
         user_id = self.current_user['id']
         result = {}
-        if action == SUBSCRIBE_ACTION:
+        if group_id is None:
+            return self.set_status(400, "id cannot be null")
+        group_data = Group().get_item(group_id)
+        if group_data is None:
+            return self.set_status(400, "group_id {0} does not correspond to a value in the database".format(group_id))
+        if action == self.SUBSCRIBE_ACTION:
             result = Group().subscribe_user(user_id, group_id)
-        elif action == UNSUBSCRIBE_ACTION:
+        elif action == self.UNSUBSCRIBE_ACTION:
             result = Group().unsubscribe_user(user_id, group_id)
         else:
             return self.set_status(400, "action must be one of {0}".format(ACTIONS))
@@ -42,8 +47,8 @@ class SubscribeAPIHandler(BaseHandler):
         unchanged = result.get('unchanged', 0)
         if unchanged:
             verb = {
-                SUBSCRIBE_ACTION: 'already subscribed',
-                UNSUBSCRIBE_ACTION: 'not yet subscribed'
+                self.SUBSCRIBE_ACTION: 'already subscribed',
+                self.UNSUBSCRIBE_ACTION: 'not yet subscribed'
             }[action]
             message = "user is {0} to this group, and cannot {1}. No change has occured.".format(verb, action)
             return self.set_status(400, message)

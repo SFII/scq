@@ -26,16 +26,17 @@ class Group(BaseModel):
         }
 
     def subscribe_user(self, user_id, group_id):
-        super(Group, self).subscribe_user(user_id, group_id, 'subscribed_groups')
+        result = super(Group, self).subscribe_user(user_id, group_id, 'subscribed_groups')
         group_data = self.get_item(group_id)
         if group_data is None:
             message = "group_id {0} does not correspond to a value in the database".format(group_id)
             return logging.error(message)
         for survey_id in group_data.get('active_surveys', []):
             self.send_user_survey(user_id, survey_id)
+        return result
 
     def unsubscribe_user(self, user_id, group_id):
-        super(Group, self).unsubscribe_user(user_id, group_id, 'subscribed_groups')
+        return super(Group, self).unsubscribe_user(user_id, group_id, 'subscribed_groups')
 
     def create_generic_item(self):
         data = self.default()

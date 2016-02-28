@@ -162,6 +162,12 @@ class BaseModel:
         """
         adds a user id to a model's subscription list.
         """
+        if user_id is None:
+            logging.error("user_id cannot be None")
+            return False
+        if row_id is None:
+            logging.error("row_id cannot be None")
+            return False
         row_table = self.__class__.__name__
         user_table = 'User'
         user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
@@ -169,8 +175,8 @@ class BaseModel:
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
-        if user_data is None:
-            logging.error("{0} {1} does not exist".format(table, row_data))
+        if row_data is None:
+            logging.error("{0} {1} does not exist".format(row_table, row_data))
             return False
         try:
             if user_subscription_name is not None:
@@ -190,6 +196,12 @@ class BaseModel:
         """
         removes a user id to a model's subscription list.
         """
+        if user_id is None:
+            logging.error("user_id cannot be None")
+            return False
+        if row_id is None:
+            logging.error("row_id cannot be None")
+            return False
         row_table = self.__class__.__name__
         user_table = 'User'
         user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
@@ -197,19 +209,20 @@ class BaseModel:
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
-        if user_data is None:
-            logging.error("{0} {1} does not exist".format(table, row_data))
+        if row_data is None:
+            logging.error("{0} {1} does not exist".format(row_table, row_data))
             return False
         if user_subscription_name is not None:
             user_subscription = user_data.get(user_subscription_name, [])
             try:
                 user_subscription.remove(row_id)
             except ValueError:
+                logging.warn("row_id {0} not in user {1}".format(row_id, user_subscription_name))
                 pass
             r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
         subscribers = row_data['subscribers']
         try:
-            subscribers.remove(row_id)
+            subscribers.remove(user_id)
         except ValueError:
             pass
         return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
