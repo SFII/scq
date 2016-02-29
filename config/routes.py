@@ -20,6 +20,7 @@ from handlers.refresh_handler import RefreshHandler
 from handlers.user_info_handler import UserInfoHandler
 from handlers.user_info_update_handler import UserInfoUpdateHandler
 from handlers.api.me_handler import MeHandler
+from handlers.api.group_api_handler import GroupAPIHandler
 from handlers.api.subscribe_api_handler import SubscribeAPIHandler
 
 
@@ -41,6 +42,7 @@ routes = [
     (r"/api/response", ResponseHandler),
     (r"/api/subscribe", SubscribeAPIHandler),
     (r"/api/me", MeHandler),
+    (r"/api/groups", GroupAPIHandler),
     (r"/api/refresh", RefreshHandler),
     (r"/userinfo", UserInfoHandler),
     (r"/userinfo/update", UserInfoUpdateHandler)
