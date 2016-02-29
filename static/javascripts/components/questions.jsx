@@ -28,7 +28,7 @@ var MultipleChoice = React.createClass({
             currAnswers: prevAnswers
         };
     },
-
+    
     handleChange: function(i,value){
         var NewValue = null;
         if(value == false){
@@ -46,45 +46,55 @@ var MultipleChoice = React.createClass({
     },
 
     render: function(){
+      var questionID = this.props.questionID;
       const renderedOptions = this.props.options.map((option,i) => {
+      var inputKey = String(questionID)+"."+option+"."+"input";
+      var labelKey = String(questionID)+"."+option+"."+"label";
+      var spanKey = String(questionID)+"."+option+"."+"span";
       if(this.state.currAnswers[i] == true){
         return (
-            <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" key = {labelKey} id={labelKey}>
                 <input
                     type="checkbox"
                     value = {this.state.data[i]}
                     name = {option}
+                    key = {inputKey}
+                    id = {inputKey}
                     className="mdl-checkbox__input"
                     onChange= {this.handleChange.bind(this,i, this.state.data[i])}
                     checked>
                 </input>
-                <span className="mdl-checkbox__label"> { option } </span>
+                <span className="mdl-checkbox__label" key={spanKey} id={spanKey}> { option } </span>
             </label>
         )
       }
       else{
           return (
-                <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" key = {labelKey} id = {labelKey}>
                     <input
                         type="checkbox"
                         value = {this.state.data[i]}
                         name = {option}
-                        key = {i}
+                        key = {inputKey}
+                        id = {inputKey}
                         className="mdl-checkbox__input"
                         onChange= {this.handleChange.bind(this,i, this.state.data[i])}>
                     </input>
-                    <span className="mdl-checkbox__label"> { option } </span>
+                    <span className="mdl-checkbox__label" key = {spanKey} id = {spanKey}> { option } </span>
                 </label>
         )
       }
       });
+      var footerKey = String(this.props.surveyID) + "." + "footer";
       return (
-        <div className="options mdl-card__supporting-text mdl-color-text--grey-600">
+        <div className="options mdl-card__supporting-text mdl-color-text--grey-600" key = {footerKey}>
             { renderedOptions }
             <Footer
             prevHandler={this.props.prevHandler}
             nextHandler={this.props.nextHandler}
             onSubmit={this.props.onSubmit}
+            key={footerKey}
+            id={footerKey}
             surveyData={this.state.data}
             questionID={this.props.questionID}
             response_format={this.props.response_format}
@@ -147,50 +157,60 @@ getInitialState: function(){
 
     render: function(){
         var surveyID = String(this.props.surveyID);
+        var questionID = this.props.questionID
         const renderedOptions = this.props.options.map((option, i) => {
+        var inputKey = String(questionID)+"."+option+"."+"input";
+        var labelKey = String(questionID)+"."+option+"."+"label";
+        var spanKey = String(questionID)+"."+option+"."+"span";
+        var divKey = String(questionID)+"."+option+"."+"div";
         if(this.state.currAnswers[i] == true){
             return (
-                <div>
-                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+            <div key={divKey} id={divKey}>
+            <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" key={labelKey} id={labelKey}>
                     <input 
                     type="radio" 
                     className="mdl-radio__button"
                     name = {surveyID}
+                    key={inputKey}
+                    id={inputKey}
                     value= {i}
                     onChange={this.handleChange.bind(this,i,this.state.data[i])}
                     checked>
                     </input>
-                      <span className="mdl-radio__label"> { option } </span>
+                    <span className="mdl-radio__label" key={spanKey} id={spanKey}> { option } </span>
                     </label>
                 </div>
             )
         }
         else{
             return (
-                <div>
-                    <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
+            <div key={divKey} id={divKey}>
+            <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" key={labelKey} id={labelKey}>
                     <input 
                     type="radio" 
                     className="mdl-radio__button"
                     name = {surveyID}
                     value= {i}
+                    key={inputKey}
+                    id={inputKey}
                     onChange={this.handleChange.bind(this,i,this.state.data[i])}>
                     </input>
-                      <span className="mdl-radio__label"> { option } </span>
+                    <span className="mdl-radio__label" key={spanKey} id={spanKey}> { option } </span>
                     </label>
                 </div>
             )
         }
         });
-
+        var footerKey = String(this.props.surveyID) + "." + "footer";
         return (
             <div
-            className="mdl-card__supporting-text mdl-color-text--grey-600">
+            className="mdl-card__supporting-text mdl-color-text--grey-600" key={footerKey}>
               { renderedOptions }
               <Footer
               prevHandler={this.props.prevHandler}
               nextHandler={this.props.nextHandler}
               onSubmit={this.props.onSubmit}
+              key={footerKey}
               surveyData={this.state.data}
               questionID={this.props.questionID}
               response_format={this.props.response_format}
@@ -227,9 +247,16 @@ var FreeResponse = React.createClass({
     },
 
   render: function(){
+    var questionID = this.props.questionID;
+    var inputKey = String(questionID)+"."+"input";
+    var labelKey = String(questionID)+"."+"label";
+    var spanKey = String(questionID)+"."+"span";
+    var divKey = String(questionID)+"."+"div";
+    var textareaKey = String(questionID)+"textarea";
+    var footerKey = String(this.props.surveyID) + "." + "footer";
     return (
       <div
-        className="mdl-card__supporting-text mdl-color-text--grey-600">
+      className="mdl-card__supporting-text mdl-color-text--grey-600" key={divKey}>
 
         <textarea
         className="mdl-textfield__input"
@@ -237,9 +264,11 @@ var FreeResponse = React.createClass({
         rows="4"
         id="test"
         value={this.state.answer}
-        onChange={this.handleChange}></textarea>
+        onChange={this.handleChange}>
+        </textarea>
         <br/>
         <Footer
+        key={footerKey}
         prevHandler={this.props.prevHandler}
         nextHandler={this.props.nextHandler}
         onSubmit={this.props.onSubmit}
@@ -276,21 +305,28 @@ var Rating = React.createClass({
 		this.setState({answer: e.target.value});
 	},
 	 render: function(){
+    var questionID = this.props.questionID;
+    var inputKey = String(questionID)+"."+"input";
+    var spanKey = String(questionID)+"."+"span";
+    var divKey = String(questionID)+"."+"div";
+    var footerKey = String(this.props.surveyID) + "." + "footer";
       return (
-        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-            <div>
+      <div className="mdl-card__supporting-text mdl-color-text--grey-600" key={divKey}>
+        <div key={divKey}>
                 <input className="mdl-slider mdl-js-slider"
                     type="range"
+                    key={inputKey}
                     min="0"
                     max="10"
                     value={this.state.answer}
                     step="1"
                     onChange={this.handleChange}
                 />
-                <span id="sliderStatus">{this.state.answer}</span>
+                <span id="sliderStatus" key={spanKey}>{this.state.answer}</span>
             </div>
             <Footer
             prevHandler={this.props.prevHandler}
+            key={footerKey}
             nextHandler={this.props.nextHandler}
             onSubmit={this.props.onSubmit}
             surveyData={this.state.answer}

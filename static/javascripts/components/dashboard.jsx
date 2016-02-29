@@ -32,28 +32,11 @@ var Page = React.createClass({
     */
 
     render: function(){
-      return (
-        <div className="mdl-grid mdl-cell--12-col content">
-        <MainDiv /*pageJson={this.state.data}*/ routes={this.props.routes}/>
-        </div>
-      );
-    }
-});
-
-/*
-*
-* MainDiv
-* At this layer we separate each Survey into separate SurveyDiv objects
-*/
-var MainDiv = React.createClass({
-    render: function() {
-		if (!loggedIn()) {
-		   return (<Welcome />);
-		}
+      if (!loggedIn()) {
+        return (<Welcome />);
+      }
+      else{
         routesObject=this.props.routes;
-        //itemNodes is the set of mapped items (each one is a survey) and each is passed it's set of questions, routes, and other relevant information
-        /*this is set to testQuestions.map until the GET works, if it's
-        working switch it to this.props.pageJson and it should work */
         var itemNodes = data.map(function (item) {
                 return (
                 <SurveyDiv
@@ -65,14 +48,16 @@ var MainDiv = React.createClass({
                 creator={item.creator}
                 isInstructor={item.isInstructor}/>
                 );
-            });
+        });
         return (
-        <div className="mainDiv ">
-            {itemNodes}
-            <SurveyCreationCard/>
-        </div>
-
+          <div className="mdl-grid mdl-cell--12-col content">
+            <div className="mainDiv">
+              {itemNodes}
+              <SurveyCreationCard/>
+            </div>
+          </div>
         );
+      }
     }
 });
 
