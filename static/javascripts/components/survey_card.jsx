@@ -26,6 +26,8 @@ var survey = [
 
 var finalSurvey = [];
 
+var numQuestion = 0;
+
 /*
 * Page with the Card for the creation of surveys
 * is passing survey[0].questions
@@ -63,7 +65,7 @@ var SurveyCreationCard = React.createClass({
                   <h4>Add Questions:</h4>
                   </div>
                   <FieldDiv survey={this.state.surveyQuestions} />
-                  <AddQuestion/>
+                  <AddQuestion survey={this.state.surveyQuestions}/>
                   <FinishSurvey/>
               </div>
           </div>
@@ -72,10 +74,11 @@ var SurveyCreationCard = React.createClass({
 });
 
 var FieldDiv = React.createClass({
+
 render: function(){
     var questionNodes = this.props.survey.map(function(survey) {
       return (
-        <Fields/>
+        <Fields key={numQuestion}/>
       );
     });
   return (
@@ -133,8 +136,6 @@ var Question = React.createClass({
     render: function(){
 
         if(this.props.value == "multipleChoice"){
-          var mQuestions = [2];
-
 
           return (
             <div>
@@ -201,14 +202,7 @@ var Question = React.createClass({
 
 
 var MQuestions = React.createClass({
-//set initial value
-getInitialState: function() {
-    return {value: 'select'};
-},
-//set value change
-changeHandler: function(event) {
-    this.setState({value: event.target.value});
-},
+
     render: function(){
       return (
       <div>
@@ -255,13 +249,32 @@ var SQuestions = React.createClass({
 
 
 var AddQuestion = React.createClass({
-    clickHandler: function() {
-      survey[0].questions.push("option");
+    /*
+    * getting initial survey
+    */
+    getInitialState: function() {
+      return {survey: survey};
+    },
+
+    /*
+    * Adding questions
+    */
+    addQuestion: function(e) {
+      console.log("Adding" + this.state);
+      alert("adding");
+      //survey.push({id: 3, author: "Jordan Walke", text: "This is *another* comment"});
+      this.props.onAdding(
+                {
+                "id" : "",
+                "type" : "",
+                "question":"",
+                "options":[]
+            });
     },
 
     render: function(){
       return (
-          <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <button onClick={this.addQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               ADD QUESTION
           </button>
       );
