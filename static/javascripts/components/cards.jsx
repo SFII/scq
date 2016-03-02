@@ -1,3 +1,4 @@
+//called in <Card>, an mdl title card that just renders the title text.
 var TitleSection = React.createClass({
     render: function(){
       return (
@@ -8,18 +9,16 @@ var TitleSection = React.createClass({
     }
 });
 
-// Card confuses responses of the same type.
 var Card = React.createClass({
+    /*Since our children are dynamic the mdl needs to be reprocessed after every render else it looks like regular html, so everytime Card updates
+    with new props (which happens every time next or previous is clicked) we upgrade all our components to mdl again*/
     componentDidUpdate: function(){
         componentHandler.upgradeDom();
     },
-
-    //handleSurveySubmit is called whenever a submit button is pushed
-    //it calls POST on /api/response sending a JSON of the survey data
-    //and on success calls the removeHandler which removes the
-    //corresponding cards
-    //case matching of the question type, generates the corresponding
-    //card, eventually we want one card per survey, this will be tricky
+    
+    /* Our children are dynamic so I wanted to make sure we're including keys where we can, questionID's are unique and by adding .card we'll ensure
+    they're unique from further children down the line, otherwise this layer just looks to generate the correct type of question card based off of 
+    this.props.response_format as well as a <TitleSection> component which is passed this.props.title*/
     render: function(){
         var cardType = "";
         var key = String(this.props.questionID) + "." + "card"; 

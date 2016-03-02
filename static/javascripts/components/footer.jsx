@@ -1,11 +1,11 @@
 /*
 *
 * Footer
-* Just an mdl submit button, behaves as a normal submit button would
+* Contains a combination of Next, Previous, and Submit buttons either active or inactive when they're inapplicable
 */
 var Footer = React.createClass({
     render: function() {
-    //first question, survey not filled out
+    //first question, survey not filled out, previous is inactive, submit is inactive
         if(this.props.questionNum == 0 && this.props.responseSize != (this.props.numQuestions)){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
@@ -32,7 +32,7 @@ var Footer = React.createClass({
                 </div>
             )
         }
-        // first question, survey is filled out
+        // first question, survey is filled out, previous is inactive, but we can submit
         else if(this.props.questionNum == 0 && this.props.responseSize == (this.props.numQuestions)){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
@@ -61,6 +61,7 @@ var Footer = React.createClass({
                 </div>
             )
         }
+        //if we're on the last question for the first time we want to be able to submit but not go to the next question
         else if(this.props.questionNum == (this.props.numQuestions)-1){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
@@ -89,6 +90,7 @@ var Footer = React.createClass({
                 </div>
             )
         }
+        //if we return to the last question at some point after backtracking it actually requires a different condition since responseSize grows
         else if(this.props.questionNum == (this.props.numQuestions) && this.props.responseSize == this.props.numQuestions){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
@@ -117,7 +119,7 @@ var Footer = React.createClass({
                 </div>
             )
         }
-        //not the first question, not the last question, and survey not filled out
+        //not the first question, not the last question, and survey not filled out, submit is inactive
     else if(this.props.questionNum != 0 && this.props.questionNum != (this.props.numQuestions) && this.props.responseSize != (this.props.numQuestions)){
         return(
             <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
@@ -146,7 +148,7 @@ var Footer = React.createClass({
             </div>
         )
         }
-        //not the first question, not the last question, survey is filled out
+        //not the first question, not the last question, survey is filled out, all buttons are active
     else if(this.props.questionNum != 0 && this.props.questionNum != (this.props.numQuestions) && this.props.responseSize == (this.props.numQuestions)){
         return(
             <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
@@ -202,6 +204,7 @@ var Progress = React.createClass({
 })
 */
 
+//creates a progress bar that fills up as you answer questions.
 var Progress = React.createClass({
     render: function() {
     var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
@@ -211,6 +214,7 @@ var Progress = React.createClass({
     }
 })
 
+//previous button that takes the questionID and the question response data and format and sends it to prevHandler in SurveyDiv
 var PrevButton = React.createClass({
     clickHandler: function() {
         var surveyData = this.props.surveyData;
@@ -227,6 +231,7 @@ var PrevButton = React.createClass({
     }
 })
 
+//same as previous button but goes to the nextHandler in SurveyDiv
 var NextButton = React.createClass({
     clickHandler: function() {
         var surveyData = this.props.surveyData;
@@ -243,6 +248,7 @@ var NextButton = React.createClass({
     }
 })
 
+//Submit button does the same as the next and previous button but sends to the submitHandler in SurveyDiv
 var SubmitButton = React.createClass({
     clickHandler:function(){
         var surveyData = this.props.surveyData;
