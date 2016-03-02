@@ -181,7 +181,7 @@ class TestResponseHandler(BaseAsyncTest):
         with mock.patch.object(BaseHandler, 'get_current_user') as m:
             m.return_value = self.user_data
             endpoint = '/api/surveys?survey_id=' + self.survey_id
-            test = {'body': None, 'method': 'DELETE',}
+            test = {'body': None, 'method': 'DELETE', }
             resp = self.fetch(endpoint, **test)
             self.assertEqual(200, resp.code)
             response = self.fetch('/api/surveys', method="GET")
