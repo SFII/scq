@@ -13,17 +13,13 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.css">
-      <link rel="stylesheet" href="https://code.getmdl.io/1.1.0/material.indigo-pink.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.0/material.indigo-pink.min.css" />
     <link href="/static/stylesheets/style.css" rel="stylesheet" type="text/css">
-      <link href="http://d2v52k3cl9vedd.cloudfront.net/basscss/7.0.4/basscss.min.css" rel="stylesheet">
+    <link href="http://d2v52k3cl9vedd.cloudfront.net/basscss/7.0.4/basscss.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
-    
-      <style type="text/css">
 
-
-        
-    </style>
- 
     </head>
   <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -102,7 +98,24 @@
           
 <div class="main_info">      
 
+    <div class="ct-chart ct-golden-section" id="chart1"></div>
+    <div class="ct-chart ct-golden-section" id="chart2"></div>
 
+<script>
+var options = {
+  width: 300,
+  height: 200
+};
+    
+  new Chartist.Bar('#chart1', {
+    labels: ['A', 'B', 'C', 'D'],
+    series: [[100, 60, 20, 40]]
+  }, options);
+  new Chartist.Bar('#chart2', {
+    labels: [1, 2, 3, 4],
+    series: [[5, 2, 8, 3]]
+  });
+</script>
           
             <!--card-->
        
