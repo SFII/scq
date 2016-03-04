@@ -160,8 +160,14 @@ class BaseModel:
 
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
-        adds a user id to a model's subscription list. Expects user_subscription_name
+        adds a user id to a model's subscription list.
         """
+        if user_id is None:
+            logging.error("user_id cannot be None")
+            return False
+        if row_id is None:
+            logging.error("row_id cannot be None")
+            return False
         row_table = self.__class__.__name__
         user_table = 'User'
         user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
@@ -169,19 +175,56 @@ class BaseModel:
         if user_data is None:
             logging.error("User {0} does not exist".format(user_data))
             return False
-        if user_data is None:
-            logging.error("{0} {1} does not exist".format(table, row_data))
+        if row_data is None:
+            logging.error("{0} {1} does not exist".format(row_table, row_data))
             return False
         try:
             if user_subscription_name is not None:
                 user_subscription = user_data.get(user_subscription_name, [])
                 user_subscription.append(row_id)
+                user_subscription = list(set(user_subscription))
                 r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
         except KeyError:
             logging.error("user subscription {0} not known in user data".format(user_subscription_name))
             return False
         subscribers = row_data['subscribers']
         subscribers.append(user_id)
+        subscribers = list(set(subscribers))
+        return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+
+    def unsubscribe_user(self, user_id, row_id, user_subscription_name=None):
+        """
+        removes a user id to a model's subscription list.
+        """
+        if user_id is None:
+            logging.error("user_id cannot be None")
+            return False
+        if row_id is None:
+            logging.error("row_id cannot be None")
+            return False
+        row_table = self.__class__.__name__
+        user_table = 'User'
+        user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
+        row_data = r.db(self.DB).table(row_table).get(row_id).run(self.conn)
+        if user_data is None:
+            logging.error("User {0} does not exist".format(user_data))
+            return False
+        if row_data is None:
+            logging.error("{0} {1} does not exist".format(row_table, row_data))
+            return False
+        if user_subscription_name is not None:
+            user_subscription = user_data.get(user_subscription_name, [])
+            try:
+                user_subscription.remove(row_id)
+            except ValueError:
+                logging.warn("row_id {0} not in user {1}".format(row_id, user_subscription_name))
+                pass
+            r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
+        subscribers = row_data['subscribers']
+        try:
+            subscribers.remove(user_id)
+        except ValueError:
+            pass
         return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
 
     # adds a survey_id to a user's unanswered_surveys list.

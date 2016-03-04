@@ -251,7 +251,8 @@ POST /api/surveys
 
 | Field            | Type          | Description                                                                                |
 | ---------------- | ------------- | ------------------------------------------------------------------------------------------ |
-| item_id          | String        | **Required**. Id of the survey                                                             |
+| id               | String        | **Required**. Id of the survey.                                                            |
+| item_id          | String        | **Required**. Id of item (i.e. Course, Instructor, User).                                  |
 | item_type        | String        | **Required**. Types can be of the following: Instructor, Course, User.                     |
 | item_name        | String[]      | **Required**. The name for the survey.                                                     |
 | creator_id       | String        | **Required**. User's id associated to account.                                             |
@@ -264,11 +265,10 @@ POST /api/surveys
 **Response:**
 ```
 Status: 200 OK
-Survey_id : "caf49f12-0404-4590-882e-b6a7fa903d02"
 ```
 
-### Create/update user's response to a survey
-*Test: FAIL*
+### Answer user's questions to a survey
+*Test: PASS*
 ```
 POST /api/response
 ```
@@ -282,10 +282,7 @@ POST /api/response
 
 **Response:**
 ```
-Status: 400
-Users can only respond to surveys in their unanswered survey list.
-
-TODO: Fix this.. My JSON is correct and my rethinkdb says that I have this unanswered survey I want to use to make this POST request.
+Status: 200
 ```
 
 ### Refresh user's cookie
