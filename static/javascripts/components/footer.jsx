@@ -220,7 +220,6 @@ var PrevButton = React.createClass({
         var surveyData = this.props.surveyData;
         var questionID = this.props.questionID;
         var response_format = this.props.response_format;
-        console.log(surveyData);
         this.props.prevHandler(surveyData,questionID,response_format);
     },
     render: function() {
@@ -238,7 +237,6 @@ var NextButton = React.createClass({
         var surveyData = this.props.surveyData;
         var questionID = this.props.questionID;
         var response_format = this.props.response_format;
-        console.log(surveyData);
         this.props.nextHandler(surveyData,questionID,response_format);
     },
     render: function() {
