@@ -12,9 +12,77 @@ var TitleSection = React.createClass({
 var Card = React.createClass({
     /*Since our children are dynamic the mdl needs to be reprocessed after every render else it looks like regular html, so everytime Card updates
     with new props (which happens every time next or previous is clicked) we upgrade all our components to mdl again*/
-    componentDidUpdate: function(){
-        componentHandler.upgradeDom();
+        
+    multipleChoiceResponseState: function(){
+        var length = Object.keys(this.props.options).length;
+        var questionObj = [];
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswers = [];
+        
+        for(var i =0; i < length; i++){
+            questionObj[i] = false;
+        }
+        
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswers = responseState[i].response_data;
+             for(var i2 =0; i2 < length; i2++){
+                 if(prevAnswers[i2] == true){
+                    questionObj[i2]= true;
+                 }
+             }
+          }
+        }
+        return questionObj;
     },
+    
+    singleChoiceResponseState: function(){
+        var length = Object.keys(this.props.options).length;
+        var questionObj =[];
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswers = [];
+        for(var i =0; i < length; i++){
+            questionObj[i]=false;
+        }
+        for(var i = responseStateLength-1; i >= 0; i--){
+            if(responseState[i].question_id == this.props.questionID){
+                prevAnswers = responseState[i].response_data;
+                    for(var i2 = 0; i2 < length; i2++){
+                        if(prevAnswers[i2]==true){
+                            questionObj[i2] = true;
+                        }
+                    }
+            }
+        }
+        return questionObj;
+    },
+    
+    freeResponseResponseState: function(){
+        var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswer = "Change Me!";
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswer = responseState[i].response_data;
+          }
+        }
+        return prevAnswer;
+    },
+    
+    ratingResponseState: function(){
+		var responseState = this.props.responseState;
+        var responseStateLength = Object.keys(responseState).length;
+        var prevAnswer = 5;
+        for(var i = responseStateLength-1; i >= 0; i--){
+          if(responseState[i].question_id == this.props.questionID){
+             prevAnswer = responseState[i].response_data;
+          }
+        }
+        return prevAnswer;
+	},
+    
     
     /* Our children are dynamic so I wanted to make sure we're including keys where we can, questionID's are unique and by adding .card we'll ensure
     they're unique from further children down the line, otherwise this layer just looks to generate the correct type of question card based off of 
@@ -23,13 +91,13 @@ var Card = React.createClass({
         var cardType = "";
         var key = String(this.props.questionID) + "." + "card"; 
         if(this.props.response_format == "multipleChoice"){
-            cardType = <MultipleChoice key={key} {...this.props}/>
+        cardType = <MultipleChoice key={key} questionState={this.multipleChoiceResponseState()} {...this.props}/>
         } else if(this.props.response_format == "rating"){
-            cardType = <Rating key={key} {...this.props}/>
+            cardType = <Rating key={key} questionState={this.ratingResponseState()} {...this.props}/>
         } else if (this.props.response_format == "trueOrFalse"){
-            cardType = <SingleChoice key={key} {...this.props}/>
+            cardType = <SingleChoice key={key} questionState={this.singleChoiceResponseState()} {...this.props}/>
         } else if (this.props.response_format == "freeResponse"){
-            cardType = <FreeResponse key={key} {...this.props}/>
+            cardType = <FreeResponse key={key} questionState={this.freeResponseResponseState()} {...this.props}/>
         } else {
             console.log("not Valid card type");
             return undefined;
@@ -37,7 +105,7 @@ var Card = React.createClass({
         return (
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
                 <div>
-                    <TitleSection titleText={this.props.title}/>
+                <TitleSection titleText={this.props.title}/>
                     {cardType}
                 </div>
             </div>
