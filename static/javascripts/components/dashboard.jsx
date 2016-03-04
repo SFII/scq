@@ -43,14 +43,24 @@ var SurveyDiv = React.createClass({
     getInitialState initializes our response json in it's state as well as other information we need to know to make everything work */
     getInitialState: function() {
         return({
-                length: Object.keys(this.props.questions).length,
+                length: 0,
                 showCard: true,
                 iter: 0,
                 responseSize: 0,
                 response: {
-                    survey_id: this.props.surveyID,
+                    survey_id: 0,
                     question_responses:[]
                 },
+        });
+    },
+    
+    componentDidMount: function() {
+        this.setState({
+            length: Object.keys(this.props.questions).length,
+            response: {
+                survey_id: this.props.surveyID,
+                question_responses: []
+            },
         });
     },
     
@@ -160,7 +170,7 @@ var SurveyDiv = React.createClass({
                 questionNum={this.state.iter}
                 questionID = {this.props.questions[this.state.iter].id}
                 responseSize = {this.state.responseSize}
-                numQuestions={this.state.length}
+                numQuestions={Object.keys(this.props.questions).length}
                 title={this.props.questions[this.state.iter].title}
                 options={this.props.questions[this.state.iter].options}
                 response_format={this.props.questions[this.state.iter].response_format}
