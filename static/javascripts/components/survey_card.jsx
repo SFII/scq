@@ -15,10 +15,11 @@ var survey = [
   "creator_id":"",
   "questions": [
       {
-          "id" : 0,
+          "id" : "",
           "type" : "",
           "question":"",
-          "options":[]
+          "options":[],
+          "position": "0"
       },
   ]
 }
@@ -68,15 +69,12 @@ var SurveyCreationCard = React.createClass({
     },
 
     handleAdding: function(newdata) {
-      alert("adding");
       numQuestion=numQuestion+1;
-      newdata.id = numQuestion;
+      newdata.position = numQuestion;
       var originalsurvey = this.state.survey;
       var temporalsurvey = originalsurvey.concat(newdata);
       this.setState({survey: temporalsurvey});
       temp = temporalsurvey;
-      console.log(this.state.survey);
-      console.log(temp);
     },
 
     render: function(){
@@ -103,7 +101,7 @@ var FieldDiv = React.createClass({
 render: function(){
     var questionNodes = this.props.survey.map(function(survey) {
       return (
-        <Fields key={survey.id}/>
+        <Fields key={survey.position}/>
       );
     });
   return (
@@ -309,25 +307,30 @@ var FinishSurvey = React.createClass({
     *  url: this.props.routes.surveys, /api/surveys
     *  not finished
     */
-    loadPageJSON: function() {
+
+    /*
     $.ajax({
-    url: '/api/surveys',
-    type: 'POST',
-    dataType: 'json',
-    cache: true,
-    success: function(data){
-    //on success we set the state of Page to be equal to the JSON received
-    this.setState({data: data});
-    }.bind(this),
-    error: function(xhr, status, err){
-    console.error(this.props.routes.surveys, status, err.toString());
-    }.bind(this)
+      url: this.props.url,
+      dataType: 'json',
+      type: 'POST',
+      data: comment,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
     });
+    */
+
+    handleSubmit: function(comment) {
+      finalSurvey[0].questions.push(temp);
+      console.log(finalSurvey);
     },
 
     render: function(){
       return (
-          <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
+          <button onClick={this.handleSubmit} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
               FINNISH SURVEY
           </button>
       );
