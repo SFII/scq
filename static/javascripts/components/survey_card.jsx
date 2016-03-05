@@ -15,7 +15,7 @@ var survey = [
   "creator_id":"",
   "questions": [
       {
-          "id" : "",
+          "id" : 0,
           "type" : "",
           "question":"",
           "options":[]
@@ -24,7 +24,20 @@ var survey = [
 }
 ];
 
-var finalSurvey = [];
+var finalSurvey = [
+
+  {
+  "id": "",
+  "item_id":"",
+  "item_name":"",
+  "item_type":"",
+  "creator_name":"",
+  "creator_id":"",
+  "questions": []
+  }
+];
+
+var temp = [];
 
 var numQuestion = 0;
 
@@ -37,7 +50,7 @@ var numQuestion = 0;
 var SurveyCreationCard = React.createClass({
 
     loadSurvey: function(){
-      this.setState({surveyQuestions: survey[0].questions});
+      this.setState({survey: survey[0].questions});
     },
 
     componentDidMount: function() {
@@ -45,13 +58,25 @@ var SurveyCreationCard = React.createClass({
     },
 
     getInitialState: function() {
-      return {surveyQuestions: []};
+      return {survey: []};
     },
 
 
     //mdl in new questions
     componentDidUpdate: function(){
         componentHandler.upgradeDom();
+    },
+
+    handleAdding: function(newdata) {
+      alert("adding");
+      numQuestion=numQuestion+1;
+      newdata.id = numQuestion;
+      var originalsurvey = this.state.survey;
+      var temporalsurvey = originalsurvey.concat(newdata);
+      this.setState({survey: temporalsurvey});
+      temp = temporalsurvey;
+      console.log(this.state.survey);
+      console.log(temp);
     },
 
     render: function(){
@@ -64,8 +89,8 @@ var SurveyCreationCard = React.createClass({
                   <Creator creator={this.props.data}/>
                   <h4>Add Questions:</h4>
                   </div>
-                  <FieldDiv survey={this.state.surveyQuestions} />
-                  <AddQuestion survey={this.state.surveyQuestions}/>
+                  <FieldDiv survey={this.state.survey} />
+                  <AddQuestion onAdding={this.handleAdding}/>
                   <FinishSurvey/>
               </div>
           </div>
@@ -78,7 +103,7 @@ var FieldDiv = React.createClass({
 render: function(){
     var questionNodes = this.props.survey.map(function(survey) {
       return (
-        <Fields key={numQuestion}/>
+        <Fields key={survey.id}/>
       );
     });
   return (
@@ -260,10 +285,7 @@ var AddQuestion = React.createClass({
     * Adding questions
     */
     addQuestion: function(e) {
-      console.log("Adding" + this.state);
-      alert("adding");
-      //survey.push({id: 3, author: "Jordan Walke", text: "This is *another* comment"});
-      this.props.onAdding(
+       this.props.onAdding(
                 {
                 "id" : "",
                 "type" : "",
