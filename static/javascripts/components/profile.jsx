@@ -7,17 +7,14 @@ getInitialState: function(){
     
     
     if(user_data[0].departments.length == 0 || user_data[0].departments == ['']){
-        console.log('default');
         departments = 'Not enrolled into any departments';
     }
     else{
         for(var i = 0; i < user_data[0].departments.length; i++){
             departments += user_data[0].departments[i];
             if(i < user_data[0].departments.length-1){
-                console.log("new line");
                 departments += "\n";
             }
-            console.log("Departments state: " + departments);
         }
     }
     
@@ -35,10 +32,8 @@ getInitialState: function(){
             for(var i = 0; i < user_data[0].courses.length; i++){
                 courses += user_data[0].courses[i];
                 if(i < user_data[0].courses.length-1){
-                    console.log("new line");
                     courses += "\n";
                 }
-                console.log("Courses state: " + courses);
             }
         }
     }
@@ -53,7 +48,6 @@ getInitialState: function(){
                 if(i < user_data[0].courses_taught.length-1){
                     courses_taught += "\n";
                 }
-                console.log("Courses taught state: " + courses_taught);
             }
         }
     }
@@ -66,7 +60,6 @@ getInitialState: function(){
 },
 
     render: function(){
-    console.log(user_data)
     return(
         <div className="mdl-card mdl-shadow--2dp">
             <div className="mdl-card__title mdl-color--primary">

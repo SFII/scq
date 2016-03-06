@@ -219,3 +219,7 @@ html, body {
 .no_bullets {
     list-style-type: none;
 }
+
+.demo-list-item {
+  width: 300px;
+}

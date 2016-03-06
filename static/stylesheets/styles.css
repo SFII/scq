@@ -270,3 +270,7 @@ _:-ms-input-placeholder, :root .graph {
     bottom: 0;
     right: 0;
 }
+
+.demo-list-item {
+  width: 300px;
+}
