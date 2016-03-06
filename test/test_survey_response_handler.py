@@ -58,8 +58,6 @@ class TestResponseHandler(BaseAsyncTest):
 
     def setUpClass():
         logging.disable(logging.CRITICAL)
-        db = BaseAsyncTest.application.settings['database_name']
-        conn = BaseAsyncTest.application.settings['conn']
         # Creates a bare minimum user data
         data = User().default()
         username = str(time.time())
