@@ -10,13 +10,14 @@ from models.user import User
 from models.course import Course
 from models.question_response import QuestionResponse
 from models.survey_response import SurveyResponse
-from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json, refresh_user_cookie_callback
 
 
 class ResponseHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    @refresh_user_cookie_callback
     def post(self):
         """
         Creates and records a users response to a survey

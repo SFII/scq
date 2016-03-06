@@ -7,6 +7,7 @@ import logging
 import rethinkdb as r
 import signal
 import time
+from handlers.base_handler import BaseHandler
 from models.basemodel import BaseModel
 from models.course import Course
 from models.instructor import Instructor

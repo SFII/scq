@@ -5,13 +5,14 @@ import time
 import logging
 import ast
 from models.group import Group
-from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json, refresh_user_cookie_callback
 
 
 class GroupAPIHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    @refresh_user_cookie_callback
     def post(self):
         """
         Creates a new group object
