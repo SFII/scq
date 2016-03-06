@@ -30,38 +30,37 @@ class TestSurveyResults(BaseAsyncTest):
     question_data = []
     question_ids = []
     q1 = {
-        'id': 'q1',
         'title': 'free response',
         "response_format": Question().RESPONSE_FREE,
         "options": []
     }
     q2 = {
-        'id': 'q2',
         'title': 'multiple choice',
         "response_format": Question().RESPONSE_MULTIPLE_CHOICE,
         "options": ["alpha", "beta", "gamma", "delta"]
     }
     q3 = {
-        'id': 'q3',
         'title': 'true or false',
         "response_format": Question().RESPONSE_TRUE_OR_FALSE,
         "options": [True, False]
     }
     q4 = {
-        'id': 'q4',
         'title': 'rating',
         "response_format": Question().RESPONSE_RATING,
         "options": []
     }
-    questions = [q1, q2, q3, q4]
+    questions = []
     survey_data = {}
 
     def setUpClass():
         logging.disable(logging.CRITICAL)
-        user_ids = [User().create_generic_item() for i in range(10)]
+        user_ids = [User().create_generic_item() for i in range(5)]
         TestSurveyResults.user_ids = user_ids
         TestSurveyResults.user_data = User().get_item(TestSurveyResults.user_id)
         TestSurveyResults.generic_group_id = Group().create_generic_item()
+        for question in [TestSurveyResults.q1, TestSurveyResults.q2, TestSurveyResults.q3, TestSurveyResults.q4]:
+            question_id = Question().create_item(question)
+            TestSurveyResults.questions.append(question_id)
         TestSurveyResults.survey_data = {
             'id': 'test_survey',
             'item_type': 'Group',
@@ -72,32 +71,44 @@ class TestSurveyResults(BaseAsyncTest):
             'responses': [],
             'created_timestamp': time.time(),
             'closed_timestamp': None,
-            'deleted': False
+            'deleted': False,
+            'questions': TestSurveyResults.questions
         }
+        Survey().create_item(TestSurveyResults.survey_data)
         return
 
     def test_survey_responses(self):
         self.respond_to_surveys()
-        pass
+        results = Survey().get_results('test_survey')
+        for question_response_id in self.question_response_ids:
+            question_response = QuestionResponse().get_item(question_response_id)
+            question_id = question_response['question_id']
+            response_data = question_response['response_data']
+            self.assertIn(response_data, results[question_id])
+        return
 
     def respond_to_surveys(self):
         survey_response_ids = []
         question_response_ids = []
+        questions = self.questions
 
-        def _respond_to_questions():
-            d1 = d2 = d3 = d4 = {}
-            d1['question_id'] = 'q1'
-            d2['question_id'] = 'q2'
-            d3['question_id'] = 'q3'
-            d4['question_id'] = 'q4'
+        def _respond_to_questions(questions):
+            d1 = {}
+            d2 = {}
+            d3 = {}
+            d4 = {}
+            d1['question_id'] = questions[0]
+            d2['question_id'] = questions[1]
+            d3['question_id'] = questions[2]
+            d4['question_id'] = questions[3]
             d1['response_format'] = Question().RESPONSE_FREE
             d2['response_format'] = Question().RESPONSE_MULTIPLE_CHOICE
             d3['response_format'] = Question().RESPONSE_TRUE_OR_FALSE
             d4['response_format'] = Question().RESPONSE_RATING
-            d1['question_id'] = lorem_ipsum.lorem_ipsum()
-            d2['question_id'] = random.choice(["alpha", "beta", "gamma", "delta"])
-            d3['question_id'] = random.choice([True, False])
-            d4['question_id'] = random.randint(0, 10)
+            d1['response_data'] = lorem_ipsum.lorem_ipsum()
+            d2['response_data'] = random.choice(["alpha", "beta", "gamma", "delta"])
+            d3['response_data'] = random.choice([True, False])
+            d4['response_data'] = random.randint(0, 10)
             r1 = QuestionResponse().create_item(d1)
             r2 = QuestionResponse().create_item(d2)
             r3 = QuestionResponse().create_item(d3)
@@ -105,8 +116,9 @@ class TestSurveyResults(BaseAsyncTest):
             return [r1, r2, r3, r4]
 
         for responder_id in self.user_ids:
-            question_responses = _respond_to_questions()
-            question_response_ids.append(question_responses)
+            question_responses = _respond_to_questions(questions)
+            for response_id in question_responses:
+                question_response_ids.append(response_id)
             response_data = {
                 'question_responses': question_responses,
                 'responder_id': responder_id,
@@ -122,12 +134,12 @@ class TestSurveyResults(BaseAsyncTest):
     def tearDownClass():
         logging.disable(logging.NOTSET)
         # Drop the database
-        Question().delete_item('q1')
-        Question().delete_item('q2')
-        Question().delete_item('q3')
-        Question().delete_item('q4')
+        for question_id in TestSurveyResults.questions:
+            Question().delete_item(question_id)
         Survey().delete_item('test_survey')
         for survey_response in TestSurveyResults.survey_response_ids:
-            SurveyResponse.delete_item(survey_response)
+            SurveyResponse().delete_item(survey_response)
         for question_response in TestSurveyResults.question_response_ids:
-            QuestionResponse.delete_item(question_response)
+            QuestionResponse().delete_item(question_response)
+        for responder_id in TestSurveyResults.user_ids:
+            User().delete_item(responder_id)
