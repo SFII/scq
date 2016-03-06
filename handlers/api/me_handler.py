@@ -7,13 +7,14 @@ from time import sleep
 from models.survey import Survey
 from models.user import User
 from models.course import Course
-from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json, refresh_user_cookie_callback
 
 
 class MeHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    @refresh_user_cookie_callback
     def post(self):
         """
         Creates or updates existing user data
