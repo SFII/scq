@@ -13,8 +13,8 @@ class BaseHandler(tornado.web.RequestHandler):
     # data for a User. The data is set at login (when the cookie is set)
     def get_current_user(self):
         user_cookie = self.get_secure_cookie('user')
-        logging.info(self.get_cookie('user'))
-        logging.info(self.get_secure_cookie('user'))
+        #logging.info(self.get_cookie('user'))
+        #logging.info(self.get_secure_cookie('user'))
         if user_cookie is None:
             return None
         return json.loads(user_cookie.decode('utf-8'))
