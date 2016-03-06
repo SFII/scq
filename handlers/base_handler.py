@@ -13,8 +13,6 @@ class BaseHandler(tornado.web.RequestHandler):
     # data for a User. The data is set at login (when the cookie is set)
     def get_current_user(self):
         user_cookie = self.get_secure_cookie('user')
-        logging.info(self.get_cookie('user'))
-        logging.info(self.get_secure_cookie('user'))
         if user_cookie is None:
             return None
         return json.loads(user_cookie.decode('utf-8'))
@@ -49,6 +47,17 @@ def api_authorized(method):
         if self.current_user is None:
             return self.set_status(403, "you must be signed in to use this api resource")
         return method(self, *args, **kwargs)
+    return wrapper
+
+
+def refresh_user_cookie_callback(method):
+    """
+    Decorate methods with this to refresh a users cookie after this API request
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        method(self, *args, **kwargs)
+        self.refresh_current_user_cookie()
     return wrapper
 
 
