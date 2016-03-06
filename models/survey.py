@@ -1,3 +1,4 @@
+import rethinkdb as r
 from models.basemodel import BaseModel
 from models.course import Course
 from models.user import User
@@ -138,3 +139,12 @@ class Survey(BaseModel):
         survey = self.get_item(survey_id)
         survey['deleted'] = True
         Survey().update_item(survey_id, survey)
+
+    def get_results(self, survey_id):
+        try:
+            query = r.db(self.DB).table('Survey').get(survey_id).get_field('questions').map(
+                lambda doc: [doc, r.db(self.DB).table('QuestionResponse').filter({'question_id':doc}).get_field('response_data').coerce_to('array')]
+            ).coerce_to('object').run(self.conn)
+            return query
+        except err:
+            return []

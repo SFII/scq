@@ -11,7 +11,7 @@ from models.instructor import Instructor
 from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
 
 
-class SurveyHandler(BaseHandler):
+class SurveyAPIHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
