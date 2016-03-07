@@ -16,6 +16,7 @@ class ProfileHandler(BaseHandler):
         pass
 
     def get_extra_info(self):
+        user_data = self.current_user
         extra_info_json = []
         extra_dict = {
             'gender': User.USER_GENDERS,
@@ -24,8 +25,13 @@ class ProfileHandler(BaseHandler):
             'native_language': User.USER_NATIVE_LANGUAGES,
             'status': User.USER_STATUS
         }
+        if (len(extra_dict['gender']) == 2):
+            extra_dict['gender'].remove(user_data['gender'])
+            extra_dict['primary_affiliation'].remove(user_data['primary_affiliation'])
+            extra_dict['ethnicity'].remove(user_data['ethnicity'])
+            extra_dict['native_language'].remove(user_data['native_language'])
+            extra_dict['status'].remove(user_data['status'])
         extra_info_json.append(extra_dict)
-        logging.info("SUNG LOOK {0}".format(extra_info_json))
         return tornado.escape.json_encode(extra_info_json)
 
     def get_user_info(self):
