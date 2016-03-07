@@ -51,10 +51,38 @@ class CuLdapRegisterHandler(RegisterHandler):
             logging.error('username %s did not match cookie username %s' % (username, decoded_cookie_username))
             return self.failWithErrors('register/culdapregister.html', ['Registration failed: cookie data is invalid'])
         data = self.collectUserData()
+
         data['username'] = username
         data['registration'] = User().REGISTRATION_CULDAP
         data['accepted_tos'] = True
-        return self.registerUser(data)
+        
+        formattedData = self.formatData(data)
+        return self.registerUser(formattedData)
+
+    def formatData(self,data):
+        #put majors and minors into one list each
+        preData = {}
+        preData['majors'] = [data['major1'], data['major2'], data['major3'], data['major4']]
+        preData['minors'] = [data['minor1'], data['minor2']]
+        #delete individual entries of majors
+        del data['major1'], data['major2'], data['major3'], data['major4'], data['minor1'], data['minor2']
+        majors = [];
+        minors = [];
+        #create arrays we're going to index
+        for i in preData['majors']:
+            if i != '':
+                majors.append(i)
+        for i in preData['minors']:
+            if i != '':
+                minors.append(i)
+        #finish indexing
+        data['majors'] = majors
+        data['minors'] = minors
+
+        #moving primary_affiliation from a list to an individual entry
+        primary_affiliation = data['primary_affiliation'][0]
+        data['primary_affiliation'] = primary_affiliation
+        return data
 
     def collectUserData(self):
         data = User().default()
@@ -94,8 +122,8 @@ class CuLdapRegisterHandler(RegisterHandler):
             return self.failWithErrors('register/culdapregister.html', errors)
         authorized = culdapauth.auth_user_ldap(username, password)
         if authorized:
-            simmilar_users = self.getLdapUser(username, User().REGISTRATION_CULDAP)
-            if len(simmilar_users) == 0:
+            similar_users = self.getLdapUser(username, User().REGISTRATION_CULDAP)
+            if len(similar_users) == 0:
                 return self.verifyCULdapRegistrationPage(username)
             else:
                 return self.failWithErrors('register/culdapregister.html', ['Registered user with those credentials already exists'])

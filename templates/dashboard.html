@@ -1,14 +1,15 @@
 {% extends "layouts/base.html" %}
 {% block title %}Dashboard{% end %}
-{% block content %}
-<script>
+{% block react %}
     var data={% raw survey_json %};
-
-    function myFunction() {
-        document.getElementById("demo").value = "75";
-    }
-
-</script>
+    var routesObject = {
+      surveys: "/api/surveys",
+      response: "/api/response"
+    };
+  
+  ReactDOM.render(React.createElement(Page, {routes: routesObject}), document.getElementById('main-grid'));
+{% end %}
+{% block content %}
   <div class = "mdl-grid content" id="main-grid">
   </div>
 {% end %}

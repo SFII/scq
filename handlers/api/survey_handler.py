@@ -8,13 +8,14 @@ from models.survey import Survey
 from models.user import User
 from models.question import Question
 from models.instructor import Instructor
-from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json, refresh_user_cookie_callback
 
 
-class SurveyHandler(BaseHandler):
+class SurveyAPIHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    @refresh_user_cookie_callback
     def post(self):
         """
         Creates or updates an existing survey object
@@ -94,6 +95,7 @@ class SurveyHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    @refresh_user_cookie_callback
     def delete(self):
         survey_id = self.get_query_argument('survey_id')
         Survey().mark_deleted(survey_id)

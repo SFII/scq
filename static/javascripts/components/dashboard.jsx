@@ -2,58 +2,16 @@
 * Page is the overall container that gets mounted into our HTML file
 */
 var Page = React.createClass({
-/*
-//loadPageJSON is the function we call whenever we want to call GET on the surveys endpoint
-    loadPageJSON: function() {
-    $.ajax({
-    url: this.props.routes.surveys,
-    type: 'GET',
-    dataType: 'json',
-    cache: true,
-    success: function(data){
-    //on success we set the state of Page to be equal to the JSON received
-    this.setState({data: data});
-    }.bind(this),
-    error: function(xhr, status, err){
-        console.error(this.props.routes.surveys, status, err.toString());
-    }.bind(this)
-    });
-    },
-    //This is where the initial loadPageJSON call happens, it happens when the React class is instantiated (Carlos we should put that
-    //initial fetch Sam showed you here)
-    getInitialState: function() {
-    //this.loadPageJSON();
-        return{data:[]};
-    },
-
-    //This is something we'll likely want to change, it calls loadPageJSON again once the component mounts, which doesn't really make sense, oops
-
-    //MainDiv is sent the data state as "pageJson" and the api routes json as "routes"
-    */
-
+    //if we're not logged in we want to render a Welcome menu
     render: function(){
-      return (
-        <div className="mdl-grid mdl-cell--12-col content">
-        <MainDiv /*pageJson={this.state.data}*/ routes={this.props.routes}/>
-        </div>
-      );
-    }
-});
-
-/*
-*
-* MainDiv
-* At this layer we separate each Survey into separate SurveyDiv objects
-*/
-var MainDiv = React.createClass({
-    render: function() {
-		if (!loggedIn()) {
-		   return (<Welcome />);
-		}
+      if (!loggedIn()) {
+        return (<Welcome />);
+      }
+      /*data is a variable defined in dashboard.html as var data = {% raw survey_json %}
+      which is a json of the unaswered_surveys list from the db, we map it out so each item
+      is a survey that gets it's own SurveyDiv react component'*/
+      else{
         routesObject=this.props.routes;
-        //itemNodes is the set of mapped items (each one is a survey) and each is passed it's set of questions, routes, and other relevant information
-        /*this is set to testQuestions.map until the GET works, if it's
-        working switch it to this.props.pageJson and it should work */
         var itemNodes = data.map(function (item) {
                 return (
                 <SurveyDiv
@@ -65,21 +23,24 @@ var MainDiv = React.createClass({
                 creator={item.creator}
                 isInstructor={item.isInstructor}/>
                 );
-            });
+        });
+        //return the surveyDiv's in an mdl-grid with a SurveyCreationCard below it (This will probably change after Survey Creation is migrated)
         return (
-        <div className="mainDiv ">
-            {itemNodes}
-            <SurveyCreationCard user_data={this.props.data}/>
-        </div>
-
+          <div className="mdl-grid mdl-cell--12-col content">
+            <div className="mainDiv">
+              {itemNodes}
+              <SurveyCreationCard/>
+            </div>
+          </div>
         );
+      }
     }
 });
 
 var SurveyDiv = React.createClass({
-    //We want our Survey cards to disappear once submitted, so the getInitialState and removeCard functions provide a boolean
-    //that we check before/while rendering
 
+    /* SurveyDiv contains the overarching json we're looking to submit through ajax as well as a secondary functionality that makes the card disappear after Submit is pressed
+    getInitialState initializes our response json in it's state as well as other information we need to know to make everything work */
     getInitialState: function() {
         return({
                 length: Object.keys(this.props.questions).length,
@@ -93,6 +54,7 @@ var SurveyDiv = React.createClass({
         });
     },
 
+    //handler is called in footer.jsx, it receives data about the card that's currently being rendered updating the response state one last time before posting through ajax
     handleSurveySubmit: function(survey,questionID,response_format){
         var response = this.state.response;
         var question_responses_object = {
@@ -101,6 +63,7 @@ var SurveyDiv = React.createClass({
             response_data: survey
         };
 
+        //iterate through our question_responses looking to see if the question has previously been answered before, if so we replace the previous answer state by splicing and pushing
         var length = Object.keys(response.question_responses).length;
         for(var i=length-1; i >= 0; i--){
             if(response.question_responses[i].question_id == questionID){
@@ -126,10 +89,14 @@ var SurveyDiv = React.createClass({
         });
     },
 
+    //called in the ajax success function, sets showCard to false which will make the SurveyDiv stop rendering
     removeCard: function() {
         this.setState({showCard: false});
     },
 
+    /*nextQuestion and prevQuestion have similar functionality to submit, just without the ajax, we check to see if it's been previously answered
+    with a for loop looking to match on questionID and then splicing and pushing if we match (otherwise just pushing) but we also increment or decrement
+    this.state.iter*/
     nextQuestion: function(survey,questionID,response_format){
         var response = this.state.response;
         var question_responses_object = {
@@ -151,12 +118,8 @@ var SurveyDiv = React.createClass({
         this.setState({responseSize: Object.keys(this.state.response.question_responses).length});
 
         var iter = this.state.iter;
-        if(iter == this.state.length - 1){
-            this.handleSurveySubmit(this.state.response);
-        }
-        else{
-          this.setState({iter: iter + 1});
-        }
+
+        this.setState({iter: iter + 1});
     },
 
     prevQuestion: function(survey,questionID,response_format){
@@ -187,8 +150,8 @@ var SurveyDiv = React.createClass({
     },
 
     render: function() {
-        //increasing the scope of the props, there has to be a better way to do this.
-        //if showCard state is true, then we map the surveys questions onto cards, else we map nothing, pass all properties again.
+        /*if showCard state is true, then we render <Card>, questionID, title, options, response_format vary depending on this.state.iter
+        which is manipulated by the previous and next buttons so we can have all the survey's questions on one card.*/
         if(this.state.showCard == true) {
             return(
             <div className="surveyDiv">
@@ -209,8 +172,7 @@ var SurveyDiv = React.createClass({
                 nextHandler={this.nextQuestion}
                 prevHandler={this.prevQuestion}
                 onSubmit={this.handleSurveySubmit}
-                responseState = {this.state.response.question_responses}>
-                </Card>
+                responseState = {this.state.response.question_responses}/>
             </div>
             );
         }

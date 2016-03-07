@@ -35,6 +35,7 @@ class User(BaseModel):
             'date_registered': (b.is_timestamp,),
             'last_sign_in': (b.is_timestamp,),
             'courses': (b.is_list,),
+            'subscribed_groups': (b.is_list,),
             'courses_taught': (b.is_list,),
             'departments': (b.is_list,),
             'created_surveys': (b.is_list,),
@@ -42,7 +43,7 @@ class User(BaseModel):
             'answered_surveys': (b.is_list,),
             'survey_responses': (b.is_list,),
             'answers': (b.is_list,),
-            'primary_affiliation': (b.is_list,),
+            'primary_affiliation': (b.is_string,),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -59,6 +60,7 @@ class User(BaseModel):
             'date_registered': time.time(),
             'last_sign_in': time.time(),
             'courses': [],
+            'subscribed_groups': [],
             'courses_taught': [],
             'departments': [],
             'unanswered_surveys': [],
@@ -66,7 +68,7 @@ class User(BaseModel):
             'created_surveys': [],
             'survey_responses': [],
             'answers': [],
-            'primary_affiliation': [],
+            'primary_affiliation': '',
         }
 
     def create_generic_item(self):

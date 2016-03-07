@@ -1,15 +1,17 @@
+import rethinkdb as r
 from models.basemodel import BaseModel
 from models.course import Course
 from models.user import User
 from models.instructor import Instructor
 from models.question import Question
+from models.group import Group
 import time
 import random
 import logging
 
 
 class Survey(BaseModel):
-    ITEM_TYPES = ['Course', 'Instructor', 'User']
+    ITEM_TYPES = ['Course', 'Instructor', 'User', 'Group']
 
     def requiredFields(self):
         return ['questions', 'item_id', 'item_type', 'item_name', 'creator_id', 'creator_name', 'responses', 'closed_timestamp', 'created_timestamp', 'deleted']
@@ -34,25 +36,27 @@ class Survey(BaseModel):
     def create_item(self, data):
         data['responses'] = []
         data['created_timestamp'] = time.time()
+        item_type = data['item_type']
+        model = self._model_from_item_type(item_type)
         if 'closed_timestamp' not in data.keys():
             data['closed_timestamp'] = None
         item_id = data['item_id']
         creator_id = data['creator_id']
         creator_data = User().get_item(creator_id)
-        course_data = Course().get_item(item_id)
+        model_data = self._get_model_data(data)
         if creator_data is None:
-            logging.error('creator_id does not correspond to value in database')
+            logging.error("creator_id {0} does not correspond to value in database".format(creator_id))
             return None
-        if course_data is None:
-            logging.error('item_id does not correspond to value in database')
+        if model_data is None:
+            logging.error("item_id {0} does not correspond to value in database".format(item_id))
             return None
-        data['item_name'] = course_data['course_name']
         data['creator_name'] = creator_data['username']
+        data['item_name'] = model_data.get(self._item_name_from_item_type(item_type), '')
         survey_id = super(Survey, self).create_item(data)
-        active_surveys = course_data['active_surveys']
+        active_surveys = model_data['active_surveys']
         active_surveys.append(survey_id)
-        subscribers = course_data['subscribers']
-        Course().update_item(item_id, {'active_surveys': active_surveys}, skip_verify=True)
+        subscribers = model_data['subscribers']
+        model.update_item(item_id, {'active_surveys': active_surveys}, skip_verify=True)
         self.send_user_survey(creator_id, survey_id, 'created_surveys')
         for subscriber_id in subscribers:
             self.send_user_survey(subscriber_id, survey_id)
@@ -73,12 +77,20 @@ class Survey(BaseModel):
             'deleted': False,
         }
 
-    # TODO: implement Departments as an item_type
     def _model_from_item_type(self, item_type):
         return {
+            'Group': Group(),
             'Instructor': Instructor(),
             'Course': Course(),
             'User': User()
+        }[item_type]
+
+    def _item_name_from_item_type(self, item_type):
+        return {
+            'Group': 'id',
+            'Instructor': 'instructor_last',
+            'Course': 'course_name',
+            'User': 'username'
         }[item_type]
 
     def create_generic_item(self, creator_id=None, item_id=None, item_type='Course'):
@@ -108,7 +120,31 @@ class Survey(BaseModel):
         decomposed_data['questions'] = decomposed_question_data
         return decomposed_data
 
+    def _get_model_data(self, data):
+        item_type = data.get('item_type', None)
+        item_id = data.get('item_id', None)
+        if item_type not in self.ITEM_TYPES:
+            return None
+        model = self._model_from_item_type(item_type)
+        return model.get_item(item_id)
+
+    def verify(self, data, skipRequiredFields=False, skipStrictSchema=False):
+        results = super(Survey, self).verify(data, skipRequiredFields=skipRequiredFields, skipStrictSchema=skipStrictSchema)
+        model_data = self._get_model_data(data)
+        if model_data is None:
+            results.append(('item_id', "item_id {0} does not correspond to value in database".format(item_id)))
+        return results
+
     def mark_deleted(self, survey_id):
         survey = self.get_item(survey_id)
         survey['deleted'] = True
         Survey().update_item(survey_id, survey)
+
+    def get_results(self, survey_id):
+        try:
+            query = r.db(self.DB).table('Survey').get(survey_id).get_field('questions').map(
+                lambda doc: [doc, r.db(self.DB).table('QuestionResponse').filter({'question_id':doc}).get_field('response_data').coerce_to('array')]
+            ).coerce_to('object').run(self.conn)
+            return query
+        except err:
+            return []

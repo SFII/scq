@@ -34,7 +34,10 @@ class Course(BaseModel):
     def subscribe_user(self, user_id, course_id):
         super(Course, self).subscribe_user(user_id, course_id, 'courses')
         course_data = self.get_item(course_id)
-        for survey_id in course_data['active_surveys']:
+        if course_data is None:
+            message = "course_id {0} does not correspond to a value in the database".format(course_id)
+            return logging.error(message)
+        for survey_id in course_data.get('active_surveys', []):
             self.send_user_survey(user_id, survey_id)
 
     def create_generic_item(self):
