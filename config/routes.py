@@ -22,6 +22,7 @@ from handlers.user_info_update_handler import UserInfoUpdateHandler
 from handlers.api.me_handler import MeHandler
 from handlers.api.group_api_handler import GroupAPIHandler
 from handlers.api.subscribe_api_handler import SubscribeAPIHandler
+from handlers.api.survey_results_handler import SurveyResultsHandler
 
 
 # Tornado pro-tip: regex routing is optimized by putting more frequently
@@ -40,6 +41,7 @@ routes = [
     (r"/groups", GroupsHandler),
     (r"/api/surveys", SurveyAPIHandler),
     (r"/api/response", ResponseHandler),
+    (r"/api/results/([\w-]+)", SurveyResultsHandler),
     (r"/api/subscribe", SubscribeAPIHandler),
     (r"/api/me", MeHandler),
     (r"/api/groups", GroupAPIHandler),

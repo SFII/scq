@@ -109,14 +109,28 @@ class TestSurveyResults(BaseAsyncTest):
                     break
         return
 
+    def test_survey_results_api(self):
+        formatted_results = Survey().get_formatted_results('test_survey')
+        with mock.patch.object(BaseHandler, 'get_current_user') as m:
+            m.return_value = self.user_ids[0]
+            response = self.fetch('/api/results/test_survey', method="GET")
+        self.assertEqual(response.code, 200)
+        self.assertEqual(result, formatted_results)
+        logging.info(result)
+
     def _test_formatted_response_free(self, formatted_result_data):
         self.assertEqual(formatted_result_data['bar_data'], [])
         self.assertEqual(formatted_result_data['pie_data'], [])
         return
 
     def _test_formatted_response_rating(self, formatted_result_data):
-        self.assertNotEqual(formatted_result_data['bar_data'], [])
-        self.assertEqual(sorted(formatted_result_data['bar_data']['labels']), sorted([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+        bar_data = formatted_result_data['bar_data']
+        series_data = bar_data['series'][0]
+        self.assertNotEqual(bar_data, [])
+        self.assertEqual(sorted(bar_data['labels']), sorted([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+        self.assertEqual(len(bar_data['labels']),
+            len(series_data),
+            "length of {0} does not match length of {1}".format(bar_data['labels'], series_data))
         self.assertEqual(formatted_result_data['pie_data'], [])
         return
 

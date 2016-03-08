@@ -146,7 +146,8 @@ class Survey(BaseModel):
                 lambda doc: [doc, r.db(self.DB).table('QuestionResponse').filter({'question_id': doc}).get_field('response_data').coerce_to('array')]
             ).coerce_to('object').run(self.conn)
             return query
-        except err:
+        except Exception as err:
+            logging.error(err)
             return []
 
     def get_formatted_results(self, survey_id):
@@ -179,7 +180,7 @@ class Survey(BaseModel):
                                 (question_data['response_format'] == Question().RESPONSE_RATING),
                                 {
                                     'labels': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                                    'series': [r.expr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).do(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                                    'series': [r.expr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map(lambda val: question[1].filter(lambda foo: foo == val).count())]
                                 },
                                 []
                             ),
