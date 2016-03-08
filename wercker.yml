@@ -1,0 +1,13 @@
+box: node
+build:
+    steps:
+      - script:
+          name: install requirements
+          code: |
+            apt-get update
+            apt-get install -y build-essential python3 python3-pip
+            make build
+      - script:
+          name: run tests
+          code: |
+            make test

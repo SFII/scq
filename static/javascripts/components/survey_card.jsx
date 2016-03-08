@@ -41,7 +41,6 @@ var SurveyCreationCard = React.createClass({
       return (
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
-                  <TitleSection titleText="Create a Survey"/>
                   <FieldDiv survey={survey[0].questions} />
                   <AddQuestion/>
                   <FinishSurvey/>
@@ -53,9 +52,9 @@ var SurveyCreationCard = React.createClass({
 
 var FieldDiv = React.createClass({
 render: function(){
-    var questionNodes = this.props.survey.map(function(survey) {
+    var questionNodes = this.props.survey.map(function(survey, key) {
       return (
-        <Fields/>
+        <Fields key={key}/>
       );
     });
   return (
@@ -81,22 +80,36 @@ var Fields = React.createClass({
         this.setState({value: event.target.value});
     },
     render: function(){
+
+        var tStyle = {
+            fontSize: "16px"
+        };
       return (
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <h4>Add Questions:</h4>
               <form>
-                  <p>Title:<input type="text" name="title_question"/></p>
-                  <p>Type:
+                  <h3>Create your own survey</h3>
+                  <table><tbody>
+                      <tr style={tStyle}>
+                          <td>Title:&nbsp;</td>
+                          <td><input type="text" name="title_question"/></td>
+                      </tr>
+                      <tr style={tStyle}>
+                          <td>Group:&nbsp;</td>
+                          <td><input type="text" name="survey_group"/></td>
+                      </tr>
+                  </tbody></table>
+                  <h5>Questions</h5>
+                  <p style={tStyle}>Type:&nbsp;
                      <select id="mySelect" onChange={this.changeHandler} value={this.state.value}>
                          <option disabled value="select"> Select an option </option>
                          <option value="multipleChoice">Multiple Choice</option>
                          <option value="singleChoice">Single Choice</option>
-                         <option value="rating">Rating</option>
-                         <option value="freeResponse">Open Response</option>
+                         <option value="rating">Rating Scale</option>
+                         <option value="freeResponse">Free Response</option>
                      </select>
                   </p>
               </form>
-                  <Question value={this.state.value}/>
+              <Question value={this.state.value}/>
           </div>
       );
     }
@@ -111,33 +124,7 @@ var Question = React.createClass({
         this.setState({value: event.target.value});
     },
 
-    //render different options for multiple & single choice
-    /*
-    *
     render: function(){
-
-      var mQuestions = [2];
-      const options = this.props.options.map((option) => {
-        return (
-            <p>Hello</p>
-        )
-      });
-    *
-    */
-
-    render: function(){
-
-    /*
-    *
-    type = this.props.value;
-    var button = (<div></div>)
-    switch (type) {
-      case ¨multipleChoice":
-        button = <MCQuestion />
-    }
-    *
-    */
-
         if(this.props.value == "multipleChoice"){
           var mQuestions = [2];
 
@@ -191,11 +178,7 @@ var Question = React.createClass({
           );
 
         } else if(this.props.value == "freeResponse"){
-          return (
-          <p> Select maximum of words
-          <input type="text" onChange={this.changeHandler}/>
-          </p>
-          );
+            return (<span/>);
 
         } else {
         return (
@@ -247,7 +230,7 @@ var AddQuestion = React.createClass({
     render: function(){
       return (
           <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-              ADD QUESTION
+              Add another question
           </button>
       );
     }
@@ -276,8 +259,11 @@ var FinishSurvey = React.createClass({
     },
 
     render: function(){
+        var style = {
+            position: "absolute"
+        };
       return (
-          <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
+          <button style={style} onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
               FINISH SURVEY
           </button>
       );

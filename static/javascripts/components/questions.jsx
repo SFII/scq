@@ -238,7 +238,7 @@ var FreeResponse = React.createClass({
     getInitialState: function(){
         var responseState = this.props.responseState;
         var responseStateLength = Object.keys(responseState).length;
-        var prevAnswer = "Change Me!";
+        var prevAnswer = "";
         for(var i = responseStateLength-1; i >= 0; i--){
           if(responseState[i].question_id == this.props.questionID){
              prevAnswer = responseState[i].response_data;
@@ -268,9 +268,9 @@ var FreeResponse = React.createClass({
         type="text"
         rows="4"
         id="test"
+        placeholder="Your answer"
         value={this.state.answer}
-        onChange={this.handleChange}>
-        </textarea>
+        onChange={this.handleChange}/>
         <br/>
         <Footer
         key={footerKey}
