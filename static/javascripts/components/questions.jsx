@@ -257,9 +257,9 @@ var FreeResponse = React.createClass({
         type="text"
         rows="4"
         id="test"
+        placeholder="Your answer"
         value={this.state.answer}
-        onChange={this.handleChange}>
-        </textarea>
+        onChange={this.handleChange}/>
         <br/>
         <Footer
         key={footerKey}

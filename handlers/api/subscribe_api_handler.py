@@ -5,7 +5,7 @@ import time
 import logging
 import ast
 from models.group import Group
-from handlers.base_handler import BaseHandler, api_authorized, parse_request_json
+from handlers.base_handler import BaseHandler, api_authorized, parse_request_json, refresh_user_cookie_callback
 
 
 class SubscribeAPIHandler(BaseHandler):
@@ -15,6 +15,7 @@ class SubscribeAPIHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    @refresh_user_cookie_callback
     def post(self):
         """
         subscribes or unsubscribes a user from a given group
