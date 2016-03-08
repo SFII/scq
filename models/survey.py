@@ -143,8 +143,51 @@ class Survey(BaseModel):
     def get_results(self, survey_id):
         try:
             query = r.db(self.DB).table('Survey').get(survey_id).get_field('questions').map(
-                lambda doc: [doc, r.db(self.DB).table('QuestionResponse').filter({'question_id':doc}).get_field('response_data').coerce_to('array')]
+                lambda doc: [doc, r.db(self.DB).table('QuestionResponse').filter({'question_id': doc}).get_field('response_data').coerce_to('array')]
             ).coerce_to('object').run(self.conn)
             return query
         except err:
+            return []
+
+    def get_formatted_results(self, survey_id):
+        results = self.get_results(survey_id)
+        try:
+            query = r.expr(results).coerce_to('array').map(
+                lambda question: r.db(self.DB).table('Question').get(question[0]).merge(r.expr({
+                    'results': question[1],
+                    'total_responses': question[1].count(),
+                    'pie_data': r.db(self.DB).table('Question').get(question[0]).do(
+                        lambda question_data: r.branch(
+                            (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
+                            question[1].group(lambda r: r).count().ungroup().map(
+                                lambda gr: {
+                                    'name': gr['group'].coerce_to('string'),
+                                    'value': gr['reduction']
+                                }
+                            ),
+                            []
+                        )),
+                    'bar_data': r.db(self.DB).table('Question').get(question[0]).do(
+                        lambda question_data: r.branch(
+                            (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
+                            r.branch(
+                                (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
+                                {
+                                    'labels': question[1].distinct(),
+                                    'series': [question[1].distinct().do(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                                },
+                                (question_data['response_format'] == Question().RESPONSE_RATING),
+                                {
+                                    'labels': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                    'series': [r.expr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).do(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                                },
+                                []
+                            ),
+                            []
+                        ))
+                }))
+            ).run(self.conn)
+            return query
+        except Exception as err:
+            logging.error(err)
             return []
