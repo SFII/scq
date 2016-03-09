@@ -20,6 +20,12 @@ var ProfilePage = React.createClass({
         user_status = "Did not specify academic year";
       }
     }
+    var array = [1, 2, 3, 4];
+    var evens = _.remove(array, function(n) {
+      return n % 2 == 0;
+    });
+    console.log(array);
+    console.log(evens);
     return {
       username: user_data[0].username,
       user_affiliation: user_data[0].primary_affiliation,
