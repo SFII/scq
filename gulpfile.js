@@ -21,7 +21,8 @@ js_files = [
     './static/javascripts/components/survey_card.jsx',
     './static/javascripts/components/survey_sample.jsx',
     './static/javascripts/components/footer.jsx',
-    './static/javascripts/components/profile.jsx'
+    './static/javascripts/components/profile.jsx',
+    './static/javascripts/components/profile_groups.jsx'
 
 ]
 
