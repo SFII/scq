@@ -6,30 +6,21 @@
 * were marked to true in the array. Set the final response state as this.state.data
 */
 var MultipleChoice = React.createClass({
-    getInitialState: function(){
-        var length = Object.keys(this.props.options).length;
-        var questionObj =[];
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswers = [];
-        
-        for(var i =0; i < length; i++){
-            questionObj[i]=false;
-        }
-        
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswers = responseState[i].response_data;
-             for(var i2 =0; i2 < length; i2++){
-                 if(prevAnswers[i2] == true){
-                    questionObj[i2]= true;
-                 }
-             }
-          }
-        }        
+    getInitialState: function(){       
         return {
-            data: questionObj,
+            data: [],
         };
+    },
+    
+    componentDidMount: function(){
+        this.setState({
+            data: this.props.questionState
+        });
+        
+    },
+    
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
     },
     /*if a checkbox is checked/unchecked, send which option got checked (i) and whether it was true or false in
     this.state.data, then use that info to flip it's value in the this.state.data array'*/
@@ -123,27 +114,20 @@ var MultipleChoice = React.createClass({
 var SingleChoice = React.createClass({
 
 getInitialState: function(){
-        var length = Object.keys(this.props.options).length;
-        var questionObj =[];
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswers = [];
-        for(var i =0; i < length; i++){
-            questionObj[i]=false;
-        }
-        for(var i = responseStateLength-1; i >= 0; i--){
-            if(responseState[i].question_id == this.props.questionID){
-                prevAnswers = responseState[i].response_data;
-                    for(var i2 = 0; i2 < length; i2++){
-                        if(prevAnswers[i2]==true){
-                            questionObj[i2] = true;
-                        }
-                    }
-            }
-        }
         return {
-            data: questionObj,
+            data: [],
         };
+    },
+
+    componentDidMount: function(){
+        this.setState({
+            data: this.props.questionState
+        });
+        
+    },
+
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
     },
 
     handleChange: function(i,value){
@@ -236,15 +220,20 @@ getInitialState: function(){
 var FreeResponse = React.createClass({
 
     getInitialState: function(){
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswer = "";
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswer = responseState[i].response_data;
-          }
-        }
-        return {answer: prevAnswer};
+        return {
+            answer: 'Change me!'
+        };
+    },
+    
+    componentDidMount: function(){
+        this.setState({
+            answer: this.props.questionState
+        });
+        
+    },
+
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
     },
 
     handleChange: function(e){
@@ -293,18 +282,20 @@ var FreeResponse = React.createClass({
 */
 var Rating = React.createClass({
    	getInitialState: function(){
-		var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswer = 5;
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswer = responseState[i].response_data;
-          }
-        }
         return{
-            answer: prevAnswer
+            answer: null,
         }
 	},
+
+    componentDidMount: function(){
+        this.setState({
+            answer: this.props.questionState
+        });
+    },
+    
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+    },
 
 	handleChange:function(e){
 		this.setState({answer: e.target.value});
