@@ -54,7 +54,7 @@ class TestSurveyResults(BaseAsyncTest):
     survey_data = {}
 
     def setUpClass():
-        # logging.disable(logging.CRITICAL)
+        logging.disable(logging.CRITICAL)
         user_ids = [User().create_generic_item() for i in range(TestSurveyResults.responses_to_make)]
         TestSurveyResults.user_ids = user_ids
         TestSurveyResults.user_data = User().get_item(TestSurveyResults.user_id)
@@ -114,9 +114,9 @@ class TestSurveyResults(BaseAsyncTest):
         with mock.patch.object(BaseHandler, 'get_current_user') as m:
             m.return_value = self.user_ids[0]
             response = self.fetch('/api/results/test_survey', method="GET")
+        result = tornado.escape.json_decode(response.body)
         self.assertEqual(response.code, 200)
         self.assertEqual(result, formatted_results)
-        logging.info(result)
 
     def _test_formatted_response_free(self, formatted_result_data):
         self.assertEqual(formatted_result_data['bar_data'], [])
@@ -127,7 +127,7 @@ class TestSurveyResults(BaseAsyncTest):
         bar_data = formatted_result_data['bar_data']
         series_data = bar_data['series'][0]
         self.assertNotEqual(bar_data, [])
-        self.assertEqual(sorted(bar_data['labels']), sorted([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+        self.assertEqual(sorted(bar_data['labels']), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         self.assertEqual(len(bar_data['labels']),
             len(series_data),
             "length of {0} does not match length of {1}".format(bar_data['labels'], series_data))

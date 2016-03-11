@@ -152,43 +152,49 @@ class Survey(BaseModel):
 
     def get_formatted_results(self, survey_id):
         results = self.get_results(survey_id)
+
+        def get_pie_data(question_data):
+            return r.branch(
+                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
+                question[1].group(lambda r: r).count().ungroup().map(
+                    lambda gr: {
+                        'name': gr['group'].coerce_to('string'),
+                        'value': gr['reduction']
+                    }
+                ),
+                []
+            )
+
+        def get_bar_data(question_data):
+            r.branch(
+                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
+                r.branch(
+                    (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
+                    {
+                        'labels': question[1].distinct(),
+                        'series': [question[1].distinct().do(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                    },
+                    (question_data['response_format'] == Question().RESPONSE_RATING),
+                    {
+                        'labels': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        'series': [r.expr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                    },
+                    []
+                ),
+                []
+            )
         try:
-            query = r.expr(results).coerce_to('array').map(
+            formatted_results = r.expr(results).coerce_to('array').map(
                 lambda question: r.db(self.DB).table('Question').get(question[0]).merge(r.expr({
                     'results': question[1],
                     'total_responses': question[1].count(),
                     'pie_data': r.db(self.DB).table('Question').get(question[0]).do(
-                        lambda question_data: r.branch(
-                            (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
-                            question[1].group(lambda r: r).count().ungroup().map(
-                                lambda gr: {
-                                    'name': gr['group'].coerce_to('string'),
-                                    'value': gr['reduction']
-                                }
-                            ),
-                            []
-                        )),
+                        lambda question_data: get_pie_data(question_data)),
                     'bar_data': r.db(self.DB).table('Question').get(question[0]).do(
-                        lambda question_data: r.branch(
-                            (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
-                            r.branch(
-                                (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
-                                {
-                                    'labels': question[1].distinct(),
-                                    'series': [question[1].distinct().do(lambda val: question[1].filter(lambda foo: foo == val).count())]
-                                },
-                                (question_data['response_format'] == Question().RESPONSE_RATING),
-                                {
-                                    'labels': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                                    'series': [r.expr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map(lambda val: question[1].filter(lambda foo: foo == val).count())]
-                                },
-                                []
-                            ),
-                            []
-                        ))
+                        lambda question_data: get_bar_data(question_data))
                 }))
             ).run(self.conn)
-            return query
+            return formatted_results
         except Exception as err:
             logging.error(err)
             return []
