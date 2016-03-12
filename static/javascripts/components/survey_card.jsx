@@ -33,8 +33,6 @@ var SurveysPage = React.createClass({
             }
         }
         this.setState({questions: questions});
-        console.log('SurveysPage');
-        console.log(questions);
     },
     
     /*when we click finish survey, we prune the key field off of each question
@@ -70,7 +68,6 @@ var SurveysPage = React.createClass({
             data: JSON.stringify(surveyObj),
             success: function(data){
                 console.log('Post success');
-                console.log(data);
             }.bind(this),
 			error: function(xhr, status,err){
 				console.error("/api/response", status, err.toString());
@@ -85,11 +82,6 @@ var SurveysPage = React.createClass({
     //mdl in new questions
     componentDidUpdate: function(){
         componentHandler.upgradeDom();
-    },
-    
-    componentDidMount: function(){
-        this.setState({creator_id: user_data[0].id});
-        console.log(user_data[0].id);
     },
 
     handleAdding: function(newQuestion) {
@@ -183,8 +175,6 @@ var Fields = React.createClass({
             options: this.state.options
         };
         this.props.updateQuestions(questionObj, this.props.questionKey);
-        console.log('Fields');
-        console.log(questionObj);
     },
     
     render: function(){
@@ -307,8 +297,6 @@ var MultipleChoiceQuestion = React.createClass({
             options: options
         });
         this.props.onOptionsChange(options);
-        console.log("MultipleChoiceQuestion");
-        console.log(options);
     },
     
     render: function(){
