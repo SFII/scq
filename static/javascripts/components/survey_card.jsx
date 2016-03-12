@@ -1,80 +1,82 @@
-
-/*
-* Survey. Filled with data to send (JSON)
-* survey_handler.py/def _survey_from_request(self):
-* models/question.py
-*/
-var survey = [
-
-  {
-  "id": "",
-  "item_id":"",
-  "item_name":"",
-  "item_type":"",
-  "creator_name":"",
-  "creator_id":"",
-  "questions": [
-      {
-          "id" : "",
-          "type" : "",
-          "question":"",
-          "options":[],
-          "position": "0"
-      },
-  ]
-}
-];
-
-var finalSurvey = [
-
-  {
-  "id": "",
-  "item_id":"",
-  "item_name":"",
-  "item_type":"",
-  "creator_name":"",
-  "creator_id":"",
-  "questions": []
-  }
-];
-
-var temp = [];
-
-var numQuestion = 0;
-
 /*
 * Page with the Card for the creation of surveys
 * is passing survey[0].questions
 */
 
 //can pass variables
-var SurveyCreationCard = React.createClass({
-
-    loadSurvey: function(){
-      this.setState({survey: survey[0].questions});
+var SurveysPage = React.createClass({
+    
+    getInitialState: function(){
+        return{
+            numQuestion: 0,
+            item_id: "testGroup1",
+            item_type: "Group",
+            item_name: "testGroup1",
+            questions: []
+        }
     },
-
-    componentDidMount: function() {
-      this.loadSurvey();
+    
+    updateQuestions: function(questionObj, questionKey){
+        var length = this.state.questions.length;
+        var questions = this.state.questions;
+        for(var i = length-1; i >= 0; i--){
+            if(questionKey == questions[i].key){
+                questions[i].title = questionObj.title;
+                questions[i].response_format = questionObj.response_format;
+                questions[i].options = questionObj.options;
+                delete questions[i].key;
+            }
+        }
+        
+        this.setState({questions: questions});
+        console.log(questions);
     },
-
-    getInitialState: function() {
-      return {survey: []};
+    
+    handleSubmit: function(){
+        var surveyObj = {
+            item_id : this.state.item_id,
+            item_type : this.state.item_type,
+            item_name : this.state.item_name,
+            questions : this.state.questions
+        };
+        
+        $.ajax({
+            url: this.props.routes.surveys,
+			contentType: 'application/json',
+            type: 'POST',
+            data: JSON.stringify(surveyObj),
+            success: function(data){
+                console.log('Post success');
+            }.bind(this),
+			error: function(xhr, status,err){
+				console.error("/api/response", status, err.toString());
+			}.bind(this)
+        });
     },
-
+    
+    onSurveyTitleChange: function(surveyTitle) {
+        this.setState({id:surveyTitle});
+    },
 
     //mdl in new questions
     componentDidUpdate: function(){
         componentHandler.upgradeDom();
     },
+    
+    componentDidMount: function(){
+        this.setState({creator_id: user_data[0].id});
+        console.log(user_data[0].id);
+    },
 
-    handleAdding: function(newdata) {
-      numQuestion=numQuestion+1;
-      newdata.position = numQuestion;
-      var originalsurvey = this.state.survey;
-      var temporalsurvey = originalsurvey.concat(newdata);
-      this.setState({survey: temporalsurvey});
-      temp = temporalsurvey;
+    handleAdding: function(newQuestion) {
+      var numQuestion= this.state.numQuestion;
+      numQuestion = numQuestion + 1;
+      newQuestion.key = numQuestion;
+      var currQuestions = this.state.questions;
+      var newQuestions = currQuestions.push(newQuestion);
+      this.setState({
+        questions: currQuestions
+      });
     },
 
     render: function(){
@@ -83,27 +85,34 @@ var SurveyCreationCard = React.createClass({
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-                  <TitleSurvey/>
-                  <Creator creator={this.props.data}/>
+                  <TitleSurvey onSurveyTitleChange={this.onSurveyTitleChange}/>
+                  <Creator creator={user_data[0].username}/>
                   <h4>Add Questions:</h4>
                   </div>
-                  <FieldDiv survey={this.state.survey} />
+                  <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
                   <AddQuestion onAdding={this.handleAdding}/>
-                  <FinishSurvey/>
+                  <FinishSurvey onSubmit={this.handleSubmit}/>
               </div>
           </div>
       );
     }
 });
 
-var FieldDiv = React.createClass({
+var QuestionDiv = React.createClass({
 
 render: function(){
-    var questionNodes = this.props.survey.map(function(survey, key) {
-      return (
-        <Fields key={survey.position}/>
-      );
-    });
+    if(this.props.questions.length > 0){
+        var questionNodes = this.props.questions.map(function(question) {
+          return (
+          <Fields questionKey={question.key} updateQuestions={this.props.updateQuestions}/>
+          );
+        }.bind(this));
+    }
+    else{
+        return(
+            <div></div>
+        );
+    }
   return (
     <div className="commentList">
        {questionNodes}
@@ -121,73 +130,82 @@ var Fields = React.createClass({
 
     //set initial value
     getInitialState: function() {
-        return {value: 'select'};
+        return {
+            title: '',
+            response_format: 'multipleChoice',
+            options: [],
+        }
     },
     //set value change
-    changeHandler: function(event) {
-        this.setState({value: event.target.value});
+    handleTitleChange: function(event) {
+        this.setState({title: event.target.value});
+        this.update();
     },
-    render: function(){
-
-        var tStyle = {
-            fontSize: "16px"
+    
+    handleResponseFormatChange: function(event) {
+        this.setState({response_format: event.target.value});
+        this.update();
+    },
+    
+    onOptionsChange: function(options){
+        this.setState({options: options});
+        this.update();
+    },
+    
+    update: function(){
+        var questionObj={
+            title: this.state.title,
+            response_format: this.state.response_format,
+            options: this.state.options
         };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
+    },
+    
+    render: function(){
       return (
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <form>
                   <div className="mdl-textfield mdl-js-textfield">
-                    <input className="mdl-textfield__input" type="text" id="question_title" onChange={this.Handler}/>
-                    <label className="mdl-textfield__label" for="text1">Title of Question:</label>
+                    <input className="mdl-textfield__input"
+                    type="text"
+                    id="question_title" 
+                    value={this.state.title}
+                    onChange={this.handleTitleChange}/>
+                    <label className="mdl-textfield__label">Title of Question:</label>
                   </div>
-              </form>
-
-                   <form>
                   <p>Type:
-                     <select id="mySelect" onChange={this.changeHandler} value={this.state.value}>
+                     <select 
+                     id="mySelect"
+                     onChange={this.handleResponseFormatChange}
+                     value={this.state.value}>
                          <option disabled value="select"> Select an option </option>
                          <option value="multipleChoice">Multiple Choice</option>
-                         <option value="singleChoice">Single Choice</option>
+                         <option value="trueOrFalse">Single Choice</option>
                          <option value="rating">Rating Scale</option>
                          <option value="freeResponse">Free Response</option>
                      </select>
                   </p>
-              </form>
-              <Question value={this.state.value}/>
+                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange}/>
           </div>
       );
     }
 });
 
 
-var Question = React.createClass({
+var OptionsDiv = React.createClass({
     
     render: function(){
-        if(this.props.value == "multipleChoice"){
+        if(this.props.response_format == "multipleChoice"){
 
           return (
             <div>
-                <MQuestions/>
-
-              <ul className="no_bullets mdl-list">
-                <li className="mdl-list__item">
-                <p>
-                  <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-                  <i className="material-icons">add</i>
-
-                  </button>
-
-                &nbsp;&nbsp;&nbsp; ADD OPTION
-                </p>
-               </li>
-
-            </ul>
+            <MultipleChoiceQuestion onOptionsChange={this.props.onOptionsChange}/>
             </div>
           );
 
-        } else if(this.props.value == "singleChoice"){
+        } else if(this.props.response_format == "trueOrFalse"){
           return (
           <div>
-              <SQuestions/>
+              <SingleChoiceQuestion/>
 
             <ul className="no_bullets mdl-list">
               <li className="mdl-list__item">
@@ -205,13 +223,13 @@ var Question = React.createClass({
           </div>
           );
 
-        } else if(this.props.value == "rating"){
+        } else if(this.props.response_format == "rating"){
           return (
           <p> Select scale
           </p>
           );
 
-        } else if(this.props.value == "freeResponse"){
+        } else if(this.props.response_format == "freeResponse"){
           return (
           <p> Select maximum of words
           </p>
@@ -228,33 +246,98 @@ var Question = React.createClass({
 
 
 
-var MQuestions = React.createClass({
-
+var MultipleChoiceQuestion = React.createClass({
+    
+    getInitialState: function(){
+        return{
+            numOptions: 0,
+            options: []
+        }
+    },
+    
+    addOption: function(){
+        var options = this.state.options;
+        var numOptions = this.state.numOptions;
+        var optionObject = {
+            key: numOptions,
+            title: ''
+        };
+        options.push(optionObject);
+        this.setState({
+            numOptions: numOptions + 1,
+            options: options
+        });
+    },
+    
+    onOptionChange: function(newTitle,key){
+        var options=this.state.options;
+        var length=options.length;
+        for(var i = length-1; i >= 0; i--){
+            if(options[i].key==key){
+                options[i].title = newTitle;
+            }
+        }
+        this.setState({
+            options: options
+        });
+        this.props.onOptionsChange(options);        
+    },
+    
     render: function(){
-      return (
-      <div>
-      <form>
-          <div className="mdl-textfield mdl-js-textfield">
-            <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
-          </div>
-      </form>
-      <form>
-          <div className="mdl-textfield mdl-js-textfield">
-            <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
-          </div>
-      </form>
-      </div>
-
+        var renderedOptions = this.state.options.map((option, i) => {
+            return(
+            <li className="mdl-list__item">  
+            <MultipleChoiceOption key={option.key} keyProp={option.key} onOptionChange={this.onOptionChange}/>
+            </li>
+            );
+        });
+    
+        return (
+        <div>
+            <ul className="no_bullets mdl-list">
+                {renderedOptions}
+                <li className="mdl-list__item">
+                    <p>
+                      <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={this.addOption}>
+                        <i className="material-icons">add</i>
+                      </button>
+                      &nbsp;&nbsp;&nbsp; ADD OPTION
+                    </p>
+                </li>
+            </ul>
+        </div>
       );
     }
 });
 
+var MultipleChoiceOption = React.createClass({
+    
+    getInitialState: function(){
+        return{
+            title: ''
+        }    
+    },
+    
+    handleChange: function(event){
+        this.setState({title: event.target.value});
+        this.props.onOptionChange(event.target.value, this.props.keyProp);
+    },
+    
+    render: function(){
+        return(
+            <div className="mdl-textfield mdl-js-textfield">
+                <p>Enter an option: &nbsp;
+                    <input className="mdl-textfield__input"
+                    type="text"
+                    onChange={this.handleChange}
+                    value={this.state.title}/>
+                </p>
+            </div>
+        );
+    }
+});
 
-
-
-
-
-var SQuestions = React.createClass({
+var SingleChoiceQuestion = React.createClass({
 
     render: function(){
       return (
@@ -277,22 +360,15 @@ var SQuestions = React.createClass({
 
 var AddQuestion = React.createClass({
     /*
-    * getting initial survey
-    */
-    getInitialState: function() {
-      return {survey: survey};
-    },
-
-    /*
     * Adding questions
     */
-    addQuestion: function(e) {
+    addQuestion: function() {
        this.props.onAdding(
                 {
-                "id" : "",
-                "type" : "",
-                "question":"",
-                "options":[]
+                "title" : "",
+                "response_format" : "",
+                "options":[],
+                "key": null
             });
     },
 
@@ -307,37 +383,12 @@ var AddQuestion = React.createClass({
 
 var FinishSurvey = React.createClass({
 
-    /* send Survey
-    *  url: this.props.routes.surveys, /api/surveys
-    *  not finished
-    */
-
-    /*
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: comment,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-    */
-
-    handleSubmit: function(comment) {
-      finalSurvey[0].questions.push(temp);
-      console.log(finalSurvey);
-    },
-
     render: function(){
         var style = {
             position: "absolute"
         };
       return (
-          <button onClick={this.handleSubmit} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
+          <button onClick={this.props.onSubmit} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
               FINISH SURVEY
           </button>
       );
@@ -350,16 +401,31 @@ var TitleSurvey = React.createClass({
     *Input for title
     *
     */
+    getInitialState: function(){
+        return{
+            title: ''
+        }
+    },
+    
+    handleChange: function(e){
+        this.props.onSurveyTitleChange(e.target.value);
+        this.setState({
+        title: e.target.value
+        });
+    },
+    
     render: function(){
       return (
-          <div>
-          <form>
+          <span>
              <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input className="mdl-textfield__input" type="text" id="item_name"/>
-                <label className="mdl-textfield__label" for="text4">Survey Title</label>
-             </div>
-           </form>
-          </div>
+             <input className="mdl-textfield__input" 
+             value={this.state.title} 
+             onChange={this.handleChange}
+             type="text" 
+             id="item_name"/>
+                <label className="mdl-textfield__label">Survey Title</label>
+                </div>
+          </span>
       );
     }
 });
@@ -369,7 +435,7 @@ var Creator = React.createClass({
     render: function(){
       return (
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <p>Survey creator:&nbsp;{this.props.username}</p>
+              <p>Survey creator:&nbsp;{this.props.creator}</p>
         </div>
       );
     }

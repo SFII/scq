@@ -9,7 +9,7 @@ class DashboardHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         self.refresh_current_user_cookie()
-        self.render('dashboard.html', survey_json=self.get_survey_json(), response_data_json=self.get_response_data())
+        self.render('dashboard.html', survey_json=self.get_survey_json(), response_data_json=self.get_response_data(), user_info_json=self.get_user_info())
 
     def get_survey_json(self):
         survey_json = []
@@ -30,3 +30,10 @@ class DashboardHandler(BaseHandler):
         response_data_json = Survey().get_response_stats(answered_survey_ids)
         #print(tornado.escape.json_encode(response_data_json))
         return tornado.escape.json_encode(response_data_json)
+    
+    def get_user_info(self):
+        user_info_json = []
+        user_data = self.current_user
+        user_info_json.append(user_data)
+        logging.info(tornado.escape.json_encode(user_info_json))
+        return tornado.escape.json_encode(user_info_json)

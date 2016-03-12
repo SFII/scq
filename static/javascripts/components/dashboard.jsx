@@ -29,7 +29,6 @@ var Page = React.createClass({
           <div className="mdl-grid mdl-cell--12-col content">
             <div className="mainDiv">
               {itemNodes}
-              <SurveyCreationCard/>
             </div>
           </div>
         );
