@@ -74,16 +74,20 @@ var SurveysPage = React.createClass({
 			}.bind(this)
         });
     },
-    
-    onSurveyTitleChange: function(surveyTitle) {
-        this.setState({id:surveyTitle});
-    },
 
-    //mdl in new questions
+    //mdl in new questions, this probably needs to be moved or repeated
     componentDidUpdate: function(){
         componentHandler.upgradeDom();
     },
 
+    /*this handles adding a new question, we push these nodes
+            {
+                "title" : "",
+                "response_format" : "",
+                "options":[],
+                "key": null
+            }
+    to the questions array state, updating the key before pushing*/
     handleAdding: function(newQuestion) {
       var numQuestion= this.state.numQuestion;
       numQuestion = numQuestion + 1;
@@ -113,7 +117,7 @@ var SurveysPage = React.createClass({
     }
 });
 
-
+/*map out a react component for each question we want*/
 var QuestionDiv = React.createClass({
 
 render: function(){
@@ -140,7 +144,7 @@ render: function(){
 
 
 /*
-* Field is receiving the survey
+* Fields controls the overarching data for a question
 */
 var Fields = React.createClass({
 
@@ -152,22 +156,27 @@ var Fields = React.createClass({
             options: [],
         }
     },
-    //set value change
+    
+    //updates this.state.title
     handleTitleChange: function(event) {
         this.setState({title: event.target.value});
         this.update();
     },
     
+    //updates this.state.response_format
     handleResponseFormatChange: function(event) {
         this.setState({response_format: event.target.value});
         this.update();
     },
     
+    //updates this.state.options
     onOptionsChange: function(options){
         this.setState({options: options});
         this.update();
     },
     
+    //this is called whenever anything updates, sends the question data
+    //up to the highest layer real time.
     update: function(){
         var questionObj={
             title: this.state.title,
@@ -206,7 +215,8 @@ var Fields = React.createClass({
     }
 });
 
-
+//depending on this.state.response_format we want to change our options field
+//formats
 var OptionsDiv = React.createClass({
     
     render: function(){
@@ -261,7 +271,7 @@ var OptionsDiv = React.createClass({
 
 
 
-
+/* controls the data for our options fields*/
 var MultipleChoiceQuestion = React.createClass({
     
     getInitialState: function(){
@@ -270,7 +280,9 @@ var MultipleChoiceQuestion = React.createClass({
             options: []
         }
     },
-    
+    /*called when add option is clicked, pushes a node with a key and blank
+    title that we update ourselves, we prune the key in the highest layer
+    when we no longer need it for organization*/
     addOption: function(){
         var options = this.state.options;
         var numOptions = this.state.numOptions;
@@ -285,6 +297,8 @@ var MultipleChoiceQuestion = React.createClass({
         });
     },
     
+    //whenever we change an option we update it's corresponding index in 
+    //our options array, and also send data up to Fields
     onOptionChange: function(newTitle,key){
         var options=this.state.options;
         var length=options.length;
@@ -326,6 +340,7 @@ var MultipleChoiceQuestion = React.createClass({
     }
 });
 
+/*this layer could be merged into MultipleChoiceQuestion fairly easily, renders a text field for every option that we want, onChange it sends data to MultipleChoiceQuestion which starts the chain of it's propagation to the highest layer*/
 var MultipleChoiceOption = React.createClass({
     
     getInitialState: function(){
@@ -373,7 +388,7 @@ var SingleChoiceQuestion = React.createClass({
     }
 });
 
-
+/*Called onClick of Add Question button, sends a default JSON to SurveysPage to be added questions state*/
 var AddQuestion = React.createClass({
     /*
     * Adding questions
@@ -397,6 +412,8 @@ var AddQuestion = React.createClass({
     }
 });
 
+/*called onClick of Finish Survey button, triggers handleSubmit in SurveysPage
+which cleans the data and uses ajax to POST it*/
 var FinishSurvey = React.createClass({
 
     render: function(){
