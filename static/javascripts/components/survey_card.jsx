@@ -19,12 +19,13 @@ var SurveysPage = React.createClass({
     updateQuestions: function(questionObj, questionKey){
         var length = this.state.questions.length;
         var questions = this.state.questions;
+        var optionsLength;
         for(var i = length-1; i >= 0; i--){
             if(questionKey == questions[i].key){
                 questions[i].title = questionObj.title;
                 questions[i].response_format = questionObj.response_format;
+                optionsLength = questionObj.options.length;
                 questions[i].options = questionObj.options;
-                delete questions[i].key;
             }
         }
         
@@ -32,13 +33,29 @@ var SurveysPage = React.createClass({
         console.log(questions);
     },
     
+    
     handleSubmit: function(){
+        var questions = this.state.questions;
+        var questionsLength = questions.length;
+        var optionsLength;
+        var finalOptions = [];
+        for(var i = questionsLength-1; i >=0; i--){
+            delete questions[i].key;
+            finalOptions = [];
+            optionsLength = questions[i].options.length;
+            for(var i2 = optionsLength-1; i2 >= 0; i2--){
+                finalOptions.push(questions[i].options[i2].title)
+            }
+            questions[i].options = finalOptions;
+        }
         var surveyObj = {
             item_id : this.state.item_id,
             item_type : this.state.item_type,
             item_name : this.state.item_name,
-            questions : this.state.questions
+            questions : questions
         };
+        console.log(surveyObj);
+        
         
         $.ajax({
             url: this.props.routes.surveys,
@@ -47,6 +64,7 @@ var SurveysPage = React.createClass({
             data: JSON.stringify(surveyObj),
             success: function(data){
                 console.log('Post success');
+                console.log(data);
             }.bind(this),
 			error: function(xhr, status,err){
 				console.error("/api/response", status, err.toString());
