@@ -6,6 +6,8 @@
 //can pass variables
 var SurveysPage = React.createClass({
     
+    /*eventually we'll make some interface to change these states, but
+    item_id and item_name should be the same*/
     getInitialState: function(){
         return{
             numQuestion: 0,
@@ -16,6 +18,8 @@ var SurveysPage = React.createClass({
         }
     },
     
+    /*onChange of just about anything, we get an array of json's holding
+    each question's data and update our state'*/
     updateQuestions: function(questionObj, questionKey){
         var length = this.state.questions.length;
         var questions = this.state.questions;
@@ -28,12 +32,14 @@ var SurveysPage = React.createClass({
                 questions[i].options = questionObj.options;
             }
         }
-        
         this.setState({questions: questions});
+        console.log('SurveysPage');
         console.log(questions);
     },
     
-    
+    /*when we click finish survey, we prune the key field off of each question
+    json we've made, and then we generate the final Options arrays for each 
+    option filed in a question, then we post a final json to the api*/
     handleSubmit: function(){
         var questions = this.state.questions;
         var questionsLength = questions.length;
@@ -93,6 +99,7 @@ var SurveysPage = React.createClass({
       var currQuestions = this.state.questions;
       var newQuestions = currQuestions.push(newQuestion);
       this.setState({
+        numQuestion: numQuestion,
         questions: currQuestions
       });
     },
@@ -103,8 +110,6 @@ var SurveysPage = React.createClass({
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-                  <TitleSurvey onSurveyTitleChange={this.onSurveyTitleChange}/>
-                  <Creator creator={user_data[0].username}/>
                   <h4>Add Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
@@ -115,6 +120,7 @@ var SurveysPage = React.createClass({
       );
     }
 });
+
 
 var QuestionDiv = React.createClass({
 
@@ -177,6 +183,8 @@ var Fields = React.createClass({
             options: this.state.options
         };
         this.props.updateQuestions(questionObj, this.props.questionKey);
+        console.log('Fields');
+        console.log(questionObj);
     },
     
     render: function(){
@@ -298,14 +306,16 @@ var MultipleChoiceQuestion = React.createClass({
         this.setState({
             options: options
         });
-        this.props.onOptionsChange(options);        
+        this.props.onOptionsChange(options);
+        console.log("MultipleChoiceQuestion");
+        console.log(options);
     },
     
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
             return(
             <li className="mdl-list__item">  
-            <MultipleChoiceOption key={option.key} keyProp={option.key} onOptionChange={this.onOptionChange}/>
+            <MultipleChoiceOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
         });
@@ -409,52 +419,6 @@ var FinishSurvey = React.createClass({
           <button onClick={this.props.onSubmit} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
               FINISH SURVEY
           </button>
-      );
-    }
-});
-
-
-var TitleSurvey = React.createClass({
-    /*
-    *Input for title
-    *
-    */
-    getInitialState: function(){
-        return{
-            title: ''
-        }
-    },
-    
-    handleChange: function(e){
-        this.props.onSurveyTitleChange(e.target.value);
-        this.setState({
-        title: e.target.value
-        });
-    },
-    
-    render: function(){
-      return (
-          <span>
-             <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-             <input className="mdl-textfield__input" 
-             value={this.state.title} 
-             onChange={this.handleChange}
-             type="text" 
-             id="item_name"/>
-                <label className="mdl-textfield__label">Survey Title</label>
-                </div>
-          </span>
-      );
-    }
-});
-
-var Creator = React.createClass({
-    //TODO: not getting data
-    render: function(){
-      return (
-        <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-              <p>Survey creator:&nbsp;{this.props.creator}</p>
-        </div>
       );
     }
 });
