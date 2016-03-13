@@ -5,7 +5,7 @@
 
 //can pass variables
 var SurveysPage = React.createClass({
-    
+
     /*eventually we'll make some interface to change these states, but
     item_id and item_name should be the same*/
     getInitialState: function(){
@@ -14,10 +14,17 @@ var SurveysPage = React.createClass({
             item_id: "testGroup1",
             item_type: "Group",
             item_name: "testGroup1",
+            item_title: "",
             questions: []
         }
     },
-    
+
+    /*update title of survey*/
+    updateTitle: function(surveyTitle){
+        this.setState({item_title: surveyTitle});
+    },
+
+
     /*onChange of just about anything, we get an array of json's holding
     each question's data and update our state'*/
     updateQuestions: function(questionObj, questionKey){
@@ -34,10 +41,11 @@ var SurveysPage = React.createClass({
         }
         this.setState({questions: questions});
     },
-    
+
     /*when we click finish survey, we prune the key field off of each question
-    json we've made, and then we generate the final Options arrays for each 
+    json we've made, and then we generate the final Options arrays for each
     option filed in a question, then we post a final json to the api*/
+
     handleSubmit: function(){
         var questions = this.state.questions;
         var questionsLength = questions.length;
@@ -56,14 +64,15 @@ var SurveysPage = React.createClass({
             item_id : this.state.item_id,
             item_type : this.state.item_type,
             item_name : this.state.item_name,
+            item_title: this.state.item_title,
             questions : questions
         };
         console.log(surveyObj);
-        
-        
+
+
         $.ajax({
             url: this.props.routes.surveys,
-			contentType: 'application/json',
+			      contentType: 'application/json',
             type: 'POST',
             data: JSON.stringify(surveyObj),
             success: function(data){
@@ -106,6 +115,7 @@ var SurveysPage = React.createClass({
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+                  <TitleSurvey titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
                   <h4>Add Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
@@ -156,25 +166,25 @@ var Fields = React.createClass({
             options: [],
         }
     },
-    
+
     //updates this.state.title
     handleTitleChange: function(event) {
         this.setState({title: event.target.value});
         this.update();
     },
-    
+
     //updates this.state.response_format
     handleResponseFormatChange: function(event) {
         this.setState({response_format: event.target.value});
         this.update();
     },
-    
+
     //updates this.state.options
     onOptionsChange: function(options){
         this.setState({options: options});
         this.update();
     },
-    
+
     //this is called whenever anything updates, sends the question data
     //up to the highest layer real time.
     update: function(){
@@ -185,24 +195,23 @@ var Fields = React.createClass({
         };
         this.props.updateQuestions(questionObj, this.props.questionKey);
     },
-    
+
     render: function(){
       return (
           <div className="mdl-card__supporting-text mdl-color-text--grey-600">
                   <div className="mdl-textfield mdl-js-textfield">
                     <input className="mdl-textfield__input"
                     type="text"
-                    id="question_title" 
+                    id="question_title"
                     value={this.state.title}
                     onChange={this.handleTitleChange}/>
                     <label className="mdl-textfield__label">Title of Question:</label>
                   </div>
                   <p>Type:
-                     <select 
+                     <select
                      id="mySelect"
                      onChange={this.handleResponseFormatChange}
                      value={this.state.value}>
-                         <option disabled value="select"> Select an option </option>
                          <option value="multipleChoice">Multiple Choice</option>
                          <option value="trueOrFalse">Single Choice</option>
                          <option value="rating">Rating Scale</option>
@@ -218,7 +227,7 @@ var Fields = React.createClass({
 //depending on this.state.response_format we want to change our options field
 //formats
 var OptionsDiv = React.createClass({
-    
+
     render: function(){
         if(this.props.response_format == "multipleChoice"){
 
@@ -273,7 +282,7 @@ var OptionsDiv = React.createClass({
 
 /* controls the data for our options fields*/
 var MultipleChoiceQuestion = React.createClass({
-    
+
     getInitialState: function(){
         return{
             numOptions: 0,
@@ -296,8 +305,8 @@ var MultipleChoiceQuestion = React.createClass({
             options: options
         });
     },
-    
-    //whenever we change an option we update it's corresponding index in 
+
+    //whenever we change an option we update it's corresponding index in
     //our options array, and also send data up to Fields
     onOptionChange: function(newTitle,key){
         var options=this.state.options;
@@ -312,16 +321,16 @@ var MultipleChoiceQuestion = React.createClass({
         });
         this.props.onOptionsChange(options);
     },
-    
+
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
             return(
-            <li className="mdl-list__item">  
+            <li className="mdl-list__item">
             <MultipleChoiceOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
         });
-    
+
         return (
         <div>
             <ul className="no_bullets mdl-list">
@@ -342,18 +351,18 @@ var MultipleChoiceQuestion = React.createClass({
 
 /*this layer could be merged into MultipleChoiceQuestion fairly easily, renders a text field for every option that we want, onChange it sends data to MultipleChoiceQuestion which starts the chain of it's propagation to the highest layer*/
 var MultipleChoiceOption = React.createClass({
-    
+
     getInitialState: function(){
         return{
             title: ''
-        }    
+        }
     },
-    
+
     handleChange: function(event){
         this.setState({title: event.target.value});
         this.props.onOptionChange(event.target.value, this.props.keyProp);
     },
-    
+
     render: function(){
         return(
             <div className="mdl-textfield mdl-js-textfield">
@@ -425,5 +434,34 @@ var FinishSurvey = React.createClass({
               FINISH SURVEY
           </button>
       );
+    }
+});
+
+
+var TitleSurvey = React.createClass({
+    //set initial value
+    getInitialState: function() {
+        return {
+            item_title: '',
+        }
+    },
+
+    //updates this.state.title
+    handleTitleChange: function(event) {
+        this.setState({item_title: event.target.value});
+        this.props.updateTitle(event.target.value);
+    },
+
+    render: function(){
+        return (
+            <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+                <h4>Survey Title:
+                  <input className="mdl-textfield__input"
+                  type="text"
+                  value={this.state.item_title}
+                  onChange={this.handleTitleChange}
+                  /></h4>
+            </div>
+        );
     }
 });
