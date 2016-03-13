@@ -1,5 +1,13 @@
 var ProfilePage = React.createClass({
   getInitialState: function(){
+    var user_affiliation = user_data[0].primary_affiliation;
+    var user_gender = user_data[0].gender;
+    var user_ethnicity = user_data[0].ethnicity;
+    var user_native_language = user_data[0].native_language;
+    var affiliation = _.pull(extra_data[0].primary_affiliation, user_affiliation);
+    var gender = _.pull(extra_data[0].gender, user_gender);
+    var ethnicity = _.pull(extra_data[0].ethnicity, user_ethnicity);
+    var native_language = _.pull(extra_data[0].native_language, user_native_language);
     var subscribed_groups = '';
     var user_status = '';
     var num_sub_groups = user_data[0].subscribed_groups.length;
@@ -13,35 +21,25 @@ var ProfilePage = React.createClass({
         }
       }
     }
-    if (user_data[0].primary_affiliation == "Student") {
-      if (user_data[0].status) {
-        user_status = user_data[0].status;
-      } else {
-        user_status = "Did not specify academic year";
-      }
+    if (user_affiliation == "Student" || user_affiliation == "Both") {
+      var user_status = user_data[0].status;
+      var status = _.pull(extra_data[0].status, user_status);
     }
-    var array = [1, 2, 3, 4];
-    var evens = _.remove(array, function(n) {
-      return n % 2 == 0;
-    });
-    console.log(array);
-    console.log(evens);
     return {
       username: user_data[0].username,
-      user_affiliation: user_data[0].primary_affiliation,
       email: user_data[0].email,
       dob: user_data[0].dob,
-      user_gender: user_data[0].gender,
-      user_ethnicity: user_data[0].ethnicity,
-      user_native_language: user_data[0].native_language,
-      user_status: user_data[0].status,
-      subscribed_groups: subscribed_groups,
-      affiliation: extra_data[0].primary_affiliation,
-      gender: extra_data[0].gender,
-      ethnicity: extra_data[0].ethnicity,
-      native_language: extra_data[0].native_language,
-      status: extra_data[0].status,
-
+      user_affiliation,
+      user_gender,
+      user_ethnicity,
+      user_native_language,
+      user_status,
+      subscribed_groups,
+      affiliation,
+      gender,
+      ethnicity,
+      native_language,
+      status,
     };
   },
   handleChange: function(key) {
