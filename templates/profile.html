@@ -2,20 +2,18 @@
 {% block title %}Profile{% end %}
 {% block react %}
   var user_data={% raw user_info_json %};
+  var extra_data={% raw extra_info_json %}
   var routesObject = {
       surveys: "/api/surveys",
       response: "/api/response",
       groups: "/api/groups",
       subscribe: "/api/subscribe"
   };
-  
   ReactDOM.render(React.createElement(ProfilePage, {routes: routesObject}), document.getElementById('main-grid'));
   ReactDOM.render(React.createElement(ProfileGroups, {routes: routesObject}),
 document.getElementById('group-grid'));
 {% end %}
 {% block content %}
-  <div class = "mdl-grid content" id="main-grid">
-  </div>
-  <div class = "mdl-grid content" id="group-grid">
-  </div>
+  <div class = "mdl-grid content" id="main-grid"></div>
+  <div class = "mdl-grid content" id="group-grid"></div>
 {% end %}
