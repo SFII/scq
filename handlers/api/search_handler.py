@@ -21,9 +21,9 @@ class SearchHandler(BaseHandler):
         searchstring: ""
         requestedfields: []
         """
-        search_type = json_data.get('searchtype', 'Group')
-        search_string = json_data.get('searchstring', '')
-        requestedfields = json_data.get('requestedfields', ['id'])
+        search_type = self.json_data.get('searchtype', 'Group')
+        search_string = self.json_data.get('searchstring', '')
+        requestedfields = self.json_data.get('requestedfields', ['id'])
         search_model = {
             'Group': Group()
         }[search_type]
