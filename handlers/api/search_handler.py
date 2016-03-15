@@ -31,6 +31,13 @@ class SearchHandler(BaseHandler):
             'Group': ['id', 'tags'],
             'User': ['username']
         }[search_type]
+        # check if requestedfields contains valid fields
+        for field in requestedfields:
+            if field == 'id':
+                continue
+            value = search_model.default().get(field, None)
+            if value is None:
+                return self.set_status(400, "Model {0} does not have requested field {1}".format(search_type, field))
         try:
             search_results = search_model.search_items(search_string, search_fields, requestedfields)
         except err:
