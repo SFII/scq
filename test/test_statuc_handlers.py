@@ -5,7 +5,7 @@ import logging
 from test.test_runner import BaseAsyncTest
 
 
-class TestHandlers(BaseAsyncTest):
+class TestStaticHandlers(BaseAsyncTest):
     def setUpClass():
         logging.disable(logging.CRITICAL)
 

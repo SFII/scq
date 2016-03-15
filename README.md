@@ -268,7 +268,7 @@ Status: 200 OK
 ```
 
 ### Answer user's questions to a survey
-*Test: FAIL*
+*Test: PASS*
 ```
 POST /api/response
 ```
@@ -282,10 +282,7 @@ POST /api/response
 
 **Response:**
 ```
-Status: 400
-Users can only respond to surveys in their unanswered survey list.
-
-TODO: Fix this.. My JSON is correct and my rethinkdb says that I have this unanswered survey I want to use to make this POST request.
+Status: 200
 ```
 
 ### Refresh user's cookie

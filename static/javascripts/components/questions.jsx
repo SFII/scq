@@ -1,34 +1,29 @@
 /*
 *
 * Multiple Choice
-* All the cards are very similar so I'm not going to copy and paste
+* Get the length of how many options there are, and initialize an array of that size to hold false at each
+* index, then check to see if the answer was previously answered, if it is we set the previous answers that
+* were marked to true in the array. Set the final response state as this.state.data
 */
 var MultipleChoice = React.createClass({
-    getInitialState: function(){
-        var length = Object.keys(this.props.options).length;
-        var questionObj =[];
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswers = [];
-        for(var i =0; i < length; i++){
-            questionObj[i]=false;
-        }
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswers = responseState[i].response_data;
-             for(var i2 =0; i2 < length; i2++){
-                 if(prevAnswers[i2] == true){
-                    questionObj[i2]= true;
-                 }
-             }
-          }
-        }
+    getInitialState: function(){       
         return {
-            data: questionObj,
-            currAnswers: prevAnswers
+            data: [],
         };
     },
     
+    componentDidMount: function(){
+        this.setState({
+            data: this.props.questionState
+        });
+        
+    },
+    
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+    },
+    /*if a checkbox is checked/unchecked, send which option got checked (i) and whether it was true or false in
+    this.state.data, then use that info to flip it's value in the this.state.data array'*/
     handleChange: function(i,value){
         var NewValue = null;
         if(value == false){
@@ -41,17 +36,20 @@ var MultipleChoice = React.createClass({
         changeAnswer[i] = NewValue;
         this.setState({
             data: changeAnswer,
-            currAnswers: this.state.data
         })
     },
-
+    
+    /*made keys for each tag, or react put up warnings, we iterate through each option attaching an iterator i that we
+    use to simultaneously index this.state.data, if it's true we render a checked checkbox, else we render it unchecked
+    unchecked*/
     render: function(){
+    
       var questionID = this.props.questionID;
       const renderedOptions = this.props.options.map((option,i) => {
       var inputKey = String(questionID)+"."+option+"."+"input";
       var labelKey = String(questionID)+"."+option+"."+"label";
       var spanKey = String(questionID)+"."+option+"."+"span";
-      if(this.state.currAnswers[i] == true){
+      if(this.state.data[i] == true){
         return (
             <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" key = {labelKey} id={labelKey}>
                 <input
@@ -116,28 +114,20 @@ var MultipleChoice = React.createClass({
 var SingleChoice = React.createClass({
 
 getInitialState: function(){
-        var length = Object.keys(this.props.options).length;
-        var questionObj =[];
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswers = [];
-        for(var i =0; i < length; i++){
-            questionObj[i]=false;
-        }
-        for(var i = responseStateLength-1; i >= 0; i--){
-            if(responseState[i].question_id == this.props.questionID){
-                prevAnswers = responseState[i].response_data;
-                    for(var i2 = 0; i2 < length; i2++){
-                        if(prevAnswers[i2]==true){
-                            questionObj[i2] = true;
-                        }
-                    }
-            }
-        }
         return {
-            data: questionObj,
-            currAnswers: prevAnswers
+            data: [],
         };
+    },
+
+    componentDidMount: function(){
+        this.setState({
+            data: this.props.questionState
+        });
+        
+    },
+
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
     },
 
     handleChange: function(i,value){
@@ -151,7 +141,6 @@ getInitialState: function(){
         changeAnswer[i] = true;
         this.setState({
             data: changeAnswer,
-            currAnswers: this.state.data
         });
     },
 
@@ -163,7 +152,7 @@ getInitialState: function(){
         var labelKey = String(questionID)+"."+option+"."+"label";
         var spanKey = String(questionID)+"."+option+"."+"span";
         var divKey = String(questionID)+"."+option+"."+"div";
-        if(this.state.currAnswers[i] == true){
+        if(this.state.data[i] == true){
             return (
             <div key={divKey} id={divKey}>
             <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" key={labelKey} id={labelKey}>
@@ -226,20 +215,25 @@ getInitialState: function(){
 *
 * Free
 * Same as the other cards, but simpler, we just take whatever is in the
-* textfield and get it to POST
+* textfield and get it to POST after all the previous question answer checking
 */
 var FreeResponse = React.createClass({
 
     getInitialState: function(){
-        var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswer = "Change Me!";
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswer = responseState[i].response_data;
-          }
-        }
-        return {answer: prevAnswer};
+        return {
+            answer: 'Change me!'
+        };
+    },
+    
+    componentDidMount: function(){
+        this.setState({
+            answer: this.props.questionState
+        });
+        
+    },
+
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
     },
 
     handleChange: function(e){
@@ -263,9 +257,9 @@ var FreeResponse = React.createClass({
         type="text"
         rows="4"
         id="test"
+        placeholder="Your answer"
         value={this.state.answer}
-        onChange={this.handleChange}>
-        </textarea>
+        onChange={this.handleChange}/>
         <br/>
         <Footer
         key={footerKey}
@@ -284,22 +278,24 @@ var FreeResponse = React.createClass({
 });
 /*
 *Rating slider
-*This still needs work from Michael and I
+*Nothing special here either relative to the other ones.
 */
 var Rating = React.createClass({
    	getInitialState: function(){
-		var responseState = this.props.responseState;
-        var responseStateLength = Object.keys(responseState).length;
-        var prevAnswer = 5;
-        for(var i = responseStateLength-1; i >= 0; i--){
-          if(responseState[i].question_id == this.props.questionID){
-             prevAnswer = responseState[i].response_data;
-          }
-        }
         return{
-            answer: prevAnswer
+            answer: null,
         }
 	},
+
+    componentDidMount: function(){
+        this.setState({
+            answer: this.props.questionState
+        });
+    },
+    
+    componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+    },
 
 	handleChange:function(e){
 		this.setState({answer: e.target.value});

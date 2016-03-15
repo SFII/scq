@@ -1,6 +1,9 @@
+import rethinkdb as r
 from models.basemodel import BaseModel
 from models.course import Course
 from models.user import User
+from models.survey_response import SurveyResponse
+from models.question_response import QuestionResponse
 from models.instructor import Instructor
 from models.question import Question
 from models.group import Group
@@ -42,12 +45,12 @@ class Survey(BaseModel):
         item_id = data['item_id']
         creator_id = data['creator_id']
         creator_data = User().get_item(creator_id)
-        model_data = model.get_item(item_id)
+        model_data = self._get_model_data(data)
         if creator_data is None:
-            logging.error('creator_id does not correspond to value in database')
+            logging.error("creator_id {0} does not correspond to value in database".format(creator_id))
             return None
         if model_data is None:
-            logging.error('item_id does not correspond to value in database')
+            logging.error("item_id {0} does not correspond to value in database".format(item_id))
             return None
         data['creator_name'] = creator_data['username']
         data['item_name'] = model_data.get(self._item_name_from_item_type(item_type), '')
@@ -86,7 +89,7 @@ class Survey(BaseModel):
 
     def _item_name_from_item_type(self, item_type):
         return {
-            'Group': 'name',
+            'Group': 'id',
             'Instructor': 'instructor_last',
             'Course': 'course_name',
             'User': 'username'
@@ -119,7 +122,103 @@ class Survey(BaseModel):
         decomposed_data['questions'] = decomposed_question_data
         return decomposed_data
 
+    def get_response_stats(self, survey_ids):
+        decomposed_data = {}
+        #for each survey that we've answered we want to get the list of it's responses
+        for survey_id in survey_ids:
+            survey_data = self.get_item(survey_id)
+            survey_response_ids = survey_data['responses']
+            logging.info(survey_response_ids)
+            #for each response we want to get the response for each question
+            for survey_response_id in survey_response_ids:
+                #get the question_response_id's
+                survey_response_data = SurveyResponse().get_item(survey_response_id)
+                question_response_ids = survey_response_data['question_responses']
+                decomposed_response_data = {}
+                decomposed_response_data[survey_response_id] = []
+                #for each questions response we record the response data
+                for question_response_id in question_response_ids:
+                    question_response_data = QuestionResponse().get_item(question_response_id)
+                    decomposed_response_data[survey_response_id].append(question_response_data['response_data'])
+            decomposed_data[survey_id] = decomposed_response_data
+        return decomposed_data
+
+
+    def _get_model_data(self, data):
+        item_type = data.get('item_type', None)
+        item_id = data.get('item_id', None)
+        if item_type not in self.ITEM_TYPES:
+            return None
+        model = self._model_from_item_type(item_type)
+        return model.get_item(item_id)
+
+    def verify(self, data, skipRequiredFields=False, skipStrictSchema=False):
+        results = super(Survey, self).verify(data, skipRequiredFields=skipRequiredFields, skipStrictSchema=skipStrictSchema)
+        model_data = self._get_model_data(data)
+        if model_data is None:
+            results.append(('item_id', "item_id {0} does not correspond to value in database".format(item_id)))
+        return results
+
     def mark_deleted(self, survey_id):
         survey = self.get_item(survey_id)
         survey['deleted'] = True
         Survey().update_item(survey_id, survey)
+
+    def get_results(self, survey_id):
+        try:
+            query = r.db(self.DB).table('Survey').get(survey_id).get_field('questions').map(
+                lambda doc: [doc, r.db(self.DB).table('QuestionResponse').filter({'question_id': doc}).get_field('response_data').coerce_to('array')]
+            ).coerce_to('object').run(self.conn)
+            return query
+        except Exception as err:
+            logging.error(err)
+            return []
+
+    def get_formatted_results(self, survey_id):
+        results = self.get_results(survey_id)
+
+        def get_pie_data(question_data):
+            return r.branch(
+                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
+                question[1].group(lambda r: r).count().ungroup().map(
+                    lambda gr: {
+                        'name': gr['group'].coerce_to('string'),
+                        'value': gr['reduction']
+                    }
+                ),
+                []
+            )
+
+        def get_bar_data(question_data):
+            r.branch(
+                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
+                r.branch(
+                    (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
+                    {
+                        'labels': question[1].distinct(),
+                        'series': [question[1].distinct().do(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                    },
+                    (question_data['response_format'] == Question().RESPONSE_RATING),
+                    {
+                        'labels': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        'series': [r.expr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                    },
+                    []
+                ),
+                []
+            )
+        try:
+            formatted_results = r.expr(results).coerce_to('array').map(
+                lambda question: r.db(self.DB).table('Question').get(question[0]).merge(r.expr({
+                    'results': question[1],
+                    'total_responses': question[1].count(),
+                    'pie_data': r.db(self.DB).table('Question').get(question[0]).do(
+                        lambda question_data: get_pie_data(question_data)),
+                    'bar_data': r.db(self.DB).table('Question').get(question[0]).do(
+                        lambda question_data: get_bar_data(question_data))
+                }))
+            ).run(self.conn)
+            return formatted_results
+        except Exception as err:
+            logging.error(err)
+            return []
