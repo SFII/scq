@@ -11,13 +11,12 @@ from handlers.base_handler import BaseHandler, api_authorized, parse_request_jso
 class GroupAPIHandler(BaseHandler):
 
     @api_authorized
-    @parse_request_json
     @refresh_user_cookie_callback
     def post(self):
         """
         Creates a new group object
         """
-        potential_group_id = self.json_data.get('id', None)
+        potential_group_id = self.get_argument('groupname')
         if potential_group_id is None:
             return self.set_status(400, "id cannot be null")
         potential_group_data = Group().get_item(potential_group_id)
@@ -30,7 +29,12 @@ class GroupAPIHandler(BaseHandler):
         group_id = Group().create_item(group_data)
         if group_id is None:
             return self.set_status(400, "something went wrong:")
+        members = self.get_arguments('members')
+        for member in members:
+            # TODO: In the future, this will invite the user.
+            Group().subscribe_user(member, group_id)
         self.set_status(200, "Success")
+        self.redirect("/profile")
         return self.write(tornado.escape.json_encode(group_id))
 
     @api_authorized

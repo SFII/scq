@@ -24,7 +24,7 @@ var CreateGroup = React.createClass({
                     <div className="mdl-cell mdl-cell--1-col">
                     </div>
                     <div className="mdl-cell mdl-cell--11-col">
-                        <form action="/groups" method="POST">
+                        <form action="/api/groups" method="POST">
                             <div className="mdl-textfield
                                             mdl-js-textfield
                                             mdl-textfield--floating-label">
@@ -67,7 +67,7 @@ var GroupMembers = React.createClass({
             return <div key={key}>
                 <div className="mdl-textfield" key={i}>
                     <input type="text"
-                           name="person"
+                           name="members"
                            className="mdl-textfield__input memberlist"
                            defaultValue={user} >
                     </input>
