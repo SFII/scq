@@ -224,28 +224,14 @@ var OptionsDiv = React.createClass({
 
           return (
             <div>
-            <MultipleChoiceQuestion onOptionsChange={this.props.onOptionsChange}/>
+            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
             </div>
           );
 
         } else if(this.props.response_format == "trueOrFalse"){
           return (
           <div>
-              <SingleChoiceQuestion/>
-
-            <ul className="no_bullets mdl-list">
-              <li className="mdl-list__item">
-              <p>
-                <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-                <i className="material-icons">add</i>
-
-                </button>
-
-              &nbsp;&nbsp;&nbsp; ADD OPTION
-              </p>
-             </li>
-
-          </ul>
+          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
           </div>
           );
 
@@ -272,7 +258,7 @@ var OptionsDiv = React.createClass({
 
 
 /* controls the data for our options fields*/
-var MultipleChoiceQuestion = React.createClass({
+var CheckboxQuestion = React.createClass({
     
     getInitialState: function(){
         return{
@@ -317,7 +303,7 @@ var MultipleChoiceQuestion = React.createClass({
         var renderedOptions = this.state.options.map((option, i) => {
             return(
             <li className="mdl-list__item">  
-            <MultipleChoiceOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
+            <CheckboxOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
         });
@@ -340,8 +326,10 @@ var MultipleChoiceQuestion = React.createClass({
     }
 });
 
+
+
 /*this layer could be merged into MultipleChoiceQuestion fairly easily, renders a text field for every option that we want, onChange it sends data to MultipleChoiceQuestion which starts the chain of it's propagation to the highest layer*/
-var MultipleChoiceOption = React.createClass({
+var CheckboxOption = React.createClass({
     
     getInitialState: function(){
         return{
@@ -365,26 +353,6 @@ var MultipleChoiceOption = React.createClass({
                 </p>
             </div>
         );
-    }
-});
-
-var SingleChoiceQuestion = React.createClass({
-
-    render: function(){
-      return (
-      <div>
-          <form>
-              <div className="mdl-textfield mdl-js-textfield">
-                <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
-              </div>
-          </form>
-          <form>
-              <div className="mdl-textfield mdl-js-textfield">
-                <p>Enter an option: &nbsp;<input className="mdl-textfield__input" type="text" id="questin_1" onChange={this.Handler}/></p>
-              </div>
-          </form>
-      </div>
-      );
     }
 });
 
