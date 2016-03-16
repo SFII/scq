@@ -122,28 +122,6 @@ class Survey(BaseModel):
         decomposed_data['questions'] = decomposed_question_data
         return decomposed_data
 
-    def get_response_stats(self, survey_ids):
-        decomposed_data = {}
-        #for each survey that we've answered we want to get the list of it's responses
-        for survey_id in survey_ids:
-            survey_data = self.get_item(survey_id)
-            survey_response_ids = survey_data['responses']
-            logging.info(survey_response_ids)
-            #for each response we want to get the response for each question
-            for survey_response_id in survey_response_ids:
-                #get the question_response_id's
-                survey_response_data = SurveyResponse().get_item(survey_response_id)
-                question_response_ids = survey_response_data['question_responses']
-                decomposed_response_data = {}
-                decomposed_response_data[survey_response_id] = []
-                #for each questions response we record the response data
-                for question_response_id in question_response_ids:
-                    question_response_data = QuestionResponse().get_item(question_response_id)
-                    decomposed_response_data[survey_response_id].append(question_response_data['response_data'])
-            decomposed_data[survey_id] = decomposed_response_data
-        return decomposed_data
-
-
     def _get_model_data(self, data):
         item_type = data.get('item_type', None)
         item_id = data.get('item_id', None)
