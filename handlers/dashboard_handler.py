@@ -22,14 +22,6 @@ class DashboardHandler(BaseHandler):
             survey_json.append(survey_data)
         #print(tornado.escape.json_encode(survey_json))
         return tornado.escape.json_encode(survey_json)
-
-    def get_response_data(self):
-        response_data_json = {}
-        user_data = self.current_user
-        answered_survey_ids = user_data['answered_surveys']
-        response_data_json = Survey().get_response_stats(answered_survey_ids)
-        #print(tornado.escape.json_encode(response_data_json))
-        return tornado.escape.json_encode(response_data_json)
     
     def get_user_info(self):
         user_info_json = []

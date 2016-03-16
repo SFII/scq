@@ -115,7 +115,7 @@ var SurveysPage = React.createClass({
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-                  <TitleSurvey titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
+                  <SurveyTitleCreation titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
                   <h4>Add Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
@@ -267,13 +267,8 @@ var OptionsDiv = React.createClass({
 
 
 /* controls the data for our options fields*/
-<<<<<<< HEAD
 var CheckboxQuestion = React.createClass({
     
-=======
-var MultipleChoiceQuestion = React.createClass({
-
->>>>>>> 26c4858a69759283f5656eb6f392cbb55d663fed
     getInitialState: function(){
         return{
             numOptions: 0,
@@ -316,13 +311,8 @@ var MultipleChoiceQuestion = React.createClass({
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
             return(
-<<<<<<< HEAD
             <li className="mdl-list__item">  
             <CheckboxOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
-=======
-            <li className="mdl-list__item">
-            <MultipleChoiceOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
->>>>>>> 26c4858a69759283f5656eb6f392cbb55d663fed
             </li>
             );
         });
@@ -348,13 +338,9 @@ var MultipleChoiceQuestion = React.createClass({
 
 
 /*this layer could be merged into MultipleChoiceQuestion fairly easily, renders a text field for every option that we want, onChange it sends data to MultipleChoiceQuestion which starts the chain of it's propagation to the highest layer*/
-<<<<<<< HEAD
-var CheckboxOption = React.createClass({
-    
-=======
-var MultipleChoiceOption = React.createClass({
 
->>>>>>> 26c4858a69759283f5656eb6f392cbb55d663fed
+var CheckboxOption = React.createClass({
+
     getInitialState: function(){
         return{
             title: ''
@@ -421,7 +407,7 @@ var FinishSurvey = React.createClass({
 });
 
 
-var TitleSurvey = React.createClass({
+var SurveyTitleCreation = React.createClass({
     //set initial value
     getInitialState: function() {
         return {
