@@ -12,6 +12,16 @@ var Page = React.createClass({
       is a survey that gets it's own SurveyDiv react component'*/
       else{
         routesObject=this.props.routes;
+        if (data.length == 0) {
+              return (
+                  <div>
+                      You don't have any open surveys right now. You can
+                      <a href="/rawdump"> view</a> survey results or
+                      <a href="/surveys"> create</a> your own survey
+                      using the bar on the left.
+                  </div>
+              )
+        }
         var itemNodes = data.map(function (item) {
                 return (
                 <SurveyDiv
