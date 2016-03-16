@@ -16,6 +16,8 @@ class User(BaseModel):
     USER_GENDERS = ['Male', 'Female', 'Other', NO_DISCLOSURE]
     USER_ETHNICITIES = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Hispanic or Latino', 'Native Hawaiian or Other Pacific Islander', 'White', 'Other', NO_DISCLOSURE]
     USER_NATIVE_LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Korean', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi', 'Other', NO_DISCLOSURE]
+    USER_PRIMARY_AFFILIATION = ['Student', 'Faculty', 'Both']
+    USER_STATUS = ['Freshman', 'Sophomore', 'Junior', 'Senior']
 
     # must be overridden
     def requiredFields(self):
@@ -34,16 +36,14 @@ class User(BaseModel):
             'native_language': (b.is_in_list(self.USER_NATIVE_LANGUAGES),),
             'date_registered': (b.is_timestamp,),
             'last_sign_in': (b.is_timestamp,),
-            'courses': (b.is_list,),
             'subscribed_groups': (b.is_list,),
-            'courses_taught': (b.is_list,),
-            'departments': (b.is_list,),
             'created_surveys': (b.is_list,),
             'unanswered_surveys': (b.is_list,),
             'answered_surveys': (b.is_list,),
             'survey_responses': (b.is_list,),
             'answers': (b.is_list,),
-            'primary_affiliation': (b.is_string,),
+            'primary_affiliation': (b.is_string, b.is_in_list(self.USER_PRIMARY_AFFILIATION)),
+            'status': (b.is_string, b.is_in_list(self.USER_STATUS)),
         }
 
     # returns default user data, that can be overwritten. Good for templating a new user
@@ -59,16 +59,14 @@ class User(BaseModel):
             'native_language': self.USER_NATIVE_LANGUAGES[-1],
             'date_registered': time.time(),
             'last_sign_in': time.time(),
-            'courses': [],
             'subscribed_groups': [],
-            'courses_taught': [],
-            'departments': [],
             'unanswered_surveys': [],
             'answered_surveys': [],
             'created_surveys': [],
             'survey_responses': [],
             'answers': [],
-            'primary_affiliation': '',
+            'primary_affiliation': self.USER_PRIMARY_AFFILIATION[-1],
+            'status': self.USER_STATUS[-1],
         }
 
     def create_generic_item(self):

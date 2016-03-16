@@ -20,7 +20,7 @@ class ResponseHandler(BaseHandler):
     @refresh_user_cookie_callback
     def post(self):
         """
-        Creates and records a users response to a survey
+        Creates and records a users response to a survey.
         """
         user_data = self.get_current_user()
         user_responses = user_data.get('survey_responses')
