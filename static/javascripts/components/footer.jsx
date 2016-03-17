@@ -7,7 +7,6 @@ var Footer = React.createClass({
     render: function() {
     //first question, survey not filled out, survey is longer than one question previous is inactive, submit is inactive
         if(this.props.questionNum == 0 && this.props.responseSize != (this.props.numQuestions) && this.props.numQuestions != 1){
-        console.log(1);
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
@@ -35,7 +34,6 @@ var Footer = React.createClass({
         }
         //survey is one question long
         else if(this.props.questionNum == 0 && this.props.numQuestions == 1){
-        console.log(2);
             return(    
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
@@ -65,7 +63,6 @@ var Footer = React.createClass({
         }
         // first question, survey is filled out, previous is inactive, but we can submit
         else if(this.props.questionNum == 0 && this.props.responseSize == (this.props.numQuestions)){
-        console.log(3);
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
@@ -95,7 +92,6 @@ var Footer = React.createClass({
         }
         //if we're on the last question for the first time we want to be able to submit but not go to the next question
         else if(this.props.questionNum == (this.props.numQuestions)-1){
-        console.log(4);
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <PrevButton
@@ -125,7 +121,6 @@ var Footer = React.createClass({
         }
         //if we return to the last question at some point after backtracking it actually requires a different condition since responseSize grows
         else if(this.props.questionNum == (this.props.numQuestions) && this.props.responseSize == this.props.numQuestions){
-        console.log(5);
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <PrevButton
@@ -155,7 +150,6 @@ var Footer = React.createClass({
         }
         //not the first question, not the last question, and survey not filled out, submit is inactive
     else if(this.props.questionNum != 0 && this.props.questionNum != (this.props.numQuestions) && this.props.responseSize != (this.props.numQuestions)){
-        console.log(6);
         return(
             <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                 <PrevButton
@@ -185,7 +179,6 @@ var Footer = React.createClass({
         }
         //not the first question, not the last question, survey is filled out, all buttons are active
     else if(this.props.questionNum != 0 && this.props.questionNum != (this.props.numQuestions) && this.props.responseSize == (this.props.numQuestions)){
-    console.log(7);
         return(
             <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                 <PrevButton

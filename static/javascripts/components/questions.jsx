@@ -148,10 +148,10 @@ getInitialState: function(){
         var surveyID = String(this.props.surveyID);
         var questionID = this.props.questionID
         const renderedOptions = this.props.options.map((option, i) => {
-        var inputKey = String(questionID)+"."+option+"."+i+"."+input";
-        var labelKey = String(questionID)+"."+option+"."+i+"."+label";
-        var spanKey = String(questionID)+"."+option+"."+i+"."+span";
-        var divKey = String(questionID)+"."+option+"."+i+"."+div";
+        var inputKey = String(questionID)+"."+option+"."+i+"."+"input";
+        var labelKey = String(questionID)+"."+option+"."+i+"."+"label";
+        var spanKey = String(questionID)+"."+option+"."+i+"."+"span";
+        var divKey = String(questionID)+"."+option+"."+i+"."+"div";
         if(this.state.data[i] == true){
             return (
             <div key={divKey} id={divKey}>
