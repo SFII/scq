@@ -20,7 +20,7 @@ class LoginHandler(BaseHandler):
                 return self.login(user_data)
             else:
                 return self.denied('User credentials are incorrect!')
-        return self.denied('User credentials not found!')
+        return self.denied('User credentials not found, have you created an account?')
 
     def login(self, user_data):
         self.set_current_user(user_data)
