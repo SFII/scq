@@ -46,9 +46,9 @@ var MultipleChoice = React.createClass({
     
       var questionID = this.props.questionID;
       const renderedOptions = this.props.options.map((option,i) => {
-      var inputKey = String(questionID)+"."+option+"."+"input";
-      var labelKey = String(questionID)+"."+option+"."+"label";
-      var spanKey = String(questionID)+"."+option+"."+"span";
+      var inputKey = String(questionID)+"."+option+"."+i+"."+"input";
+      var labelKey = String(questionID)+"."+option+"."+i+"."+"label";
+      var spanKey = String(questionID)+"."+option+"."+i+"."+"span";
       if(this.state.data[i] == true){
         return (
             <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" key = {labelKey} id={labelKey}>
@@ -148,10 +148,10 @@ getInitialState: function(){
         var surveyID = String(this.props.surveyID);
         var questionID = this.props.questionID
         const renderedOptions = this.props.options.map((option, i) => {
-        var inputKey = String(questionID)+"."+option+"."+"input";
-        var labelKey = String(questionID)+"."+option+"."+"label";
-        var spanKey = String(questionID)+"."+option+"."+"span";
-        var divKey = String(questionID)+"."+option+"."+"div";
+        var inputKey = String(questionID)+"."+option+"."+i+"."+input";
+        var labelKey = String(questionID)+"."+option+"."+i+"."+label";
+        var spanKey = String(questionID)+"."+option+"."+i+"."+span";
+        var divKey = String(questionID)+"."+option+"."+i+"."+div";
         if(this.state.data[i] == true){
             return (
             <div key={divKey} id={divKey}>
@@ -246,7 +246,7 @@ var FreeResponse = React.createClass({
     var labelKey = String(questionID)+"."+"label";
     var spanKey = String(questionID)+"."+"span";
     var divKey = String(questionID)+"."+"div";
-    var textareaKey = String(questionID)+"textarea";
+    var textareaKey = String(questionID)+"."+"textarea";
     var footerKey = String(this.props.surveyID) + "." + "footer";
     return (
       <div
