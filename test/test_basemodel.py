@@ -37,7 +37,7 @@ class TestBaseModel(BaseAsyncTest):
     mock_x = 0
 
     def setUpClass():
-        logging.disable(logging.CRITICAL)
+        # logging.disable(logging.CRITICAL)
         # Initializes Mockmodel Table
         MockModel().init(BaseAsyncTest.database_name, BaseAsyncTest.conn)
         return
@@ -419,6 +419,39 @@ class TestBaseModel(BaseAsyncTest):
         mock_data['x'] = time.time()
         mock_id = MockModel().create_item(mock_data)
         self.assertIsNotNone(mock_id)
+
+    def test_search_items(self):
+        mock_data = [
+            {'a': 1, 'b': 'John Black csci-1300', 'x': time.time(), 'c': ['computer', 'science', 'introduction', 'csci', '1300']},
+            {'a': 2, 'b': 'Muffins engl-2300', 'x': time.time(), 'c': ['introduction', 'literature', 'engl', '2300', 'Muffins']},
+            {'a': 3, 'b': 'snickers candy geen-1000', 'x': time.time(), 'c': ['underwater', 'basket', 'weaving', 'elective']},
+            {'a': 4, 'b': 'Boese csci-2300', 'x': time.time(), 'c': ['Elizabeth', 'Boese', 'object', 'oriented', 'programming', 'csci', '2300', 'computer', 'science']},
+            {'a': 5, 'b': 'Republican Political Science poli-1100', 'x': time.time(), 'c': ['John', 'Boehner', 'Republican', 'values', 'intensive']},
+            {'a': 6, 'b': 'Democratic Political Science poli-1200', 'x': time.time(), 'c': ['John', 'Adams', 'Democratic', 'values', 'intensive']},
+            {'a': 7, 'b': 'Finding your soul through clay; arts-1300', 'x': time.time(), 'c': ['introduction', 'art', 'nonmajors', 'arts', '1300']},
+            {'a': 8, 'b': 'Advanced Computer Science Topics; csci-2700', 'x': time.time(), 'c': ['advanced', 'computer', 'science', 'topics', '2700']},
+            {'a': 9, 'b': 'Netflix Studies poli-1300', 'x': time.time(), 'c': ['Elizabeth', 'Hale', 'pragmatic', 'values', 'intensive']},
+            {'a': 10, 'b': 'fuckbois', 'x': time.time(), 'c': ['bad', 'data', None, False, 0]}
+        ]
+        for data in mock_data:
+            MockModel().create_item(data)
+        searchfields = ['b', 'c']
+        returnfields = ['id', 'a']
+        results = MockModel().search_items('Intro to literature', searchfields, returnfields)
+        self.assertEqual(len(results), 1)
+        result = results[0]
+        self.assertEqual(result['a'], 2)
+        results = MockModel().search_items('Elizabeth Boese', searchfields, returnfields)
+        self.assertEqual(len(results), 1)
+        result = results[0]
+        self.assertEqual(result['a'], 4)
+        results = MockModel().search_items('Political Science Intensive', searchfields, returnfields)
+        self.assertEqual(len(results), 2)
+        items = list(map(lambda foo: foo['a'], results))
+        self.assertIn(5, items)
+        self.assertIn(6, items)
+        results = MockModel().search_items('', searchfields, returnfields)
+        self.assertEqual(len(results), 0)
 
     def teardown():
         if (mock_id is not None) or (mock_id is not ""):
