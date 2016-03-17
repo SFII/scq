@@ -6,6 +6,7 @@ from test.test_runner import BaseAsyncTest
 import time
 import rethinkdb as r
 import logging
+import urllib
 from models.basemodel import BaseModel
 from models.user import User
 from models.group import Group
@@ -31,18 +32,16 @@ class TestGroupSubscribe(BaseAsyncTest):
     def test_api_group(self):
         with mock.patch.object(BaseHandler, 'get_current_user') as m:
             m.return_value = User().get_item(self.generic_user_id)
-            bodya = tornado.escape.json_encode({})
-            bodyb = tornado.escape.json_encode({'id': self.generic_group_id})
-            bodyc = tornado.escape.json_encode({'id': str(time.time())})
-            bodyd = tornado.escape.json_encode({'id': 'not unique'})
+            bodya = urllib.parse.urlencode({})
+            bodyb = urllib.parse.urlencode({'groupname': self.generic_group_id})
+            bodyc = urllib.parse.urlencode({'groupname': str(time.time())})
+            bodyd = urllib.parse.urlencode({'groupname': 'not unique'})
             response0 = self.fetch('/api/groups', body=bodya, method="POST")
             response1 = self.fetch('/api/groups', body=bodyb, method="POST")
             response2 = self.fetch('/api/groups', body=bodyc, method="POST")
             response3 = self.fetch('/api/groups', method="GET")
         self.assertEqual(response0.code, 400)
-        self.assertTrue('id cannot be null' in str(response0.error))
         self.assertEqual(response1.code, 400)
-        self.assertTrue('group with id' in str(response1.error))
         self.assertEqual(response2.code, 200, str(response2.error))
         self.assertEqual(response3.code, 200, str(response3.error))
 

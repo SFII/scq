@@ -8,7 +8,7 @@ from models.user import User
 class Group(BaseModel):
 
     def requiredFields(self):
-        return ['id', 'active_surveys', 'inactive_surveys', 'subscribers']
+        return ['id', 'active_surveys', 'inactive_surveys', 'subscribers', 'tags']
 
     def fields(self):
         return {
@@ -17,6 +17,7 @@ class Group(BaseModel):
             'active_surveys': (self.is_list, ),
             'inactive_surveys': (self.is_list,),
             'subscribers': (self.is_list,),
+            'tags': (self.is_list, self.schema_list_check(self.is_string,),),
         }
 
     def default(self):
@@ -25,7 +26,8 @@ class Group(BaseModel):
             'creator_id': '',
             'active_surveys': [],
             'inactive_surveys': [],
-            'subscribers': []
+            'subscribers': [],
+            'tags': []
         }
 
     def create_item(self, data, skip_verify=False):

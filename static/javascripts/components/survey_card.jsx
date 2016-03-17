@@ -15,7 +15,7 @@ var SurveysPage = React.createClass({
             item_type: "Group",
             item_name: "testGroup1",
             item_title: "",
-            questions: []
+            questions: [{title: "", response_format: "", options: []}]
         }
     },
 
@@ -114,13 +114,14 @@ var SurveysPage = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText="Create a Survey"/>
-                  <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+<div style={{paddingLeft: "30px"}}className="mdl-card__supporting-text mdl-color-text--grey-600">
                   <SurveyTitleCreation titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
-                  <h4>Add Questions:</h4>
+                  <h4>Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
                   <AddQuestion onAdding={this.handleAdding}/>
                   <FinishSurvey onSubmit={this.handleSubmit}/>
+                  </div>
               </div>
           </div>
       );
@@ -205,7 +206,7 @@ var Fields = React.createClass({
                     id="question_title"
                     value={this.state.title}
                     onChange={this.handleTitleChange}/>
-                    <label className="mdl-textfield__label">Title of Question:</label>
+                    <label className="mdl-textfield__label">Question title</label>
                   </div>
                   <p>Type:
                      <select
@@ -423,14 +424,12 @@ var SurveyTitleCreation = React.createClass({
 
     render: function(){
         return (
-            <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-                <h4>Survey Title:
-                  <input className="mdl-textfield__input"
-                  type="text"
-                  value={this.state.item_title}
-                  onChange={this.handleTitleChange}
-                  /></h4>
-            </div>
+            <h4>Survey Title:
+                <input className="mdl-textfield__input"
+                       type="text"
+                       value={this.state.item_title}
+                       onChange={this.handleTitleChange}
+                /></h4>
         );
     }
 });
