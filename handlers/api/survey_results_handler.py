@@ -17,4 +17,6 @@ class SurveyResultsHandler(BaseHandler):
         """
         gets the formatted results to a survey_id
         """
-        return self.write(tornado.escape.json_encode(Survey().get_formatted_results(survey_id)))
+        results = Survey().get_formatted_results(survey_id)
+        print(results)
+        return self.write(tornado.escape.json_encode(results))

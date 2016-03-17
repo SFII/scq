@@ -60,7 +60,7 @@ var SurveyDiv = React.createClass({
                     survey_id: 0,
                     question_responses:[]
                 },
-                responded: false,
+                responded: true, //TODO for debugging, please change to false before merging
         });
     },
     
@@ -99,7 +99,6 @@ var SurveyDiv = React.createClass({
             type: 'POST',
             data: JSON.stringify(response),
             success: function(data){
-                console.log(response);
                 this.setState({responded: true});
             }.bind(this),
 			error: function(xhr, status,err){
@@ -172,9 +171,7 @@ var SurveyDiv = React.createClass({
     render: function() {
         if (this.state.responded) {
             return (
-                <div>
-                    responded to card.
-                </div>
+                <ResponseCard {...this.props}/>
             )
         } else
         /*if showCard state is true, then we render <Card>, questionID, title, options, response_format vary depending on this.state.iter
