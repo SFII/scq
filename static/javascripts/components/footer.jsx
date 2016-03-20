@@ -5,8 +5,8 @@
 */
 var Footer = React.createClass({
     render: function() {
-    //first question, survey not filled out, previous is inactive, submit is inactive
-        if(this.props.questionNum == 0 && this.props.responseSize != (this.props.numQuestions)){
+    //first question, survey not filled out, survey is longer than one question previous is inactive, submit is inactive
+        if(this.props.questionNum == 0 && this.props.responseSize != (this.props.numQuestions) && this.props.numQuestions != 1){
             return(
                 <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
                     <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
@@ -31,6 +31,35 @@ var Footer = React.createClass({
                     <div className="mdl-cell mdl-cell--2-col"></div>
                 </div>
             )
+        }
+        //survey is one question long
+        else if(this.props.questionNum == 0 && this.props.numQuestions == 1){
+            return(    
+                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Previous
+                    </button>
+                    
+                    <Progress
+                    questionNum = {this.props.questionNum}
+                    numQuestions = {this.props.numQuestions}
+                    responseSize={this.props.responseSize}/>    
+                    
+                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                        Next
+                    </button>
+                    
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                    <SubmitButton
+                    onSubmit={this.props.onSubmit}
+                    surveyData={this.props.surveyData}
+                    questionID={this.props.questionID}
+                    response_format={this.props.response_format}/>
+                    <div className="mdl-cell mdl-cell--2-col"></div>
+                </div>
+                    
+                    
+            );
         }
         // first question, survey is filled out, previous is inactive, but we can submit
         else if(this.props.questionNum == 0 && this.props.responseSize == (this.props.numQuestions)){
@@ -183,31 +212,10 @@ var Footer = React.createClass({
     }
 })
 
-/* I made an mdl progress bar, but it doesn't work well with React, so I'm only saving this in case we decide our current progress bar is ugly.
-var Progress = React.createClass({
-    
-    getInitialState: function() {
-    var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
-    return({progressValue: progressValue})
-    },
-    
-    componentDidUpdate: function() {
-        console.log("update");
-        document.querySelector('#myProgress').MaterialProgress.setProgress(this.state.progressValue);
-    },
-    
-    render: function() {
-        return (
-        <div id="myProgress" className="mdl-cell mdl-cell--4-col mdl-progress mdl-js-progress"></div>
-        )
-    }
-})
-*/
-
 //creates a progress bar that fills up as you answer questions.
 var Progress = React.createClass({
     render: function() {
-    var progressValue = (this.props.responseSize/(this.props.numQuestions-1))*100;
+    var progressValue = ((this.props.responseSize+1)/this.props.numQuestions)*100;
         return (
         <progress id="myProgress" className="mdl-cell mdl-cell--4-col bar" value={progressValue} max="100"></progress>
         )

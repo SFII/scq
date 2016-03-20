@@ -2,8 +2,7 @@
 {% block title %}Home{% end %}
 {% block react %}
     var data={% raw survey_json %};
-    var responseData={% raw response_data_json %};
-    console.log(responseData);
+    var user_data={% raw user_info_json %};
     var routesObject = {
       surveys: "/api/surveys",
       response: "/api/response"

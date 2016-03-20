@@ -5,6 +5,29 @@ from datetime import datetime
 import tornado.gen as gen
 import logging
 
+# Stopwords from https://pypi.python.org/pypi/stop-words
+
+STOPWORDS = ['', 'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am',
+             'an', 'and', 'any', 'are', "aren't", 'as', 'at', 'be', 'because', 'been',
+             'before', 'being', 'below', 'between', 'both', 'but', 'by', "can't", 'cannot',
+             'could', "couldn't", 'did', "didn't", 'do', 'does', "doesn't", 'doing', "don't",
+             'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', "hadn't",
+             'has', "hasn't", 'have', "haven't", 'having', 'he', "he'd", "he'll", "he's",
+             'her', 'here', "here's", 'hers', 'herself', 'him', 'himself', 'his', 'how',
+             "how's", 'i', "i'd", "i'll", "i'm", "i've", 'if', 'in', 'into', 'is', "isn't",
+             'it', "it's", 'its', 'itself', "let's", 'me', 'more', 'most', "mustn't", 'my',
+             'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other',
+             'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', "shan't",
+             'she', "she'd", "she'll", "she's", 'should', "shouldn't", 'so', 'some', 'such',
+             'than', 'that', "that's", 'the', 'their', 'theirs', 'them', 'themselves',
+             'then', 'there', "there's", 'these', 'they', "they'd", "they'll", "they're",
+             "they've", 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up',
+             'very', 'was', "wasn't", 'we', "we'd", "we'll", "we're", "we've", 'were',
+             "weren't", 'what', "what's", 'when', "when's", 'where', "where's", 'which',
+             'while', 'who', "who's", 'whom', 'why', "why's", 'with', "won't", 'would',
+             "wouldn't", 'you', "you'd", "you'll", "you're", "you've", 'your', 'yours',
+             'yourself', 'yourselves']
+
 
 class BaseModel:
 
@@ -369,3 +392,69 @@ class BaseModel:
     def get_all(self):
         table = self.__class__.__name__
         return list(r.db(self.DB).table(table).run(self.conn))
+
+    def search_items(self, searchstring, searchfields=['tags'], returnfields=['id']):
+        """
+        Searches through the Table
+        1) search all alternate_titles for full searchstring
+        2) if searchstring contains a number > 99, search course_numbers for that number
+        3) if searchstring contains a ngram with four or fewer characters, looks through course_subject
+        """
+
+        DB = self.DB
+        table = self.__class__.__name__
+        lowercase_searchstring = searchstring.lower()
+        lowercase_searchstring.replace('-', ' ')
+        splitwords = lowercase_searchstring.split(' ')
+        words = list(filter(lambda word: word not in STOPWORDS, splitwords))
+
+        if not len(words):
+            return []
+
+        logging.info(words)
+
+        def sequence_search(searchfield, words):
+            return r.expr(words).concat_map(
+                lambda word: r.db(DB).table(table).filter(
+                    lambda doc: doc[searchfield].map(
+                        lambda title: title.do(
+                            lambda matcher: matcher.coerce_to('STRING').match('(?i)' + word)
+                        )
+                    ).reduce(lambda left, right: left | right)
+                ).coerce_to('array').map(lambda doc: doc['id'])
+            )
+
+        def static_search(searchfield, words):
+            return r.expr(words).concat_map(
+                lambda word: r.db(DB).table(table).filter(
+                    lambda doc: doc[searchfield].coerce_to('STRING').match('(?i)' + word)
+                ).coerce_to('array').map(lambda doc: doc['id'])
+            )
+
+        def search(searchfield, words):
+            if isinstance(self.default()[searchfield], (list, tuple)):
+                return sequence_search(searchfield, words)
+            return static_search(searchfield, words)
+
+        searches = [search(searchfield, words) for searchfield in searchfields]
+        total_results = r.add(r.args(searches)).run(self.conn)
+
+        searchresults = (r.expr(total_results)).group(r.row).count().ungroup().order_by('reduction').run(self.conn)
+
+        if not len(searchresults):
+            return []
+
+        best_score = searchresults[-1]['reduction']
+
+        best_ids = r.expr(searchresults).filter({'reduction': best_score}).get_field('group').run(self.conn)
+
+        if 'id' not in returnfields:
+            logging.warn("'id' is not in listed returnfields. It's recomended this field is included")
+        if not len(returnfields):
+            logging.error("returnfields cannot be empty")
+            return []
+        try:
+            return list(r.db(DB).table(table).get_all(r.args(best_ids)).pluck(r.args(returnfields)).run(self.conn))
+        except err:
+            logging.error(err)
+            return []

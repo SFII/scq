@@ -9,7 +9,7 @@ class GroupsHandler(BaseHandler):
     def get(self):
         self.refresh_current_user_cookie()
         self.render('groups.html', user_info_json=self.get_user_info())
-    
+
     def get_user_info(self):
         user_info_json = []
         user_data = self.current_user

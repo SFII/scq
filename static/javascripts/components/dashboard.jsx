@@ -2,7 +2,7 @@
 * Page is the overall container that gets mounted into our HTML file
 */
 var Page = React.createClass({
-    //if we're not logged in we want to render a Welcome menu 
+    //if we're not logged in we want to render a Welcome menu
     render: function(){
       if (!loggedIn()) {
         return (<Welcome />);
@@ -12,6 +12,16 @@ var Page = React.createClass({
       is a survey that gets it's own SurveyDiv react component'*/
       else{
         routesObject=this.props.routes;
+        if (data.length == 0) {
+              return (
+                  <div>
+                      You don't have any open surveys right now. You can
+                      <a href="/rawdump"> view</a> survey results or
+                      <a href="/surveys"> create</a> your own survey
+                      using the bar on the left.
+                  </div>
+              )
+        }
         var itemNodes = data.map(function (item) {
                 return (
                 <SurveyDiv
@@ -29,7 +39,6 @@ var Page = React.createClass({
           <div className="mdl-grid mdl-cell--12-col content">
             <div className="mainDiv">
               {itemNodes}
-              <SurveyCreationCard/>
             </div>
           </div>
         );
@@ -72,7 +81,7 @@ var SurveyDiv = React.createClass({
             question_id: questionID,
             response_data: survey
         };
-        
+
         //iterate through our question_responses looking to see if the question has previously been answered before, if so we replace the previous answer state by splicing and pushing
         var length = Object.keys(response.question_responses).length;
         for(var i=length-1; i >= 0; i--){
@@ -98,12 +107,12 @@ var SurveyDiv = React.createClass({
 			}.bind(this)
         });
     },
-    
-    //called in the ajax success function, sets showCard to false which will make the SurveyDiv stop rendering 
+
+    //called in the ajax success function, sets showCard to false which will make the SurveyDiv stop rendering
     removeCard: function() {
         this.setState({showCard: false});
     },
-    
+
     /*nextQuestion and prevQuestion have similar functionality to submit, just without the ajax, we check to see if it's been previously answered
     with a for loop looking to match on questionID and then splicing and pushing if we match (otherwise just pushing) but we also increment or decrement
     this.state.iter*/

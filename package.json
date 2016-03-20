@@ -8,7 +8,8 @@
   "license": "MIT",
   "description": "Our main repo for the SCQ senior project.",
   "dependencies": {
-    "material-ui": "^0.12.3"
+    "material-ui": "^0.12.3",
+    "lodash": "~4.6.1"
   },
   "devDependencies": {
     "del": "^2.0.2",
