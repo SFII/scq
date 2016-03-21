@@ -43,4 +43,4 @@ class SearchHandler(BaseHandler):
         except err:
             return self.set_status(400, "Something went wrong")
         self.set_status(200, "Success")
-        return self.write(tornado.escape.json_encode(search_results))
+        return tornado.escape.json_encode(search_results)
