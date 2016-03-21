@@ -44,4 +44,4 @@ class SearchHandler(BaseHandler):
             return self.set_status(400, "Something went wrong")
         self.set_status(200, "Success")
         logging.info(search_results);
-        return tornado.escape.json_encode(search_results)
+        return self.write(tornado.escape.json_encode(search_results))
