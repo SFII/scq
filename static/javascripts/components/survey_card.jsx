@@ -121,6 +121,7 @@ var SurveysPage = React.createClass({
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
                   <AddQuestion onAdding={this.handleAdding}/>
                   <FinishSurvey onSubmit={this.handleSubmit}/>
+                  <SearchCard routes={this.props.routes}/>
               </div>
           </div>
       );
@@ -427,8 +428,8 @@ var SurveyTitleCreation = React.createClass({
                 <input className="mdl-textfield__input"
                        type="text"
                        value={this.state.item_title}
-                       onChange={this.handleTitleChange}
-                /></h4>
+                       onChange={this.handleTitleChange}/>
+            </h4>
         );
     }
 });

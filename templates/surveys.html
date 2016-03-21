@@ -4,7 +4,8 @@
   var user_data={% raw user_info_json %};
   var routesObject = {
     surveys: "/api/surveys",
-    response: "/api/response"
+    response: "/api/response",
+    search: "/api/search"
   };
 
   ReactDOM.render(React.createElement(SurveysPage, {routes: routesObject}), document.getElementById('main-grid'));
