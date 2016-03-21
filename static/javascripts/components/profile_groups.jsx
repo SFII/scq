@@ -33,7 +33,7 @@ var ProfileGroups = React.createClass({
                 dataType: "json",
                 success: function(data){
                     var currentGroups = this.state.currentGroups
-                    currentGroups = data
+                    currentGroups = data;
                     console.log('success');
                     this.setState({
                         currentGroups: data,
@@ -64,6 +64,7 @@ var ProfileGroups = React.createClass({
     },
     
     render: function(){
+    
       var renderedGroups = this.state.currentGroups.map((group,i) => {
       if(this.state.currentGroups.length > 0){
         return (
@@ -76,6 +77,7 @@ var ProfileGroups = React.createClass({
         )
       }
       });
+      
       return(    
           <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
               <div className="mdl-card__title mdl-card--expand mdl-color--primary">

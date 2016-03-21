@@ -24,7 +24,13 @@ var SurveysPage = React.createClass({
         this.setState({item_title: surveyTitle});
     },
 
-
+    setRecipient: function(surveyRecipient, recipientType){
+        this.setState({
+            item_type: recipientType,
+            item_id: surveyRecipient,
+            item_name: surveyRecipient
+        });
+    },
     /*onChange of just about anything, we get an array of json's holding
     each question's data and update our state'*/
     updateQuestions: function(questionObj, questionKey){
@@ -115,13 +121,13 @@ var SurveysPage = React.createClass({
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <div style={{paddingLeft: "30px"}}className="mdl-card__supporting-text mdl-color-text--grey-600">
+                      <SearchCard routes={this.props.routes} setRecipient={this.setRecipient}/>
                       <SurveyTitleCreation titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
                       <h4>Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
                   <AddQuestion onAdding={this.handleAdding}/>
                   <FinishSurvey onSubmit={this.handleSubmit}/>
-                  <SearchCard routes={this.props.routes}/>
               </div>
           </div>
       );
