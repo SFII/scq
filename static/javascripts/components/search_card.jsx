@@ -28,7 +28,6 @@ var SearchCard = React.createClass({
             type: 'POST',
             data: JSON.stringify(searchObj),
             success: function(data){
-                console.log(Object.prototype.toString.call(data))
                 console.log(data);
                 this.setState({search_results:data});
             }.bind(this),
