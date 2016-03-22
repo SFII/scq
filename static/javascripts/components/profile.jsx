@@ -8,19 +8,7 @@ var ProfilePage = React.createClass({
     var gender = _.pull(extra_data[0].gender, user_gender);
     var ethnicity = _.pull(extra_data[0].ethnicity, user_ethnicity);
     var native_language = _.pull(extra_data[0].native_language, user_native_language);
-    var subscribed_groups = '';
     var user_status = '';
-    var num_sub_groups = user_data[0].subscribed_groups.length;
-    if ((num_sub_groups == 0) || (user_data[0].subscribed_groups == [''])) {
-      subscribed_groups = '';
-    } else {
-      for (var i = 0; i < num_sub_groups; i++) {
-        subscribed_groups += user_data[0].subscribed_groups[i];
-        if (i < num_sub_groups - 1) {
-          subscribed_groups += "\n";
-        }
-      }
-    }
     if (user_affiliation == "Student" || user_affiliation == "Both") {
       var user_status = user_data[0].status;
       var status = _.pull(extra_data[0].status, user_status);
@@ -34,7 +22,6 @@ var ProfilePage = React.createClass({
       user_ethnicity,
       user_native_language,
       user_status,
-      subscribed_groups,
       affiliation,
       gender,
       ethnicity,
@@ -102,8 +89,6 @@ var ProfilePage = React.createClass({
                          <option value={this.state.status[1]}>{this.state.status[1]}</option>
                          <option value={this.state.status[2]}>{this.state.status[2]}</option>
                        </select><br/>
-        Group(s) Subscribed: <br/><textarea name="subscribed_groups" cols="30" rows="5" value={this.state.subscribed_groups}
-                                    onChange={this.handleChange('subscribed_groups')} /><br/>
         <br/>
         <input type="submit" value="submit" />
       </form>
