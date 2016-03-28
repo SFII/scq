@@ -11,9 +11,9 @@ var SurveysPage = React.createClass({
     getInitialState: function(){
         return{
             numQuestion: 0,
-            item_id: "testGroup1",
+            item_id: "",
             item_type: "Group",
-            item_name: "testGroup1",
+            item_name: "",
             item_title: "",
             questions: [{title: "", response_format: "", options: []}]
         }
@@ -140,8 +140,9 @@ var QuestionDiv = React.createClass({
 render: function(){
     if(this.props.questions.length > 0){
         var questionNodes = this.props.questions.map(function(question) {
+          var fieldsKey = question.key + ".question"; 
           return (
-          <Fields questionKey={question.key} updateQuestions={this.props.updateQuestions}/>
+          <Fields questionKey={question.key} key={fieldsKey} updateQuestions={this.props.updateQuestions}/>
           );
         }.bind(this));
     }
@@ -225,7 +226,7 @@ var Fields = React.createClass({
                          <option value="freeResponse">Free Response</option>
                      </select>
                   </p>
-                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange}/>
+                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange} questionKey={this.props.questionKey}/>
           </div>
       );
     }
@@ -240,14 +241,14 @@ var OptionsDiv = React.createClass({
 
           return (
             <div>
-            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
+            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
             </div>
           );
 
         } else if(this.props.response_format == "trueOrFalse"){
           return (
           <div>
-          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
+          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
           </div>
           );
 
@@ -317,9 +318,11 @@ var CheckboxQuestion = React.createClass({
 
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
+            var optionKey = this.props.questionKey+".question."+option.key+".option";
+            var liKey = this.props.questionKey+".question."+option.key+".li";
             return(
-            <li className="mdl-list__item">  
-            <CheckboxOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
+            <li className="mdl-list__item" key={liKey}>  
+            <CheckboxOption key={optionKey} keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
         });
