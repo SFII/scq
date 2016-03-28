@@ -25,6 +25,14 @@
   {% include body/footer.html %}
   {% include body/scripts.html %}
   <script>
+  var routesObject = {
+      surveys: "/api/surveys",
+      response: "/api/response",
+      search: "/api/search",
+      groups: "/api/groups",
+      subscribe: "/api/subscribe",
+      search: "/api/search",
+  };
   {% block react %}
   //Default React
   {% end %}

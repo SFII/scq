@@ -1,10 +1,6 @@
 {% extends "layouts/base.html" %}
 {% block title %}Help{% end %}
 {% block react %}
-  var routesObject = {
-      surveys: "/api/surveys",
-      response: "/api/response"
-  };
   
   ReactDOM.render(React.createElement(helpPage, {routes: routesObject}), document.getElementById('main-grid'));
 {% end %}

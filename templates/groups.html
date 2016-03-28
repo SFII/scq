@@ -2,11 +2,6 @@
 {% block title %}Groups - create your own group or browse existing ones{% end %}
 {% block react %}
   var user_data={% raw user_info_json %};
-  var routesObject = {
-    surveys: "/api/surveys",
-    response: "/api/response",
-    search: "/api/search"
-  };
 
   ReactDOM.render(React.createElement(GroupsPage, {routes: routesObject}), document.getElementById('main-grid'));
 {% end %}
