@@ -124,6 +124,7 @@ class TestSurveyResults(BaseAsyncTest):
         return
 
     def _test_formatted_response_rating(self, formatted_result_data):
+        logging.info(formatted_result_data)
         bar_data = formatted_result_data['bar_data']
         series_data = bar_data['series'][0]
         self.assertNotEqual(bar_data, [])
@@ -141,7 +142,7 @@ class TestSurveyResults(BaseAsyncTest):
 
     def _test_formatted_response_multiple_choice(self, formatted_result_data):
         self.assertNotEqual(formatted_result_data['bar_data'], [])
-        self.assertNotEqual(formatted_result_data['pie_data'], [])
+        self.assertEqual(formatted_result_data['pie_data'], [])
         return
 
     def respond_to_surveys(self):
