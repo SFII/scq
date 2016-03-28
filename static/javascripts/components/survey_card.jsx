@@ -114,14 +114,13 @@ var SurveysPage = React.createClass({
           <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText="Create a Survey"/>
-<div style={{paddingLeft: "30px"}}className="mdl-card__supporting-text mdl-color-text--grey-600">
-                  <SurveyTitleCreation titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
-                  <h4>Questions:</h4>
+                  <div style={{paddingLeft: "30px"}}className="mdl-card__supporting-text mdl-color-text--grey-600">
+                      <SurveyTitleCreation titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
+                      <h4>Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
                   <AddQuestion onAdding={this.handleAdding}/>
                   <FinishSurvey onSubmit={this.handleSubmit}/>
-                  </div>
               </div>
           </div>
       );
