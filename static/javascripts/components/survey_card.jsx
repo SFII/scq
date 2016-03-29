@@ -11,9 +11,9 @@ var SurveysPage = React.createClass({
     getInitialState: function(){
         return{
             numQuestion: 0,
-            item_id: "testGroup1",
+            item_id: "",
             item_type: "Group",
-            item_name: "testGroup1",
+            item_name: "",
             item_title: "",
             questions: [{title: "", response_format: "", options: []}]
         }
