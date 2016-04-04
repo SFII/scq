@@ -46,8 +46,6 @@ var SurveysPage = React.createClass({
             }
         }
         this.setState({questions: questions});
-        console.log('update');
-        console.log(questions);
     },
 
     /*when we click finish survey, we prune the key field off of each question
