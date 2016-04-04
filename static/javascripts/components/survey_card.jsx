@@ -11,9 +11,9 @@ var SurveysPage = React.createClass({
     getInitialState: function(){
         return{
             numQuestion: 0,
-            item_id: "testGroup1",
+            item_id: "",
             item_type: "Group",
-            item_name: "testGroup1",
+            item_name: "",
             item_title: "",
             questions: [{title: "", response_format: "", options: []}]
         }
@@ -140,8 +140,9 @@ var QuestionDiv = React.createClass({
 render: function(){
     if(this.props.questions.length > 0){
         var questionNodes = this.props.questions.map(function(question) {
+          var fieldsKey = question.key + ".question"; 
           return (
-          <Fields questionKey={question.key} updateQuestions={this.props.updateQuestions}/>
+          <Fields questionKey={question.key} key={fieldsKey} updateQuestions={this.props.updateQuestions}/>
           );
         }.bind(this));
     }
@@ -177,28 +178,44 @@ var Fields = React.createClass({
     //updates this.state.title
     handleTitleChange: function(event) {
         this.setState({title: event.target.value});
-        this.update();
+        this.updateTitle(event.target.value);
     },
 
     //updates this.state.response_format
     handleResponseFormatChange: function(event) {
         this.setState({response_format: event.target.value});
-        this.update();
+        this.updateResponseFormat(event.target.value);
     },
 
     //updates this.state.options
     onOptionsChange: function(options){
         this.setState({options: options});
-        this.update();
+        this.updateOptions(options);
+    },
+    
+    updateTitle: function(title){
+        var questionObj={
+            title: title,
+            response_format: this.state.response_format,
+            options: this.state.options
+        };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
     },
 
-    //this is called whenever anything updates, sends the question data
-    //up to the highest layer real time.
-    update: function(){
+    updateResponseFormat: function(response_format){
+        var questionObj={
+            title: this.state.title,
+            response_format: response_format,
+            options: this.state.options
+        };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
+    },
+
+    updateOptions: function(options){
         var questionObj={
             title: this.state.title,
             response_format: this.state.response_format,
-            options: this.state.options
+            options: options
         };
         this.props.updateQuestions(questionObj, this.props.questionKey);
     },
@@ -225,7 +242,7 @@ var Fields = React.createClass({
                          <option value="freeResponse">Free Response</option>
                      </select>
                   </p>
-                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange}/>
+                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange} questionKey={this.props.questionKey}/>
           </div>
       );
     }
@@ -240,27 +257,25 @@ var OptionsDiv = React.createClass({
 
           return (
             <div>
-            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
+            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
             </div>
           );
 
         } else if(this.props.response_format == "trueOrFalse"){
           return (
           <div>
-          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
+          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
           </div>
           );
 
         } else if(this.props.response_format == "rating"){
           return (
-          <p> Select scale
-          </p>
+          <p></p>
           );
 
         } else if(this.props.response_format == "freeResponse"){
           return (
-          <p> Select maximum of words
-          </p>
+          <p></p>
           );
 
         } else {
@@ -317,9 +332,11 @@ var CheckboxQuestion = React.createClass({
 
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
+            var optionKey = this.props.questionKey+".question."+option.key+".option";
+            var liKey = this.props.questionKey+".question."+option.key+".li";
             return(
-            <li className="mdl-list__item">
-            <CheckboxOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
+            <li className="mdl-list__item" key={liKey}>  
+            <CheckboxOption key={optionKey} keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
         });
