@@ -17,7 +17,7 @@ class User(BaseModel):
     USER_ETHNICITIES = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Hispanic or Latino', 'Native Hawaiian or Other Pacific Islander', 'White', 'Other', NO_DISCLOSURE]
     USER_NATIVE_LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Korean', 'Chinese', 'Japanese', 'Russian', 'Arabic', 'Portuguese', 'Hindi', 'Other', NO_DISCLOSURE]
     USER_PRIMARY_AFFILIATION = ['Student', 'Faculty', 'Both']
-    USER_STATUS = ['Freshman', 'Sophomore', 'Junior', 'Senior']
+    USER_STATUS = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'Ph.D']
 
     # must be overridden
     def requiredFields(self):

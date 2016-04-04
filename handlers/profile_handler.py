@@ -28,6 +28,8 @@ class ProfileHandler(BaseHandler):
             data['subscribed_groups'] = []
         else:
             data['subscribed_groups'] = (self.get_argument('subscribed_groups', None, strip=True)).replace(' ', '').split(',')
+        if data['status'] == '':
+            data['status'] = user_data['status'] or "Freshman"
         verified = User().verify(data)
         if len(verified) != 0:
             logging.error('User: verification errors in POST profile page!')
