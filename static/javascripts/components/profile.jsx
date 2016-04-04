@@ -8,7 +8,8 @@ var ProfilePage = React.createClass({
     var gender = _.pull(extra_data[0].gender, user_gender);
     var ethnicity = _.pull(extra_data[0].ethnicity, user_ethnicity);
     var native_language = _.pull(extra_data[0].native_language, user_native_language);
-    var user_status = '';
+    var user_status = null;
+    var status = null;
     if (user_affiliation == "Student" || user_affiliation == "Both") {
       var user_status = user_data[0].status;
       var status = _.pull(extra_data[0].status, user_status);
@@ -27,7 +28,7 @@ var ProfilePage = React.createClass({
       ethnicity,
       native_language,
       status,
-      edit: false,
+      edit: false
     };
   },
   handleChange: function(key) {
@@ -38,6 +39,7 @@ var ProfilePage = React.createClass({
     }.bind(this);
   },
   handleClick: function(event) {
+    console.log({edit: !this.state.edit});
     this.setState({edit: !this.state.edit});
   },
   render: function(){
@@ -45,13 +47,14 @@ var ProfilePage = React.createClass({
       listStyleType: "none",
       fontSize: "20px"
     };
-    var edit_state = this.state.edit ? "edit mode: ON" : "edit mode: OFF";
-    if (edit_state == "edit mode: OFF") {
+    var academic_year = null;
+    if (this.state.user_affiliation != "Faculty") {
+      academic_year = (<li>Academic Year: {this.state.user_status}</li>);
+    }
+    if (this.state.edit == false) {
       return(
         <ul style={style}>
-          <p onClick={this.handleClick}>
-            Click to toggle. {edit_state}.
-          </p>
+          <button type="button" onClick={this.handleClick}>edit</button><br/>
           <li>Username: {this.state.username}</li>
           <li>Affiliation: {this.state.user_affiliation}</li>
           <li>Email: {this.state.email}</li>
@@ -59,16 +62,25 @@ var ProfilePage = React.createClass({
           <li>Gender: {this.state.user_gender}</li>
           <li>Ethnicity: {this.state.user_ethnicity}</li>
           <li>Native Language: {this.state.user_native_language}</li>
-          <li>Academic Year: {this.state.user_status}</li>
+          {academic_year}
         </ul>
       );
     } else {
+      var academic_year_options = null;
+      if (this.state.user_affiliation != "Faculty") {
+        academic_year_options = (
+          <li>Academic Year: <select name="status">
+                               <option value={this.state.user_status}>{this.state.user_status}</option>
+                               <option value={this.state.status[0]}>{this.state.status[0]}</option>
+                               <option value={this.state.status[1]}>{this.state.status[1]}</option>
+                               <option value={this.state.status[2]}>{this.state.status[2]}</option>
+                             </select></li>
+        );
+      }
       return(
         <ul style={style}>
         <form action="/profile" method="post">
-          <p onClick={this.handleClick}>
-            Click to toggle. {edit_state}.
-          </p>
+          <button type="button" onClick={this.handleClick}>edit</button><br/>
           Username: <input name="username" value={this.state.username} readOnly /><br/>
           Affiliation(s): <select name="primary_affiliation">
                             <option value={this.state.user_affiliation}>{this.state.user_affiliation}</option>
@@ -108,12 +120,7 @@ var ProfilePage = React.createClass({
                              <option value={this.state.native_language[10]}>{this.state.native_language[10]}</option>
                              <option value={this.state.native_language[11]}>{this.state.native_language[11]}</option>
                            </select><br/>
-          Academic Year: <select name="status">
-                           <option value={this.state.user_status}>{this.state.user_status}</option>
-                           <option value={this.state.status[0]}>{this.state.status[0]}</option>
-                           <option value={this.state.status[1]}>{this.state.status[1]}</option>
-                           <option value={this.state.status[2]}>{this.state.status[2]}</option>
-                         </select><br/>
+          {academic_year_options}
           <br/>
           <input type="submit" value="submit" />
         </form>
