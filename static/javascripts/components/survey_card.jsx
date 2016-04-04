@@ -275,7 +275,7 @@ var OptionsDiv = React.createClass({
 
 /* controls the data for our options fields*/
 var CheckboxQuestion = React.createClass({
-    
+
     getInitialState: function(){
         return{
             numOptions: 0,
@@ -318,7 +318,7 @@ var CheckboxQuestion = React.createClass({
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
             return(
-            <li className="mdl-list__item">  
+            <li className="mdl-list__item">
             <CheckboxOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
