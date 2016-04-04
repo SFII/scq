@@ -74,6 +74,8 @@ var ProfilePage = React.createClass({
                                <option value={this.state.status[0]}>{this.state.status[0]}</option>
                                <option value={this.state.status[1]}>{this.state.status[1]}</option>
                                <option value={this.state.status[2]}>{this.state.status[2]}</option>
+                               <option value={this.state.status[3]}>{this.state.status[3]}</option>
+                               <option value={this.state.status[4]}>{this.state.status[4]}</option>
                              </select></li>
         );
       }
