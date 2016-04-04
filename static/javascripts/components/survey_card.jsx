@@ -276,7 +276,7 @@ var OptionsDiv = React.createClass({
 
 /* controls the data for our options fields*/
 var CheckboxQuestion = React.createClass({
-    
+
     getInitialState: function(){
         return{
             numOptions: 0,

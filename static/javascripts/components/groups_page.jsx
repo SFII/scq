@@ -25,14 +25,14 @@ var CreateGroup = React.createClass({
                     </div>
                     <div className="mdl-cell mdl-cell--11-col">
                         <form action="/api/groups" method="POST">
-                            <div classname="mdl-textfield
+                            <div className="mdl-textfield
                                             mdl-js-textfield
                                             mdl-textfield--floating-label">
-                                <input style={{fontsize: "24px"}}
+                                <input style={{fontSize: "24px"}}
                                        type="text" name="groupname"
-                                       classname="mdl-textfield__input"></input>
-                                <label classname="mdl-textfield__label"
-                                       htmlfor="groupname">group name</label>
+                                       className="mdl-textfield__input"></input>
+                                <label className="mdl-textfield__label"
+                                       htmlFor="groupname">group name</label>
                             </div>
                             <GroupMembers/>
                             <input className="mdl-button
