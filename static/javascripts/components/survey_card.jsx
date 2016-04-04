@@ -46,6 +46,8 @@ var SurveysPage = React.createClass({
             }
         }
         this.setState({questions: questions});
+        console.log('update');
+        console.log(questions);
     },
 
     /*when we click finish survey, we prune the key field off of each question
@@ -178,28 +180,44 @@ var Fields = React.createClass({
     //updates this.state.title
     handleTitleChange: function(event) {
         this.setState({title: event.target.value});
-        this.update();
+        this.updateTitle(event.target.value);
     },
 
     //updates this.state.response_format
     handleResponseFormatChange: function(event) {
         this.setState({response_format: event.target.value});
-        this.update();
+        this.updateResponseFormat(event.target.value);
     },
 
     //updates this.state.options
     onOptionsChange: function(options){
         this.setState({options: options});
-        this.update();
+        this.updateOptions(options);
+    },
+    
+    updateTitle: function(title){
+        var questionObj={
+            title: title,
+            response_format: this.state.response_format,
+            options: this.state.options
+        };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
     },
 
-    //this is called whenever anything updates, sends the question data
-    //up to the highest layer real time.
-    update: function(){
+    updateResponseFormat: function(response_format){
+        var questionObj={
+            title: this.state.title,
+            response_format: response_format,
+            options: this.state.options
+        };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
+    },
+
+    updateOptions: function(options){
         var questionObj={
             title: this.state.title,
             response_format: this.state.response_format,
-            options: this.state.options
+            options: options
         };
         this.props.updateQuestions(questionObj, this.props.questionKey);
     },
@@ -254,14 +272,12 @@ var OptionsDiv = React.createClass({
 
         } else if(this.props.response_format == "rating"){
           return (
-          <p> Select scale
-          </p>
+          <p></p>
           );
 
         } else if(this.props.response_format == "freeResponse"){
           return (
-          <p> Select maximum of words
-          </p>
+          <p></p>
           );
 
         } else {
