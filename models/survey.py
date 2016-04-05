@@ -134,6 +134,7 @@ class Survey(BaseModel):
         results = super(Survey, self).verify(data, skipRequiredFields=skipRequiredFields, skipStrictSchema=skipStrictSchema)
         model_data = self._get_model_data(data)
         if model_data is None:
+            item_id = data.get('item_id', None)
             results.append(('item_id', "item_id {0} does not correspond to value in database".format(item_id)))
         return results
 
