@@ -79,6 +79,10 @@ class BaseModel:
             assert r.db(self.DB).table(table).get(data).run(self.conn) is not None, "id '{0}' does not exist in table {1}".format(data, table)
         return _exists
 
+    def is_id(self, data):
+        self.is_string(data)
+        assert (len(data) < 127), "id '{0}' must be 127 characters or fewer".format(data)
+
     def is_none(self, data):
         assert data is None, "Must be empty"
 
@@ -387,7 +391,9 @@ class BaseModel:
     def verify(self, data, skipRequiredFields=False, skipStrictSchema=False):
         requiredFields = [] if skipRequiredFields else self.requiredFields()
         strictSchema = False if skipStrictSchema else self.strictSchema()
-        return list(BaseModel.check_data(data, self.fields(), requiredFields, strictSchema))
+        fields = self.fields()
+        fields.update({'id': (self.is_id, )})
+        return list(BaseModel.check_data(data, fields, requiredFields, strictSchema))
 
     def get_all(self):
         table = self.__class__.__name__

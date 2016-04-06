@@ -156,9 +156,9 @@ class Survey(BaseModel):
     def get_formatted_results(self, survey_id):
         results = self.get_results(survey_id)
 
-        def get_pie_data(question_data):
+        def get_pie_data(question_data, question):
             return r.branch(
-                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
+                (r.expr(question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
                 question[1].group(lambda r: r).count().ungroup().map(
                     lambda gr: {
                         'name': gr['group'].coerce_to('string'),
@@ -168,8 +168,8 @@ class Survey(BaseModel):
                 []
             )
 
-        def get_bar_data(question_data):
-            r.branch(
+        def get_bar_data(question_data, question):
+            return r.branch(
                 (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
                 r.branch(
                     (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
@@ -192,9 +192,9 @@ class Survey(BaseModel):
                     'results': question[1],
                     'total_responses': question[1].count(),
                     'pie_data': r.db(self.DB).table('Question').get(question[0]).do(
-                        lambda question_data: get_pie_data(question_data)),
+                        lambda question_data: get_pie_data(question_data, question)),
                     'bar_data': r.db(self.DB).table('Question').get(question[0]).do(
-                        lambda question_data: get_bar_data(question_data))
+                        lambda question_data: get_bar_data(question_data, question))
                 }))
             ).run(self.conn)
             return formatted_results
