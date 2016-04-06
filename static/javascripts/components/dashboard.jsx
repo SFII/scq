@@ -15,9 +15,7 @@ var Page = React.createClass({
         if (data.length == 0) {
               return (
                   <div>
-                      You don't have any open surveys right now. You can
-                      <a href="/rawdump"> view</a> survey results or
-                      <a href="/surveys"> create</a> your own survey
+                      You don't have any open surveys right now. You can <a href="/rawdump">view</a> survey results or <a href="/surveys">create</a> your own survey
                       using the bar on the left.
                   </div>
               )
