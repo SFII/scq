@@ -4,4 +4,4 @@ tornado==4.2.1
 python-dateutil==2.4.2
 ldap3==0.9.9.2
 mock
-rethinkdb
+rethinkdb==2.1.0
