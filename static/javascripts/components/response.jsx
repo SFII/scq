@@ -10,7 +10,6 @@ var ResponseCard = React.createClass({
             dataType: "json",
             type: 'GET',
             success: function(results){
-                console.log(results) //TODO for debugging, remove me.
                 this.setState({results: results})
             }.bind(this),
             error: function(xhr, status, err){

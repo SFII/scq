@@ -32,11 +32,20 @@ var Page = React.createClass({
                 isInstructor={item.isInstructor}/>
                 );
         });
+          var answeredSurveys
+        if (itemNodes.length < 10) {
+          var ids = user_data[0].answered_surveys
+            ids.length = (10 - itemNodes.length)
+          answeredSurveys = ids.map(function(id, idx) {
+            return <ResponseCard surveyID={id} key={idx}/>
+          });
+        }
         //return the surveyDiv's in an mdl-grid with a SurveyCreationCard below it (This will probably change after Survey Creation is migrated)
         return (
           <div className="mdl-grid mdl-cell--12-col content">
             <div className="mainDiv">
               {itemNodes}
+              {answeredSurveys}
             </div>
           </div>
         );
@@ -58,7 +67,7 @@ var SurveyDiv = React.createClass({
                     survey_id: 0,
                     question_responses:[]
                 },
-                responded: true, //TODO for debugging, please change to false before merging
+                responded: false,
         });
     },
     
