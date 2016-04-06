@@ -158,7 +158,7 @@ class Survey(BaseModel):
 
         def get_pie_data(question_data, question):
             return r.branch(
-                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
+                (r.expr(question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
                 question[1].group(lambda r: r).count().ungroup().map(
                     lambda gr: {
                         'name': gr['group'].coerce_to('string'),
@@ -169,7 +169,7 @@ class Survey(BaseModel):
             )
 
         def get_bar_data(question_data, question):
-            r.branch(
+            return r.branch(
                 (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
                 r.branch(
                     (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
