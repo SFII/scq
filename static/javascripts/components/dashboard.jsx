@@ -58,6 +58,7 @@ var SurveyDiv = React.createClass({
                     survey_id: 0,
                     question_responses:[]
                 },
+                responded: true, //TODO for debugging, please change to false before merging
         });
     },
     
@@ -96,8 +97,7 @@ var SurveyDiv = React.createClass({
             type: 'POST',
             data: JSON.stringify(response),
             success: function(data){
-                console.log(response);
-                this.removeCard();
+                this.setState({responded: true});
             }.bind(this),
 			error: function(xhr, status,err){
                 console.log(this.state.response);
@@ -167,6 +167,11 @@ var SurveyDiv = React.createClass({
     },
 
     render: function() {
+        if (this.state.responded) {
+            return (
+                <ResponseCard {...this.props}/>
+            )
+        } else
         /*if showCard state is true, then we render <Card>, questionID, title, options, response_format vary depending on this.state.iter
         which is manipulated by the previous and next buttons so we can have all the survey's questions on one card.*/
         if(this.state.showCard == true) {
