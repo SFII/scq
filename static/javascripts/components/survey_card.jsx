@@ -79,43 +79,51 @@ var SurveysPage = React.createClass({
     option filed in a question, then we post a final json to the api*/
 
     handleSubmit: function(){
-        var questions = this.state.questions;
-        var questionsLength = questions.length;
-        var optionsLength;
-        var finalOptions = [];
-        for(var i = questionsLength-1; i >=0; i--){
-            delete questions[i].key;
-            finalOptions = [];
-            optionsLength = questions[i].options.length;
-            for(var i2 = optionsLength-1; i2 >= 0; i2--){
-                finalOptions.push(questions[i].options[i2].title)
-            }
-            questions[i].options = finalOptions;
-        }
-        var surveyObj = {
+        
+        var surveyTestObj = {
             item_id : this.state.item_id,
-            item_type : this.state.item_type,
-            item_name : this.state.item_name,
-            questions : questions
+            item_type: this.state.item_type,
+            item_name: this.state.item_name,
+            questions: this.state.questions
         };
-        //console.log(surveyObj);
-
-        var test = this.checkSurvey(surveyObj);
+        
+        var test = this.checkSurvey(surveyTestObj);
 
         if (test==true){
-        $.ajax({
-            url: this.props.routes.surveys,
-			      contentType: 'application/json',
-            type: 'POST',
-            data: JSON.stringify(surveyObj),
-            success: function(data){
-                console.log('Post success');
-            }.bind(this),
-			error: function(xhr, status,err){
-				console.error("/api/response", status, err.toString());
-			}.bind(this)
-        });
-      }
+            var questions = this.state.questions;
+            var questionsLength = questions.length;
+            var optionsLength;
+            var finalOptions = [];
+            for(var i = questionsLength-1; i >=0; i--){
+                delete questions[i].key;
+                finalOptions = [];
+                optionsLength = questions[i].options.length;
+                for(var i2 = optionsLength-1; i2 >= 0; i2--){
+                    finalOptions.push(questions[i].options[i2].title)
+                }
+                questions[i].options = finalOptions;
+            }
+            var surveyObj = {
+                item_id : this.state.item_id,
+                item_type : this.state.item_type,
+                item_name : this.state.item_name,
+                questions : questions
+            };
+
+            $.ajax({
+                url: this.props.routes.surveys,
+                      contentType: 'application/json',
+                type: 'POST',
+                data: JSON.stringify(surveyObj),
+                success: function(data){
+                    console.log(surveyObj);
+                    console.log('Post success');
+                }.bind(this),
+                error: function(xhr, status,err){
+                    console.error("/api/response", status, err.toString());
+                }.bind(this)
+            });
+        }
     },
 
     //mdl in new questions, this probably needs to be moved or repeated
