@@ -27,20 +27,31 @@ var SurveysPage = React.createClass({
     checkSurvey: function(survey){
         //console.log(survey);
         //check title
-        if (survey.item_name ===""){
+        console.log(survey);
+        if (survey.item_id ==""){
+            alert("Specify a group to post to");
+            return false;
+        }
+        if (survey.item_name ==""){
             alert("Complete the Survey Title");
             return false;
         }
         //check questions
         for (var i = 0; i< survey.questions.length; i++){
-            if(survey.questions[i].title === ""){
+            if(survey.questions[i].title == ""){
                 alert("Every Question should have a title.");
                 return false;
             }
-            if(survey.questions[i].response_format === "multipleChoice" || survey.questions[i].response_format ==="trueOrFalse"){
+            if(survey.questions[i].response_format == "multipleChoice" || survey.questions[i].response_format =="trueOrFalse"){
                 if(survey.questions[i].options.length<2){
                 alert("Add at least two options.");
                 return false;
+                }
+            }
+            for(var i2 = 0; i2 < survey.questions[i].options.length; i2++){
+                if(survey.questions[i].options[i2].title == ""){
+                    alert("Options should have a title");
+                    return false;
                 }
             }
 
@@ -54,7 +65,6 @@ var SurveysPage = React.createClass({
         this.setState({
             item_type: recipientType,
             item_id: surveyRecipient,
-            item_name: surveyRecipient
         });
     },
     /*onChange of just about anything, we get an array of json's holding
