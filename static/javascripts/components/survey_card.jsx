@@ -116,8 +116,7 @@ var SurveysPage = React.createClass({
                 type: 'POST',
                 data: JSON.stringify(surveyObj),
                 success: function(data){
-                    console.log(surveyObj);
-                    console.log('Post success');
+                    location.reload();
                 }.bind(this),
                 error: function(xhr, status,err){
                     console.error("/api/response", status, err.toString());
