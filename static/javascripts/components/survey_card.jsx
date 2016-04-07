@@ -80,14 +80,14 @@ var SurveysPage = React.createClass({
 
     handleSubmit: function(){
         
-        var surveyTestObj = {
+        var surveyObj = {
             item_id : this.state.item_id,
             item_type: this.state.item_type,
             item_name: this.state.item_name,
             questions: this.state.questions
         };
         
-        var test = this.checkSurvey(surveyTestObj);
+        var test = this.checkSurvey(surveyObj);
 
         if (test==true){
             var questions = this.state.questions;
@@ -103,12 +103,8 @@ var SurveysPage = React.createClass({
                 }
                 questions[i].options = finalOptions;
             }
-            var surveyObj = {
-                item_id : this.state.item_id,
-                item_type : this.state.item_type,
-                item_name : this.state.item_name,
-                questions : questions
-            };
+            
+            surveyObj.questions = questions;
 
             $.ajax({
                 url: this.props.routes.surveys,
