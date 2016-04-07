@@ -25,13 +25,12 @@ var SurveysPage = React.createClass({
 
     /*checks that all the required fields are filled*/
     checkSurvey: function(survey){
-        //console.log(survey);
-        //check title
-        console.log(survey);
+        //check group
         if (survey.item_id ==""){
             alert("Specify a group to post to");
             return false;
         }
+        //check title
         if (survey.item_name ==""){
             alert("Complete the Survey Title");
             return false;
@@ -42,12 +41,14 @@ var SurveysPage = React.createClass({
                 alert("Every Question should have a title.");
                 return false;
             }
+            //two options minimum
             if(survey.questions[i].response_format == "multipleChoice" || survey.questions[i].response_format =="trueOrFalse"){
                 if(survey.questions[i].options.length<2){
                 alert("Add at least two options.");
                 return false;
                 }
             }
+            //options must have titles
             for(var i2 = 0; i2 < survey.questions[i].options.length; i2++){
                 if(survey.questions[i].options[i2].title == ""){
                     alert("Options should have a title");
