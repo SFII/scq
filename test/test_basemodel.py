@@ -37,7 +37,7 @@ class TestBaseModel(BaseAsyncTest):
     mock_x = 0
 
     def setUpClass():
-        # logging.disable(logging.CRITICAL)
+        logging.disable(logging.CRITICAL)
         # Initializes Mockmodel Table
         MockModel().init(BaseAsyncTest.database_name, BaseAsyncTest.conn)
         return

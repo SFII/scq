@@ -15,9 +15,7 @@ var Page = React.createClass({
         if (data.length == 0) {
               return (
                   <div>
-                      You don't have any open surveys right now. You can
-                      <a href="/rawdump"> view</a> survey results or
-                      <a href="/surveys"> create</a> your own survey
+                      You don't have any open surveys right now. You can <a href="/rawdump">view</a> survey results or <a href="/surveys">create</a> your own survey
                       using the bar on the left.
                   </div>
               )
@@ -34,11 +32,20 @@ var Page = React.createClass({
                 isInstructor={item.isInstructor}/>
                 );
         });
+          var answeredSurveys
+        if (itemNodes.length < 10) {
+          var ids = user_data[0].answered_surveys
+            ids.length = (10 - itemNodes.length)
+          answeredSurveys = ids.map(function(id, idx) {
+            return <ResponseCard surveyID={id} key={idx}/>
+          });
+        }
         //return the surveyDiv's in an mdl-grid with a SurveyCreationCard below it (This will probably change after Survey Creation is migrated)
         return (
           <div className="mdl-grid mdl-cell--12-col content">
             <div className="mainDiv">
               {itemNodes}
+              {answeredSurveys}
             </div>
           </div>
         );
@@ -60,6 +67,7 @@ var SurveyDiv = React.createClass({
                     survey_id: 0,
                     question_responses:[]
                 },
+                responded: false,
         });
     },
     
@@ -98,8 +106,7 @@ var SurveyDiv = React.createClass({
             type: 'POST',
             data: JSON.stringify(response),
             success: function(data){
-                console.log(response);
-                this.removeCard();
+                this.setState({responded: true});
             }.bind(this),
 			error: function(xhr, status,err){
                 console.log(this.state.response);
@@ -169,6 +176,11 @@ var SurveyDiv = React.createClass({
     },
 
     render: function() {
+        if (this.state.responded) {
+            return (
+                <ResponseCard {...this.props}/>
+            )
+        } else
         /*if showCard state is true, then we render <Card>, questionID, title, options, response_format vary depending on this.state.iter
         which is manipulated by the previous and next buttons so we can have all the survey's questions on one card.*/
         if(this.state.showCard == true) {

@@ -14,14 +14,40 @@ var SurveysPage = React.createClass({
             item_id: "",
             item_type: "Group",
             item_name: "",
-            item_title: "",
             questions: [{title: "", response_format: "", options: []}]
         }
     },
 
     /*update title of survey*/
     updateTitle: function(surveyTitle){
-        this.setState({item_title: surveyTitle});
+        this.setState({item_name: surveyTitle});
+    },
+
+    /*checks that all the required fields are filled*/
+    checkSurvey: function(survey){
+        //console.log(survey);
+        //check title
+        if (survey.item_name ===""){
+            alert("Complete the Survey Title");
+            return false;
+        }
+        //check questions
+        for (var i = 0; i< survey.questions.length; i++){
+            if(survey.questions[i].title === ""){
+                alert("Every Question should have a title.");
+                return false;
+            }
+            if(survey.questions[i].response_format === "multipleChoice" || survey.questions[i].response_format ==="trueOrFalse"){
+                if(survey.questions[i].options.length<2){
+                alert("Add at least two options.");
+                return false;
+                }
+            }
+
+
+        }
+        return true;
+
     },
 
     setRecipient: function(surveyRecipient, recipientType){
@@ -70,12 +96,13 @@ var SurveysPage = React.createClass({
             item_id : this.state.item_id,
             item_type : this.state.item_type,
             item_name : this.state.item_name,
-            item_title: this.state.item_title,
             questions : questions
         };
-        console.log(surveyObj);
+        //console.log(surveyObj);
 
+        var test = this.checkSurvey(surveyObj);
 
+        if (test==true){
         $.ajax({
             url: this.props.routes.surveys,
 			      contentType: 'application/json',
@@ -88,6 +115,7 @@ var SurveysPage = React.createClass({
 				console.error("/api/response", status, err.toString());
 			}.bind(this)
         });
+      }
     },
 
     //mdl in new questions, this probably needs to be moved or repeated
@@ -122,7 +150,7 @@ var SurveysPage = React.createClass({
                   <TitleSection titleText="Create a Survey"/>
                   <div style={{paddingLeft: "30px"}}className="mdl-card__supporting-text mdl-color-text--grey-600">
                       <SearchCard routes={this.props.routes} setRecipient={this.setRecipient}/>
-                      <SurveyTitleCreation titleSurvey={this.state.item_title} updateTitle={this.updateTitle} />
+                      <SurveyTitleCreation titleSurvey={this.state.item_name} updateTitle={this.updateTitle} />
                       <h4>Questions:</h4>
                   </div>
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
@@ -140,8 +168,9 @@ var QuestionDiv = React.createClass({
 render: function(){
     if(this.props.questions.length > 0){
         var questionNodes = this.props.questions.map(function(question) {
+          var fieldsKey = question.key + ".question";
           return (
-          <Fields questionKey={question.key} updateQuestions={this.props.updateQuestions}/>
+          <Fields questionKey={question.key} key={fieldsKey} updateQuestions={this.props.updateQuestions}/>
           );
         }.bind(this));
     }
@@ -177,28 +206,44 @@ var Fields = React.createClass({
     //updates this.state.title
     handleTitleChange: function(event) {
         this.setState({title: event.target.value});
-        this.update();
+        this.updateTitle(event.target.value);
     },
 
     //updates this.state.response_format
     handleResponseFormatChange: function(event) {
         this.setState({response_format: event.target.value});
-        this.update();
+        this.updateResponseFormat(event.target.value);
     },
 
     //updates this.state.options
     onOptionsChange: function(options){
         this.setState({options: options});
-        this.update();
+        this.updateOptions(options);
     },
 
-    //this is called whenever anything updates, sends the question data
-    //up to the highest layer real time.
-    update: function(){
+    updateTitle: function(title){
+        var questionObj={
+            title: title,
+            response_format: this.state.response_format,
+            options: this.state.options
+        };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
+    },
+
+    updateResponseFormat: function(response_format){
+        var questionObj={
+            title: this.state.title,
+            response_format: response_format,
+            options: this.state.options
+        };
+        this.props.updateQuestions(questionObj, this.props.questionKey);
+    },
+
+    updateOptions: function(options){
         var questionObj={
             title: this.state.title,
             response_format: this.state.response_format,
-            options: this.state.options
+            options: options
         };
         this.props.updateQuestions(questionObj, this.props.questionKey);
     },
@@ -225,7 +270,7 @@ var Fields = React.createClass({
                          <option value="freeResponse">Free Response</option>
                      </select>
                   </p>
-                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange}/>
+                  <OptionsDiv response_format={this.state.response_format} onOptionsChange={this.onOptionsChange} questionKey={this.props.questionKey}/>
           </div>
       );
     }
@@ -240,27 +285,25 @@ var OptionsDiv = React.createClass({
 
           return (
             <div>
-            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
+            <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
             </div>
           );
 
         } else if(this.props.response_format == "trueOrFalse"){
           return (
           <div>
-          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange}/>
+          <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
           </div>
           );
 
         } else if(this.props.response_format == "rating"){
           return (
-          <p> Select scale
-          </p>
+          <p></p>
           );
 
         } else if(this.props.response_format == "freeResponse"){
           return (
-          <p> Select maximum of words
-          </p>
+          <p></p>
           );
 
         } else {
@@ -317,9 +360,11 @@ var CheckboxQuestion = React.createClass({
 
     render: function(){
         var renderedOptions = this.state.options.map((option, i) => {
+            var optionKey = this.props.questionKey+".question."+option.key+".option";
+            var liKey = this.props.questionKey+".question."+option.key+".li";
             return(
-            <li className="mdl-list__item">
-            <CheckboxOption keyProp={option.key} onOptionChange={this.onOptionChange}/>
+            <li className="mdl-list__item" key={liKey}>
+            <CheckboxOption key={optionKey} keyProp={option.key} onOptionChange={this.onOptionChange}/>
             </li>
             );
         });
@@ -418,13 +463,13 @@ var SurveyTitleCreation = React.createClass({
     //set initial value
     getInitialState: function() {
         return {
-            item_title: '',
+            item_name: '',
         }
     },
 
     //updates this.state.title
     handleTitleChange: function(event) {
-        this.setState({item_title: event.target.value});
+        this.setState({item_name: event.target.value});
         this.props.updateTitle(event.target.value);
     },
 
@@ -433,7 +478,7 @@ var SurveyTitleCreation = React.createClass({
             <h4>Survey Title:
                 <input className="mdl-textfield__input"
                        type="text"
-                       value={this.state.item_title}
+                       value={this.state.item_name}
                        onChange={this.handleTitleChange}/>
             </h4>
         );
