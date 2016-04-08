@@ -1,10 +1,88 @@
 {% extends "layouts/base.html" %}
 {% block title %}Help{% end %}
-{% block react %}
-  
-  ReactDOM.render(React.createElement(helpPage, {routes: routesObject}), document.getElementById('main-grid'));
-{% end %}
 {% block content %}
   <div class = "mdl-grid content" id="main-grid">
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Information Collection Policy
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            TBD
+        </div>
+      </div>
+      
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Censorship Policy
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            TBD
+        </div>
+      </div>
+      
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Contact Us!
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            TBD
+        </div>
+      </div>
+      
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Groups
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            Upon creation surveys are sent to a group to be answered by it's members. Groups 
+            are user created and in order to respond to a survey you must be subscribed to the
+            group the survey was sent to.
+        </div>
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Group Creation
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            First navigate to the Group page through the navigation bar. You will see several
+            fields, you'll need to enter a unique group name at the top as well as  users that 
+            you wish to invite to your new group upon creation in the fields below. Additional 
+            fields to invite users will appear as you fill them out. Click Submit when you're 
+            finished!
+        </div>
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Group Management
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            First navigate to the Profile page through the navigation bar. You'll see a My Groups 
+            section as well as a Subscribe to a Group section at the bottom of the page. If you 
+            want to unsubscribe from a group and no longer be able to see or reply to that groups
+            surveys, click the orange Unsubscribe button to the right of the group. If you wish to 
+            see and be able to responsd to a groups surveys you must enter the groups name into the
+            field labeled "GroupID here..." and then click the orange Subscribe button. 
+        </div>
+      </div>
+
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title mdl-color--primary">
+            <h2 class="mdl-card__title-text">
+                Surveys
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            Surveys are a collection of Free Response, Multiple Choice, Single Choice, and Rating
+            questions that can be sent to a group. 
+        </div>
+      </div>
   </div>
 {% end %}
