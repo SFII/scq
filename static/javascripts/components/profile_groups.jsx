@@ -68,7 +68,7 @@ var ProfileGroups = React.createClass({
       var renderedGroups = this.state.currentGroups.map((group,i) => {
       if(this.state.currentGroups.length > 0){
         return (
-        <GroupDiv key={group.id} unsubscribeGroup={this.unsubscribeGroup} groupID = {group}/>
+        <GroupDiv key={i} unsubscribeGroup={this.unsubscribeGroup} groupID = {group}/>
         )
       }
       else{
