@@ -25,7 +25,7 @@ var ProfileGroups = React.createClass({
             }.bind(this)
         });
     },
-        
+
     refreshData: function(){
         $.ajax({
                 url: this.props.routes.groups,
@@ -44,7 +44,7 @@ var ProfileGroups = React.createClass({
                 }.bind(this)
         });
     },
-    
+
     componentDidMount: function(){
         $.ajax({
                 url: this.props.routes.groups,
@@ -62,9 +62,9 @@ var ProfileGroups = React.createClass({
                 }.bind(this)
         });
     },
-    
+
     render: function(){
-    
+
       var renderedGroups = this.state.currentGroups.map((group,i) => {
       if(this.state.currentGroups.length > 0){
         return (
@@ -77,21 +77,29 @@ var ProfileGroups = React.createClass({
         )
       }
       });
-      
-      return(    
+
+      return(
           <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
               <div className="mdl-card__title mdl-card--expand mdl-color--primary">
                 <h2 className="mdl-card__title-text"> My Groups </h2>
-              </div>  
+              </div>
               <div className="mdl-cell mdl-cell--12-col">
                 <ul className= "mdl-list">
                     {renderedGroups}
                 </ul>
               </div>
-            <div className="mdl-card__title mdl-card--expand mdl-color--primary">
-              <h2 className="mdl-card__title-text"> Subscribe to a Group </h2>
-            </div>  
-            <SubscribeDiv refreshData={this.refreshData} routes={this.props.routes}/>
+              <div className="mdl-card__title mdl-card--expand mdl-color--primary">
+                <h2 className="mdl-card__title-text"> Pending Groups </h2>
+              </div>
+              <div className="mdl-cell mdl-cell--12-col">
+                <ul className= "mdl-list">
+                    {''}
+                </ul>
+              </div>
+              <div className="mdl-card__title mdl-card--expand mdl-color--primary">
+                <h2 className="mdl-card__title-text"> Subscribe to a Group </h2>
+              </div>
+              <SubscribeDiv refreshData={this.refreshData} routes={this.props.routes}/>
           </div>
       );
     }
@@ -103,7 +111,7 @@ var GroupDiv = React.createClass({
         var id = this.props.groupID;
         this.props.unsubscribeGroup(id);
     },
-    
+
     render: function(){
       var li_key = this.props.groupID + "." + "li";
       var span_key = this.props.groupID + "." + "span";
@@ -119,24 +127,24 @@ var GroupDiv = React.createClass({
                 </span>
                 <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={this.clickHandler}>
                 Unsubscribe
-          </button>    
+          </button>
             </li>
         )
     }
 });
 
 var SubscribeDiv = React.createClass({
-    
+
     getInitialState: function(){
         return{
             group: ''
         }
     },
-    
+
     handleChange: function(e){
         this.setState({group: e.target.value});
     },
-    
+
     subscribe: function(){
         var subJSON = {
             "id": this.state.group,
@@ -154,16 +162,16 @@ var SubscribeDiv = React.createClass({
             error: function(xhr, status,err){
                 console.log('error');
             }.bind(this)
-        });    
+        });
     },
-    
+
     render: function(){
         return(
         <span>
           <div className="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--8-col">
               <input className="mdl-textfield__input"
-              type="text" 
-              value={this.state.group} 
+              type="text"
+              value={this.state.group}
               onChange={this.handleChange}/>
               <label className="mdl-textfield__label">GroupID here...</label>
           </div>
