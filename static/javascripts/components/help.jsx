@@ -189,7 +189,7 @@ var SurveysHelp = React.createClass({
                         </li>
                         <li className="mdl-list__item">
                             Rating Scale: A question with a slider, you can drag the slider to answer the question with
-                            some value between 1 and 10
+                            some value between 0 and 10
                         </li>
                         <li className="mdl-list__item">
                             Free Response: A question with a textbox, you type in your response to the question 
