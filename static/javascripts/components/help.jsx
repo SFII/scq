@@ -2,46 +2,76 @@ var HelpPage = React.createClass({
 
     render: function(){
         return(
-        <GroupsHelp />
-        <SurveysHelp />
-        <Censorship />
-        <InformationCollection />
+            <div className="mdl-cell mdl-cell--12-col">
+                <GroupsHelp />
+                <SurveysHelp />
+                <Censorship />
+                <InformationCollection />
+            </div>
         );
     }
 });
 
 var GroupsHelp = React.createClass({
+    
+    getInitialState: function(){
+        return({
+            expanded: "false"
+        });
+    },
+    
+    expand: function(){
+        this.setState({
+            expanded: "true"
+        });
+    },
+    
+    contract: function(){
+        this.setState({
+            expanded: "false"
+        });
+    },
+    
     render: function(){
+    if(this.state.expanded == "true"){
         return(
-          <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-            <div class="mdl-card__title mdl-color--primary">
-                <h2 class="mdl-card__title-text">
-                    Groups
-                </h2>
+          <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Groups
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.contract} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">remove</i>
+                    </button>
+                </div>
             </div>
-            <div class="mdl-card__supporting-text">
+            <div className="mdl-card__supporting-text">
                 Upon creation surveys are sent to a group to be answered by it's members. Groups 
                 are user created and in order to respond to a survey you must be subscribed to the
                 group the survey was sent to.
             </div>
-            <div class="mdl-card__title mdl-color--accent">
-                <h2 class="mdl-card__title-text">
+            <div className="mdl-card__title mdl-color--accent">
+                <h2 className="mdl-card__title-text">
                     Group Creation
                 </h2>
             </div>
-            <div class="mdl-card__supporting-text">
+            <div className="mdl-card__supporting-text">
                 First navigate to the Group page through the navigation bar. You will see several
                 fields, you'll need to enter a unique group name at the top as well as  users that 
                 you wish to invite to your new group upon creation in the fields below. Additional 
                 fields to invite users will appear as you fill them out. Click Submit when you're 
                 finished!
             </div>
-            <div class="mdl-card__title mdl-color--accent">
-                <h2 class="mdl-card__title-text">
+            <div className="mdl-card__title mdl-color--accent">
+                <h2 className="mdl-card__title-text">
                     Group Management
                 </h2>
             </div>
-            <div class="mdl-card__supporting-text">
+            <div className="mdl-card__supporting-text">
                 First navigate to the Profile page through the navigation bar. You'll see a My Groups 
                 section as well as a Subscribe to a Group section at the bottom of the page. If you 
                 want to unsubscribe from a group and no longer be able to see or reply to that groups
@@ -52,27 +82,75 @@ var GroupsHelp = React.createClass({
           </div>
         );
     }
+    else{
+        return(
+        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Groups
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.expand} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">add</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        );
+    }
+    }
 });
 
 var SurveysHelp = React.createClass({
+
+    getInitialState: function(){
+        return({
+            expanded: "false"
+        });
+    },
+    
+    expand: function(){
+        this.setState({
+            expanded: "true"
+        });
+    },
+    
+    contract: function(){
+        this.setState({
+            expanded: "false"
+        });
+    },
+    
     render:function(){
+    if(this.state.expanded == "true"){
         return(
-              <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-                <div class="mdl-card__title mdl-color--primary">
-                    <h2 class="mdl-card__title-text">
-                        Surveys
-                    </h2>
+              <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+                <div className="mdl-card__title mdl-color--primary">
+                    <div className="mdl-cell mdl-cell--6-col">
+                        <h2 className="mdl-card__title-text">
+                            Surveys
+                        </h2>
+                    </div>
+                    <div className="mdl-layout-spacer"></div>
+                    <div className="mdl-cell mdl-cell--1-col">
+                        <button onClick={this.contract} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                          <i className="material-icons">remove</i>
+                        </button>
+                    </div>
                 </div>
-                <div class="mdl-card__supporting-text">
+                <div className="mdl-card__supporting-text">
                     Surveys are a collection of Free Response, Multiple Choice, Single Choice, and Rating
                     questions that can be sent to a group. 
                 </div>
-                <div class="mdl-card__title mdl-color--accent">
-                    <h2 class="mdl-card__title-text">
+                <div className="mdl-card__title mdl-color--accent">
+                    <h2 className="mdl-card__title-text">
                         Creating a Survey
                     </h2>
                 </div>
-                <div class="mdl-card__supporting-text">
+                <div className="mdl-card__supporting-text">
                     First navigate to the Surveys page through the navigation bar. At the top of the Create a Survey section
                     you'll see a field labeled "Search for Group here...", you'll have to search for the group you want the
                     survey to be sent to by typing in at least part of the name of the group and then clicking Search. After 
@@ -84,12 +162,12 @@ var SurveysHelp = React.createClass({
                     options, to add additional options (you need at least two) click the + button next to "Add Option", name the
                     options by filling in their fields. 
                 </div>
-                <div class="mdl-card__title mdl-color--accent">
-                    <h2 class="mdl-card__title-text">
+                <div className="mdl-card__title mdl-color--accent">
+                    <h2 className="mdl-card__title-text">
                         Responding to a Survey
                     </h2>
                 </div>
-                <div class="mdl-card__supporting-text">
+                <div className="mdl-card__supporting-text">
                     First navigate to the Home page through the navigation bar. If you belong to a Group which has a survey
                     you have yet to respond to it will be displayed on the page. Fill in your answers to 
                     each question and push Next until you've answered every question upon which you can click 
@@ -97,7 +175,7 @@ var SurveysHelp = React.createClass({
                     submission however your answers will be final.
                 </div>
                 <div className="mdl-card__title mdl-color--accent">
-                    <h2 class="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text">
                         Question Types
                     </h2>
                 </div>
@@ -121,38 +199,155 @@ var SurveysHelp = React.createClass({
               </div>
         );
     }
+    else{
+        return(
+        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Surveys
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.expand} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">add</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        );
+    }
+    }
 });
 
 var Censorship = React.createClass({
+
+    getInitialState: function(){
+        return({
+            expanded: "false"
+        });
+    },
+    
+    expand: function(){
+        this.setState({
+            expanded: "true"
+        });
+    },
+    
+    contract: function(){
+        this.setState({
+            expanded: "false"
+        });
+    },
+    
     render:function(){
+    if(this.state.expanded=="true"){
         return(
-          <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-            <div class="mdl-card__title mdl-color--primary">
-                <h2 class="mdl-card__title-text">
-                    Censorship Policy
-                </h2>
+          <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Censorship Policy
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.contract} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">remove</i>
+                    </button>
+                </div>
             </div>
-            <div class="mdl-card__supporting-text">
+            <div className="mdl-card__supporting-text">
                 TBD
             </div>
           </div>
         );
     }
+        
+    else{
+        return(
+        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Censorship Policy
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.expand} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">add</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        );
+    }
+    }
 });
 
 var InformationCollection = React.createClass({
+
+    getInitialState: function(){
+        return({
+            expanded: "false"
+        });
+    },
+    
+    expand: function(){
+        this.setState({
+            expanded: "true"
+        });
+    },
+    
+    contract: function(){
+        this.setState({
+            expanded: "false"
+        });
+    },
+    
     render:function(){
+    if(this.state.expanded=="true"){
         return(
-          <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-            <div class="mdl-card__title mdl-color--primary">
-                <h2 class="mdl-card__title-text">
-                    Information Collection Policy
-                </h2>
+          <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Information Collection Policy
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.contract} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">remove</i>
+                    </button>
+                </div>
             </div>
-            <div class="mdl-card__supporting-text">
+            <div className="mdl-card__supporting-text">
                 TBD
             </div>
           </div>
         );
+    }
+    else{
+        return(
+        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div className="mdl-card__title mdl-color--primary">
+                <div className="mdl-cell mdl-cell--6-col">
+                    <h2 className="mdl-card__title-text">
+                        Information Collection Policy
+                    </h2>
+                </div>
+                <div className="mdl-layout-spacer"></div>
+                <div className="mdl-cell mdl-cell--1-col">
+                    <button onClick={this.expand} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                      <i className="material-icons">add</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        );
+    }
     }
 })
