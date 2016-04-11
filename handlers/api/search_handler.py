@@ -44,3 +44,15 @@ class SearchHandler(BaseHandler):
             return self.set_status(400, "Something went wrong")
         self.set_status(200, "Success")
         return self.write(tornado.escape.json_encode(search_results))
+
+    def remove(self, useless, groups):
+        "Remove groups that are not useful for a user (eg duplicate, already member)"
+        return [group for group in groups if group not in useless]
+
+    def get(self):
+        user = self.get_current_user()
+        popular = Group().popular_groups()
+        relevant = Group().relevant_groups(user)
+        relevant = self.remove(popular, relevant)
+        json = tornado.escape.json_encode({'popular': popular, 'relevant': relevant})
+        return self.write(json)
