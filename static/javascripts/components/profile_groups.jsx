@@ -2,7 +2,7 @@ var ProfileGroups = React.createClass({
     getInitialState: function(){
         return({
             currentGroups: [],
-            pendingGroups: [],
+            pendingGroups: user_data[0].pending_groups,
         });
     },
 

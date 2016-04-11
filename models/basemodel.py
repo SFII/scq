@@ -195,12 +195,25 @@ class BaseModel:
         if row_id is None:
             logging.error("row_id cannot be None")
             return False
-        row_table = self.__class__.__name__
         user_table = 'User'
+        row_table = self.__class__.__name__
+        # TODO: remember to have a condition of length 8
+        if user_id[:4].isalpha():
+            user_list = list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn))
+            user_str = ", ".join(repr(e) for e in user_list)
+            user_dict = dict([user_str.strip('{}').split(":"), ])
+            logging.info('user_list is {0}'.format(user_list))
+            logging.info('list to dict is {0}'.format(user_dict))
+            user_id = user_dict['id']
+        logging.info('user_id is {0}'.format(user_id))
+        logging.info('row_id is {0}'.format(row_id))
+        # logging.info(list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn)))
+        # user_id = list(r.db(self.DB).table(user_table).filter({"username": "john"}).run(self.conn))
         user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
+        logging.info('user_data is {0}'.format(user_data))
         row_data = r.db(self.DB).table(row_table).get(row_id).run(self.conn)
         if user_data is None:
-            logging.error("User {0} does not exist".format(user_data))
+            logging.error("User {0} does not exist".format(user_id))
             return False
         if row_data is None:
             logging.error("{0} {1} does not exist".format(row_table, row_data))
