@@ -189,9 +189,8 @@ class BaseModel:
     Something weird is going on in this method, or in Group.subscribe_user method.
     The first call to this method gives an actual 'id' of the user, but the calls
     after that will give username instead. That is why I have popped off the first
-    member in group_api_hander (that is the first name in the field of members).
-    Note: only half of the code is being used here since I have popped off the
-    first member. Every call to this method are 'submembers'.
+    member in group_api_hander (that is the first name in the field of members
+    which is a duplicate of the creator).
     """
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
@@ -228,7 +227,6 @@ class BaseModel:
                 user_subscription = list(set(user_subscription))
                 r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
             else:
-                logging.info("I AM A SUBMEMBER GOING INTO USER()-------------------------- ")
                 user_pending = user_data.get("pending_groups", [])
                 user_pending.append(row_id)
                 user_pending = list(set(user_pending))
@@ -242,7 +240,6 @@ class BaseModel:
             subscribers = list(set(subscribers))
             return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
         else:
-            logging.info("I AM A SUBMEMBER GOING INTO GROUP()-------------------------- ")
             penders = row_data['penders']
             penders.append(user_id)
             penders = list(set(penders))
@@ -282,6 +279,43 @@ class BaseModel:
         except ValueError:
             pass
         return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+
+    def remove_pending_user(self, user_id, row_id, user_pending_name=None):
+        """
+        removes a user id to a model's pending list.
+        """
+        if user_id is None:
+            logging.error("user_id cannot be None")
+            return False
+        if row_id is None:
+            logging.error("row_id cannot be None")
+            return False
+        row_table = self.__class__.__name__
+        user_table = 'User'
+        user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
+        row_data = r.db(self.DB).table(row_table).get(row_id).run(self.conn)
+        if user_data is None:
+            logging.error("User {0} does not exist".format(user_data))
+            return False
+        if row_data is None:
+            logging.error("{0} {1} does not exist".format(row_table, row_data))
+            return False
+        if user_pending_name is not None:
+            user_pending = user_data.get(user_pending_name, [])
+            try:
+                user_pending.remove(row_id)
+            except ValueError:
+                logging.warn("row_id {0} not in user {1}".format(row_id, user_pending_name))
+                pass
+            r.db(self.DB).table(user_table).get(user_id).update({user_pending_name: user_pending}).run(self.conn)
+        penders = row_data['penders']
+        try:
+            penders.remove(user_id)
+        except ValueError:
+            pass
+        return r.db(self.DB).table(row_table).get(row_id).update({'penders': penders}).run(self.conn)
+
+
 
     # adds a survey_id to a user's unanswered_surveys list.
     # maybe this should live somewhere else? like user? or survey?

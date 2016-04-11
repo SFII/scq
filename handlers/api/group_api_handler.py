@@ -31,7 +31,6 @@ class GroupAPIHandler(BaseHandler):
             return self.set_status(400, "something went wrong:")
         members = self.get_arguments('members')
         members.pop(0)
-        logging.info("members are {0}".format(members))
         for member in members:
             # TODO: In the future, this will invite the user.
             # I popped off the first member of the list

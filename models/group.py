@@ -40,9 +40,8 @@ class Group(BaseModel):
         return group_id
 
     def subscribe_user(self, user_id, group_id):
-        # TODO: edit this method, because the calls are now username instead of userid
-        logging.info("SUBSCRIBE_USER INSIDE GROUP.PY")
-        logging.info('user_id is {0}'.format(user_id))
+        # TODO: edit this method. Need to add another parameter to see if an actual
+        # id is being passed or if a username is passed instead.
         result = super(Group, self).subscribe_user(user_id, group_id, 'subscribed_groups')
         group_data = self.get_item(group_id)
         if group_data is None:
@@ -54,6 +53,9 @@ class Group(BaseModel):
 
     def unsubscribe_user(self, user_id, group_id):
         return super(Group, self).unsubscribe_user(user_id, group_id, 'subscribed_groups')
+
+    def remove_pending_user(self, user_id, group_id):
+        return super(Group, self).remove_pending_user(user_id, group_id, 'pending_groups')
 
     def create_generic_item(self, user_id=None):
         data = self.default()
