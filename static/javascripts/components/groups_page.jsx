@@ -179,7 +179,7 @@ var GroupMembers = React.createClass({
         }
         subscribe = {
           this.subscribe
-        };
+        }
         groups = {
           groups
         } > < /GroupList>;
