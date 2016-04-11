@@ -27,18 +27,16 @@ class GroupAPIHandler(BaseHandler):
         group_data['creator_id'] = creator_id
         group_data['id'] = potential_group_id
         group_id = Group().create_item(group_data)
-        logging.info('group data is')
-        logging.info(group_data)
         if group_id is None:
             return self.set_status(400, "something went wrong:")
         members = self.get_arguments('members')
-        logging.info('members is')
-        # members.pop(0)
-        logging.info(members)
-        logging.info(group_id)
+        members.pop(0)
+        logging.info("members are {0}".format(members))
         for member in members:
             # TODO: In the future, this will invite the user.
-            logging.info("SUNG DO YOU SEE THIS")
+            # I popped off the first member of the list
+            # That first member is still being added to the subscription list
+            # so it works.. so weird.
             Group().subscribe_user(member, group_id)
         self.set_status(200, "Success")
         self.redirect("/profile")

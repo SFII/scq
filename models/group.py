@@ -40,6 +40,9 @@ class Group(BaseModel):
         return group_id
 
     def subscribe_user(self, user_id, group_id):
+        # TODO: edit this method, because the calls are now username instead of userid
+        logging.info("SUBSCRIBE_USER INSIDE GROUP.PY")
+        logging.info('user_id is {0}'.format(user_id))
         result = super(Group, self).subscribe_user(user_id, group_id, 'subscribed_groups')
         group_data = self.get_item(group_id)
         if group_data is None:

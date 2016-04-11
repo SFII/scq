@@ -185,9 +185,17 @@ class BaseModel:
                 return None
         return r.db(self.DB).table(table).get(idnum).update(data).run(self.conn)
 
+    """
+    Something weird is going on in this method, or in Group.subscribe_user method.
+    The first call to this method gives an actual 'id' of the user, but the calls
+    after that will give username instead. That is why I have popped off the first
+    member in group_api_hander (that is the first name in the field of members).
+    Note: only half of the code is being used here since I have popped off the
+    first member. Every call to this method are 'submembers'.
+    """
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
-        adds a user id to a model's subscription list.
+        adds a user id to a User() and Group() models' subscription/pending list.
         """
         if user_id is None:
             logging.error("user_id cannot be None")
@@ -203,16 +211,9 @@ class BaseModel:
             # Since all username is unique, we have only one entry in the list
             user_list = list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn))
             user_dict = user_list[0]
-            logging.info('user_list is {0}'.format(user_list))
-            logging.info('list to dict is {0}'.format(user_dict))
             user_id = user_dict['id']
             submember = True
-        logging.info('user_id is {0}'.format(user_id))
-        logging.info('row_id is {0}'.format(row_id))
-        # logging.info(list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn)))
-        # user_id = list(r.db(self.DB).table(user_table).filter({"username": "john"}).run(self.conn))
         user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
-        logging.info('user_data is {0}'.format(user_data))
         row_data = r.db(self.DB).table(row_table).get(row_id).run(self.conn)
         if user_data is None:
             logging.error("User {0} does not exist".format(user_id))
@@ -220,33 +221,32 @@ class BaseModel:
         if row_data is None:
             logging.error("{0} {1} does not exist".format(row_table, row_data))
             return False
-        # TODO: This needs to be an if else for pending_groups/subscribed_groups for user table
         try:
-            if user_subscription_name is not None:
+            if (user_subscription_name is not None) and (submember is False):
                 user_subscription = user_data.get(user_subscription_name, [])
                 user_subscription.append(row_id)
                 user_subscription = list(set(user_subscription))
-                logging.info('user_subscription_name is {0}'.format(user_subscription_name))
-                logging.info('user_subscription is {0}'.format(user_subscription))
-                if submember:
-                    user_pending = user_data.get("pending_groups", [])
-                    user_pending.append(row_id)
-                    user_pending = list(set(user_pending))
-                    r.db(self.DB).table(user_table).get(user_id).update({"pending_groups": user_subscription}).run(self.conn)
-                else:
-                    r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
+                r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
+            else:
+                logging.info("I AM A SUBMEMBER GOING INTO USER()-------------------------- ")
+                user_pending = user_data.get("pending_groups", [])
+                user_pending.append(row_id)
+                user_pending = list(set(user_pending))
+                r.db(self.DB).table(user_table).get(user_id).update({"pending_groups": user_pending}).run(self.conn)
         except KeyError:
             logging.error("user subscription {0} not known in user data".format(user_subscription_name))
             return False
-        subscribers = row_data['subscribers']
-        subscribers.append(user_id)
-        subscribers = list(set(subscribers))
-        logging.info('type of subscribers is {0}'.format(subscribers))
-        if submember:
-            subscribers.pop(0)
-            return r.db(self.DB).table(row_table).get(row_id).update({'penders': subscribers}).run(self.conn)
-        else:
+        if submember is False:
+            subscribers = row_data['subscribers']
+            subscribers.append(user_id)
+            subscribers = list(set(subscribers))
             return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+        else:
+            logging.info("I AM A SUBMEMBER GOING INTO GROUP()-------------------------- ")
+            penders = row_data['penders']
+            penders.append(user_id)
+            penders = list(set(penders))
+            return r.db(self.DB).table(row_table).get(row_id).update({'penders': penders}).run(self.conn)
 
     def unsubscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
