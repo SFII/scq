@@ -195,16 +195,18 @@ class BaseModel:
         if row_id is None:
             logging.error("row_id cannot be None")
             return False
+        submember = False
         user_table = 'User'
         row_table = self.__class__.__name__
-        # TODO: remember to have a condition of length 8
+        # TODO: remember to add in a condition of length 8
         if user_id[:4].isalpha():
+            # Since all username is unique, we have only one entry in the list
             user_list = list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn))
-            user_str = ", ".join(repr(e) for e in user_list)
-            user_dict = dict([user_str.strip('{}').split(":"), ])
+            user_dict = user_list[0]
             logging.info('user_list is {0}'.format(user_list))
             logging.info('list to dict is {0}'.format(user_dict))
             user_id = user_dict['id']
+            submember = True
         logging.info('user_id is {0}'.format(user_id))
         logging.info('row_id is {0}'.format(row_id))
         # logging.info(list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn)))
@@ -218,19 +220,33 @@ class BaseModel:
         if row_data is None:
             logging.error("{0} {1} does not exist".format(row_table, row_data))
             return False
+        # TODO: This needs to be an if else for pending_groups/subscribed_groups for user table
         try:
             if user_subscription_name is not None:
                 user_subscription = user_data.get(user_subscription_name, [])
                 user_subscription.append(row_id)
                 user_subscription = list(set(user_subscription))
-                r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
+                logging.info('user_subscription_name is {0}'.format(user_subscription_name))
+                logging.info('user_subscription is {0}'.format(user_subscription))
+                if submember:
+                    user_pending = user_data.get("pending_groups", [])
+                    user_pending.append(row_id)
+                    user_pending = list(set(user_pending))
+                    r.db(self.DB).table(user_table).get(user_id).update({"pending_groups": user_subscription}).run(self.conn)
+                else:
+                    r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
         except KeyError:
             logging.error("user subscription {0} not known in user data".format(user_subscription_name))
             return False
         subscribers = row_data['subscribers']
         subscribers.append(user_id)
         subscribers = list(set(subscribers))
-        return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+        logging.info('type of subscribers is {0}'.format(subscribers))
+        if submember:
+            subscribers.pop(0)
+            return r.db(self.DB).table(row_table).get(row_id).update({'penders': subscribers}).run(self.conn)
+        else:
+            return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
 
     def unsubscribe_user(self, user_id, row_id, user_subscription_name=None):
         """

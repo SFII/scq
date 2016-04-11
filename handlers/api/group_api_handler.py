@@ -33,7 +33,7 @@ class GroupAPIHandler(BaseHandler):
             return self.set_status(400, "something went wrong:")
         members = self.get_arguments('members')
         logging.info('members is')
-        members.pop(0)
+        # members.pop(0)
         logging.info(members)
         logging.info(group_id)
         for member in members:

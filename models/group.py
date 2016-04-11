@@ -27,6 +27,7 @@ class Group(BaseModel):
             'active_surveys': [],
             'inactive_surveys': [],
             'subscribers': [],
+            'penders': [],
             'tags': []
         }
 
