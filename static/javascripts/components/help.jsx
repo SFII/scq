@@ -38,7 +38,7 @@ var GroupsHelp = React.createClass({
           <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Groups
                     </h2>
                 </div>
@@ -87,7 +87,7 @@ var GroupsHelp = React.createClass({
         <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Groups
                     </h2>
                 </div>
@@ -130,7 +130,7 @@ var SurveysHelp = React.createClass({
               <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
                 <div className="mdl-card__title mdl-color--primary">
                     <div className="mdl-cell mdl-cell--6-col">
-                        <h2 className="mdl-card__title-text">
+                        <h2 className="mdl-card__title-text white_text">
                             Surveys
                         </h2>
                     </div>
@@ -204,7 +204,7 @@ var SurveysHelp = React.createClass({
         <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Surveys
                     </h2>
                 </div>
@@ -247,7 +247,7 @@ var Censorship = React.createClass({
           <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Censorship Policy
                     </h2>
                 </div>
@@ -270,7 +270,7 @@ var Censorship = React.createClass({
         <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Censorship Policy
                     </h2>
                 </div>
@@ -313,7 +313,7 @@ var InformationCollection = React.createClass({
           <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Information Collection Policy
                     </h2>
                 </div>
@@ -335,7 +335,7 @@ var InformationCollection = React.createClass({
         <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
-                    <h2 className="mdl-card__title-text">
+                    <h2 className="mdl-card__title-text white_text">
                         Information Collection Policy
                     </h2>
                 </div>

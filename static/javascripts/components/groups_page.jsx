@@ -75,8 +75,21 @@ var GroupMembers = React.createClass({
         </div>
       </div>;
     };
-
-    for (var i = 0; i < count; i++) {
+    
+    memberlist.push(
+    <div key={0}>
+        <div className="mdl-textfield" key={0}>
+          <input type="text"
+            name="members"
+            className="mdl-textfield__input memberlist"
+            defaultValue={this.state.members[0]}
+            readOnly>
+          </input>
+        </div>
+    </div>
+    );
+    
+    for (var i = 1; i < count; i++) {
       memberlist.push(element(i, this.state.members[i]));
     }
     memberlist.push(

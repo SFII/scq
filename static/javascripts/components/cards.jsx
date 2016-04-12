@@ -3,7 +3,7 @@ var TitleSection = React.createClass({
     render: function(){
       return (
         <div className="mdl-card__title mdl-card--expand mdl-color--primary">
-          <h2 className="mdl-card__title-text"> { this.props.titleText } </h2>
+          <h2 className="mdl-card__title-text white_text"> { this.props.titleText } </h2>
         </div>
       );
     }
