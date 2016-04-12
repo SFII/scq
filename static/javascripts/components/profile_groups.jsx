@@ -81,7 +81,7 @@ var ProfileGroups = React.createClass({
       return(    
           <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
               <div className="mdl-card__title mdl-card--expand mdl-color--primary">
-                <h2 className="mdl-card__title-text"> My Groups </h2>
+                <h2 className="mdl-card__title-text white_text"> My Groups </h2>
               </div>  
               <div className="mdl-cell mdl-cell--12-col">
                 <ul className= "mdl-list">
