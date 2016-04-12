@@ -315,8 +315,6 @@ class BaseModel:
             pass
         return r.db(self.DB).table(row_table).get(row_id).update({'penders': penders}).run(self.conn)
 
-
-
     # adds a survey_id to a user's unanswered_surveys list.
     # maybe this should live somewhere else? like user? or survey?
     def send_user_survey(self, user_id, survey_id, survey_key='unanswered_surveys'):

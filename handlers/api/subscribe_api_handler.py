@@ -16,6 +16,13 @@ class SubscribeAPIHandler(BaseHandler):
 
     @api_authorized
     @parse_request_json
+    def get(self):
+        pending_groups = self.current_user.get('pending_groups', [])
+        self.set_status(200, "Success")
+        return self.write(tornado.escape.json_encode(pending_groups))
+
+    @api_authorized
+    @parse_request_json
     @refresh_user_cookie_callback
     def post(self):
         """
@@ -52,7 +59,8 @@ class SubscribeAPIHandler(BaseHandler):
         if unchanged:
             verb = {
                 self.SUBSCRIBE_ACTION: 'already subscribed',
-                self.UNSUBSCRIBE_ACTION: 'not yet subscribed'
+                self.UNSUBSCRIBE_ACTION: 'not yet subscribed',
+                self.REMOVE_PENDING_ACTION: 'already removed'
             }[action]
             message = "user is {0} to this group, and cannot {1}. No change has occured.".format(verb, action)
             return self.set_status(400, message)

@@ -58,7 +58,7 @@ var ProfileGroups = React.createClass({
             contentType: "application/json",
             data: JSON.stringify(removeJSON),
             success: function(data){
-                this.refreshData();
+                this.refreshDataPending();
             }.bind(this),
             error: function(xhr, status,err){
                 console.log('error');
@@ -72,12 +72,30 @@ var ProfileGroups = React.createClass({
                 type: 'GET',
                 dataType: "json",
                 success: function(data){
-                    console.log(data)
-                    var currentGroups = this.state.currentGroups
+                    var currentGroups = this.state.currentGroups;
                     currentGroups = data;
                     console.log('success');
                     this.setState({
                         currentGroups: data,
+                    })
+                }.bind(this),
+                error: function(xhr, status,err){
+                    console.log('error');
+                }.bind(this)
+        });
+    },
+
+    refreshDataPending: function(){
+        $.ajax({
+                url: this.props.routes.subscribe,
+                type: 'GET',
+                dataType: "json",
+                success: function(data){
+                    var pendingGroups = this.state.pendingGroups;
+                    pendingGroups = data;
+                    console.log('success');
+                    this.setState({
+                        pendingGroups: data,
                     })
                 }.bind(this),
                 error: function(xhr, status,err){
