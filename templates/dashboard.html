@@ -3,7 +3,7 @@
 {% block react %}
     var data={% raw survey_json %};
     var user_data={% raw user_info_json %};
-  
+
   ReactDOM.render(React.createElement(Page, {routes: routesObject}), document.getElementById('main-grid'));
 {% end %}
 {% block content %}
