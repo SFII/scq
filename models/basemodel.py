@@ -205,10 +205,12 @@ class BaseModel:
         submember = False
         user_table = 'User'
         row_table = self.__class__.__name__
-        # TODO: remember to add in a condition of length 8
-        if user_id[:4].isalpha():
+        if user_id[:4].isalpha() and len(user_id) == 8:
             # Since all username is unique, we have only one entry in the list
             user_list = list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn))
+            if user_list is None:
+                logging.error("User {0} does not exist".format(user_id))
+                return False
             user_dict = user_list[0]
             user_id = user_dict['id']
             submember = True
