@@ -175,7 +175,7 @@ class Survey(BaseModel):
                     (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
                     {
                         'labels': question[1].distinct(),
-                        'series': [question[1].distinct().do(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                        'series': [question[1].distinct().map(lambda val: question[1].filter(lambda foo: foo == val).count())]
                     },
                     (question_data['response_format'] == Question().RESPONSE_RATING),
                     {

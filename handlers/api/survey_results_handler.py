@@ -3,7 +3,6 @@ import tornado.gen as gen
 import json
 import time
 import logging
-import ast
 from time import sleep
 from models.survey import Survey
 from models.user import User
@@ -18,5 +17,4 @@ class SurveyResultsHandler(BaseHandler):
         gets the formatted results to a survey_id
         """
         results = Survey().get_formatted_results(survey_id)
-        print(results)
         return self.write(tornado.escape.json_encode(results))

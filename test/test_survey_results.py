@@ -128,6 +128,7 @@ class TestSurveyResults(BaseAsyncTest):
         bar_data = formatted_result_data['bar_data']
         series_data = bar_data['series'][0]
         self.assertNotEqual(bar_data, [])
+        self.assertEqual(len(series_data), len(bar_data['labels']))
         self.assertEqual(sorted(bar_data['labels']), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         self.assertEqual(len(bar_data['labels']),
             len(series_data),
