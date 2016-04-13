@@ -28,6 +28,8 @@ settings = {}
 
 define('debug', default=True, help='set True for debug mode', type=bool)
 define('test', default=False, help='set True to run Tests', type=bool)
+define('dump', default=False, help='dumps certain database tables for accessing the rawdump', type=bool)
+define('backup', default=False, help='makes a backup of the database', type=bool)
 define('wipe_user_data', default=False, help='set True to violently wipe user survey and course data', type=bool)
 define('bootstrap_data', default=False, help='set True to provision a user with surveys and courses', type=bool)
 define('port', default=8000, help='run on the given port', type=int)
@@ -77,6 +79,23 @@ def main():
             if options.bootstrap_data:
                 return bootstrap_data(user_id)
         return logging.error('no found user with username: ' + username)
+    if options.backup:
+        remove = "rm -rf rethinkdb_dump*"
+        backup = "rethinkdb dump -e {0}".format(settings['database_name'])
+        os.system(remove)
+        return os.system(backup)
+    if options.dump:
+        filename = 'static/dump/scq_dump.tar.gz'
+        remove = "rm static/dump/scq_dump*"
+        db = settings['database_name']
+        e_db = ' -e ' + db + '.'
+        tables = ['Survey', 'Question', 'QuestionResponse', 'SurveyResponse', 'Group']
+        backup_tables = e_db.join(tables)
+        backup_tables = e_db + backup_tables
+        backup = "rethinkdb dump {0} -f {1}".format(backup_tables, filename)
+        logging.info(backup)
+        os.system(remove)
+        return os.system(backup)
     if options.debug:
         httpserver.listen(settings['site_port'])
         signal.signal(signal.SIGINT, sig_handler)

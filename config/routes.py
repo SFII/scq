@@ -11,7 +11,6 @@ from handlers.register.culdap_register_handler import CuLdapRegisterHandler
 from handlers.dashboard_handler import DashboardHandler
 from handlers.profile_handler import ProfileHandler
 from handlers.help_handler import HelpHandler
-from handlers.raw_dump_handler import RawDumpHandler
 from handlers.surveys_handler import SurveysHandler
 from handlers.groups_handler import GroupsHandler
 from handlers.api.survey_handler import SurveyAPIHandler
@@ -35,7 +34,6 @@ routes = [
     (r"/dashboard", DashboardHandler),
     (r"/profile", ProfileHandler),
     (r"/help", HelpHandler),
-    (r"/rawdump", RawDumpHandler),
     (r"/surveys", SurveysHandler),
     (r"/groups", GroupsHandler),
     (r"/api/surveys", SurveyAPIHandler),
