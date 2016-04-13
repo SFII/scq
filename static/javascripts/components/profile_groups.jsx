@@ -161,17 +161,13 @@ var ProfileGroups = React.createClass({
                 </ul>
               </div>
               <div className="mdl-card__title mdl-card--expand mdl-color--primary">
-                <h2 className="mdl-card__title-text"> Pending Groups </h2>
+                <h2 className="mdl-card__title-text white_text"> Pending Groups </h2>
               </div>
               <div className="mdl-cell mdl-cell--12-col">
                 <ul className= "mdl-list">
                     {renderedPendingGroups}
                 </ul>
               </div>
-              <div className="mdl-card__title mdl-card--expand mdl-color--primary">
-                <h2 className="mdl-card__title-text"> Subscribe to a Group </h2>
-              </div>
-              <SubscribeDiv refreshData={this.refreshData} routes={this.props.routes}/>
           </div>
       );
     }
