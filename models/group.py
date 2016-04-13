@@ -3,6 +3,7 @@ import time
 import random
 import logging
 from models.user import User
+import rethinkdb as r
 
 
 class Group(BaseModel):
@@ -64,3 +65,13 @@ class Group(BaseModel):
         data['id'] = str(time.time())
         data['creator_id'] = user_id
         return self.create_item(data)
+
+    def popular_groups(self):
+        results = r.db(self.DB).table('Group').order_by(lambda group: group['subscribers'].count()).limit(10)["id"].run(self.conn)
+        return list(results)
+
+    def relevant_groups(self, user):
+        majors = user['majors']
+        results = r.db(self.DB).table('Group').filter(
+            lambda group: group['id'] in majors).limit(10)["id"].run(self.conn)
+        return list(results)

@@ -24,7 +24,9 @@ js_files = [
     './static/javascripts/components/profile.jsx',
     './static/javascripts/components/profile_groups.jsx',
     './static/javascripts/components/groups_page.jsx',
-    './static/javascripts/components/search_card.jsx'
+    './static/javascripts/components/search_card.jsx',
+    './static/javascripts/components/response.jsx',
+    './static/javascripts/components/help.jsx'
 ]
 
 // Lint Task

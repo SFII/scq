@@ -476,4 +476,6 @@ _:-ms-input-placeholder, :root .graph {
     margin-bottom: 45px;
 }
 
-
+h2.white_text{
+    color: white;
+}

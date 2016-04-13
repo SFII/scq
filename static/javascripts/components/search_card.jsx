@@ -23,8 +23,6 @@ var SearchCard = React.createClass({
             "requestedfields": this.state.requestedfields
         };
         
-        console.log(searchObj);
-        
         $.ajax({
             url: this.props.routes.search,
             contentType: 'application/json',

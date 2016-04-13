@@ -1,8 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block title %}Help{% end %}
 {% block react %}
-  
-  ReactDOM.render(React.createElement(helpPage, {routes: routesObject}), document.getElementById('main-grid'));
+    ReactDOM.render(React.createElement(HelpPage, {routes: routesObject}), document.getElementById('main-grid'));
 {% end %}
 {% block content %}
   <div class = "mdl-grid content" id="main-grid">
