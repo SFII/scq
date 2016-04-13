@@ -20,9 +20,8 @@ class DashboardHandler(BaseHandler):
             if survey_data is None:
                 continue
             survey_json.append(survey_data)
-        #print(tornado.escape.json_encode(survey_json))
         return tornado.escape.json_encode(survey_json)
-    
+
     def get_user_info(self):
         user_info_json = []
         user_data = self.current_user
