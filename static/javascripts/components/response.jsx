@@ -35,7 +35,7 @@ var ResponseCard = React.createClass({
     }
     else if(item.response_format == "multipleChoice"){
         var data={
-            series: [item.response_data.series],
+            series: item.response_data.series,
             labels: item.response_data.labels
         };
         var options = {

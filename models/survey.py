@@ -160,10 +160,15 @@ class Survey(BaseModel):
             return r.branch(
                 (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
                 r.branch(
-                    ((question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
+                    (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
                     {
                         'labels': question_data['options'],
-                        'series': r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))
+                        'series': [r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))]
+                    },
+                    (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE),
+                    {
+                        'labels': question_data['options'],
+                        'series': r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))                        
                     },
                     (question_data['response_format'] == Question().RESPONSE_RATING),
                     {
