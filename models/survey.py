@@ -174,8 +174,8 @@ class Survey(BaseModel):
                 r.branch(
                     (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
                     {
-                        'labels': question[1].distinct(),
-                        'series': [question[1].distinct().map(lambda val: question[1].filter(lambda foo: foo == val).count())]
+                        'labels': question_data['options'],
+                        'series': question[1]
                     },
                     (question_data['response_format'] == Question().RESPONSE_RATING),
                     {

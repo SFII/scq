@@ -26,11 +26,11 @@ var MultipleChoice = React.createClass({
     this.state.data, then use that info to flip it's value in the this.state.data array'*/
     handleChange: function(i,value){
         var NewValue = null;
-        if(value == false){
-            NewValue = true;
+        if(value == 0){
+            NewValue = 1;
         }
         else{
-            NewValue = false;
+            NewValue = 0;
         }
         var changeAnswer = this.state.data;
         changeAnswer[i] = NewValue;
@@ -49,7 +49,7 @@ var MultipleChoice = React.createClass({
       var inputKey = String(questionID)+"."+option+"."+i+"."+"input";
       var labelKey = String(questionID)+"."+option+"."+i+"."+"label";
       var spanKey = String(questionID)+"."+option+"."+i+"."+"span";
-      if(this.state.data[i] == true){
+      if(this.state.data[i] == 1){
         return (
             <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" key = {labelKey} id={labelKey}>
                 <input
@@ -136,9 +136,9 @@ getInitialState: function(){
         var questionObj=[];
         var changeAnswer = this.state.data;
         for(var iter = 0; iter < length; iter++){
-            changeAnswer[iter]=false;
+            changeAnswer[iter]=0;
         }
-        changeAnswer[i] = true;
+        changeAnswer[i] = 1;
         this.setState({
             data: changeAnswer,
         });
@@ -152,7 +152,7 @@ getInitialState: function(){
         var labelKey = String(questionID)+"."+option+"."+i+"."+"label";
         var spanKey = String(questionID)+"."+option+"."+i+"."+"span";
         var divKey = String(questionID)+"."+option+"."+i+"."+"div";
-        if(this.state.data[i] == true){
+        if(this.state.data[i] == 1){
             return (
             <div key={divKey} id={divKey}>
             <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" key={labelKey} id={labelKey}>
