@@ -25,18 +25,40 @@ var ResponseCard = React.createClass({
     var questionNodes = this.state.results.map(function(item) {
     if(item.response_format == "rating"){
         var data = {
-            series: item.bar_data.series,
-            labels: item.bar_data.labels
+            series: item.response_data.series,
+            labels: item.response_data.labels
         };
         var options = {
             seriesBarDistance: 15
         };
-        new Chartist.Bar('.chart',data,options)
+        new Chartist.Bar('.chart1',data,options)
+    }
+    else if(item.response_format == "multipleChoice"){
+        var data={
+            series: [item.response_data.series],
+            labels: item.response_data.labels
+        };
+        var options = {
+            seriesBarDistance: 15
+        };
+        new Chartist.Bar('.chart2',data,options)
+    }
+    else if(item.response_format == "trueOrFalse"){
+        var data = {
+          series: item.response_data.series,
+          labels: item.response_data.labels
+        };
+
+        new Chartist.Pie('.chart3', data);    
     }
     });
         return(
-            <div className="updates chart mdl-card">
+            <div className="updates mdl-card">
+            <div className="chart1"></div>
+            <div className="chart2"></div>
+            <div className="chart3"></div>
             </div>
+            
         );
     },
 });
