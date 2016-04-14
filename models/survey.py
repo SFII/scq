@@ -156,24 +156,11 @@ class Survey(BaseModel):
     def get_formatted_results(self, survey_id):
         results = self.get_results(survey_id)
 
-        def get_pie_data(question_data, question):
+        def get_data(question_data, question):            
             return r.branch(
-                (r.expr(question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
-                question[1].group(lambda r: r).count().ungroup().map(
-                    lambda gr: {
-                        'name': gr['group'].coerce_to('string'),
-                        'value': gr['reduction']
-                    }
-                ),
-                []
-            )
-
-        def get_bar_data(question_data, question):
-            
-            return r.branch(
-                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
+                (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
                 r.branch(
-                    (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
+                    ((question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
                     {
                         'labels': question_data['options'],
                         'series': r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))
@@ -192,10 +179,8 @@ class Survey(BaseModel):
                 lambda question: r.db(self.DB).table('Question').get(question[0]).merge(r.expr({
                     'results': question[1],
                     'total_responses': question[1].count(),
-                    'pie_data': r.db(self.DB).table('Question').get(question[0]).do(
-                        lambda question_data: get_pie_data(question_data, question)),
-                    'bar_data': r.db(self.DB).table('Question').get(question[0]).do(
-                        lambda question_data: get_bar_data(question_data, question))
+                    'response_data': r.db(self.DB).table('Question').get(question[0]).do(
+                        lambda question_data: get_data(question_data, question))
                 }))
             ).run(self.conn)
             return formatted_results
