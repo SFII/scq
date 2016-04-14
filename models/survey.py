@@ -169,13 +169,14 @@ class Survey(BaseModel):
             )
 
         def get_bar_data(question_data, question):
+            
             return r.branch(
                 (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING)),
                 r.branch(
                     (question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE),
                     {
                         'labels': question_data['options'],
-                        'series': question[1]
+                        'series': r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))
                     },
                     (question_data['response_format'] == Question().RESPONSE_RATING),
                     {

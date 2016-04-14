@@ -19,9 +19,9 @@ class SurveyResultsHandler(BaseHandler):
         """
         results = Survey().get_formatted_results(survey_id)
 
-        for i in results:
-            if i['response_format'] == 'multipleChoice':
-                i['bar_data']['series'] = np.sum(i['results'], axis=0).tolist()
+        #for i in results:
+        #    if i['response_format'] == 'multipleChoice':
+        #        i['bar_data']['series'] = np.sum(i['results'], axis=0).tolist()
                 
         logging.info(results)
         return self.write(tornado.escape.json_encode(results))
