@@ -13,7 +13,6 @@ var ResponseCard = React.createClass({
             type: 'GET',
             success: function(results){
                 this.setState({results: results})
-                console.log(this.state.results);
             }.bind(this),
             error: function(xhr, status, err){
                 console.error("/api/results", status, err.toString());
