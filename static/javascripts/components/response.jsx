@@ -2,7 +2,8 @@ var ResponseCard = React.createClass({
 
     getInitialState: function() {
         return({
-            results: []
+            results: 0,
+            iter: 0
         })
     },
 
@@ -13,6 +14,7 @@ var ResponseCard = React.createClass({
             type: 'GET',
             success: function(results){
                 this.setState({results: results})
+                console.log(this.state.results);
             }.bind(this),
             error: function(xhr, status, err){
                 console.error("/api/results", status, err.toString());
@@ -21,43 +23,63 @@ var ResponseCard = React.createClass({
     },
 
     render: function(){
-    var questionNodes = this.state.results.map(function(item) {
-    if(item.response_format == "rating"){
-        var data = {
-            series: item.response_data.series,
-            labels: item.response_data.labels
-        };
-        var options = {
-            seriesBarDistance: 15
-        };
-        new Chartist.Bar('.chart1',data,options)
-    }
-    else if(item.response_format == "multipleChoice"){
-        var data={
-            series: item.response_data.series,
-            labels: item.response_data.labels
-        };
-        var options = {
-            seriesBarDistance: 15
-        };
-        new Chartist.Bar('.chart2',data,options)
-    }
-    else if(item.response_format == "trueOrFalse"){
-        var data = {
-          series: item.response_data.series,
-          labels: item.response_data.labels
-        };
-
-        new Chartist.Pie('.chart3', data);    
-    }
-    });
+    if(this.state.results != 0){
         return(
             <div className="updates mdl-card">
-            <div className="chart1"></div>
-            <div className="chart2"></div>
-            <div className="chart3"></div>
+            <QuestionDiv 
+            questionID={this.state.results[this.state.iter].id} 
+            question_format={this.state.results[this.state.iter].response_format} 
+            response_data={this.state.results[this.state.iter].response_data}/>
             </div>
             
         );
+    }
+    else{
+        return(
+        <div></div>
+        );
+    }
     },
+});
+
+var QuestionDiv = React.createClass({
+
+    componentDidMount: function(){
+            var chartCSS = "#chart" + this.props.questionID + "-chart";
+            if(this.props.question_format == "rating"){    
+                var data = {
+                    series: this.props.response_data.series,
+                    labels: this.props.response_data.labels
+                };
+                var options = {
+                    seriesBarDistance: 15
+                };
+                new Chartist.Bar(chartCSS,data,options)
+            }
+            else if(this.props.question_format == "multipleChoice"){
+                var data={
+                    series: this.props.response_data.series,
+                    labels: this.props.response_data.labels
+                };
+                var options = {
+                    seriesBarDistance: 15
+                };
+                new Chartist.Bar(chartCSS,data,options)
+            }
+            else if(this.props.question_format == "trueOrFalse"){
+                var data = {
+                    series: this.props.response_data.series,
+                    labels: this.props.response_data.labels
+                };
+
+                new Chartist.Pie(chartCSS,data);    
+            }
+    },
+    
+    render: function(){
+        var chartName = "chart" + this.props.questionID + "-chart";
+        return(
+            <div className="ct-chart ct-golden-section" id={chartName}></div>
+        );
+    }
 });
