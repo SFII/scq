@@ -21,15 +21,15 @@ var Card = React.createClass({
         var prevAnswers = [];
         
         for(var i =0; i < length; i++){
-            questionObj[i] = false;
+            questionObj[i] = 0;
         }
         
         for(var i = responseStateLength-1; i >= 0; i--){
           if(responseState[i].question_id == this.props.questionID){
              prevAnswers = responseState[i].response_data;
              for(var i2 =0; i2 < length; i2++){
-                 if(prevAnswers[i2] == true){
-                    questionObj[i2]= true;
+                 if(prevAnswers[i2] == 1){
+                    questionObj[i2]= 1;
                  }
              }
           }
@@ -44,14 +44,14 @@ var Card = React.createClass({
         var responseStateLength = Object.keys(responseState).length;
         var prevAnswers = [];
         for(var i =0; i < length; i++){
-            questionObj[i]=false;
+            questionObj[i]=0;
         }
         for(var i = responseStateLength-1; i >= 0; i--){
             if(responseState[i].question_id == this.props.questionID){
                 prevAnswers = responseState[i].response_data;
                     for(var i2 = 0; i2 < length; i2++){
-                        if(prevAnswers[i2]==true){
-                            questionObj[i2] = true;
+                        if(prevAnswers[i2]==1){
+                            questionObj[i2] = 1;
                         }
                     }
             }
