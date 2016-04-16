@@ -67,41 +67,52 @@ var ResponseCard = React.createClass({
 
 var QuestionDiv = React.createClass({
     
+    getInitialState: function(){
+        return{
+            questionID: 0
+        }
+    },
+    
     componentDidMount: function(){
-        this.updateChart();
+        this.setState({
+            questionID: this.props.questionID
+        });
+        this.updateChart(this.props.response_data.labels,this.props.response_data.series,this.props.question_format);
     },
     
-    componentWillReceiveProps: function(){
-        this.updateChart();
+    componentWillReceiveProps: function(nextProps){
+        this.setState({
+            questionID: nextProps.questionID
+        });
+        this.updateChart(nextProps.response_data.labels,nextProps.response_data.series,nextProps.question_format);
     },
     
-    updateChart: function(){
-        console.log(this.props.questionID)
-        var chartCSS = "#chart" + this.props.questionID + "-chart";
-        if(this.props.question_format == "rating"){    
+    updateChart: function(labels,series,question_format,questionID){
+        var chartCSS = "#chart" + this.state.questionID + "-chart";
+        if(question_format == "rating"){    
             var data = {
-                series: this.props.response_data.series,
-                labels: this.props.response_data.labels
+                series: series,
+                labels: labels
             };
             var options = {
                 seriesBarDistance: 15
             };
             new Chartist.Bar(chartCSS,data,options)
         }
-        else if(this.props.question_format == "multipleChoice"){
+        else if(question_format == "multipleChoice"){
             var data={
-                series: this.props.response_data.series,
-                labels: this.props.response_data.labels
+                series: series,
+                labels: labels
             };
             var options = {
                 seriesBarDistance: 15
             };
             new Chartist.Bar(chartCSS,data,options)
         }
-        else if(this.props.question_format == "trueOrFalse"){
+        else if(question_format == "trueOrFalse"){
             var data = {
-                series: this.props.response_data.series,
-                labels: this.props.response_data.labels
+                series: series,
+                labels: labels
             };
 
             new Chartist.Pie(chartCSS,data);    
@@ -109,7 +120,7 @@ var QuestionDiv = React.createClass({
     },
     
     render: function(){
-        var chartName = "chart" + this.props.questionID + "-chart";
+        var chartName = "chart" + this.state.questionID + "-chart";
         return(
             <div className="ct-chart ct-golden-section" id={chartName}></div>
         );
