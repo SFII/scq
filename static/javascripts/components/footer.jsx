@@ -234,7 +234,7 @@ var PrevButton = React.createClass({
         return (
         <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Previous
-            </button>
+        </button>
         )
     }
 })
