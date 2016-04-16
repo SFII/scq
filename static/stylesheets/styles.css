@@ -479,3 +479,10 @@ _:-ms-input-placeholder, :root .graph {
 h2.white_text{
     color: white;
 }
+.margin_general_title{
+    margin-left: 15px;
+}
+
+.margin_general{
+    margin-left: 25px;
+}
