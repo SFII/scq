@@ -16,6 +16,7 @@ var ResponseCard = React.createClass({
             success: function(results){
                 this.setState({results: results})
                 this.setState({length: results.length})
+                console.log(results)
             }.bind(this),
             error: function(xhr, status, err){
                 console.error("/api/results", status, err.toString());
@@ -42,7 +43,8 @@ var ResponseCard = React.createClass({
     render: function(){
     if(this.state.results != 0){
         return(
-            <div className="updates mdl-card">
+            <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+            <TitleSection titleText={this.state.results[this.state.iter].title} />
             <QuestionDiv 
             questionID={this.state.results[this.state.iter].id} 
             question_format={this.state.results[this.state.iter].response_format} 
