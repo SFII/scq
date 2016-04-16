@@ -135,11 +135,11 @@ var ResponseFooter = React.createClass({
 
         if(this.props.currQuestion == 0 && this.props.numQuestions != 1){
             return(
-                <div>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__title mdl-card--expand mdl-300">
                     <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
                             Previous
                     </button>
-
+                    <Progress responseSize={this.props.currQuestion} numQuestions={this.props.numQuestions} />
                     <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                             Next
                     </button>
@@ -149,41 +149,40 @@ var ResponseFooter = React.createClass({
 
         else if(this.props.currQuestion > 0 && this.props.currQuestion < this.props.numQuestions - 1){
             return(
-                <div>
-                        <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                Previous
-                        </button>
-
-                        <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                Next
-                        </button>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__title mdl-card--expand mdl-300">
+                    <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Previous
+                    </button>
+                    <Progress responseSize={this.props.currQuestion} numQuestions={this.props.numQuestions} />
+                    <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Next
+                    </button>
                 </div>
             );
         }
         else if(this.props.currQuestion == this.props.numQuestions - 1 && this.props.numQuestions != 1){
             return(
-                <div>
-                        <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                Previous
-                        </button>
-
-                        <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
-                                Next
-                        </button>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__title mdl-card--expand mdl-300">
+                    <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Previous
+                    </button>
+                    <Progress responseSize={this.props.currQuestion} numQuestions={this.props.numQuestions} />
+                    <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                            Next
+                    </button>
                 </div>
             );
         }
         else if(this.props.numQuestions == 1){
             return(
-                <div>
-
-                        <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
-                                Previous
-                        </button>
-
-                        <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
-                                Next
-                        </button>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__title mdl-card--expand mdl-300">
+                    <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                            Previous
+                    </button>
+                    <Progress responseSize={this.props.currQuestion} numQuestions={this.props.numQuestions} />
+                    <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                            Next
+                    </button>
                 </div>
             );
         }
