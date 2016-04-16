@@ -3,7 +3,8 @@ var ResponseCard = React.createClass({
     getInitialState: function() {
         return({
             results: 0,
-            iter: 0
+            iter: 0,
+            length: 0
         })
     },
 
@@ -14,11 +15,27 @@ var ResponseCard = React.createClass({
             type: 'GET',
             success: function(results){
                 this.setState({results: results})
-                console.log(this.state.results);
+                this.setState({length: results.length})
             }.bind(this),
             error: function(xhr, status, err){
                 console.error("/api/results", status, err.toString());
             }.bind(this)
+        });
+    },
+    
+    nextQuestion: function() {
+        var iter = this.state.iter;
+        
+        this.setState({
+            iter: iter + 1
+        });
+    },
+    
+    prevQuestion: function() {
+        var iter = this.state.iter;
+        
+        this.setState({
+            iter: iter - 1
         });
     },
 
@@ -29,7 +46,13 @@ var ResponseCard = React.createClass({
             <QuestionDiv 
             questionID={this.state.results[this.state.iter].id} 
             question_format={this.state.results[this.state.iter].response_format} 
-            response_data={this.state.results[this.state.iter].response_data}/>
+            response_data={this.state.results[this.state.iter].response_data} />
+            
+            <ResponseFooter 
+            nextQuestion={this.nextQuestion}
+            prevQuestion={this.prevQuestion}
+            currQuestion={this.state.iter}
+            numQuestions={this.state.length} />
             </div>
             
         );
@@ -43,37 +66,46 @@ var ResponseCard = React.createClass({
 });
 
 var QuestionDiv = React.createClass({
-
+    
     componentDidMount: function(){
-            var chartCSS = "#chart" + this.props.questionID + "-chart";
-            if(this.props.question_format == "rating"){    
-                var data = {
-                    series: this.props.response_data.series,
-                    labels: this.props.response_data.labels
-                };
-                var options = {
-                    seriesBarDistance: 15
-                };
-                new Chartist.Bar(chartCSS,data,options)
-            }
-            else if(this.props.question_format == "multipleChoice"){
-                var data={
-                    series: this.props.response_data.series,
-                    labels: this.props.response_data.labels
-                };
-                var options = {
-                    seriesBarDistance: 15
-                };
-                new Chartist.Bar(chartCSS,data,options)
-            }
-            else if(this.props.question_format == "trueOrFalse"){
-                var data = {
-                    series: this.props.response_data.series,
-                    labels: this.props.response_data.labels
-                };
+        this.updateChart();
+    },
+    
+    componentWillReceiveProps: function(){
+        this.updateChart();
+    },
+    
+    updateChart: function(){
+        console.log(this.props.questionID)
+        var chartCSS = "#chart" + this.props.questionID + "-chart";
+        if(this.props.question_format == "rating"){    
+            var data = {
+                series: this.props.response_data.series,
+                labels: this.props.response_data.labels
+            };
+            var options = {
+                seriesBarDistance: 15
+            };
+            new Chartist.Bar(chartCSS,data,options)
+        }
+        else if(this.props.question_format == "multipleChoice"){
+            var data={
+                series: this.props.response_data.series,
+                labels: this.props.response_data.labels
+            };
+            var options = {
+                seriesBarDistance: 15
+            };
+            new Chartist.Bar(chartCSS,data,options)
+        }
+        else if(this.props.question_format == "trueOrFalse"){
+            var data = {
+                series: this.props.response_data.series,
+                labels: this.props.response_data.labels
+            };
 
-                new Chartist.Pie(chartCSS,data);    
-            }
+            new Chartist.Pie(chartCSS,data);    
+        }
     },
     
     render: function(){
@@ -82,4 +114,66 @@ var QuestionDiv = React.createClass({
             <div className="ct-chart ct-golden-section" id={chartName}></div>
         );
     }
+});
+
+var ResponseFooter = React.createClass({
+
+    render:function(){
+
+        if(this.props.currQuestion == 0 && this.props.numQuestions != 1){
+            return(
+                <div>
+                    <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                            Previous
+                    </button>
+
+                    <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Next
+                    </button>
+                </div>
+            );
+        }
+
+        else if(this.props.currQuestion > 0 && this.props.currQuestion < this.props.numQuestions - 1){
+            return(
+                <div>
+                        <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Previous
+                        </button>
+
+                        <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Next
+                        </button>
+                </div>
+            );
+        }
+        else if(this.props.currQuestion == this.props.numQuestions - 1 && this.props.numQuestions != 1){
+            return(
+                <div>
+                        <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Previous
+                        </button>
+
+                        <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                                Next
+                        </button>
+                </div>
+            );
+        }
+        else if(this.props.numQuestions == 1){
+            return(
+                <div>
+
+                        <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                                Previous
+                        </button>
+
+                        <button onClick={this.props.nextQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
+                                Next
+                        </button>
+                </div>
+            );
+        }
+    }
+
 });
