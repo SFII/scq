@@ -28,6 +28,7 @@ class Group(BaseModel):
             'active_surveys': [],
             'inactive_surveys': [],
             'subscribers': [],
+            'penders': [],
             'tags': []
         }
 
@@ -40,6 +41,8 @@ class Group(BaseModel):
         return group_id
 
     def subscribe_user(self, user_id, group_id):
+        # TODO: edit this method. Need to add another parameter to see if an actual
+        # id is being passed or if a username is passed instead.
         result = super(Group, self).subscribe_user(user_id, group_id, 'subscribed_groups')
         group_data = self.get_item(group_id)
         if group_data is None:
@@ -51,6 +54,9 @@ class Group(BaseModel):
 
     def unsubscribe_user(self, user_id, group_id):
         return super(Group, self).unsubscribe_user(user_id, group_id, 'subscribed_groups')
+
+    def remove_pending_user(self, user_id, group_id):
+        return super(Group, self).remove_pending_user(user_id, group_id, 'pending_groups')
 
     def create_generic_item(self, user_id=None):
         data = self.default()
@@ -66,6 +72,6 @@ class Group(BaseModel):
 
     def relevant_groups(self, user):
         majors = user['majors']
-        results =  r.db(self.DB).table('Group').filter(
+        results = r.db(self.DB).table('Group').filter(
             lambda group: group['id'] in majors).limit(10)["id"].run(self.conn)
         return list(results)

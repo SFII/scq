@@ -39,7 +39,6 @@ var ProfilePage = React.createClass({
     }.bind(this);
   },
   handleClick: function(event) {
-    console.log({edit: !this.state.edit});
     this.setState({edit: !this.state.edit});
   },
   render: function(){

@@ -185,9 +185,16 @@ class BaseModel:
                 return None
         return r.db(self.DB).table(table).get(idnum).update(data).run(self.conn)
 
+    """
+    Something weird is going on in this method, or in Group.subscribe_user method.
+    The first call to this method gives an actual 'id' of the user, but the calls
+    after that will give username instead. That is why I have popped off the first
+    member in group_api_hander (that is the first name in the field of members
+    which is a duplicate of the creator).
+    """
     def subscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
-        adds a user id to a model's subscription list.
+        adds a user id to a User() and Group() models' subscription/pending list.
         """
         if user_id is None:
             logging.error("user_id cannot be None")
@@ -195,29 +202,50 @@ class BaseModel:
         if row_id is None:
             logging.error("row_id cannot be None")
             return False
-        row_table = self.__class__.__name__
+        submember = False
         user_table = 'User'
+        row_table = self.__class__.__name__
+        if user_id[:4].isalpha() and len(user_id) == 8:
+            # Since all username is unique, we have only one entry in the list
+            user_list = list(r.db(self.DB).table(user_table).filter({"username": user_id}).run(self.conn))
+            if user_list is None:
+                logging.error("User {0} does not exist".format(user_id))
+                return False
+            user_dict = user_list[0]
+            user_id = user_dict['id']
+            submember = True
         user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
         row_data = r.db(self.DB).table(row_table).get(row_id).run(self.conn)
         if user_data is None:
-            logging.error("User {0} does not exist".format(user_data))
+            logging.error("User {0} does not exist".format(user_id))
             return False
         if row_data is None:
             logging.error("{0} {1} does not exist".format(row_table, row_data))
             return False
         try:
-            if user_subscription_name is not None:
+            if (user_subscription_name is not None) and (submember is False):
                 user_subscription = user_data.get(user_subscription_name, [])
                 user_subscription.append(row_id)
                 user_subscription = list(set(user_subscription))
                 r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
+            else:
+                user_pending = user_data.get("pending_groups", [])
+                user_pending.append(row_id)
+                user_pending = list(set(user_pending))
+                r.db(self.DB).table(user_table).get(user_id).update({"pending_groups": user_pending}).run(self.conn)
         except KeyError:
             logging.error("user subscription {0} not known in user data".format(user_subscription_name))
             return False
-        subscribers = row_data['subscribers']
-        subscribers.append(user_id)
-        subscribers = list(set(subscribers))
-        return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+        if submember is False:
+            subscribers = row_data['subscribers']
+            subscribers.append(user_id)
+            subscribers = list(set(subscribers))
+            return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+        else:
+            penders = row_data['penders']
+            penders.append(user_id)
+            penders = list(set(penders))
+            return r.db(self.DB).table(row_table).get(row_id).update({'penders': penders}).run(self.conn)
 
     def unsubscribe_user(self, user_id, row_id, user_subscription_name=None):
         """
@@ -253,6 +281,41 @@ class BaseModel:
         except ValueError:
             pass
         return r.db(self.DB).table(row_table).get(row_id).update({'subscribers': subscribers}).run(self.conn)
+
+    def remove_pending_user(self, user_id, row_id, user_pending_name=None):
+        """
+        removes a user id to a model's pending list.
+        """
+        if user_id is None:
+            logging.error("user_id cannot be None")
+            return False
+        if row_id is None:
+            logging.error("row_id cannot be None")
+            return False
+        row_table = self.__class__.__name__
+        user_table = 'User'
+        user_data = r.db(self.DB).table(user_table).get(user_id).run(self.conn)
+        row_data = r.db(self.DB).table(row_table).get(row_id).run(self.conn)
+        if user_data is None:
+            logging.error("User {0} does not exist".format(user_data))
+            return False
+        if row_data is None:
+            logging.error("{0} {1} does not exist".format(row_table, row_data))
+            return False
+        if user_pending_name is not None:
+            user_pending = user_data.get(user_pending_name, [])
+            try:
+                user_pending.remove(row_id)
+            except ValueError:
+                logging.warn("row_id {0} not in user {1}".format(row_id, user_pending_name))
+                pass
+            r.db(self.DB).table(user_table).get(user_id).update({user_pending_name: user_pending}).run(self.conn)
+        penders = row_data['penders']
+        try:
+            penders.remove(user_id)
+        except ValueError:
+            pass
+        return r.db(self.DB).table(row_table).get(row_id).update({'penders': penders}).run(self.conn)
 
     # adds a survey_id to a user's unanswered_surveys list.
     # maybe this should live somewhere else? like user? or survey?

@@ -11,7 +11,15 @@ from handlers.base_handler import BaseHandler, api_authorized, parse_request_jso
 class SubscribeAPIHandler(BaseHandler):
     SUBSCRIBE_ACTION = 'sub'
     UNSUBSCRIBE_ACTION = 'unsub'
-    ACTIONS = [SUBSCRIBE_ACTION, UNSUBSCRIBE_ACTION]
+    REMOVE_PENDING_ACTION = 'remove_pending'
+    ACTIONS = [SUBSCRIBE_ACTION, UNSUBSCRIBE_ACTION, REMOVE_PENDING_ACTION]
+
+    @api_authorized
+    @parse_request_json
+    def get(self):
+        pending_groups = self.current_user.get('pending_groups', [])
+        self.set_status(200, "Success")
+        return self.write(tornado.escape.json_encode(pending_groups))
 
     @api_authorized
     @parse_request_json
@@ -35,6 +43,8 @@ class SubscribeAPIHandler(BaseHandler):
             result = Group().subscribe_user(user_id, group_id)
         elif action == self.UNSUBSCRIBE_ACTION:
             result = Group().unsubscribe_user(user_id, group_id)
+        elif action == self.REMOVE_PENDING_ACTION:
+            result = Group().remove_pending_user(user_id, group_id)
         else:
             return self.set_status(400, "action must be one of {0}".format(ACTIONS))
         return self._analyze_result(result, action)
@@ -49,7 +59,8 @@ class SubscribeAPIHandler(BaseHandler):
         if unchanged:
             verb = {
                 self.SUBSCRIBE_ACTION: 'already subscribed',
-                self.UNSUBSCRIBE_ACTION: 'not yet subscribed'
+                self.UNSUBSCRIBE_ACTION: 'not yet subscribed',
+                self.REMOVE_PENDING_ACTION: 'already removed'
             }[action]
             message = "user is {0} to this group, and cannot {1}. No change has occured.".format(verb, action)
             return self.set_status(400, message)

@@ -187,5 +187,4 @@ var ResponseFooter = React.createClass({
             );
         }
     }
-
 });
