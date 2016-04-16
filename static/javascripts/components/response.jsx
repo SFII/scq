@@ -45,7 +45,7 @@ var ResponseCard = React.createClass({
         return(
             <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <TitleSection titleText={this.state.results[this.state.iter].title} />
-            <QuestionDiv 
+            <ChartDiv 
             questionID={this.state.results[this.state.iter].id} 
             question_format={this.state.results[this.state.iter].response_format} 
             response_data={this.state.results[this.state.iter].response_data} />
@@ -67,7 +67,7 @@ var ResponseCard = React.createClass({
     },
 });
 
-var QuestionDiv = React.createClass({
+var ChartDiv = React.createClass({
     
     getInitialState: function(){
         return{
