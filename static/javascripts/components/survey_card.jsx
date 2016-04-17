@@ -90,14 +90,14 @@ var SurveysPage = React.createClass({
     option filed in a question, then we post a final json to the api*/
 
     handleSubmit: function(){
-        
+
         var surveyObj = {
             item_id : this.state.item_id,
             item_type: this.state.item_type,
             item_name: this.state.item_name,
             questions: this.state.questions
         };
-        
+
         var test = this.checkSurvey(surveyObj);
 
         if (test==true){
@@ -114,7 +114,7 @@ var SurveysPage = React.createClass({
                 }
                 questions[i].options = finalOptions;
             }
-            
+
             surveyObj.questions = questions;
 
             $.ajax({
@@ -355,6 +355,21 @@ var CheckboxQuestion = React.createClass({
             options: options
         });
     },
+    removeOption: function(){
+        var options = this.state.options;
+        var numOptions = this.state.numOptions;
+        var optionObject = {
+            key: numOptions,
+            title: ''
+        };
+        console.log(options);
+        console.log(optionObject);
+        options.pop();
+        this.setState({
+            numOptions: numOptions - 1,
+            options: options
+        });
+    },
 
     //whenever we change an option we update it's corresponding index in
     //our options array, and also send data up to Fields
@@ -392,7 +407,13 @@ var CheckboxQuestion = React.createClass({
                       <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={this.addOption}>
                         <i className="material-icons">add</i>
                       </button>
-                      &nbsp;&nbsp;&nbsp; ADD OPTION
+                      &nbsp;&nbsp;&nbsp; ADD OPTION &nbsp;&nbsp;&nbsp;
+                    </p>
+                    <p>
+                      <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={this.removeOption}>
+                        <i className="material-icons">subtract</i>
+                      </button>
+                      &nbsp;&nbsp;&nbsp; REMOVE OPTION
                     </p>
                 </li>
             </ul>
