@@ -156,6 +156,22 @@ var SurveysPage = React.createClass({
         questions: currQuestions
       });
     },
+    /*this handles removing a recently added question*/
+    handleRemoving: function(newQuestion) {
+      var numQuestion= this.state.numQuestion;
+      numQuestion = numQuestion - 1;
+      if (numQuestion < 0) {
+        alert("Must have at least one question in survey.");
+        return false;
+      }
+      newQuestion.key = numQuestion;
+      var currQuestions = this.state.questions;
+      var newQuestions = currQuestions.pop();
+      this.setState({
+        numQuestion: numQuestion,
+        questions: currQuestions
+      });
+    },
 
     render: function(){
       return (
@@ -170,6 +186,7 @@ var SurveysPage = React.createClass({
                   <QuestionDiv questions={this.state.questions} updateQuestions={this.updateQuestions} />
                   <AddQuestion onAdding={this.handleAdding}/>
                   <FinishSurvey onSubmit={this.handleSubmit}/>
+                  <RemoveQuestion onRemoving={this.handleRemoving}/>
               </div>
           </div>
       );
@@ -358,15 +375,13 @@ var CheckboxQuestion = React.createClass({
     removeOption: function(){
         var options = this.state.options;
         var numOptions = this.state.numOptions;
-        var optionObject = {
-            key: numOptions,
-            title: ''
-        };
-        console.log(options);
-        console.log(optionObject);
+        numOptions = numOptions - 1;
+        if (numOptions < 0) {
+          return false;
+        }
         options.pop();
         this.setState({
-            numOptions: numOptions - 1,
+            numOptions: numOptions,
             options: options
         });
     },
@@ -472,6 +487,30 @@ var AddQuestion = React.createClass({
       return (
           <button onClick={this.addQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               ADD QUESTION
+          </button>
+      );
+    }
+});
+
+/*Called onClick of Remove Question button, used to remove the most recent question.*/
+var RemoveQuestion = React.createClass({
+    /*
+    * Removing questions
+    */
+    removeQuestion: function() {
+       this.props.onRemoving(
+                {
+                "title" : "",
+                "response_format" : "",
+                "options":[],
+                "key": null
+            });
+    },
+
+    render: function(){
+      return (
+          <button onClick={this.removeQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              REMOVE QUESTION
           </button>
       );
     }
