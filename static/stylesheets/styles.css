@@ -486,3 +486,8 @@ h2.white_text{
 .margin_general{
     margin-left: 25px;
 }
+
+h1.white_text{
+    color: white;
+    font-weight: bold;
+}

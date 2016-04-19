@@ -53,7 +53,6 @@ class Survey(BaseModel):
             logging.error("item_id {0} does not correspond to value in database".format(item_id))
             return None
         data['creator_name'] = creator_data['username']
-        data['item_name'] = model_data.get(self._item_name_from_item_type(item_type), '')
         survey_id = super(Survey, self).create_item(data)
         active_surveys = model_data['active_surveys']
         active_surveys.append(survey_id)
@@ -156,7 +155,7 @@ class Survey(BaseModel):
     def get_formatted_results(self, survey_id):
         results = self.get_results(survey_id)
 
-        def get_data(question_data, question):            
+        def get_data(question_data, question):
             return r.branch(
                 (r.expr(question_data['response_format'] == Question().RESPONSE_MULTIPLE_CHOICE) | (question_data['response_format'] == Question().RESPONSE_RATING) | (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE)),
                 r.branch(
@@ -168,7 +167,7 @@ class Survey(BaseModel):
                     (question_data['response_format'] == Question().RESPONSE_TRUE_OR_FALSE),
                     {
                         'labels': question_data['options'],
-                        'series': r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))                        
+                        'series': r.expr(question[1]).reduce(lambda left, right: left.map(right, lambda leftVal, rightVal: leftVal + rightVal))
                     },
                     (question_data['response_format'] == Question().RESPONSE_RATING),
                     {
