@@ -2,55 +2,62 @@
 * Page is the overall container that gets mounted into our HTML file
 */
 var Page = React.createClass({
+    componentDidMount: function () {
+        const unansweredSurveys = data.length
+        const title = document.title
+        const newTitle = title + " (" + unansweredSurveys +  ")"
+        document.title = newTitle
+
+        const header =  title + " - " + unansweredSurveys + " unanswered survey"
+        $('.mdl-layout-title')[0].innerHTML = header + (unansweredSurveys != 1 ? "s" : "")
+    },
+
     //if we're not logged in we want to render a Welcome menu
     render: function(){
-      if (!loggedIn()) {
-        return (<Welcome />);
-      }
-      /*data is a variable defined in dashboard.html as var data = {% raw survey_json %}
-      which is a json of the unaswered_surveys list from the db, we map it out so each item
-      is a survey that gets it's own SurveyDiv react component'*/
-      else{
+        /*data is a variable defined in dashboard.html as var data = {% raw survey_json %}
+           which is a json of the unaswered_surveys list from the db, we map it out so each item
+           is a survey that gets it's own SurveyDiv react component'*/
         routesObject=this.props.routes;
         if (data.length == 0) {
-              return (
-                  <div>
-                      You don't have any open surveys right now. You can <a href="/rawdump">view</a> survey results or <a href="/surveys">create</a> your own survey
-                      using the bar on the left.
-                  </div>
-              )
+            return (
+                <div>
+                  You don't have any open surveys right now. You can <a
+                  href="/rawdump">view</a> survey results or <a
+                  href="/surveys">create</a> your own survey using the bar on
+                  the left.
+                </div>
+            )
         }
         var itemNodes = data.map(function (item) {
-                return (
+            return (
                 <SurveyDiv
-                key = {item.id}
-                questions={item.questions}
-                routes={routesObject}
-                surveyID={item.id}
-                department={item.department}
-                creator={item.creator}
-                isInstructor={item.isInstructor}
-                surveyTitle={item.item_name}/>
-                );
+                    key = {item.id}
+                    questions={item.questions}
+                    routes={routesObject}
+                    surveyID={item.id}
+                    department={item.department}
+                    creator={item.creator}
+                    isInstructor={item.isInstructor}
+                    surveyTitle={item.item_name}/>
+            );
         });
-          var answeredSurveys
+        var answeredSurveys
         if (itemNodes.length < 10) {
-          var ids = user_data[0].answered_surveys
+            var ids = user_data[0].answered_surveys
             ids.length = (10 - itemNodes.length)
-          answeredSurveys = ids.map(function(id, idx) {
-            return <ResponseCard surveyID={id} key={idx}/>
-          });
+                answeredSurveys = ids.map(function(id, idx) {
+                    return <ResponseCard surveyID={id} key={idx}/>
+                });
         }
         //return the surveyDiv's in an mdl-grid with a SurveyCreationCard below it (This will probably change after Survey Creation is migrated)
         return (
-          <div className="mdl-grid mdl-cell--12-col content">
-            <div className="mainDiv">
-              {itemNodes}
-              {answeredSurveys}
+            <div className="mdl-grid mdl-cell--12-col content">
+              <div className="mainDiv">
+                {itemNodes}
+                {answeredSurveys}
+              </div>
             </div>
-          </div>
         );
-      }
     }
 });
 

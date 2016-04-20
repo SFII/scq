@@ -13,6 +13,7 @@ from handlers.profile_handler import ProfileHandler
 from handlers.help_handler import HelpHandler
 from handlers.surveys_handler import SurveysHandler
 from handlers.groups_handler import GroupsHandler
+from handlers.abuse_handler import AbuseHandler
 from handlers.api.survey_handler import SurveyAPIHandler
 from handlers.api.response_handler import ResponseHandler
 from handlers.refresh_handler import RefreshHandler
@@ -36,6 +37,7 @@ routes = [
     (r"/help", HelpHandler),
     (r"/surveys", SurveysHandler),
     (r"/groups", GroupsHandler),
+    (r"/abuse", AbuseHandler),
     (r"/api/surveys", SurveyAPIHandler),
     (r"/api/response", ResponseHandler),
     (r"/api/results/([\w-]+)", SurveyResultsHandler),
