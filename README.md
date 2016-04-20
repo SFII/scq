@@ -1,4 +1,4 @@
-# scq
+  # scq
 Our main repo for the SCQ senior project.
 
 ## Installing:
@@ -89,33 +89,29 @@ GET /api/me
 ```
  Status: 200 OK
  {
-    "answers": [],
-    "last_sign_in": 1456035511.3893418,
-    "id": "7423c6be-2ce7-4f9a-882e-1130d21cf52b",
-    "major3": "",
-    "date_registered": 1455754947.062986,
-    "gender": "Female",
-    "created_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
-    "native_language": "English",
-    "unanswered_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
-    "email": "sung.bae@colorado.edu",
-    "survey_responses": [],
-    "dob": "2016-02-03",
-    "status": "Senior",
-    "answered_surveys": [],
-    "courses": ["1c406ea0-6b4a-437f-acc6-372e4a37ac6f"],
-    "courses_taught": [],
-    "ethnicity": "American Indian or Alaska Native",
-    "major2": "Mathematics",
-    "accepted_tos": true,
-    "minor1": "",
-    "departments": ["Computer Science"],
-    "major4": "",
-    "major1": "",
-    "username": "suba8204",
-    "primary_affiliation": ["Student"],
-    "minor2": "",
-    "registration": "registration_culdap"
+   "registration": "registration_culdap",
+   "primary_affiliation": "Student",
+   "majors": ["Computer Science"],
+   "dob": "1990-01-01",
+   "status": "Senior",
+   "pending_groups": [],
+   "survey_responses": [],
+   "answers": [],
+   "departments": ["Computer Science"],
+   "email": "sung.bae@colorado.edu",
+   "last_sign_in": 1461132923.425379,
+   "minors": ["Mathematics"],
+   "subscribed_groups": [],
+   "ethnicity": "Asian",
+   "answered_surveys": [],
+   "username": "suba8204",
+   "created_surveys": [],
+   "gender": "Male",
+   "accepted_tos": true,
+   "id": "0510b13d-ea5d-45e7-9a85-503fa984a257",
+   "date_registered": 1461132919.8357852,
+   "native_language": "English",
+   "unanswered_surveys": []
  }
  ```
 
@@ -130,55 +126,45 @@ POST /api/me
 | ------------------- | ------------- | ----------------------------------------------------------------- |
 | email               | String        | User's email must be Colorado domain (i.e. user@colorado.edu).    |
 | status              | String        | User's academic year (i.e. Freshman, Sophomore, Junior, Senior).  |
-| primary_affiliation | String[]      | User's affiliation to CU (i.e. Student, Faculty, Student/Faulty). |
+| primary_affiliation | String        | User's affiliation to CU (i.e. Student, Faculty, Both).           |
 | dob                 | String        | User's date of birth in the form of year-month-day.               |
 | native_language     | String        | User's native language.                                           |
 | gender              | String        | User's gender.                                                    |
 | ethnicity           | String        | User's, ethnicity.                                                |
-| major1              | String        | User's first major.                                               |
-| major2              | String        | User's second major.                                              |
-| major3              | String        | User's third major.                                               |
-| major4              | String        | User's fourth major.                                              |
-| minor1              | String        | User's first minor.                                               |
-| minor2              | String        | User's second minor.                                              |
+| major               | String[]      | User's major(s).                                                  |
+| minor               | String[]      | User's minor(s).                                                  |
 | departments         | String[]      | User's departments.                                               |
-| courses             | String[]      | Courses taken by user.                                            |
-| courses_taught      | String[]      | Courses taught by user.                                           |
 
 **Response:**
 ```
  Status: 200 OK
- {
-    "answers": [],
-    "last_sign_in": 1456035511.3893418,
-    "id": "7423c6be-2ce7-4f9a-882e-1130d21cf52b",
-    "major3": "",
-    "date_registered": 1455754947.062986,
-    "gender": "Female",
-    "created_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
-    "native_language": "English",
-    "unanswered_surveys": ["d8e70e63-12bd-46b7-bd0e-a9758bc632fd"],
-    "email": "sung.bae@colorado.edu",
-    "survey_responses": [],
-    "dob": "2016-02-03",
-    "status": "Senior",
-    "answered_surveys": [],
-    "courses": ["1c406ea0-6b4a-437f-acc6-372e4a37ac6f"],
-    "courses_taught": [],
-    "ethnicity": "American Indian or Alaska Native",
-    "major2": "Mathematics",
-    "accepted_tos": true,
-    "minor1": "",
-    "departments": ["Computer Science"],
-    "major4": "",
-    "major1": "",
-    "username": "suba8204",
-    "primary_affiliation": ["Student"],
-    "minor2": "",
-    "registration": "registration_culdap"
- }
-
- Note: It did not update my information, instead it just gave back my old information.
+{
+  "registration": "registration_culdap",
+  "courses_taught": [],
+  "primary_affiliation": "Faculty",
+  "majors": ["Computer Science"],
+  "dob": "1991-01-23",
+  "status": "Senior",
+  "pending_groups": [],
+  "survey_responses": [],
+  "answers": [],
+  "departments": ["Computer Science", "Mathematics"],
+  "email": "sung@colorado.edu",
+  "last_sign_in": 1461132923.425379,
+  "minors": ["Mathematics"],
+  "subscribed_groups": [],
+  "ethnicity": "Asian",
+  "answered_surveys": [],
+  "username": "suba8204",
+  "courses": [],
+  "created_surveys": [],
+  "gender": "Male",
+  "accepted_tos": true,
+  "id": "0510b13d-ea5d-45e7-9a85-503fa984a257",
+  "date_registered": 1461132919.8357852,
+  "native_language": "English",
+  "unanswered_surveys": []
+}
  ```
 
 ### Display surveys taken by user
@@ -248,6 +234,7 @@ Status: 200 OK
 POST /api/surveys
 ```
 **Parameter: Must be in JSON format, take a look at schema/sampleSurvey.json**
+**Note: If this survey already exists, then this post request will update the survey with the new questions given and delete the old questions.**
 
 | Field            | Type          | Description                                                                                |
 | ---------------- | ------------- | ------------------------------------------------------------------------------------------ |
@@ -255,8 +242,8 @@ POST /api/surveys
 | item_id          | String        | **Required**. Id of item (i.e. Course, Instructor, User).                                  |
 | item_type        | String        | **Required**. Types can be of the following: Instructor, Course, User.                     |
 | item_name        | String[]      | **Required**. The name for the survey.                                                     |
-| creator_id       | String        | **Required**. User's id associated to account.                                             |
-| creator_name     | String        | **Required**. User's name.                                                                 |
+| creator_id       | String        | **Required**. User's rethinkdb generated id, who created the survey.                       |
+| creator_name     | String        | **Required**. User's username, who created the survey.                                     |
 | questions        | String[]      | **Required**. Questions must be a contain a list with title, response_format, and options. |
 | title            | String        | **Required**. This is the actual question itself (i.e. Did you like this course?).         |
 | response_format  | String        | **Required**. Types of responses are: trueOrFalse, multipleChoice, freeResponse, etc.      |
