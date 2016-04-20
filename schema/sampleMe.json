@@ -1,18 +1,12 @@
 {
-    "primary_affiliation" : "Student, Faculty",
+    "primary_affiliation" : "Faculty",
     "status" : "Senior",
     "email" : "sung@colorado.edu",
-    "dob" : "year-month-day",
+    "dob" : "1991-01-23",
     "gender" : "Male",
     "ethnicity" : "Asian",
     "native_language" : "English",
-    "major1" : "Computer Science",
-    "major2" : "",
-    "major3" : "",
-    "major4" : "",
-    "minor1" : "Mathematics",
-    "minor2" : "",
-    "departments" : ["Computer Science", "Mathematics"],
-    "courses" : ["CSCI-4830", "MATH-4830"],
-    "courses_taught" : ["CSCI-1300", "CSCI-1000"]
+    "major" : ["Computer Science"],
+    "minor" : ["Mathematics"],
+    "departments" : ["Computer Science", "Mathematics"]
 }
