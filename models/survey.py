@@ -97,6 +97,7 @@ class Survey(BaseModel):
     def create_generic_item(self, creator_id=None, item_id=None, item_type='Course'):
         data = self.default()
         model = self._model_from_item_type(item_type)
+        data['item_name'] = 'generic survey'
         data['item_type'] = item_type
         data['item_id'] = item_id if item_id else model.create_generic_item()
         data['creator_id'] = creator_id if creator_id else User().create_generic_item()

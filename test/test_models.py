@@ -4,9 +4,7 @@ import tornado.web
 import time
 from test.test_runner import BaseAsyncTest
 from models.question import Question
-from models.instructor import Instructor
 from models.question_response import QuestionResponse
-from models.course import Course
 from models.survey import Survey
 from models.survey_response import SurveyResponse
 from models.user import User
@@ -16,10 +14,10 @@ import logging
 
 
 class TestModels(BaseAsyncTest):
-    models = [Group(), User(), Course(), Instructor(), QuestionResponse(), Question(), Survey(), SurveyResponse()]
+    models = [Group(), User(), QuestionResponse(), Question(), Survey(), SurveyResponse()]
 
     def setUpClass():
-        logging.disable(logging.CRITICAL)
+        # logging.disable(logging.CRITICAL)
         return
 
     def test_default_model_keys(self):

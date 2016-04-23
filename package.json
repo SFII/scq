@@ -35,7 +35,7 @@
     "jsdom": "^2.0.0",
     "react-addons-test-utils": "^15.0.1",
     "gulp-mocha": "^2.2.0"
-    
+
   },
   "keywords": [
     "student course questionaire"
