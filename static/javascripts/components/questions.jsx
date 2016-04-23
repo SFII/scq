@@ -20,7 +20,9 @@ var MultipleChoice = React.createClass({
     },
     
     componentDidUpdate: function(){
-      componentHandler.upgradeDom();
+	if(test == false){	
+	    componentHandler.upgradeDom();
+	}
     },
     /*if a checkbox is checked/unchecked, send which option got checked (i) and whether it was true or false in
     this.state.data, then use that info to flip it's value in the this.state.data array'*/
@@ -127,7 +129,9 @@ getInitialState: function(){
     },
 
     componentDidUpdate: function(){
-      componentHandler.upgradeDom();
+	if(test == false){	
+	    componentHandler.upgradeDom();
+	}
     },
 
     handleChange: function(i,value){
@@ -233,7 +237,9 @@ var FreeResponse = React.createClass({
     },
 
     componentDidUpdate: function(){
-      componentHandler.upgradeDom();
+	if(test == false){	
+	    componentHandler.upgradeDom();
+	}
     },
 
     handleChange: function(e){
@@ -294,7 +300,9 @@ var Rating = React.createClass({
     },
     
     componentDidUpdate: function(){
-      componentHandler.upgradeDom();
+	if(test == false){	
+	    componentHandler.upgradeDom();
+	}
     },
 
 	handleChange:function(e){

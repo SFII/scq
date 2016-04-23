@@ -98,9 +98,9 @@ var SurveysPage = React.createClass({
             questions: this.state.questions
         };
 
-        var test = this.checkSurvey(surveyObj);
+        var testSurvey = this.checkSurvey(surveyObj);
 
-        if (test==true){
+        if (testSurvey==true){
             var questions = this.state.questions;
             var questionsLength = questions.length;
             var optionsLength;
@@ -134,7 +134,9 @@ var SurveysPage = React.createClass({
 
     //mdl in new questions, this probably needs to be moved or repeated
     componentDidUpdate: function(){
-        componentHandler.upgradeDom();
+        if(test == false){
+            componentHandler.upgradeDom();
+        }
     },
 
     /*this handles adding a new question, we push these nodes
@@ -175,7 +177,7 @@ var SurveysPage = React.createClass({
 
     render: function(){
       return (
-          <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+          <div className="surveysPageDiv updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
               <div>
                   <TitleSection titleText="Create a Survey"/>
                   <div style={{paddingLeft: "30px"}}className="mdl-card__supporting-text mdl-color-text--grey-600">
@@ -211,7 +213,7 @@ render: function(){
         );
     }
   return (
-    <div className="commentList">
+    <div className="questionDivDiv commentList">
        {questionNodes}
     </div>
   );
@@ -281,7 +283,7 @@ var Fields = React.createClass({
 
     render: function(){
       return (
-          <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+          <div className="fieldsDiv mdl-card__supporting-text mdl-color-text--grey-600">
                   <div className="mdl-textfield mdl-js-textfield">
                     <input className="mdl-textfield__input"
                     type="text"
@@ -315,7 +317,7 @@ var OptionsDiv = React.createClass({
         if(this.props.response_format == "multipleChoice"){
 
           return (
-            <div>
+            <div className="optionsDivDiv">
             <CheckboxQuestion onOptionsChange={this.props.onOptionsChange} questionKey={this.props.questionKey}/>
             </div>
           );
@@ -414,7 +416,7 @@ var CheckboxQuestion = React.createClass({
         });
 
         return (
-        <div>
+        <div className="checkboxQuestionDiv">
             <ul className="no_bullets mdl-list">
                 {renderedOptions}
                 <li className="mdl-list__item">
@@ -456,7 +458,7 @@ var CheckboxOption = React.createClass({
 
     render: function(){
         return(
-            <div className="mdl-textfield mdl-js-textfield">
+            <div className="checkboxOptionDiv mdl-textfield mdl-js-textfield">
                 <p>Enter an option: &nbsp;
                     <input className="mdl-textfield__input"
                     type="text"
@@ -485,7 +487,7 @@ var AddQuestion = React.createClass({
 
     render: function(){
       return (
-          <button onClick={this.addQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <button onClick={this.addQuestion} className="addQuestionDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               ADD QUESTION
           </button>
       );
@@ -509,7 +511,7 @@ var RemoveQuestion = React.createClass({
 
     render: function(){
       return (
-          <button onClick={this.removeQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <button onClick={this.removeQuestion} className="removeQuestionDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               REMOVE QUESTION
           </button>
       );
@@ -525,7 +527,7 @@ var FinishSurvey = React.createClass({
             position: "absolute"
         };
       return (
-          <button onClick={this.props.onSubmit} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
+          <button onClick={this.props.onSubmit} className="finishSurveyDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent right_button">
               FINISH SURVEY
           </button>
       );
@@ -549,7 +551,7 @@ var SurveyTitleCreation = React.createClass({
 
     render: function(){
         return (
-            <h4>Survey Title:
+            <h4 className="surveyTitleCreationDiv">Survey Title:
                 <input className="mdl-textfield__input"
                        type="text"
                        value={this.state.item_name}

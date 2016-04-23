@@ -2,7 +2,7 @@
 var TitleSection = React.createClass({
     render: function(){
       return (
-        <div className="mdl-card__title mdl-card--expand mdl-color--primary">
+        <div className="questionTitleDiv mdl-card__title mdl-card--expand mdl-color--primary">
           <h2 className="mdl-card__title-text white_text"> { this.props.titleText } </h2>
         </div>
       );
@@ -12,7 +12,7 @@ var TitleSection = React.createClass({
 var TitleSurvey = React.createClass({
     render: function(){
       return (
-        <div className="mdl-card__title mdl-card--expand mdl-color--primary">
+        <div className="surveyTitleDiv mdl-card__title mdl-card--expand mdl-color--primary">
           <h1 className="mdl-card__title-text white_text"> { this.props.title } </h1>
         </div>
       );
@@ -112,7 +112,7 @@ var Card = React.createClass({
             return undefined;
         }
         return (
-            <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+            <div className="cardDiv updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
                 <div>
                 <TitleSurvey title={this.props.surveyTitle}/>
                 <TitleSection titleText={this.props.title}/>

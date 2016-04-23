@@ -18,6 +18,8 @@ console:
 test:
 	@export PROJECTPATH=${PROJECTPATH} && python3 main.py --test
 
+test-js:
+	@export PROJECTPATH=${PROJECTPATH} && gulp test-run
 bootstrap_data:
 	@export PROJECTPATH=${PROJECTPATH} && python3 main.py --bootstrap_data
 

@@ -1,7 +1,7 @@
 var GroupsPage = React.createClass({
   render: function() {
     return (
-      <div>
+      <div className="groupsPageDiv">
         <div>
           <CreateGroup/>
           <BrowseGroups/>
@@ -19,7 +19,7 @@ var CreateGroup = React.createClass({
     };
 
     return (
-      <div style={style}>
+      <div style={style} className="createGroupDiv">
         <h3>Create a group</h3>
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--1-col">
@@ -102,7 +102,7 @@ var GroupMembers = React.createClass({
         </input></div>
       );
       return (
-        <div>
+        <div className="groupMembersDiv">
           <h4>Members</h4>
           Add initial members here, but anyone can join
           {memberlist}
@@ -127,7 +127,15 @@ var GroupMembers = React.createClass({
     },
 
     componentDidMount: function() {
-      this.findGroups();
+      if(test == false){
+        this.findGroups();
+      }
+      else{
+        this.setState({ 
+	  relevant: ['relevantGroup1'],
+	  popular: ['relevantGroup2']
+	});
+      }
     },
 
     getInitialState: function() {
@@ -212,7 +220,7 @@ var GroupMembers = React.createClass({
           </div>;
         }
         return (
-          <div>
+          <div className="browseGroupsDiv">
             <h3>Browse groups</h3>
             <div className="mdl-grid">
               <div className="mdl-cell mdl-cell--1-col"></div>
@@ -235,7 +243,8 @@ var GroupMembers = React.createClass({
         return (
           //style={{display: "inline"}}
           <span
-            className="mdl-textfield
+            className="mdl-textfield 
+	    groupSearchDiv
             mdl-js-textfield
             mdl-textfield--floating-label">
             <input style={{fontSize: "24px"}}
@@ -273,7 +282,7 @@ var GroupMembers = React.createClass({
             </div>;
           });
           return (
-            <div>{groups}</div>
+            <div className="groupListDiv">{groups}</div>
           );
         }
       });

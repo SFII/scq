@@ -9,7 +9,9 @@ var Page = React.createClass({
         document.title = newTitle
 
         const header =  title + " - " + unansweredSurveys + " unanswered survey"
-        $('.mdl-layout-title')[0].innerHTML = header + (unansweredSurveys != 1 ? "s" : "")
+	if(test == false){
+            $('.mdl-layout-title')[0].innerHTML = header + (unansweredSurveys != 1 ? "s" : "")
+	}
     },
 
     //if we're not logged in we want to render a Welcome menu
@@ -17,7 +19,7 @@ var Page = React.createClass({
         /*data is a variable defined in dashboard.html as var data = {% raw survey_json %}
            which is a json of the unaswered_surveys list from the db, we map it out so each item
            is a survey that gets it's own SurveyDiv react component'*/
-        routesObject=this.props.routes;
+        var routesObject=this.props.routes;
         if (data.length == 0) {
             return (
                 <div>

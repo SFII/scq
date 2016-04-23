@@ -2,7 +2,7 @@ var HelpPage = React.createClass({
 
     render: function(){
         return(
-            <div className="mdl-cell mdl-cell--12-col">
+            <div className="helpPageDiv mdl-cell mdl-cell--12-col">
                 <GroupsHelp />
                 <SurveysHelp />
                 <Censorship />
@@ -84,7 +84,7 @@ var GroupsHelp = React.createClass({
     }
     else{
         return(
-        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div className="groupsHelpDiv mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
                     <h2 className="mdl-card__title-text white_text">
@@ -201,7 +201,7 @@ var SurveysHelp = React.createClass({
     }
     else{
         return(
-        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div className="surveysHelpDiv mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
                     <h2 className="mdl-card__title-text white_text">
@@ -267,7 +267,7 @@ var Censorship = React.createClass({
         
     else{
         return(
-        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div className="censorshipDiv mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
                     <h2 className="mdl-card__title-text white_text">
@@ -332,7 +332,7 @@ var InformationCollection = React.createClass({
     }
     else{
         return(
-        <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div className="informationCollectionDiv mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div className="mdl-card__title mdl-color--primary">
                 <div className="mdl-cell mdl-cell--6-col">
                     <h2 className="mdl-card__title-text white_text">

@@ -35,8 +35,8 @@ var Footer = React.createClass({
         //survey is one question long
         else if(this.props.questionNum == 0 && this.props.numQuestions == 1){
             return(    
-                <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
-                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                <div className="footerDiv mdl-grid mdl-card__title mdl-card--expand mdl-300">
+                    <button className="prevButtonDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
                         Previous
                     </button>
                     
@@ -45,7 +45,7 @@ var Footer = React.createClass({
                     numQuestions = {this.props.numQuestions}
                     responseSize={this.props.responseSize}/>    
                     
-                    <button className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
+                    <button className="nextButtonDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised" disabled>
                         Next
                     </button>
                     
@@ -217,7 +217,7 @@ var Progress = React.createClass({
     render: function() {
     var progressValue = ((this.props.responseSize+1)/this.props.numQuestions)*100;
         return (
-        <progress id="myProgress" className="mdl-cell mdl-cell--4-col bar" value={progressValue} max="100"></progress>
+        <progress id="myProgress" className="progressDiv mdl-cell mdl-cell--4-col bar" value={progressValue} max="100"></progress>
         )
     }
 })
@@ -232,7 +232,7 @@ var PrevButton = React.createClass({
     },
     render: function() {
         return (
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+        <button onClick={this.clickHandler} className="prevButtonDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Previous
         </button>
         )
@@ -249,7 +249,7 @@ var NextButton = React.createClass({
     },
     render: function() {
         return (
-        <button onClick={this.clickHandler} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+        <button onClick={this.clickHandler} className="nextButtonDiv mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Next
         </button>
         )
@@ -266,7 +266,7 @@ var SubmitButton = React.createClass({
     },
     render: function(){
         return(
-        <button onClick={this.clickHandler} className="surveySubmit mdl-cell mdl-cell--8-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent">
+        <button onClick={this.clickHandler} className="surveySubmit submitButtonDiv mdl-cell mdl-cell--8-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent">
                 Submit
         </button>
         )

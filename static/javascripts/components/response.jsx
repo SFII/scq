@@ -9,6 +9,7 @@ var ResponseCard = React.createClass({
     },
 
     componentDidMount: function() {
+	if(test == false){
         $.ajax({
             url: "/api/results/" + this.props.surveyID,
             dataType: "json",
@@ -22,6 +23,13 @@ var ResponseCard = React.createClass({
                 console.error("/api/results", status, err.toString());
             }.bind(this)
         });
+	}
+	else{
+	this.setState({
+		results: [{ id: 123456, response_format: "multipleChoice", response_data: {series: [1,1,1], labels: ['option1','option2','option3']} }],
+		length: 1
+	});
+	}
     },
     
     nextQuestion: function() {
@@ -43,7 +51,7 @@ var ResponseCard = React.createClass({
     render: function(){
     if(this.state.results != 0){
         return(
-            <div className="updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+            <div className="responseCardDiv updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
             <TitleSection titleText={this.state.results[this.state.iter].title} />
             <ChartDiv 
             questionID={this.state.results[this.state.iter].id} 
@@ -90,6 +98,7 @@ var ChartDiv = React.createClass({
     },
     
     updateChart: function(labels,series,question_format,questionID){
+	if(test == false){
         var chartCSS = "#chart" + this.state.questionID + "-chart";
         if(question_format == "rating"){    
             var data = {
@@ -119,12 +128,15 @@ var ChartDiv = React.createClass({
 
             new Chartist.Pie(chartCSS,data);    
         }
+	}
     },
     
     render: function(){
         var chartName = "chart" + this.state.questionID + "-chart";
         return(
+	    <div className="chartDivDiv">
             <div className="ct-chart ct-golden-section" id={chartName}></div>
+            </div>
         );
     }
 });
@@ -175,7 +187,7 @@ var ResponseFooter = React.createClass({
         }
         else if(this.props.numQuestions == 1){
             return(
-                <div className="mdl-cell mdl-cell--12-col mdl-card__title mdl-card--expand mdl-300">
+                <div className="responseFooterDiv mdl-cell mdl-cell--12-col mdl-card__title mdl-card--expand mdl-300">
                     <button onClick={this.props.prevQuestion} className="mdl-cell mdl-cell--4-col mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>
                             Previous
                     </button>

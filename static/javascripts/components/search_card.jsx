@@ -83,7 +83,7 @@ var SearchCard = React.createClass({
             </p> -->
 */    
     return(
-        <div className="mdl-grid mdl-card__title mdl-card--expand mdl-300">
+        <div className="searchCardDiv mdl-grid mdl-card__title mdl-card--expand mdl-300">
             <div className="mdl-cell mdl-cell--12-col">
                 Post to Group: {this.state.recipient}
             </div>

@@ -93,7 +93,6 @@ var ProfileGroups = React.createClass({
                 success: function(data){
                     var pendingGroups = this.state.pendingGroups;
                     pendingGroups = data;
-                    console.log('success');
                     this.setState({
                         pendingGroups: data,
                     })
@@ -105,21 +104,45 @@ var ProfileGroups = React.createClass({
     },
 
     componentDidMount: function(){
-        $.ajax({
-                url: this.props.routes.groups,
-                type: 'GET',
-                dataType: "json",
-                success: function(data){
-                    var currentGroups = this.state.currentGroups
-                    currentGroups = data
-                    this.setState({
-                        currentGroups: data,
-                    })
-                }.bind(this),
-                error: function(xhr, status,err){
-                    console.log('error');
-                }.bind(this)
-        });
+	if(test == false){
+		$.ajax({
+		    url: this.props.routes.groups,
+		    type: 'GET',
+		    dataType: "json",
+		    success: function (data) {
+		        var currentGroups = this.state.currentGroups;
+		        currentGroups = data;
+		        this.setState({
+		            currentGroups: data
+		        });
+		    }.bind(this),
+		    error: function (xhr, status, err) {
+		        console.log('error');
+		    }.bind(this)
+		});
+
+		$.ajax({
+		        url: this.props.routes.subscribe,
+		        type: 'GET',
+		        dataType: "json",
+		        success: function(data){
+		            var pendingGroups = this.state.pendingGroups;
+		            pendingGroups = data;
+		            this.setState({
+		                pendingGroups: data,
+		            })
+		        }.bind(this),
+		        error: function(xhr, status,err){
+		            console.log('error');
+		        }.bind(this)
+		});
+        }
+	else{
+		console.log(test)
+		this.setState({ 
+			currentGroups: ["TestSubscribedGroup"]
+		});
+	}
     },
 
     render: function(){
@@ -151,7 +174,7 @@ var ProfileGroups = React.createClass({
       });
 
       return(
-          <div className="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+          <div className="profileGroupsDiv mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
               <div className="mdl-card__title mdl-card--expand mdl-color--primary">
                 <h2 className="mdl-card__title-text white_text"> My Groups </h2>
               </div>
@@ -188,7 +211,7 @@ var SubscribedGroupDiv = React.createClass({
       var a_key = this.props.groupID + "." + "a";
       var ul_key = this.props.groupID + "." + "ul";
         return(
-            <li className="mdl-list__item" key={li_key}>
+            <li className="subscribedGroupDiv mdl-list__item" key={li_key}>
                 <span className="groupListItem mdl-list__item-primary-content" key={span_key}>
                     <i className="groupListItem material-icons" key={i_key}>group</i>
                     {this.props.groupID}
@@ -222,7 +245,7 @@ var PendingGroupDiv = React.createClass({
       var a_key = this.props.groupID + "." + "a";
       var ul_key = this.props.groupID + "." + "ul";
         return(
-            <li className="mdl-list__item" key={li_key}>
+            <li className="pendingGroupDiv mdl-list__item" key={li_key}>
                 <span className="groupListItem mdl-list__item-primary-content" key={span_key}>
                     <i className="groupListItem material-icons" key={i_key}>group</i>
                     {this.props.groupID}
