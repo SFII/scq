@@ -13,6 +13,7 @@ class ProfileHandler(BaseHandler):
         self.render('profile.html', extra_info_json=self.get_extra_info(), user_info_json=self.get_user_info())
 
     def post(self):
+        self.refresh_current_user_cookie()
         user_data = self.current_user
         data = User().default()
         data['username'] = self.current_user['username']
@@ -23,11 +24,19 @@ class ProfileHandler(BaseHandler):
         data['native_language'] = self.get_argument('native_language', None, strip=True)
         data['status'] = self.get_argument('status', '', strip=True)
         data['primary_affiliation'] = (self.get_argument('primary_affiliation', None, strip=True))
-        data['subscribed_groups'] = self.get_argument('subscribed_groups', None, strip=True)
+        data['subscribed_groups'] = self.current_user['subscribed_groups']
+        data['pending_groups'] = self.current_user['pending_groups']
+        data['answered_surveys'] = self.current_user['answered_surveys']
+        data['answers'] = self.current_user['answers']
+        data['unanswered_surveys'] = self.current_user['unanswered_surveys']
+        data['created_surveys'] = self.current_user['created_surveys']
+        data['survey_responses'] = self.current_user['survey_responses']
+        '''
         if (data['subscribed_groups'] is None):
             data['subscribed_groups'] = []
         else:
             data['subscribed_groups'] = (self.get_argument('subscribed_groups', None, strip=True)).replace(' ', '').split(',')
+        '''
         if data['status'] == '':
             data['status'] = user_data['status'] or "Freshman"
         data['status'] = self.get_argument('status', '', strip=True)

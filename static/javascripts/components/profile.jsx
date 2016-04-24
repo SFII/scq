@@ -129,7 +129,7 @@ var ProfilePage = React.createClass({
         <ul style={style}>
         <form action="/profile" method="post">
           <button type="button" onClick={this.handleClick}>edit</button><br/>
-          Username: <input name="username" value={this.state.username} readOnly /><br/>
+          Username: <input type="text" name="username" value={this.state.username} readOnly /><br/>
           Affiliation(s): <select name="primary_affiliation">
                             <option value={this.state.user_affiliation}>{this.state.user_affiliation}</option>
                             <option value={this.state.affiliation[0]}>{this.state.affiliation[0]}</option>
