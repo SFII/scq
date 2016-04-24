@@ -55,7 +55,7 @@ class CuLdapRegisterHandler(RegisterHandler):
         data['username'] = username
         data['registration'] = User().REGISTRATION_CULDAP
         data['accepted_tos'] = True
-        
+
         formattedData = self.formatData(data)
         return self.registerUser(formattedData)
 
@@ -66,8 +66,8 @@ class CuLdapRegisterHandler(RegisterHandler):
         preData['minors'] = [data['minor1'], data['minor2']]
         #delete individual entries of majors
         del data['major1'], data['major2'], data['major3'], data['major4'], data['minor1'], data['minor2']
-        majors = [];
-        minors = [];
+        majors = []
+        minors = []
         #create arrays we're going to index
         for i in preData['majors']:
             if i != '':
