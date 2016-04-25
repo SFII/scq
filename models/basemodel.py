@@ -275,11 +275,9 @@ class BaseModel:
                 logging.warn("row_id {0} not in user {1}".format(row_id, user_subscription_name))
                 pass
             r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
-        logging.info("ROW_ID IS {0}".format(row_id))
-        active_surveys = r.db(self.DB).table('Group').get(row_id).getField('active_surveys').run(self.conn)
-        logging.info("active surveys are {0}".format(active_surveys))
-        unanswered_surveys = r.db(self.DB).table(user_table).get(user_id).getField('unanswered_surveys').run(self.conn)
-        answered_surveys = r.db(self.DB).table(user_table).get(user_id).getField('answered_surveys').run(self.conn)
+        active_surveys = r.db(self.DB).table('Group').get(row_id).get_field('active_surveys').run(self.conn)
+        unanswered_surveys = r.db(self.DB).table(user_table).get(user_id).get_field('unanswered_surveys').run(self.conn)
+        answered_surveys = r.db(self.DB).table(user_table).get(user_id).get_field('answered_surveys').run(self.conn)
         for survey in active_surveys:
             if survey in unanswered_surveys:
                 unanswered_surveys = [x for x in unanswered_surveys if x != survey]
