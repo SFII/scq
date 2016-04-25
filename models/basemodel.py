@@ -275,6 +275,18 @@ class BaseModel:
                 logging.warn("row_id {0} not in user {1}".format(row_id, user_subscription_name))
                 pass
             r.db(self.DB).table(user_table).get(user_id).update({user_subscription_name: user_subscription}).run(self.conn)
+        logging.info("ROW_ID IS {0}".format(row_id))
+        active_surveys = r.db(self.DB).table('Group').get(row_id).getField('active_surveys').run(self.conn)
+        logging.info("active surveys are {0}".format(active_surveys))
+        unanswered_surveys = r.db(self.DB).table(user_table).get(user_id).getField('unanswered_surveys').run(self.conn)
+        answered_surveys = r.db(self.DB).table(user_table).get(user_id).getField('answered_surveys').run(self.conn)
+        for survey in active_surveys:
+            if survey in unanswered_surveys:
+                unanswered_surveys = [x for x in unanswered_surveys if x != survey]
+            elif survey in answered_surveys:
+                answered_surveys = [x for x in answered_surveys if x != survey]
+        r.db(self.DB).table(user_table).get(user_id).update({'unanswered_surveys': unanswered_surveys}).run(self.conn)
+        r.db(self.DB).table(user_table).get(user_id).update({'answered_surveys': answered_surveys}).run(self.conn)
         subscribers = row_data['subscribers']
         try:
             subscribers.remove(user_id)
