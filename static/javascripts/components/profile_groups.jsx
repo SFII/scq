@@ -160,18 +160,20 @@ var ProfileGroups = React.createClass({
       }
       });
 
-      var renderedPendingGroups = this.state.pendingGroups.map((group,i) => {
-      if(this.state.pendingGroups.length > 0){
-        return (
-        <PendingGroupDiv key={group.id} subscribeGroup={this.subscribeGroup} removePendingGroup={this.removePendingGroup} groupID = {group}/>
-        )
-      }
-      else{
+      if (this.state.pendingGroups) {
+        var renderedPendingGroups = this.state.pendingGroups.map((group,i) => {
+        if(this.state.pendingGroups.length > 0){
           return (
-          <div key={group.id}></div>
-        )
+          <PendingGroupDiv key={group.id} subscribeGroup={this.subscribeGroup} removePendingGroup={this.removePendingGroup} groupID = {group}/>
+          )
+        }
+        else{
+            return (
+            <div key={group.id}></div>
+          )
+        }
+        });
       }
-      });
 
       return(
           <div className="profileGroupsDiv mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
