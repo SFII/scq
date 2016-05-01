@@ -71,7 +71,11 @@ class Group(BaseModel):
         return list(results)
 
     def relevant_groups(self, user):
-        majors = user['majors']
-        results = r.db(self.DB).table('Group').filter(
-            lambda group: group['id'] in majors).limit(10)["id"].run(self.conn)
+        results = []
+        for major in user['majors']:
+            results.append(self.get_item(major)['id'])
+
+        for minor in user['minors']:
+            results.append(self.get_item(minor)['id'])
+
         return list(results)

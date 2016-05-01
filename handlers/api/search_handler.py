@@ -53,6 +53,6 @@ class SearchHandler(BaseHandler):
         user = self.get_current_user()
         popular = Group().popular_groups()
         relevant = Group().relevant_groups(user)
-        relevant = self.remove(popular, relevant)
+        popular = self.remove(relevant, popular)
         json = tornado.escape.json_encode({'popular': popular, 'relevant': relevant})
         return self.write(json)
