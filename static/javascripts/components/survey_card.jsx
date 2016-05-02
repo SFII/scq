@@ -428,7 +428,7 @@ var CheckboxQuestion = React.createClass({
                     </p>
                     <p>
                       <button className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={this.removeOption}>
-                        <i className="material-icons">subtract</i>
+                        <i className="material-icons">remove</i>
                       </button>
                       &nbsp;&nbsp;&nbsp; REMOVE OPTION
                     </p>
