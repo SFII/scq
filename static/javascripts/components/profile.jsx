@@ -25,6 +25,8 @@ var ProfilePage = React.createClass({
       username: user_data[0].username,
       email: user_data[0].email,
       dob: user_data[0].dob,
+      majors: user_data[0].majors,
+      minors: user_data[0].minors,
       user_affiliation,
       user_gender,
       user_ethnicity,
@@ -54,9 +56,28 @@ var ProfilePage = React.createClass({
       fontSize: "20px"
     };
     var academic_year = null;
+    var user_majors = null;
+    var user_minors = null;
     if (this.state.user_affiliation != "Faculty") {
       academic_year = (<li>Academic Year: {this.state.user_status}</li>);
+      var majors = user_data[0].majors;
+      var minors = user_data[0].minors;
+      var display_majors = "";
+      var display_minors = "";
+      var i;
+      for (i = 0; i < majors.length; i++) {
+        display_majors += majors[i] + ", ";
+      }
+      for (i = 0; i < minors.length; i++) {
+        display_minors += minors[i] + ", ";
+      }
+      var final_majors = display_majors.substring(0, display_majors.length-2);
+      var final_minors = display_minors.substring(0, display_minors.length-2);
+      user_majors = (<li>Majors: {final_majors} </li>);
+      user_minors = (<li>Minors: {final_minors} </li>);
     }
+
+
     if (this.state.edit == false) {
       return(
         <ul className="profilePageDiv" style={style}>
@@ -69,10 +90,14 @@ var ProfilePage = React.createClass({
           <li>Ethnicity: {this.state.user_ethnicity}</li>
           <li>Native Language: {this.state.user_native_language}</li>
           {academic_year}
+          {user_majors}
+          {user_minors}
         </ul>
       );
     } else {
       var academic_year_options = null;
+      var edit_majors = null;
+      var edit_minors = null;
       if (this.state.user_affiliation != "Faculty") {
         academic_year_options = (
           <li>Academic Year: <select name="status">
@@ -82,14 +107,29 @@ var ProfilePage = React.createClass({
                                <option value={this.state.status[2]}>{this.state.status[2]}</option>
                                <option value={this.state.status[3]}>{this.state.status[3]}</option>
                                <option value={this.state.status[4]}>{this.state.status[4]}</option>
-                             </select></li>
+                             </select><br/>
+          </li>
         );
+        edit_majors = (
+          <li>Majors: <input type="text" name="major1" value={this.state.majors[0]} /><br/>
+                      <input type="text" name="major2" value={this.state.majors[1]} /><br/>
+                      <input type="text" name="major3" value={this.state.majors[2]} /><br/>
+                      <input type="text" name="major4" value={this.state.majors[3]} /><br/>
+          </li>
+        );
+        edit_minors = (
+          <li>Minors: <input type="text" name="minor1" value={this.state.minors[0]} /><br/>
+                      <input type="text" name="minor2" value={this.state.minors[1]} /><br/>
+          </li>
+        );
+
+
       }
       return(
         <ul style={style}>
         <form action="/profile" method="post">
           <button type="button" onClick={this.handleClick}>edit</button><br/>
-          Username: <input name="username" value={this.state.username} readOnly /><br/>
+          Username: <input type="text" name="username" value={this.state.username} readOnly /><br/>
           Affiliation(s): <select name="primary_affiliation">
                             <option value={this.state.user_affiliation}>{this.state.user_affiliation}</option>
                             <option value={this.state.affiliation[0]}>{this.state.affiliation[0]}</option>
@@ -129,6 +169,8 @@ var ProfilePage = React.createClass({
                              <option value={this.state.native_language[11]}>{this.state.native_language[11]}</option>
                            </select><br/>
           {academic_year_options}
+          {edit_majors}
+          {edit_minors}
           <br/>
           <input type="submit" value="submit" />
         </form>
